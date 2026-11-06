@@ -265,4 +265,61 @@ check("Battle", function()
 end)
 hold(gui, "Result")
 
+-- Placeholder art: every character's rig builds in the real engine, jointed and marked.
+local Characters = require(Shared.Config.Characters)
+local RigBuilder = require(Shared.Art.RigBuilder)
+check("rigs for all 100 characters", function()
+	local parts, joints = 0, 0
+	for _, def in Characters.List do
+		local rig = RigBuilder.build(def.id)
+		assert(rig:GetAttribute("Placeholder") == true, `{def.id} rig not marked Placeholder`)
+		local j = 0
+		for _, d in rig:GetDescendants() do
+			if d:IsA("BasePart") then
+				parts += 1
+				assert(d:GetAttribute("Placeholder") == true, `{def.id}: unmarked part {d.Name}`)
+			elseif d:IsA("Motor6D") then
+				j += 1
+			end
+		end
+		assert(j >= 6, `{def.id}: only {j} joints`)
+		joints += j
+		rig:Destroy()
+	end
+	print(`UI RIGS {#Characters.List} rigs, {parts} parts, {joints} joints`)
+end)
+
+check("art gallery", function()
+	ctx.close()
+	local Visuals = require(AppFolder.Visuals)
+	local Ui = require(AppFolder.Ui)
+	local root = gui:FindFirstChild("Root", true) :: Frame
+	local gallery = Ui.frame(
+		{ Name = "Gallery", BackgroundColor3 = Color3.fromHex("#080B18"), Parent = root.Overlays },
+		{
+			Ui.pad(12),
+			Ui.grid(Vector2.new(150, 200), 10),
+		}
+	)
+	local picks = {}
+	local seenRole, seenRarity = {}, {}
+	for _, def in Characters.List do
+		if
+			not seenRole[def.role .. def.rarity] and (not seenRole[def.role] or not seenRarity[def.rarity])
+		then
+			seenRole[def.role] = true
+			seenRarity[def.rarity] = true
+			seenRole[def.role .. def.rarity] = true
+			table.insert(picks, def)
+		end
+		if #picks >= 10 then
+			break
+		end
+	end
+	for i, def in picks do
+		Visuals.portrait(gallery, def.id, i == 10, Vector2.new(150, 200), true).LayoutOrder = i
+	end
+end)
+hold(gui, "Gallery")
+
 print(`UI CHECK DONE: {failures} failure(s)`)

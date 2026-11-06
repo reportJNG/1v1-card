@@ -77,7 +77,8 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				Ui.stroke(if active == i then C.Gold else C.Stroke, if active == i then 2.5 else 1),
 			})
 			if card then
-				local portrait = Visuals.portrait(slot, card.characterId, card.golden, Vector2.new(118, 160))
+				local portrait =
+					Visuals.portrait(slot, card.characterId, card.golden, Vector2.new(118, 160), true)
 				portrait.Position = UDim2.fromOffset(6, 6)
 				Ui.text({
 					Text = `Lv {card.level} · ⚡ {Power.card(card.characterId, card.level)}`,

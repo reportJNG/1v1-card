@@ -175,6 +175,7 @@ function Battle.open(ctx: any, start: any): Handle
 	forfeit.instance.Parent = layer
 
 	local buttons: { [string]: any } = {}
+	local figures: { [number]: ViewportFrame? } = {}
 
 	local function renderSide(side: number)
 		local f = sideFrames[side]
@@ -189,8 +190,9 @@ function Battle.open(ctx: any, start: any): Handle
 			Size = UDim2.new(1, 0, 0, 18),
 			Parent = f,
 		})
-		local portrait = Visuals.portrait(f, u.characterId, false, Vector2.new(110, 140))
+		local portrait = Visuals.portrait(f, u.characterId, false, Vector2.new(110, 140), true)
 		portrait.Position = UDim2.fromOffset(0, 24)
+		figures[side] = portrait:FindFirstChild("Figure") :: ViewportFrame?
 		local info = Ui.frame({
 			BackgroundTransparency = 1,
 			Position = UDim2.fromOffset(120, 24),
@@ -408,6 +410,18 @@ function Battle.open(ctx: any, start: any): Handle
 				showChooser()
 			end
 			renderAll()
+			if msg.kind == "Round" and not ctx.reducedMotion() then
+				local n = 0
+				for _, e in data.events do
+					if e[1] == "Hit" then
+						local fig = figures[e[2]]
+						if fig then
+							task.delay(n * 0.3, Visuals.lunge, fig, if e[2] == you then 1 else -1)
+						end
+						n += 1
+					end
+				end
+			end
 		end,
 		finish = function(data)
 			closed = true

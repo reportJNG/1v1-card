@@ -116,7 +116,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			return
 		end
 		local def = Characters.ById[card.characterId]
-		local portrait = Visuals.portrait(inspect, card.characterId, card.golden, Vector2.new(110, 150))
+		local portrait = Visuals.portrait(inspect, card.characterId, card.golden, Vector2.new(110, 150), true)
 		portrait.Position = UDim2.fromOffset(0, 0)
 		local info = Ui.frame({
 			BackgroundTransparency = 1,

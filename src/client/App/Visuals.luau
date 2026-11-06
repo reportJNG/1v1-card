@@ -6,6 +6,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Types = require(Shared.Types)
 local Characters = require(Shared.Config.Characters)
+local Art = require(Shared.Config.Art)
+local RigBuilder = require(Shared.Art.RigBuilder)
+local TweenService = game:GetService("TweenService")
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
 
@@ -59,8 +62,108 @@ function Visuals.egg(parent: Instance, egg: Types.EggDef, golden: boolean, size:
 	return holder
 end
 
+local function sequence(hexes: { string }): ColorSequence
+	local keys = {}
+	for i, hex in hexes do
+		table.insert(keys, ColorSequenceKeypoint.new((i - 1) / math.max(1, #hexes - 1), Color3.fromHex(hex)))
+	end
+	return ColorSequence.new(keys)
+end
+
+-- The rarity card frame (Config/Art.Frames), with a gold foil for Golden copies. Same card
+-- silhouette for every rarity; only the border, gradient and shine change (design rule 6).
+function Visuals.frame(card: GuiObject, rarity: string, golden: boolean)
+	local style = Art.Frames[rarity] or Art.Frames.Common
+	local stroke = Ui.new("UIStroke", {
+		Thickness = style.border + (if golden then 1 else 0),
+		Color = Color3.new(1, 1, 1),
+		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+		Parent = card,
+	})
+	local gradient = Ui.new("UIGradient", {
+		Color = sequence(if golden then Art.GoldenFoil.colors else style.colors),
+		Rotation = 45,
+		Parent = stroke,
+	})
+	if style.inner then
+		Ui.frame({
+			BackgroundTransparency = 1,
+			Position = UDim2.fromOffset(4, 4),
+			Size = UDim2.new(1, -8, 1, -8),
+			Parent = card,
+		}, { Ui.corner(6), Ui.stroke(Color3.fromHex(style.colors[#style.colors]), 1, 0.4) })
+	end
+	if style.shine or golden then
+		gradient.Offset = Vector2.new(-1, 0)
+		TweenService:Create(
+			gradient,
+			TweenInfo.new(
+				if golden then 1.6 else 2.4,
+				Enum.EasingStyle.Linear,
+				Enum.EasingDirection.InOut,
+				-1,
+				false,
+				0.6
+			),
+			{ Offset = Vector2.new(1, 0) }
+		):Play()
+	end
+end
+
+-- A 3D figure of the character in a ViewportFrame: the placeholder rig (Shared/Art/RigBuilder)
+-- until the character's approved model exists. Used where one or a few show at once (inspect,
+-- deck slots, battle, hatch), never in long grids, to keep mobile rendering cheap.
+function Visuals.figure(parent: Instance, characterId: string, size: Vector2): ViewportFrame
+	local vp: ViewportFrame = Ui.new("ViewportFrame", {
+		BackgroundTransparency = 1,
+		Size = UDim2.fromOffset(size.X, size.Y),
+		Ambient = Color3.fromRGB(170, 170, 190),
+		LightColor = Color3.fromRGB(255, 245, 230),
+		LightDirection = Vector3.new(-0.4, -1, -0.6),
+		Parent = parent,
+	})
+	local model = RigBuilder.build(characterId)
+	model.Parent = vp
+	local cf, ext = model:GetBoundingBox()
+	local camera = Instance.new("Camera")
+	camera.FieldOfView = 30
+	local distance = math.max(ext.Y, ext.X) / (2 * math.tan(math.rad(15))) * 1.15
+	local target = cf.Position
+	camera.CFrame = CFrame.lookAt(target + Vector3.new(distance * 0.35, distance * 0.12, -distance), target)
+	camera.Parent = vp
+	vp.CurrentCamera = camera
+	vp:SetAttribute("Placeholder", true)
+	return vp
+end
+
+-- A short lunge toward the opponent: the battle screen plays it on the attacker's figure.
+function Visuals.lunge(vp: ViewportFrame, toward: number)
+	local model = vp:FindFirstChildOfClass("Model")
+	if model == nil then
+		return
+	end
+	local start = model:GetPivot()
+	local value = Instance.new("NumberValue")
+	value.Changed:Connect(function(v)
+		if model.Parent then
+			model:PivotTo(start * CFrame.new(toward * v, 0, -v))
+		end
+	end)
+	local out = TweenService:Create(value, TweenInfo.new(0.12, Enum.EasingStyle.Quad), { Value = 1.4 })
+	out.Completed:Connect(function()
+		TweenService:Create(value, TweenInfo.new(0.2, Enum.EasingStyle.Quad), { Value = 0 }):Play()
+	end)
+	out:Play()
+end
+
 -- A card portrait: rarity frame, initials and the rarity in text (never colour alone).
-function Visuals.portrait(parent: Instance, characterId: string, golden: boolean, size: Vector2): Frame
+function Visuals.portrait(
+	parent: Instance,
+	characterId: string,
+	golden: boolean,
+	size: Vector2,
+	withFigure: boolean?
+): Frame
 	local def = Characters.ById[characterId]
 	local rarityColor = Theme.Rarity[def.rarity] or C.Muted
 	local card = Ui.frame({
@@ -70,14 +173,20 @@ function Visuals.portrait(parent: Instance, characterId: string, golden: boolean
 		Parent = parent,
 	}, {
 		Ui.corner(8),
-		Ui.stroke(if golden then C.Gold else rarityColor, if golden then 3 else 2),
 		Ui.gradient(C.Raised, C.Background, 90),
 	})
+	Visuals.frame(card, def.rarity, golden)
 	local initials = ""
 	for word in string.gmatch(def.displayName, "%a+") do
 		initials ..= string.sub(word, 1, 1)
 	end
+	if withFigure then
+		local fig = Visuals.figure(card, characterId, Vector2.new(size.X - 8, math.floor(size.Y * 0.62)))
+		fig.Name = "Figure"
+		fig.Position = UDim2.fromOffset(4, math.floor(size.Y * 0.1))
+	end
 	Ui.text({
+		Visible = not withFigure,
 		Text = initials,
 		Font = Theme.Font.Title,
 		TextSize = math.floor(size.Y * 0.32),

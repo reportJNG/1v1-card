@@ -320,3 +320,20 @@ Made by Claude while working autonomously on "finish every stage in HANDOFF.md a
   - Pools stay Placeholder until the owner reviews them.
 - **Guardians** field three characters from their own world's eggs. In `sim/trials.py`, a random
   same-level deck beats them 36–53% of the time.
+
+### Placeholder art (M2)
+- **I can't produce hero-quality character models here, and I don't pretend to.** They need a 3D
+  artist (or a dedicated Blender pass with the now-installed Blender MCP) and then the approval
+  pipeline in DESIGN.md section 4.
+- **What exists, all marked `Placeholder`:**
+  - **`Shared/Art/RigBuilder`:** a procedural, R15-style jointed rig for every character. The role
+    sets the silhouette and prop, the family the colours, the rarity the neon trim. It has Motor6D
+    joints named like R15, so animations can be authored now and real models
+    (`CharacterDef.assets.model`) can replace the rigs later.
+  - **Figures:** the rigs appear in ViewportFrames in the card inspect, deck slots, arena, hatch
+    reveal and battle. The battle plays a lunge on each hit. Long grids keep the 2D portrait, so
+    phones don't render dozens of viewports.
+  - **`Config/Art` card frames:** one per rarity, differing only in border, gradient and shine, plus
+    a gold foil for Golden copies.
+- **Verified in real Studio.** All 100 rigs build (1,299 parts, 600 joints), and a gallery
+  screenshot confirms the frames and figures render.

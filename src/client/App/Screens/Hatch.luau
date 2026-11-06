@@ -95,7 +95,7 @@ function Hatch.show(ctx: any, cards: { any }, egg: Types.EggDef, golden: boolean
 				})
 				local scale =
 					Ui.new("UIScale", { Scale = if ctx.reducedMotion() then 1 else 0.2, Parent = slot })
-				Visuals.portrait(slot, card.characterId, card.golden, Vector2.new(150, 200))
+				Visuals.portrait(slot, card.characterId, card.golden, Vector2.new(150, 200), true)
 				Ui.text({
 					Text = `{def.displayName} · {def.rarity}`,
 					Font = Theme.Font.Bold,

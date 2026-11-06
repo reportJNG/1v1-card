@@ -44,7 +44,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		for i, uid in view.deck do
 			local card = view.cards[uid]
 			if card then
-				Visuals.portrait(deckRow, card.characterId, card.golden, Vector2.new(110, 150)).LayoutOrder =
+				Visuals.portrait(deckRow, card.characterId, card.golden, Vector2.new(110, 150), true).LayoutOrder =
 					i
 				table.insert(specs, { characterId = card.characterId, level = card.level })
 			end
