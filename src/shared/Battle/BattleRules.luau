@@ -134,6 +134,12 @@ function BattleRules.effSpd(u: Unit): number
 	return s
 end
 
+-- The three units a deck would field, with family bonuses applied, exactly as a battle builds
+-- them. For the deck builder and card inspect; no RNG involved.
+function BattleRules.preview(specs: { UnitSpec }): { Unit }
+	return newSide(specs).units
+end
+
 function BattleRules.new(deckA: { UnitSpec }, deckB: { UnitSpec }, seed: number): Match
 	return { sides = { newSide(deckA), newSide(deckB) }, rng = Prng.new(seed), round = 0, events = {} }
 end

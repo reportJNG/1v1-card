@@ -88,6 +88,11 @@ function EconomyService.init()
 	Router.handle("Deck.Set", function(_player, args, profile)
 		return Deck.set(profile :: any, args.uids)
 	end)
+
+	Router.handle("Settings.Set", function(_player, args, profile)
+		(profile :: any).settings[args.key] = args.value
+		return Result.ok(nil)
+	end)
 end
 
 return EconomyService

@@ -264,3 +264,22 @@ Made by Claude while working autonomously on "finish every stage in HANDOFF.md a
   restarts. Missing a day restarts at day 1.
 - **Item names and prices for worlds 2–10 are new and original.** The items, world art and quest
   rewards are all marked Placeholder.
+
+### Client UI (M5, `src/client/App`)
+- **Built in code, from `05-ui-design-system.md` tokens (`Theme`).** The base is a 960×540 design
+  space with a UIScale fit to the device, which is mobile first. Every screen gets its dependencies
+  injected (state, net, clock, attributes). This lets `scripts/studio/ui-check.server.luau` build
+  every screen inside real Studio with a real profile view and real MatchRunner battle states, and
+  check for errors and text overflow.
+- **Left menu.** Play, Cards, Deck, Shop, Worlds, Quests, Settings. **Trade is not shown**: it's V2
+  and not built.
+- **Odds** is its own labelled button next to every Coin and Robux buy, fed by `Shared/Domain/Odds`.
+- **Robux buttons** appear only while `PaidRandomItemsAllowed` is true, only for eggs of unlocked
+  worlds. Until a Developer Product id exists they show "not on sale yet" and are disabled.
+- **No art yet.** Eggs show a neutral silhouette labelled "art pending", not an imitation of the
+  icon pack, which can't be edited. Character cards show initials in a rarity frame with the rarity
+  written out (never colour alone). Both switch to the real assets once their ids are filled in.
+- **Coin icon.** The 🪙 emoji doesn't render in Roblox's font (the Studio screenshot showed a box),
+  so Coins use 💰.
+- **Settings** are saved on the server through a new `Settings.Set` remote, which accepts only the
+  three known boolean keys. The settings panel also explains plainly what Robux can and can't buy.

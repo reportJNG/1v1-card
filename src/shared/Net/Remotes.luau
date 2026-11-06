@@ -171,6 +171,17 @@ local Requests: { [string]: RequestDef } = {
 		end),
 	},
 	["Battle.Forfeit"] = { rate = 1, burst = 1, parse = empty },
+	["Settings.Set"] = {
+		rate = 2,
+		burst = 4,
+		parse = shape({ "key", "value" }, function(t)
+			local value = Check.bool(t.value)
+			if t.key ~= "music" and t.key ~= "sfx" and t.key ~= "reducedMotion" then
+				return nil
+			end
+			return if value ~= nil then { key = t.key, value = value } else nil
+		end),
+	},
 }
 
 -- Server -> client pushes.
