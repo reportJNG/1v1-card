@@ -3,8 +3,20 @@
 Read this before changing anything. It replaces the earlier setup-file constitution, which had
 wagers, 40 eggs and V1 trading. Those were overruled.
 
-The full design lives in the design doc "1v1 CARD — Game Design & Technical Foundation"
-(https://claude.ai/artifact/Bdc9fe3tjh3ybZnVVBVMfg). If this file and the doc disagree, stop and ask.
+The full design lives in `docs/DESIGN.md` (a copy of the design doc "1v1 CARD — Game Design &
+Technical Foundation", https://claude.ai/artifact/Bdc9fe3tjh3ybZnVVBVMfg). If this file and the doc
+disagree, stop and ask.
+
+## Start here (every new session)
+
+This project began in a web chat that can't be resumed here. These files carry it over, so read
+them first, then continue with the next unfinished step without waiting to be asked:
+
+@docs/CONVERSATION.md
+@HANDOFF.md
+@STATUS.md
+
+The owner's original brief files and concept board are in `docs/brief/`.
 
 ## What the game is
 
