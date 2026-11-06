@@ -23,6 +23,7 @@ BattleStage.__index = BattleStage
 -- Far from the hub and the worlds; client-only parts, so every player gets their own stage.
 local ORIGIN = Vector3.new(0, 800, 6000)
 local MARK = 11 -- studs from the centre to each fighter's mark
+local RENDER_KEY = "OneVOneBattleCamera"
 local HOME_CAM = CFrame.lookAt(ORIGIN + Vector3.new(0, 7.5, 27), ORIGIN + Vector3.new(0, 3.2, 0))
 
 export type Stage = typeof(setmetatable(
@@ -33,7 +34,6 @@ export type Stage = typeof(setmetatable(
 		ids: { [number]: string },
 		camera: Camera,
 		shake: number,
-		conn: RBXScriptConnection?,
 		camBase: CFrame,
 		reduced: boolean,
 		saved: { cameraType: Enum.CameraType, cframe: CFrame, fov: number },
@@ -143,7 +143,6 @@ function BattleStage.new(you: number, ids: { [number]: string }, reduced: boolea
 		ids = {},
 		camera = camera,
 		shake = 0,
-		conn = nil,
 		camBase = HOME_CAM,
 		reduced = reduced,
 		saved = { cameraType = camera.CameraType, cframe = camera.CFrame, fov = camera.FieldOfView },
@@ -174,7 +173,10 @@ function BattleStage.new(you: number, ids: { [number]: string }, reduced: boolea
 	camera.CameraType = Enum.CameraType.Scriptable
 	camera.FieldOfView = 46
 	camera.CFrame = HOME_CAM
-	self.conn = RunService.RenderStepped:Connect(function(dt)
+	-- Runs after the default camera module (RenderPriority.Camera) and re-asserts Scriptable every
+	-- frame, so the player's camera scripts can't pull the view back to the character.
+	RunService:BindToRenderStep(RENDER_KEY, Enum.RenderPriority.Camera.Value + 1, function(dt: number)
+		camera.CameraType = Enum.CameraType.Scriptable
 		local s = self.shake
 		local offset = CFrame.new()
 		if s > 0.01 then
@@ -428,9 +430,7 @@ function BattleStage.addShake(self: Stage, amount: number)
 end
 
 function BattleStage.destroy(self: Stage)
-	if self.conn then
-		self.conn:Disconnect()
-	end
+	RunService:UnbindFromRenderStep(RENDER_KEY)
 	self.model:Destroy()
 	local cam = self.camera
 	cam.CameraType = self.saved.cameraType

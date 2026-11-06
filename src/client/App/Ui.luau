@@ -622,6 +622,52 @@ function Ui.bar(parent: Instance, color: Color3, props: { [string]: any }?): (nu
 	end
 end
 
+-- The theme pass: every rounded, raised, code-drawn box under `root` (a Frame/TextButton with a
+-- UICorner and a Raised/Panel/Background fill) becomes the 9-slice tile art, so all screens share
+-- the same look. A gold stroke marks the selected tile. Already-skinned boxes are left alone.
+local TILE_FILLS = { C.Raised, C.Panel, C.Background, C.Stroke, C.PanelDeep, C.RaisedHi }
+
+local function isTileFill(c: Color3): boolean
+	for _, f in TILE_FILLS do
+		if math.abs(c.R - f.R) + math.abs(c.G - f.G) + math.abs(c.B - f.B) < 0.02 then
+			return true
+		end
+	end
+	return false
+end
+
+function Ui.skinify(root: Instance)
+	for _, d in root:GetDescendants() do
+		if
+			(d.ClassName == "Frame" or d.ClassName == "TextButton")
+			and not d:FindFirstChild("Skin")
+			and d:FindFirstChildOfClass("UICorner")
+		then
+			local g = d :: any
+			if g.BackgroundTransparency < 0.5 and isTileFill(g.BackgroundColor3) then
+				local stroke = d:FindFirstChildOfClass("UIStroke")
+				local selected = stroke ~= nil
+					and math.abs(stroke.Color.R - C.Gold.R) + math.abs(stroke.Color.G - C.Gold.G) < 0.05
+				local dim = g.BackgroundColor3 == C.Background
+				for _, c in d:GetChildren() do
+					if c:IsA("UICorner") or c:IsA("UIStroke") or c:IsA("UIGradient") then
+						c:Destroy()
+					end
+				end
+				local skin = Ui.skin(g, if selected then "tile_selected" else "tile", 0.75)
+				if dim then
+					skin.ImageTransparency = 0.4
+				end
+				if g:IsA("TextButton") and not g:GetAttribute("Juiced") then
+					g:SetAttribute("Juiced", true)
+					g.AutoButtonColor = false
+					Ui.juice(g, skin)
+				end
+			end
+		end
+	end
+end
+
 -- Removes every child except layout objects and skins.
 function Ui.clear(container: Instance)
 	for _, child in container:GetChildren() do

@@ -29,7 +29,19 @@ Screenshots are in `docs/screens/`. Look at them against `docs/brief/concept-boa
 to change. Scaling to every screen and all 100 characters continues in the meantime, but nothing
 from the slice is called final until you approve it.
 
-## 5. Still open from before
+## 5. Sound effects (pick or approve)
+Music is in: APMOfficial tracks, which are licensed for Roblox ("Yachiyo-Jishi" in the hub,
+"Battleground" in battles, "Sports Fanfare" on victory, an APM swipe on panel open). Most SFX slots
+in `src/shared/Config/Sounds.luau` are still **empty and silent**: click, hover, close, coin, error,
+hatch shake/crack/reveal, tick, hit, special hit, parry, KO, defeat. Creator Store search can't
+filter by creator, most "click/hit" results are rips from commercial games, and Claude can't hear
+audio to judge it. Either:
+- paste asset ids you like into `Config/Sounds.luau` (ProSoundEffects or APMOfficial uploads are
+  safe), or
+- say "make synthetic SFX", and Claude will synthesize original WAVs in code. That needs an audio
+  upload (Open Cloud Assets API with your API key), because the Studio MCP only uploads images.
+
+## 6. Still open from before
 - Player Emulator: the remaining 3 of the 4 policy combinations (README, "Testing PolicyService
   combinations").
 - Publish to a test universe to try real DataStores, MemoryStore matchmaking and teleports.

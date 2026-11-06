@@ -379,6 +379,7 @@ function App.start(deps: Deps): Ctx
 			close()
 			dim.Visible = true
 			current = build(ctx, panelLayer, arg)
+			Ui.skinify(panelLayer)
 			if hud then
 				hud.select(name)
 			end
@@ -387,6 +388,7 @@ function App.start(deps: Deps): Ctx
 		overlay = function(build: (layer: Frame) -> Screen): Screen
 			local frame = Ui.frame({ BackgroundTransparency = 1, Parent = overlayLayer })
 			local screen = build(frame)
+			Ui.skinify(frame)
 			local wrapped: Screen
 			wrapped = {
 				destroy = function()
@@ -406,21 +408,30 @@ function App.start(deps: Deps): Ctx
 			toastCount += 1
 			local color = if kind == "error" then C.Red elseif kind == "good" then C.Green else C.Blue
 			local t = Ui.frame({
-				BackgroundColor3 = C.Panel,
-				Size = UDim2.fromOffset(440, 36),
+				BackgroundTransparency = 1,
+				Size = UDim2.fromOffset(440, 38),
 				LayoutOrder = toastCount,
 				Parent = toastLayer,
-			}, { Ui.corner(10), Ui.stroke(color, 1.5) })
-			Ui.text({
+			})
+			local skin = Ui.skin(t, "toast", 0.52)
+			skin.ImageColor3 = C.White:Lerp(color, 0.35)
+			local label = Ui.text({
 				Text = text,
 				FontFace = Theme.Face.Bold,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				Size = UDim2.fromScale(1, 1),
+				ZIndex = 2,
 				Parent = t,
 			})
+			Ui.outline(C.Night, 1, 0.3).Parent = label
+			Ui.popIn(t)
+			if kind == "error" then
+				Ui.sound("error")
+			end
 			task.delay(3, function()
 				if t.Parent then
-					local fade = TweenService:Create(t, TweenInfo.new(0.3), { BackgroundTransparency = 1 })
+					TweenService:Create(skin, TweenInfo.new(0.3), { ImageTransparency = 1 }):Play()
+					local fade = TweenService:Create(label, TweenInfo.new(0.3), { TextTransparency = 1 })
 					fade:Play()
 					fade.Completed:Wait()
 					t:Destroy()
@@ -480,6 +491,7 @@ function App.start(deps: Deps): Ctx
 			refreshHud()
 			if current and current.refresh then
 				current.refresh()
+				Ui.skinify(panelLayer)
 			end
 			for _, o in overlays do
 				if o.refresh then

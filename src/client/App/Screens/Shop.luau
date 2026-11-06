@@ -32,6 +32,17 @@ local BAND_GLOW: { [string]: Color3 } = {
 }
 local RARITY_ORDER = { "Mythical", "Legendary", "Epic", "Rare", "Common" }
 
+-- The most common rarity this egg can drop (its pool keys).
+local function lowestRarity(egg: Types.EggDef): string
+	for i = #RARITY_ORDER, 1, -1 do
+		local ids = (egg.pool :: any)[RARITY_ORDER[i]]
+		if ids and #ids > 0 then
+			return RARITY_ORDER[i]
+		end
+	end
+	return "Common"
+end
+
 -- The rarest rarity this egg can drop (its pool keys).
 local function bestRarity(egg: Types.EggDef): string
 	for _, r in RARITY_ORDER do
@@ -200,14 +211,14 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		Ui.fit(title, 26, 12)
 		local stage = Ui.frame({
 			BackgroundTransparency = 1,
-			Size = UDim2.new(1, 0, 0, 150),
+			Size = UDim2.new(1, 0, 0, 128),
 			LayoutOrder = 2,
 			Parent = content,
 		})
 		Ui.image("egg_pedestal", {
 			AnchorPoint = Vector2.new(0.5, 1),
 			Position = UDim2.new(0.5, 0, 1, 6),
-			Size = UDim2.fromOffset(230, 115),
+			Size = UDim2.fromOffset(210, 105),
 			Parent = stage,
 		})
 		Ui.image("egg_glow", {
@@ -218,13 +229,15 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			ImageTransparency = 0.35,
 			Parent = stage,
 		})
-		local icon = Visuals.egg(stage, egg, false, 124)
+		local icon = Visuals.egg(stage, egg, false, 108)
 		icon.AnchorPoint = Vector2.new(0.5, 0.5)
 		icon.Position = UDim2.fromScale(0.5, 0.42)
 		local world = Worlds.ById[egg.world or 0]
 		local best = bestRarity(egg)
 		Ui.text({
-			Text = `Get a {best} character or better · {if world then `World {world.id}` else "Event"}`,
+			Text = `Drops {lowestRarity(egg)} up to {best} (see Odds) · {if world
+				then `World {world.id}`
+				else "Event"}`,
 			FontFace = Theme.Face.Bold,
 			TextSize = 13,
 			TextColor3 = Theme.Rarity[best] or C.Text,

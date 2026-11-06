@@ -2,7 +2,8 @@
 -- Builds the hub plaza from Config/HubLayout: the plaza floor with glowing path edges, every
 -- generated mesh model (one MeshPart each, loaded once per mesh with AssetService and cloned),
 -- lantern lights, the Worlds portal core, signs, interaction prompts, falling petals and the
--- spawn. Idempotent: rebuilding replaces the previous hub. Runs on Hub servers only.
+-- spawn. The floor and spawn exist on return; the meshes stream in on a background thread.
+-- Idempotent: rebuilding replaces the previous hub. Runs on Hub servers only.
 local AssetService = game:GetService("AssetService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
@@ -294,9 +295,14 @@ function HubBuilder.build(parent: Instance): Model
 	local models = Instance.new("Folder")
 	models.Name = "Models"
 	models.Parent = hub
-	for i, piece in HubLayout.Pieces do
-		place(piece, i, origin, models)
-	end
+	-- Meshes load over several seconds: do it in the background so the floor and the spawn
+	-- exist at once and server boot (WorldService.init) never waits on the asset service.
+	task.spawn(function()
+		for i, piece in HubLayout.Pieces do
+			place(piece, i, origin, models)
+		end
+		HubBuilder.buildStageProps()
+	end)
 
 	-- Interactive features.
 	for key, f in HubLayout.Features do
@@ -332,7 +338,6 @@ function HubBuilder.build(parent: Instance): Model
 	spawn.Parent = hub
 
 	hub.Parent = parent
-	HubBuilder.buildStageProps()
 	return hub
 end
 

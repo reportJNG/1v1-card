@@ -8,6 +8,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Presets = require(Shared.Config.Lighting)
+local Ui = require(script.Parent.Ui)
+local Sounds = require(Shared.Config.Sounds)
+local SoundService = game:GetService("SoundService")
 
 local AreaFx = {}
 
@@ -95,16 +98,63 @@ function AreaFx.apply(name: string, instant: boolean?)
 end
 
 local battleOpen = false
+local musicOn = true
+local track: Sound? = nil
+local trackName: string? = nil
+
+-- Crossfades to an area's looping track (Config/Sounds music_*). Silent when the slot has no id
+-- or the player turned music off in Settings.
+local function playMusic(name: string?)
+	if name == trackName then
+		return
+	end
+	trackName = name
+	local old = track
+	if old then
+		local fade = TweenService:Create(old, FADE, { Volume = 0 })
+		fade.Completed:Connect(function()
+			old:Destroy()
+		end)
+		fade:Play()
+	end
+	track = nil
+	local def = if name then Sounds[name] else nil
+	if def == nil or def.id == nil or not musicOn then
+		return
+	end
+	local snd = Instance.new("Sound")
+	snd.Name = `Music_{name}`
+	snd.SoundId = def.id
+	snd.Looped = def.looped == true
+	snd.Volume = 0
+	snd.Parent = SoundService
+	snd:Play()
+	TweenService:Create(snd, FADE, { Volume = def.volume }):Play()
+	track = snd
+end
+
+function AreaFx.setMusic(on: boolean)
+	musicOn = on
+	local name = trackName
+	trackName = nil
+	playMusic(if on then name else nil)
+	if not on then
+		trackName = name
+	end
+end
 
 local function refresh()
 	local player = Players.LocalPlayer
 	local world = if player then player:GetAttribute("World") else 0
 	if battleOpen then
 		AreaFx.apply("arena")
+		playMusic("music_battle")
 	elseif world == 0 or world == nil then
 		AreaFx.apply("hub")
+		playMusic("music_hub")
 	else
 		AreaFx.apply("world")
+		playMusic("music_hub")
 	end
 end
 
@@ -142,6 +192,15 @@ function AreaFx.start(ctx: any)
 	ctx.state.changed:connect(function(what: string)
 		if what == "battle" then
 			AreaFx.setBattle(ctx.state.battle ~= nil)
+		elseif what == "profile" then
+			-- The player's audio settings (saved on the server, Settings.Set).
+			local settings = ctx.state.view and ctx.state.view.settings
+			if settings then
+				if (settings.music ~= false) ~= musicOn then
+					AreaFx.setMusic(settings.music ~= false)
+				end
+				Ui.setSfxVolume(if settings.sfx == false then 0 else 1)
+			end
 		end
 	end)
 	refresh()

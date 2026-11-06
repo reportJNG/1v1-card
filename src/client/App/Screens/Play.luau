@@ -20,11 +20,11 @@ local function band(waited: number): number
 end
 
 return function(ctx: any, layer: Frame, _arg: any?): any
-	local p = Ui.panel(layer, "1v1 Arena", ctx.close, UDim2.fromOffset(700, 430), "icon_play")
+	local p = Ui.panel(layer, "1v1 Arena", ctx.close, UDim2.fromOffset(700, 460), "icon_play")
 	local deckRow = Ui.frame(
 		{ BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 170), Parent = p.body },
 		{
-			Ui.list(true, 12, Enum.HorizontalAlignment.Center),
+			Ui.list(true, 10, Enum.HorizontalAlignment.Center),
 		}
 	)
 	local info = Ui.frame({
@@ -44,38 +44,82 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		for i, uid in view.deck do
 			local card = view.cards[uid]
 			if card then
-				Visuals.portrait(deckRow, card.characterId, card.golden, Vector2.new(110, 150), true).LayoutOrder =
+				Visuals.portrait(deckRow, card.characterId, card.golden, Vector2.new(108, 150), true).LayoutOrder =
 					i
 				table.insert(specs, { characterId = card.characterId, level = card.level })
 			end
 		end
+		-- VS and the unknown opponent (a card back until a match is found).
+		Ui.image("vs_badge", { Size = UDim2.fromOffset(110, 70), LayoutOrder = 10, Parent = deckRow })
+		local foe = Ui.frame({
+			BackgroundTransparency = 1,
+			Size = UDim2.fromOffset(108, 150),
+			LayoutOrder = 11,
+			Parent = deckRow,
+		})
+		Ui.image("card_back", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(106, 148),
+			ScaleType = Enum.ScaleType.Stretch,
+			Parent = foe,
+		})
+		Ui.display({ Text = "?", TextSize = 54, Size = UDim2.fromScale(1, 1), Parent = foe })
 		local league = Progress.leagueFor(view.trophies)
 		local purse = Economy.Matches.purseByLeague[league.id]
-		Ui.text({
-			Text = `{league.id} League · 🏆 {Format.number(view.trophies)} · cards fight at up to level {league.rankedLevelCap}`,
-			FontFace = Theme.Face.Bold,
+		local leagueLine = Ui.text({
+			Text = `{string.upper(league.id)} LEAGUE · cards fight at up to level {league.rankedLevelCap}`,
+			FontFace = Theme.Face.Title,
+			TextSize = 16,
 			TextXAlignment = Enum.TextXAlignment.Center,
 			LayoutOrder = 1,
 			Parent = info,
 		})
+		Ui.outline(C.Night, 1, 0.3).Parent = leagueLine
+		-- What a win pays (a game-paid purse: no entry fee, nothing at stake).
+		local pays = Ui.frame({
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, 0, 0, 30),
+			LayoutOrder = 2,
+			Parent = info,
+		}, { Ui.list(true, 18, Enum.HorizontalAlignment.Center) })
 		Ui.text({
-			Text = `Win: 💰 {purse} purse (paid by the game) and about +{Economy.Matches.trophyWin} trophies. No entry fee, nothing at stake.`,
+			Text = "Win:",
+			FontFace = Theme.Face.Bold,
+			TextColor3 = C.Muted,
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, 30),
+			LayoutOrder = 0,
+			Parent = pays,
+		})
+		Ui.price(`+{Format.number(purse)}`, "icon_coin", 26, {
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, 30),
+			LayoutOrder = 1,
+			Parent = pays,
+		})
+		Ui.price(`+{Economy.Matches.trophyWin}`, "icon_trophy", 26, {
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, 30),
+			LayoutOrder = 2,
+			Parent = pays,
+		})
+		if #specs == 3 then
+			Ui.price(`Deck Power {Format.number(Power.deck(specs).total)}`, "icon_power", 26, {
+				AutomaticSize = Enum.AutomaticSize.X,
+				Size = UDim2.fromOffset(0, 30),
+				LayoutOrder = 3,
+				Parent = pays,
+			})
+		end
+		Ui.text({
+			Text = "No entry fee and nothing at stake: the purse is paid by the game.",
 			TextSize = Theme.Size.small,
 			TextColor3 = C.Muted,
 			TextXAlignment = Enum.TextXAlignment.Center,
-			LayoutOrder = 2,
+			LayoutOrder = 3,
 			Parent = info,
 		})
-		if #specs == 3 then
-			Ui.text({
-				Text = `Deck Power {Power.deck(specs).total}`,
-				TextColor3 = C.Green,
-				FontFace = Theme.Face.Bold,
-				TextXAlignment = Enum.TextXAlignment.Center,
-				LayoutOrder = 3,
-				Parent = info,
-			})
-		end
 		queueText = Ui.text({
 			Text = "",
 			FontFace = Theme.Face.Bold,
@@ -87,7 +131,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		})
 		local q = ctx.state.queue
 		if q.state == "Searching" then
-			local cancel = Ui.button("Cancel search", "ghost", function()
+			local cancel = Ui.button("Cancel search", "danger", function()
 				ctx.request("Queue.Leave")
 			end, { Size = UDim2.fromOffset(240, 44), LayoutOrder = 5, Name = "CancelQueue" })
 			cancel.instance.Parent = info
@@ -99,7 +143,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		else
 			local find = Ui.button("Find Match", "primary", function()
 				ctx.request("Queue.Join")
-			end, { Size = UDim2.fromOffset(260, 48), LayoutOrder = 5, Name = "FindMatch" })
+			end, { Size = UDim2.fromOffset(300, 54), LayoutOrder = 5, Name = "FindMatch" })
 			find.instance.Parent = info
 		end
 		Ui.text({
