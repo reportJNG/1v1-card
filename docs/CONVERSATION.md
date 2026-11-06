@@ -241,3 +241,26 @@ Made by Claude while working autonomously on "finish every stage in HANDOFF.md a
 - **Studio.** ReserveServer doesn't exist there, so a pair plays locally on the same server. With an
   unpublished place, MemoryStore falls back to an in-memory map (Studio only, like the DataStore
   fallback). A live server never falls back.
+
+### Worlds (M6)
+- **One place, not two.** The design describes separate Hub and Battle places. For V1, battle
+  servers are reserved servers of the same place, detected by `PrivateServerId`; they skip
+  building worlds. This avoids a second place to publish and keep in sync. Splitting them later
+  only changes `MatchmakingService.reserve` / `sendHome`.
+- **Layout.** Each world sits 2,000 studs apart on X. It has two common resources (6 and 5 nodes)
+  and one rare (2 nodes, 120 s respawn, and also a 3% drop from the common nodes). Node positions
+  come from one pure function (`WorldLayout`), used by both the builder and the server range
+  check, so they can't disagree.
+- **Respawn timers are per player.** Players never compete for nodes. The timers live in server
+  memory: a rejoin resets them, which is harmless because the respawns are short. There is no idle
+  income.
+- **Merchants.** Selling items needs the player within 16 studs of their current world's
+  merchant. Any merchant buys any item.
+- **Quests.** Each player gets 3 dailies a day, seeded by day and UserId so a rejoin can't
+  reroll them. Dailies pay Coins and achievements pay Gems.
+  - The Secret Egg's reveal quest is "Harvest 150 resources in the Shadow Dimension".
+  - Voided ranked matches don't count toward quests.
+- **Streak.** Days 1–6 pay Coins (100–400), day 7 pays 10 Gems and a Golden Basic egg, then it
+  restarts. Missing a day restarts at day 1.
+- **Item names and prices for worlds 2–10 are new and original.** The items, world art and quest
+  rewards are all marked Placeholder.

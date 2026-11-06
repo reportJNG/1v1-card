@@ -13,6 +13,7 @@ local Types = require(Shared.Types)
 local Result = require(Shared.Domain.Result)
 local Settlement = require(Shared.Domain.Settlement)
 local Trials = require(Shared.Domain.Trials)
+local Quests = require(Shared.Domain.Quests)
 local Economy = require(Shared.Config.Economy)
 local Server = script.Parent.Parent
 local Router = require(Server:WaitForChild("Net").Router)
@@ -74,6 +75,12 @@ local function settleRanked(record: MatchHost.Record, result: MatchRunner.EndInf
 		})
 		if r.ok then
 			rewards[userId] = r.value
+			if not r.value.duplicate and r.value.voidReason == nil then
+				Quests.track(profile, "PlayRanked", 1, os.time())
+				if r.value.won then
+					Quests.track(profile, "WinRanked", 1, os.time())
+				end
+			end
 			Telemetry.event(Players:GetPlayerByUserId(userId), "match_end", {
 				won = result.winner == side,
 				reason = result.reason,
@@ -103,6 +110,10 @@ local function settleTrial(record: MatchHost.Record, result: MatchRunner.EndInfo
 		local r = Trials.grantClear(profile, record.worldId :: number, os.time())
 		if r.ok then
 			rewards[userId] = r.value
+			Quests.track(profile, "TrialWin", 1, os.time())
+			if r.value.firstClear then
+				Quests.track(profile, "TrialFirstClear", 1, os.time())
+			end
 		end
 	else
 		rewards[userId] = { firstClear = false, trophies = 0, coins = 0, gems = 0 }

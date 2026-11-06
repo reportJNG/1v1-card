@@ -20,4 +20,18 @@ for _, entry in LogService:GetLogHistory() do
 		print(`BOOT LOG: {entry.message}`)
 	end
 end
-print(`BOOT CHECK: remotes={remotes and #remotes:GetChildren() or 0} errors={errors}`)
+local worlds = workspace:FindFirstChild("Worlds")
+local nodes, prompts = 0, 0
+if worlds then
+	for _, d in worlds:GetDescendants() do
+		if d:GetAttribute("NodeId") then
+			nodes += 1
+		elseif d:IsA("ProximityPrompt") then
+			prompts += 1
+		end
+	end
+end
+print(
+	`BOOT CHECK: remotes={remotes and #remotes:GetChildren() or 0} worlds={worlds and #worlds:GetChildren() or 0}`
+		.. ` nodes={nodes} prompts={prompts} errors={errors}`
+)

@@ -16,6 +16,9 @@ local Items = require(Config.Items)
 local Monetization = require(Config.Monetization)
 local Market = require(Config.Market)
 local ContentStatus = require(Config.ContentStatus)
+local WorldLayouts = require(Config.WorldLayouts)
+local QuestsCfg = require(Config.Quests)
+local Guardians = require(Config.Guardians)
 local Odds = require(script.Parent.Odds)
 
 export type Report = { errors: { string }, warnings: { string } }
@@ -311,6 +314,74 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 		end
 		if not isPositiveInt(item.maxStack) or not isPositiveInt(item.sellPrice) then
 			err(`Items: {item.id} needs positive integer maxStack and sellPrice`)
+		end
+	end
+
+	-- World layouts and farming
+	for _, world in Worlds.List do
+		local layout = WorldLayouts.ByWorld[world.id]
+		if layout == nil then
+			err(`WorldLayouts: world {world.id} has no layout`)
+			continue
+		end
+		if #layout.resources < 2 or #layout.resources > 3 then
+			err(`WorldLayouts: world {world.id} needs 2-3 resource types`)
+		end
+		for _, res in layout.resources do
+			local item = Items.ById[res.itemId]
+			if item == nil or item.world ~= world.id then
+				err(`WorldLayouts: world {world.id} farms {res.itemId}, which is not one of its items`)
+			end
+			if res.rareItemId and Items.ById[res.rareItemId] == nil then
+				err(`WorldLayouts: unknown rare drop {res.rareItemId}`)
+			end
+			if not isPositiveInt(res.nodes) or not isPositiveInt(res.respawnSeconds) then
+				err(`WorldLayouts: {res.itemId} needs positive integer nodes and respawnSeconds`)
+			end
+			if not isPositiveInt(res.yield[1]) or res.yield[2] < res.yield[1] then
+				err(`WorldLayouts: {res.itemId} has a bad yield range`)
+			end
+		end
+		local guardian = Guardians.ByWorld[world.id]
+		if guardian == nil or #guardian.deck ~= 3 then
+			err(`Guardians: world {world.id} needs a Guardian with 3 cards`)
+		else
+			for _, spec in guardian.deck do
+				if Characters.ById[spec.characterId] == nil then
+					err(`Guardians: world {world.id} uses unknown character {spec.characterId}`)
+				end
+			end
+		end
+	end
+
+	-- Quests
+	local QUEST_KINDS = {
+		WinRanked = true,
+		PlayRanked = true,
+		Harvest = true,
+		Hatch = true,
+		SellItems = true,
+		Merge = true,
+		TrialWin = true,
+		TrialFirstClear = true,
+	}
+	for id, q in QuestsCfg.ById do
+		if not QUEST_KINDS[q.kind] then
+			err(`Quests: {id} has unknown kind {q.kind}`)
+		end
+		if not isPositiveInt(q.target) then
+			err(`Quests: {id} needs a positive integer target`)
+		end
+		if q.egg and Eggs.ById[q.egg.id] == nil then
+			err(`Quests: {id} rewards unknown egg {q.egg.id}`)
+		end
+	end
+	if #QuestsCfg.Daily < QuestsCfg.dailyCount then
+		err("Quests: fewer daily quests than dailyCount")
+	end
+	for _, egg in Eggs.List do
+		if egg.hiddenUntilQuest and QuestsCfg.ById[egg.hiddenUntilQuest] == nil then
+			err(`Eggs: {egg.id} is revealed by unknown quest {egg.hiddenUntilQuest}`)
 		end
 	end
 

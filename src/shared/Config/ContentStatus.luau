@@ -11,7 +11,9 @@ return table.freeze({
 		eggPrices = "Egg coin prices are starting values pending the economy simulation.",
 		economyPrices = "Card storage, item slot and merge prices are starting values.",
 		characterNumbers = "Character stats and abilities come from the reference simulation and need playtest tuning.",
-		items = "Only World 1 items exist; worlds 2-10 items are designed in M6.",
+		items = "Item names and merchant prices for all 10 worlds are starting values pending the economy simulation.",
+		worldArt = "Worlds are data-driven blockouts (flat ground, node and NPC markers) until world art exists.",
+		questRewards = "Quest targets and rewards are starting values.",
 		guardianDecks = "Guardian Trial decks use the launch characters until the full roster exists.",
 	}) :: { [string]: string },
 })

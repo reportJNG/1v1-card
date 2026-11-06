@@ -138,6 +138,14 @@ return table.freeze({
 
 	EggBag = table.freeze({ maxPerStack = 99 }),
 
+	-- 7-day login streak: Coins on days 1-6, then Gems and a Golden egg on day 7. Missing a day
+	-- restarts at day 1; after day 7 the streak starts over.
+	Streak = table.freeze({
+		coins = table.freeze({ 100, 150, 200, 250, 300, 400 }),
+		day7Gems = 10,
+		day7Egg = "egg_basic", -- Golden
+	}),
+
 	-- NPC merchant price for a spare copy of a character the player already has at max level.
 	CardSale = table.freeze({
 		Common = 150,

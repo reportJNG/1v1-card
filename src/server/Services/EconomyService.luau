@@ -10,6 +10,7 @@ local Cards = require(Shared.Domain.Cards)
 local Deck = require(Shared.Domain.Deck)
 local Inventory = require(Shared.Domain.Inventory)
 local ClientView = require(Shared.Domain.ClientView)
+local Quests = require(Shared.Domain.Quests)
 local Router = require(script.Parent.Parent:WaitForChild("Net").Router)
 local Telemetry = require(script.Parent.Telemetry)
 
@@ -27,6 +28,7 @@ end
 
 local function hatchReply(
 	player: Player,
+	profile: Types.PlayerProfile,
 	eggId: string,
 	source: string,
 	r: Types.Result<Hatch.HatchResult>
@@ -34,6 +36,7 @@ local function hatchReply(
 	if not r.ok then
 		return Result.fail(r.err)
 	end
+	Quests.track(profile, "Hatch", #r.value.cards, os.time())
 	for _, copy in r.value.cards do
 		Telemetry.event(
 			player,
@@ -47,23 +50,24 @@ end
 function EconomyService.init()
 	Router.handle("Shop.BuyEgg", function(player, args, profile)
 		local r = Hatch.buyWithCoins(profile :: any, args.eggId, `egg:{args.requestId}`, rng, os.time())
-		return hatchReply(player, args.eggId, "coins", r)
+		return hatchReply(player, profile :: any, args.eggId, "coins", r)
 	end, { saveNow = true })
 
 	Router.handle("Bag.OpenEgg", function(player, args, profile)
 		local r = Hatch.openFromBag(profile :: any, args.eggId, args.golden, rng, os.time())
-		return hatchReply(player, args.eggId, if args.golden then "bag_golden" else "bag", r)
+		return hatchReply(player, profile :: any, args.eggId, if args.golden then "bag_golden" else "bag", r)
 	end, { saveNow = true })
 
 	Router.handle("Daily.ClaimFreeEgg", function(player, _args, profile)
 		local r = Hatch.claimDailyFree(profile :: any, os.time() // 86400, rng, os.time())
-		return hatchReply(player, "daily", "daily", r)
+		return hatchReply(player, profile :: any, "daily", "daily", r)
 	end, { saveNow = true })
 
 	Router.handle("Cards.Merge", function(player, args, profile)
 		local r =
 			Cards.merge(profile :: any, args.targetUid, args.spareUids, `merge:{args.requestId}`, os.time())
 		if r.ok then
+			Quests.track(profile :: any, "Merge", 1, os.time())
 			Telemetry.event(player, "merge", { to = r.value.toLevel, fee = r.value.coinFee })
 		end
 		return r

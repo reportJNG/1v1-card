@@ -25,6 +25,18 @@ function Progress.isEggAvailable(profile: Types.PlayerProfile, egg: Types.EggDef
 	return true
 end
 
+-- Moves the player to an unlocked world (the server then moves their character there).
+function Progress.travel(profile: Types.PlayerProfile, worldId: number): Types.Result<number>
+	if Worlds.ById[worldId] == nil then
+		return { ok = false, err = "UnknownWorld" }
+	end
+	if not Progress.isWorldUnlocked(profile, worldId) then
+		return { ok = false, err = "WorldLocked" }
+	end
+	profile.currentWorld = worldId
+	return { ok = true, value = worldId }
+end
+
 function Progress.leagueFor(trophies: number): Types.LeagueDef
 	local current = Leagues.List[1]
 	for _, league in Leagues.List do

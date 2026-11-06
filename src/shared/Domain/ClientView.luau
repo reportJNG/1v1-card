@@ -27,6 +27,11 @@ export type View = {
 	quests: { [string]: { progress: number, claimed: boolean } },
 	flags: { [string]: any },
 	cards: { [string]: CardView },
+	currentWorld: number,
+	questDay: number,
+	trials: { [string]: number },
+	stats: { [string]: number },
+	settings: { [string]: boolean },
 }
 
 export type Delta = {
@@ -77,8 +82,8 @@ function ClientView.card(copy: Types.CardCopy): CardView
 	}
 end
 
-local SCALARS = { "coins", "gems", "trophies", "highestTrophies", "cardSlots" }
-local TABLES = { "deck", "eggBag", "items", "daily", "quests", "flags" }
+local SCALARS = { "coins", "gems", "trophies", "highestTrophies", "cardSlots", "currentWorld", "questDay" }
+local TABLES = { "deck", "eggBag", "items", "daily", "quests", "flags", "trials", "stats", "settings" }
 
 function ClientView.build(profile: Types.PlayerProfile): View
 	local p = profile :: any
