@@ -1,0 +1,22 @@
+{
+  "name": "1v1card-dev",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Shared": { "$path": "src/shared" },
+      "DevPackages": {
+        "$className": "Folder",
+        "TestEZ": { "$path": "DevPackages/TestEZ" }
+      }
+    },
+    "ServerScriptService": {
+      "Server": { "$path": "src/server" },
+      "Tests": { "$path": "tests" }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Client": { "$path": "src/client" }
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: CompeyDev/setup-rokit@v0.1.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Format
+        run: stylua --check src tests
+      - name: Lint
+        run: selene src tests
+      - name: Build both projects
+        run: |
+          rojo build default.project.json -o game.rbxl
+          mkdir -p DevPackages && git clone --depth 1 https://github.com/Roblox/testez.git /tmp/testez && cp -r /tmp/testez/src DevPackages/TestEZ
+          rojo build dev.project.json -o dev.rbxl
+      - name: Type check (strict)
+        run: |
+          curl -sSLo globalTypes.d.luau https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/main/scripts/globalTypes.d.luau
+          rojo sourcemap dev.project.json -o sourcemap.json
+          luau-lsp analyze --definitions=globalTypes.d.luau --definitions=testez.d.luau --sourcemap=sourcemap.json src tests
+      - name: Unit tests (headless)
+        run: |
+          curl -sSLo luau.zip https://github.com/luau-lang/luau/releases/latest/download/luau-ubuntu.zip
+          unzip -o luau.zip luau && chmod +x luau
+          python3 scripts/headless/bundle.py
+          ./luau build/headless.luau
+# The same TestEZ suite also runs inside Roblox Studio (README "Unit tests"); Studio is the
+# reference runtime, the headless host covers only the engine surface the specs need.
