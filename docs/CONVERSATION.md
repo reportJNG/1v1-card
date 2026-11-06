@@ -283,3 +283,40 @@ Made by Claude while working autonomously on "finish every stage in HANDOFF.md a
   so Coins use 💰.
 - **Settings** are saved on the server through a new `Settings.Set` remote, which accepts only the
   three known boolean keys. The settings panel also explains plainly what Robux can and can't buy.
+
+### The 100-character roster and egg pools
+- **The roster.** 93 new original characters (`sim/roster.py`) join the 7 launch ones, whose ids
+  and order are unchanged.
+  - Rarity split is 30 Common, 26 Rare, 20 Epic, 14 Legendary, 10 Mythical, with 6–7 per family.
+  - Names were checked against well-known anime and game characters. Examples I avoided: Pyra,
+    Ignis, Noctis, Kiba, Vex, Valka, Nala, Sora.
+- **Mechanics.** Every Special and passive uses mechanics the engine already has. Each character
+  has one tuned number, written to `sim/roster_tuned.json`.
+- **Roles follow rarity.** Measured on the model, a Common Support loses even with the biggest
+  heal, and a Mythical Bruiser wins even with the weakest Special, because the rarity stat budget
+  and role base stats dominate. So low-rarity healers and shielders are Guardians or Bruisers,
+  Support is a premium (Legendary/Mythical) role, and high-rarity damage dealers are mostly
+  Skirmishers. **Taren's and Vesper's Special multipliers hit the 1.15 floor; their roles are worth
+  revisiting with the owner.**
+- **The launch seven were re-tuned for the bigger roster**, one number each (marked in
+  `Characters.luau`).
+- **One battle rule changed.** `guardVsAttack` went from 0.35 to 0.40 (Defend softens a basic
+  Attack by 40%), because with the full roster "always Attack" reached 61% against a ≤60% target.
+  Both parity fixtures were regenerated; Luau and Python still match exactly.
+- **Gate methodology.** `sim/balance.py` now scales the per-character sample with the roster
+  (≥75 matches × roster size per worker). With 100 characters, the old fixed sample gave each
+  character only ~360 appearances, about ±2.6% noise, so a perfectly balanced roster could fail
+  the 45–55% gate by chance.
+- **Result.** All targets pass:
+  - every character 47.4–52.9%
+  - random 4–12%
+  - attack-only 59%
+  - adaptive 60%
+  - match length 15.9
+- **Egg pools** (`Config/EggPools.luau`):
+  - 8–10 themed characters per egg. Cat leans Ninja and Dog leans Beast, as the design says.
+  - Every character is in at least one egg.
+  - Pools only hold rarities the egg's band can drop.
+  - Pools stay Placeholder until the owner reviews them.
+- **Guardians** field three characters from their own world's eggs. In `sim/trials.py`, a random
+  same-level deck beats them 36–53% of the time.

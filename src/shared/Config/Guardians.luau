@@ -1,7 +1,8 @@
 --!strict
 -- One Guardian per world for the Guardian Trials (PvE). The Guardian plays the adaptive reader
 -- AI (Server/Battle/BattleAI). First-clear rewards are in Economy.Trials.
--- Decks use launch characters until the full roster exists (ContentStatus: guardianDecks).
+-- Each Guardian fields three characters from its own world's eggs, at a level that rises
+-- world by world. The difficulty curve still needs playtesting (ContentStatus: guardianDecks).
 
 export type GuardianDef = {
 	world: number,
@@ -14,27 +15,27 @@ local List: { GuardianDef } = {
 		world = 1,
 		displayName = "Warden Moss",
 		deck = {
+			{ characterId = "marza_steelheart", level = 1 },
 			{ characterId = "brannok_ironhide", level = 1 },
-			{ characterId = "ren_emberfang", level = 1 },
-			{ characterId = "aurelia_dawn", level = 1 },
+			{ characterId = "aoi_wisplight", level = 1 },
 		},
 	},
 	{
 		world = 2,
 		displayName = "Thistle the Grove-Keeper",
 		deck = {
-			{ characterId = "aurelia_dawn", level = 2 },
-			{ characterId = "yuki_frostveil", level = 2 },
-			{ characterId = "rai_stormvolt", level = 2 },
+			{ characterId = "rowan_soulkeeper", level = 2 },
+			{ characterId = "shiro_spiritmoss", level = 2 },
+			{ characterId = "faelan_glyphstone", level = 2 },
 		},
 	},
 	{
 		world = 3,
 		displayName = "Sultana Kesh",
 		deck = {
-			{ characterId = "taren_ashscale", level = 3 },
-			{ characterId = "brannok_ironhide", level = 3 },
-			{ characterId = "vesper_shade", level = 3 },
+			{ characterId = "nyx_voidglimmer", level = 3 },
+			{ characterId = "benedia_lightwell", level = 3 },
+			{ characterId = "juno_sparkwhip", level = 3 },
 		},
 	},
 	{
@@ -42,17 +43,17 @@ local List: { GuardianDef } = {
 		displayName = "Old Hrimvald",
 		deck = {
 			{ characterId = "yuki_frostveil", level = 4 },
-			{ characterId = "brannok_ironhide", level = 4 },
-			{ characterId = "rai_stormvolt", level = 4 },
+			{ characterId = "yara_moonhex", level = 4 },
+			{ characterId = "sythe_cragscale", level = 4 },
 		},
 	},
 	{
 		world = 5,
 		displayName = "Magmar the Forgeborn",
 		deck = {
+			{ characterId = "sorin_embervale", level = 6 },
 			{ characterId = "taren_ashscale", level = 6 },
-			{ characterId = "ren_emberfang", level = 6 },
-			{ characterId = "brannok_ironhide", level = 6 },
+			{ characterId = "vesh_cinderhorn", level = 6 },
 		},
 	},
 	{
@@ -60,44 +61,44 @@ local List: { GuardianDef } = {
 		displayName = "Countess Veyra",
 		deck = {
 			{ characterId = "vesper_shade", level = 7 },
-			{ characterId = "taren_ashscale", level = 7 },
-			{ characterId = "aurelia_dawn", level = 7 },
+			{ characterId = "vesh_cinderhorn", level = 7 },
+			{ characterId = "selene_gloomfeather", level = 7 },
 		},
 	},
 	{
 		world = 7,
 		displayName = "Skyherald Ilun",
 		deck = {
-			{ characterId = "aurelia_dawn", level = 9 },
-			{ characterId = "rai_stormvolt", level = 9 },
-			{ characterId = "yuki_frostveil", level = 9 },
+			{ characterId = "eira_mistsong", level = 9 },
+			{ characterId = "elio_dawnspire", level = 9 },
+			{ characterId = "mira_stormglen", level = 9 },
 		},
 	},
 	{
 		world = 8,
 		displayName = "King Osrath the Undying",
 		deck = {
-			{ characterId = "brannok_ironhide", level = 11 },
-			{ characterId = "taren_ashscale", level = 11 },
-			{ characterId = "vesper_shade", level = 11 },
+			{ characterId = "leopold_lionmark", level = 11 },
+			{ characterId = "elio_dawnspire", level = 11 },
+			{ characterId = "korr_flamejaw", level = 11 },
 		},
 	},
 	{
 		world = 9,
 		displayName = "The Hollow Regent",
 		deck = {
-			{ characterId = "vesper_shade", level = 13 },
-			{ characterId = "rai_stormvolt", level = 13 },
-			{ characterId = "taren_ashscale", level = 13 },
+			{ characterId = "lyss_nebulight", level = 13 },
+			{ characterId = "quen_spiralsight", level = 13 },
+			{ characterId = "mira_stormglen", level = 13 },
 		},
 	},
 	{
 		world = 10,
 		displayName = "Seraph-Tyrant Azael",
 		deck = {
-			{ characterId = "taren_ashscale", level = 15 },
 			{ characterId = "aurelia_dawn", level = 15 },
-			{ characterId = "vesper_shade", level = 15 },
+			{ characterId = "ruska_sinmaw", level = 15 },
+			{ characterId = "tamsin_ghostbloom", level = 15 },
 		},
 	},
 }

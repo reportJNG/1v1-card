@@ -5,15 +5,15 @@
 
 return table.freeze({
 	Placeholder = table.freeze({
-		eggPools = "All 24 eggs share the 7 launch characters until the 100-character roster and egg-specific pools are designed.",
+		eggPools = "Egg pools are designed (themed, 8-10 characters each, every character in at least one egg) but await owner review and playtest.",
 		oddsBands = "Band odds (A-E) are design-doc proposals, not balanced values.",
 		eventOdds = "The Party Egg uses a stand-in Event band until event design.",
 		eggPrices = "Egg coin prices are starting values pending the economy simulation.",
 		economyPrices = "Card storage, item slot and merge prices are starting values.",
-		characterNumbers = "Character stats and abilities come from the reference simulation and need playtest tuning.",
+		characterNumbers = "All 100 characters pass sim/balance.py (47-53% win rate each), but numbers need real playtest tuning.",
 		items = "Item names and merchant prices for all 10 worlds are starting values pending the economy simulation.",
 		worldArt = "Worlds are data-driven blockouts (flat ground, node and NPC markers) until world art exists.",
 		questRewards = "Quest targets and rewards are starting values.",
-		guardianDecks = "Guardian Trial decks use the launch characters until the full roster exists.",
+		guardianDecks = "Guardian decks come from each world's own eggs; the difficulty curve needs playtesting.",
 	}) :: { [string]: string },
 })

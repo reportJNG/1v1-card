@@ -146,7 +146,9 @@ if __name__ == "__main__":
         rounds.sort()
         out["rounds_mean"] = statistics.mean(rounds); out["rounds_p90"] = rounds[int(len(rounds) * 0.9)]
 
-        chunks = pool.map(per_character, [(N // 2, 77 + i, 8) for i in range(8)])
+        # Per-character sample scales with the roster (each match shows only 6 of the cards), so every
+        # character gets ~3,000+ appearances: standard error under 1 point at any roster size.
+        chunks = pool.map(per_character, [(max(N // 2, len(IDS) * 75), 77 + i, 8) for i in range(8)])
         tot = {c: [0, 0] for c in IDS}
         for w in chunks:
             for c in IDS: tot[c][0] += w[c][0]; tot[c][1] += w[c][1]

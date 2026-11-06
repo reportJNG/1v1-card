@@ -12,7 +12,7 @@ return table.freeze({
 	energyOnDefend = 1,
 	initSlope = 2.5, -- chance to act first = 0.5 + slope x speed gap / speed sum ...
 	initCap = 0.30, -- ... clamped to 20-80%
-	guardVsAttack = 0.35, -- Defend softens a basic Attack by 35% (M3 tuning: was 25%, curbs "always Attack")
+	guardVsAttack = 0.40, -- Defend softens a basic Attack by 40% (M3: 25% -> 35%; roster pass: 40% keeps "always Attack" <= 60%)
 	guardVsSpecial = 0.80, -- and parries 80% of a damaging Special
 	repeatDefend = 0.5, -- a second Defend in a row works at half strength
 	riposte = 0.5, -- parry counter-hit multiplier

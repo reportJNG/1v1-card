@@ -145,9 +145,39 @@ return function()
 	end)
 
 	describe("Character catalog", function()
-		it("ships the seven launch characters with room for 100", function()
-			expect(#Characters.List).to.equal(7)
+		it("ships the full 100-character roster, launch characters first and unchanged in order", function()
+			expect(#Characters.List).to.equal(100)
 			expect(Characters.MaxCatalogSize).to.equal(100)
+			local launch = {
+				"ren_emberfang",
+				"yuki_frostveil",
+				"rai_stormvolt",
+				"vesper_shade",
+				"aurelia_dawn",
+				"brannok_ironhide",
+				"taren_ashscale",
+			}
+			for i, id in launch do
+				expect(Characters.List[i].id).to.equal(id)
+			end
+		end)
+
+		it("puts every character in 6-10 character egg pools, each in at least one egg", function()
+			local seen = {}
+			for _, egg in Eggs.List do
+				local n = 0
+				for rarity, ids in egg.pool do
+					for _, id in ids do
+						n += 1
+						seen[id] = true
+						expect(Characters.ById[id].rarity).to.equal(rarity)
+					end
+				end
+				expect(n >= 6 and n <= 10).to.equal(true)
+			end
+			for _, c in Characters.List do
+				expect(seen[c.id]).to.equal(true)
+			end
 		end)
 	end)
 

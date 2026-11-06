@@ -25,7 +25,7 @@ read this file and `STATUS.md` first. The full plan is the design doc
 ```
 python3 scripts/headless/bundle.py --entry=ServerScriptService/Tests/Tools/ExportContent
 luau build/entry.luau > sim/content.json
-python3 sim/parity.py && python3 sim/balance.py
+python3 sim/parity.py && python3 sim/ai_parity.py && python3 sim/balance.py && python3 sim/trials.py
 python3 scripts/headless/bundle.py && luau build/headless.luau
 ```
 

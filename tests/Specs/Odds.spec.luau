@@ -25,19 +25,14 @@ return function()
 		end)
 
 		it("uses the band odds and splits a rarity equally inside the pool", function()
-			local odds = Odds.forEgg(Eggs.ById.egg_dragon, false) -- band C
+			local egg = Eggs.ById.egg_dragon -- band C: every rarity has characters in its pool
+			local odds = Odds.forEgg(egg, false)
 			expect(odds.rarities.Common).to.be.near(45, 1e-9)
 			expect(odds.rarities.Mythical).to.be.near(0.5, 1e-9)
-			local rai, brannok
 			for _, entry in odds.characters do
-				if entry.characterId == "rai_stormvolt" then
-					rai = entry.percent
-				elseif entry.characterId == "brannok_ironhide" then
-					brannok = entry.percent
-				end
+				local share = odds.rarities[entry.rarity] / #egg.pool[entry.rarity]
+				expect(entry.percent).to.be.near(share, 1e-9)
 			end
-			expect(rai).to.be.near(22.5, 1e-9)
-			expect(brannok).to.be.near(22.5, 1e-9)
 		end)
 
 		it("removes Common for Golden eggs and redistributes proportionally", function()
@@ -110,8 +105,13 @@ return function()
 		end)
 
 		it("lists every possible character before purchase", function()
-			local rows = Odds.display(Eggs.ById.egg_mythical, false)
-			expect(#rows).to.equal(7)
+			local egg = Eggs.ById.egg_mythical
+			local rows = Odds.display(egg, false)
+			local n = 0
+			for _, ids in egg.pool do
+				n += #ids
+			end
+			expect(#rows).to.equal(n)
 		end)
 	end)
 end

@@ -317,6 +317,30 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 		end
 	end
 
+	-- Egg pools: 6-10 characters each, every character dropping from at least one egg.
+	local inPool: { [string]: boolean } = {}
+	for _, egg in Eggs.List do
+		local n = 0
+		for rarity, ids in egg.pool do
+			for _, id in ids do
+				n += 1
+				inPool[id] = true
+				local def = Characters.ById[id]
+				if def and def.rarity ~= rarity then
+					err(`Eggs: {egg.id} lists {id} under {rarity}, but it is {def.rarity}`)
+				end
+			end
+		end
+		if n < 6 or n > 10 then
+			err(`Eggs: {egg.id} pool has {n} characters (6-10 expected)`)
+		end
+	end
+	for _, c in Characters.List do
+		if c.enabled and not inPool[c.id] then
+			table.insert(warnings, `Characters: {c.id} is in no egg pool`)
+		end
+	end
+
 	-- World layouts and farming
 	for _, world in Worlds.List do
 		local layout = WorldLayouts.ByWorld[world.id]
