@@ -25,6 +25,7 @@ local ORDER = {
 	"NetService",
 	"EconomyService",
 	"BattleService",
+	"MatchmakingService",
 	"PurchaseService",
 	"PolicySelfCheck",
 } -- explicit dependency order; append new services here

@@ -219,3 +219,25 @@ Made by Claude while working autonomously on "finish every stage in HANDOFF.md a
     then checks the services and remotes and that the log has no errors.
 - Run mode has no client and no Player Emulator. Client UI play-tests and the four
   PolicyService combinations still need someone at Studio (see README).
+
+### Matchmaking (M4: `Server/Matchmaking`, `MatchmakingService`)
+- **Pairing.** Same league only, so both decks play under one level cap. The band is
+  ±100 → ±400, widening 50 every 10 s. Two players pair when their gap fits the *wider* of their
+  two bands (whoever has waited longer decides), and the oldest ticket is served first.
+- **No multi-key transactions in MemoryStore.** A claim therefore stamps each ticket with
+  `UpdateAsync` and reverts the first if the second fails. Leaving marks the ticket `left` first,
+  so the matchmaker can never claim it mid-leave.
+- **Order.** The match record is written *before* the tickets are claimed. A claimed pair always has
+  a record; a failed claim leaves an orphan record that just expires.
+- **Teleport to the battle server.** The leader can't teleport players on other Hub servers. It
+  stamps the assignment (matchId + access code) on the tickets, and each Hub polls its own
+  players' tickets every 2 s and teleports them. This needs no MessagingService.
+- **Battle server.** It finds its record by `game.PrivateServerId` and ignores teleport data. It
+  rebuilds both decks from the loaded profiles under the league cap. If a player doesn't arrive
+  within 30 s, or a deck is no longer valid, the match is cancelled with no reward and both players
+  are sent home.
+- **Reconnect.** `active:{userId}` (MemoryStore, 15 min TTL, cleared at settlement) sends a player
+  who rejoins the Hub back to their reserved server.
+- **Studio.** ReserveServer doesn't exist there, so a pair plays locally on the same server. With an
+  unpublished place, MemoryStore falls back to an in-memory map (Studio only, like the DataStore
+  fallback). A live server never falls back.
