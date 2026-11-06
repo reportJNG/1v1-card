@@ -153,9 +153,23 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		save.setEnabled(s ~= nil)
 		save.instance.Parent = summary
 
-		-- Best copy of each character first.
-		local cards = {}
+		-- The best copy of each character only (a deck takes one copy per character): at most 100
+		-- tiles however many copies the player owns.
+		local best: { [string]: any } = {}
 		for _, c in view.cards do
+			local b = best[c.characterId]
+			if b == nil or c.level > b.level then
+				best[c.characterId] = c
+			end
+		end
+		for _, uid in slots do
+			local c = uid and view.cards[uid :: string]
+			if c then
+				best[c.characterId] = c -- always show the copy that is actually in a slot
+			end
+		end
+		local cards = {}
+		for _, c in best do
 			table.insert(cards, c)
 		end
 		table.sort(cards, function(a, b)

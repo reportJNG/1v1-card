@@ -245,6 +245,8 @@ export type PlayerProfile = {
 	trials: { [string]: number }, -- worldId -> first Guardian Trial clear time
 	stats: { wins: number, losses: number, matches: number, trialsCleared: number },
 	settings: { music: boolean, sfx: boolean, reducedMotion: boolean },
+	-- schema v3
+	harvests: { [string]: number }, -- nodeId -> os.time of this player's last harvest (respawn timers)
 }
 
 -- ---------------------------------------------------------------- results

@@ -337,3 +337,27 @@ Made by Claude while working autonomously on "finish every stage in HANDOFF.md a
     a gold foil for Golden copies.
 - **Verified in real Studio.** All 100 rigs build (1,299 parts, 600 joints), and a gallery
   screenshot confirms the frames and figures render.
+
+### M7 prep: security review, performance, telemetry
+- **Security review of every remote.** Findings:
+  - **Fixed: farming exploit.** Harvest respawn timers lived in server memory, so hopping servers
+    (~15 s) reset them, including the 120 s rare nodes worth up to 550 Coins. The timers are now
+    saved on the profile (`harvests`, schema v3, append-only migration 2→3). This supersedes the M6
+    note that "a rejoin resets them, which is harmless".
+  - **Already safe:** shop, bag, daily egg, merge, card sell (deck, locked and non-spare cards
+    refused), storage, deck, merchant (proximity plus ownership), quests, travel, queue, Trials
+    (cooldown, world, deck, not in a match or queue), battle picks (seat, round, deadline, once),
+    settings (three known keys).
+  - Every payload goes through `Shared/Net/Check` (exact keys and types) and the per-remote rate
+    limit. Handler errors become "ServerError", with no text leaked.
+- **Performance.**
+  - Shine tweens run only on large cards.
+  - The collection is paged at 60 cards; storage goes up to 1,000.
+  - The deck picker shows only the best copy of each character (at most 100 tiles).
+  - `Workspace.StreamingEnabled` is on in both projects, so phones only load the world they're in.
+- **Telemetry.**
+  - Already: hatch, merge, match_end, trial_end, sell_items, quest_claim, streak_claim, travel,
+    queue_join, queue_matched.
+  - Added: session_start, deck_set, storage_expand, trial_start, battle_forfeit, robux_egg_granted.
+  - Counter-only (`Telemetry.increment`, never sent per event, to stay under analytics limits):
+    harvests, replayed receipts, held receipts by reason.

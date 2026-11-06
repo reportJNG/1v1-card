@@ -34,6 +34,12 @@ function Telemetry.event(player: Player?, name: string, fields: { [string]: any 
 	end)
 end
 
+-- Counts a high-frequency event (harvests) on this server without sending it to analytics,
+-- so busy players never hit the analytics rate limits.
+function Telemetry.increment(name: string)
+	counters[name] = (counters[name] or 0) + 1
+end
+
 function Telemetry.count(name: string): number
 	return counters[name] or 0
 end

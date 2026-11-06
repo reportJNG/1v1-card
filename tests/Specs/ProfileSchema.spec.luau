@@ -31,11 +31,23 @@ return function()
 			local loaded = ProfileSchema.load(v1, 77)
 			expect(loaded.ok).to.equal(true)
 			local p = (loaded :: any).value
-			expect(p.schemaVersion).to.equal(2)
+			expect(p.schemaVersion).to.equal(ProfileSchema.CURRENT_VERSION)
 			expect(p.coins).to.equal(1234)
 			expect(p.currentWorld).to.equal(1)
 			expect(p.stats.matches).to.equal(0)
 			expect(p.settings.sfx).to.equal(true)
+		end)
+
+		it("upgrades a version 2 save to version 3 with empty harvest timers", function()
+			local v2: any = ProfileSchema.new(78)
+			v2.harvests = nil
+			v2.schemaVersion = 2
+			v2.gems = 42
+			local loaded = ProfileSchema.load(v2, 78)
+			assert(loaded.ok, "load")
+			expect(loaded.value.schemaVersion).to.equal(3)
+			expect(loaded.value.gems).to.equal(42)
+			expect((next(loaded.value.harvests))).to.equal(nil)
 		end)
 
 		it("runs migrations in order", function()

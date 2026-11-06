@@ -15,6 +15,7 @@ local Persistence = script.Parent.Parent:WaitForChild("Persistence")
 local SessionStore = require(Persistence.SessionStore)
 local ProfileManager = require(Persistence.ProfileManager)
 local InMemoryDataStore = require(Persistence.InMemoryDataStore)
+local Telemetry = require(script.Parent.Telemetry)
 
 local STORE_NAME = "PlayerProfiles_v1"
 local AUTOSAVE_INTERVAL = 60
@@ -78,6 +79,11 @@ local function onPlayerAdded(player: Player)
 	end
 	retained[player.UserId] = nil
 	player:SetAttribute("ProfileLoaded", true)
+	Telemetry.event(player, "session_start", {
+		coins = loaded.value.coins,
+		cards = loaded.value.nextCardSerial - 1,
+		trophies = loaded.value.trophies,
+	})
 	for _, callback in loadedCallbacks do
 		task.spawn(callback, player, loaded.value)
 	end

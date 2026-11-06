@@ -16,6 +16,7 @@ local PolicyRules = require(Shared.Domain.PolicyRules)
 local ReceiptProcessor = require(script.Parent.Parent:WaitForChild("Purchases").ReceiptProcessor)
 local PlayerDataService = require(script.Parent.PlayerDataService)
 local PolicyGate = require(script.Parent.PolicyGate)
+local Telemetry = require(script.Parent.Telemetry)
 local Result = require(Shared.Domain.Result)
 local Router = require(script.Parent.Parent:WaitForChild("Net").Router)
 
@@ -65,8 +66,18 @@ local function processReceipt(receipt: any): Enum.ProductPurchaseDecision
 	end
 	local purchaseId = if typeof(receipt) == "table" then tostring(receipt.PurchaseId) else "?"
 	print(`[Purchase] receipt {purchaseId} user {userId}: {decision} ({reason})`)
-	if decision == "Granted" and player then
+	if decision == "Granted" and player and reason ~= "Granted" then
 		PlayerDataService.push(player)
+		Telemetry.increment("receipt_replayed") -- acknowledged again; nothing new was granted
+	elseif decision == "Granted" and player then
+		PlayerDataService.push(player)
+		local product = Monetization.RobuxEggsByProductId[receipt.ProductId]
+		Telemetry.event(player, "robux_egg_granted", {
+			egg = if product then product.eggId else "?",
+			quantity = if product then product.quantity else 0,
+		})
+	elseif decision ~= "Granted" then
+		Telemetry.increment(`receipt_held_{reason}`)
 	end
 	return if decision == "Granted"
 		then Enum.ProductPurchaseDecision.PurchaseGranted

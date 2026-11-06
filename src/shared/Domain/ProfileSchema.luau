@@ -10,7 +10,7 @@ export type Migration = (data: { [string]: any }) -> { [string]: any }
 
 local ProfileSchema = {}
 
-ProfileSchema.CURRENT_VERSION = 2
+ProfileSchema.CURRENT_VERSION = 3
 
 -- Migrations[n] upgrades a profile from version n to n + 1. Append only; never edit a shipped one.
 ProfileSchema.Migrations = table.freeze({
@@ -22,6 +22,11 @@ ProfileSchema.Migrations = table.freeze({
 		data.trials = data.trials or {}
 		data.stats = data.stats or { wins = 0, losses = 0, matches = 0, trialsCleared = 0 }
 		data.settings = data.settings or { music = true, sfx = true, reducedMotion = false }
+		return data
+	end,
+	-- 2 -> 3: per-node harvest times on the profile, so a server hop can't reset node respawns.
+	[2] = function(data: { [string]: any }): { [string]: any }
+		data.harvests = data.harvests or {}
 		return data
 	end,
 }) :: { [number]: Migration }
@@ -54,6 +59,7 @@ function ProfileSchema.new(userId: number): Types.PlayerProfile
 		trials = {},
 		stats = { wins = 0, losses = 0, matches = 0, trialsCleared = 0 },
 		settings = { music = true, sfx = true, reducedMotion = false },
+		harvests = {},
 	}
 end
 

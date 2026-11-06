@@ -18,8 +18,7 @@ export type Rng = {
 
 export type Context = {
 	playerPosition: WorldLayout.Point?, -- nil when the character isn't spawned
-	lastHarvest: number?, -- when this player last harvested this node
-	now: number,
+	now: number, -- os.time(); respawns are tracked on the profile, so they survive a server hop
 	rng: Rng,
 }
 
@@ -47,13 +46,15 @@ function Farming.harvest(profile: Types.PlayerProfile, nodeId: string, ctx: Cont
 		return Result.fail("TooFar")
 	end
 	local resource = node.resource
-	if ctx.lastHarvest ~= nil and ctx.now - ctx.lastHarvest < resource.respawnSeconds then
+	local last = profile.harvests[nodeId]
+	if last ~= nil and ctx.now - last < resource.respawnSeconds then
 		return Result.fail("NotReady")
 	end
 	if Inventory.spaceFor(profile, resource.itemId) < 1 then
 		return Result.fail("InventoryFull")
 	end
 
+	profile.harvests[nodeId] = ctx.now
 	local count = ctx.rng:NextInteger(resource.yield[1], resource.yield[2])
 	local added = Inventory.add(profile, resource.itemId, count)
 	assert(added.ok, "space was checked")

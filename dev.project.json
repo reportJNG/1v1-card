@@ -3,19 +3,35 @@
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
-      "Shared": { "$path": "src/shared" },
+      "Shared": {
+        "$path": "src/shared"
+      },
       "DevPackages": {
         "$className": "Folder",
-        "TestEZ": { "$path": "DevPackages/TestEZ" }
+        "TestEZ": {
+          "$path": "DevPackages/TestEZ"
+        }
       }
     },
     "ServerScriptService": {
-      "Server": { "$path": "src/server" },
-      "Tests": { "$path": "tests" }
+      "Server": {
+        "$path": "src/server"
+      },
+      "Tests": {
+        "$path": "tests"
+      }
     },
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "Client": { "$path": "src/client" }
+        "Client": {
+          "$path": "src/client"
+        }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "StreamingEnabled": true
       }
     }
   }

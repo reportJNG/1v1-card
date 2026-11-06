@@ -78,6 +78,8 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 	local view = ctx.state.view
 	local p = Ui.panel(layer, "Collection", ctx.close, UDim2.fromOffset(820, 470))
 	local tab = "Cards"
+	local page = 1
+	local PAGE_SIZE = 60 -- storage holds up to 1,000 copies; never build them all at once
 	local filter: string? = nil
 	local selected: string? = nil
 
@@ -249,8 +251,36 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 	end
 
 	local function renderCards()
+		local cards = sortedCards(view, filter)
+		local pages = math.max(1, math.ceil(#cards / PAGE_SIZE))
+		page = math.clamp(page, 1, pages)
 		local grid =
-			Ui.scroll({ Position = UDim2.fromOffset(0, 36), Size = UDim2.new(1, 0, 1, -36), Parent = left })
+			Ui.scroll({ Position = UDim2.fromOffset(0, 36), Size = UDim2.new(1, 0, 1, -72), Parent = left })
+		local pager = Ui.frame({
+			BackgroundTransparency = 1,
+			Position = UDim2.new(0, 0, 1, -32),
+			Size = UDim2.new(1, 0, 0, 30),
+			Parent = left,
+		}, { Ui.list(true, 8, Enum.HorizontalAlignment.Center) })
+		local prev = Ui.button("<", "ghost", function()
+			page -= 1
+			render()
+		end, { Size = UDim2.fromOffset(40, 28), LayoutOrder = 1 })
+		prev.setEnabled(page > 1)
+		prev.instance.Parent = pager
+		Ui.text({
+			Text = `Page {page}/{pages} · {#cards} cards`,
+			TextXAlignment = Enum.TextXAlignment.Center,
+			Size = UDim2.fromOffset(170, 28),
+			LayoutOrder = 2,
+			Parent = pager,
+		})
+		local nextButton = Ui.button(">", "ghost", function()
+			page += 1
+			render()
+		end, { Size = UDim2.fromOffset(40, 28), LayoutOrder = 3 })
+		nextButton.setEnabled(page < pages)
+		nextButton.instance.Parent = pager
 		Ui.grid(Vector2.new(88, 120), 8).Parent = grid
 		local filters = Ui.frame(
 			{ BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 28), Parent = left },
@@ -264,6 +294,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			local active = (filter == nil and name == "All") or filter == name
 			local b = Ui.button(name, if active then "purple" else "ghost", function()
 				filter = if name == "All" then nil else name
+				page = 1
 				render()
 			end, {
 				Size = UDim2.fromOffset(if name == "Legendary" then 82 else 66, 28),
@@ -272,7 +303,8 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			})
 			b.instance.Parent = filters
 		end
-		for i, card in sortedCards(view, filter) do
+		for i = (page - 1) * PAGE_SIZE + 1, math.min(#cards, page * PAGE_SIZE) do
+			local card = cards[i]
 			local tile = Ui.new("TextButton", {
 				Text = "",
 				BackgroundTransparency = 1,

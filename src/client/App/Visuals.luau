@@ -72,7 +72,7 @@ end
 
 -- The rarity card frame (Config/Art.Frames), with a gold foil for Golden copies. Same card
 -- silhouette for every rarity; only the border, gradient and shine change (design rule 6).
-function Visuals.frame(card: GuiObject, rarity: string, golden: boolean)
+function Visuals.frame(card: GuiObject, rarity: string, golden: boolean, animate: boolean?)
 	local style = Art.Frames[rarity] or Art.Frames.Common
 	local stroke = Ui.new("UIStroke", {
 		Thickness = style.border + (if golden then 1 else 0),
@@ -93,7 +93,7 @@ function Visuals.frame(card: GuiObject, rarity: string, golden: boolean)
 			Parent = card,
 		}, { Ui.corner(6), Ui.stroke(Color3.fromHex(style.colors[#style.colors]), 1, 0.4) })
 	end
-	if style.shine or golden then
+	if (style.shine or golden) and animate ~= false then
 		gradient.Offset = Vector2.new(-1, 0)
 		TweenService:Create(
 			gradient,
@@ -175,7 +175,8 @@ function Visuals.portrait(
 		Ui.corner(8),
 		Ui.gradient(C.Raised, C.Background, 90),
 	})
-	Visuals.frame(card, def.rarity, golden)
+	-- Shine only on large cards: a grid of hundreds must not run hundreds of endless tweens.
+	Visuals.frame(card, def.rarity, golden, size.Y >= 140)
 	local initials = ""
 	for word in string.gmatch(def.displayName, "%a+") do
 		initials ..= string.sub(word, 1, 1)

@@ -170,7 +170,11 @@ function BattleService.init()
 	end, { mutates = false, needsProfile = false })
 
 	Router.handle("Battle.Forfeit", function(player)
-		return getHost():forfeit(player.UserId)
+		local r = getHost():forfeit(player.UserId)
+		if r.ok then
+			Telemetry.event(player, "battle_forfeit", {})
+		end
+		return r
 	end, { mutates = false, needsProfile = false })
 
 	Router.handle("Trial.Start", function(player, args, profile)
@@ -205,6 +209,7 @@ function BattleService.init()
 		if not created.ok then
 			return Result.fail(created.err)
 		end
+		Telemetry.event(player, "trial_start", { world = args.worldId })
 		return Result.ok({ matchId = matchId })
 	end, { mutates = false })
 

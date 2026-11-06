@@ -77,16 +77,24 @@ function EconomyService.init()
 		return Cards.sellSpares(profile :: any, args.uids, `sell:{args.requestId}`, os.time())
 	end)
 
-	Router.handle("Cards.ExpandStorage", function(_player, args, profile)
-		return Cards.expandStorage(profile :: any, `storage:{args.requestId}`, os.time())
+	Router.handle("Cards.ExpandStorage", function(player, args, profile)
+		local r = Cards.expandStorage(profile :: any, `storage:{args.requestId}`, os.time())
+		if r.ok then
+			Telemetry.event(player, "storage_expand", { slots = r.value })
+		end
+		return r
 	end)
 
 	Router.handle("Inventory.Expand", function(_player, args, profile)
 		return Inventory.expand(profile :: any, `slots:{args.requestId}`, os.time())
 	end)
 
-	Router.handle("Deck.Set", function(_player, args, profile)
-		return Deck.set(profile :: any, args.uids)
+	Router.handle("Deck.Set", function(player, args, profile)
+		local r = Deck.set(profile :: any, args.uids)
+		if r.ok then
+			Telemetry.event(player, "deck_set", {})
+		end
+		return r
 	end)
 
 	Router.handle("Settings.Set", function(_player, args, profile)

@@ -44,9 +44,11 @@ local function harvestAt(
 	rare: boolean?
 )
 	local pos = node.position
+	if last then
+		p.harvests[node.id] = last
+	end
 	return Farming.harvest(p, node.id, {
 		playerPosition = { x = pos.x + offset, y = pos.y, z = pos.z },
-		lastHarvest = last,
 		now = now or Helpers.NOW,
 		rng = rng(rare),
 	})
@@ -121,6 +123,16 @@ return function()
 			local none = Farming.harvest(p, node.id, { playerPosition = nil, now = Helpers.NOW, rng = rng() })
 			expect(if none.ok then "" else none.err).to.equal("TooFar")
 			expect(#p.items.stacks).to.equal(0)
+		end)
+
+		it("keeps respawn timers on the profile, so a server hop doesn't reset them", function()
+			local p = Helpers.profile()
+			local node = firstNode(1)
+			assert(harvestAt(p, node, 0).ok, "first harvest")
+			expect(p.harvests[node.id]).to.equal(Helpers.NOW)
+			-- the same profile loaded on another server: still on cooldown
+			local again = harvestAt(p, node, 0, nil, Helpers.NOW + 1)
+			expect(if again.ok then "" else again.err).to.equal("NotReady")
 		end)
 
 		it("rejects a node that hasn't respawned for this player yet", function()
