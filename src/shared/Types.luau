@@ -52,6 +52,7 @@ export type AbilityDef = {
 	pierceGuard: number?, -- 0..1 of the opponent's guard ignored
 	armorPen: number?, -- 0..1 of the opponent's DEF ignored
 	healFraction: number?, -- Heal abilities: fraction of max HP
+	shieldFraction: number?, -- Shield abilities: absorb equal to this fraction of max HP (lasts until used up)
 	blockFraction: number?, -- Stance abilities: damage blocked this round
 	reflectFraction: number?, -- Stance abilities: fraction of the incoming hit reflected
 	recoilFraction: number?, -- fraction of own max HP lost after use
@@ -59,10 +60,26 @@ export type AbilityDef = {
 	applies: { StatusApplication }?,
 }
 
+-- What a passive does in battle. kind is a plain string for the type checker; the validator
+-- enforces the values:
+--   BonusVsStatus  +value damage against a target that has `status`
+--   CritBonus      +value crit chance (points, 0.05 = +5%)
+--   Lifesteal      basic Attacks heal for value x damage dealt
+--   LowHpStat      +value to `stat` ("atk" | "def") while HP < threshold x max HP
+--   EnergyOnFirst  +value Energy when this card acts first in a round
+export type PassiveEffect = {
+	kind: string,
+	value: number,
+	status: string?,
+	stat: string?,
+	threshold: number?,
+}
+
 export type PassiveDef = {
 	id: string,
 	displayName: string,
 	description: string,
+	effect: PassiveEffect,
 }
 
 export type CharacterDef = {
@@ -221,6 +238,13 @@ export type PlayerProfile = {
 	recentTx: { [string]: number }, -- transaction ref -> time; request idempotency (pruned)
 	ledger: { LedgerEntry }, -- last N currency events, for support
 	flags: { tutorialDone: boolean? },
+	-- schema v2
+	currentWorld: number, -- world the player last travelled to (must be unlocked)
+	opponentsToday: { [string]: number }, -- opponent userId -> ranked matches today (anti-farming)
+	questDay: number, -- day the daily quests were rolled
+	trials: { [string]: number }, -- worldId -> first Guardian Trial clear time
+	stats: { wins: number, losses: number, matches: number, trialsCleared: number },
+	settings: { music: boolean, sfx: boolean, reducedMotion: boolean },
 }
 
 -- ---------------------------------------------------------------- results

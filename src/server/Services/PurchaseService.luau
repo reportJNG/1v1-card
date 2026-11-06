@@ -16,34 +16,25 @@ local PolicyRules = require(Shared.Domain.PolicyRules)
 local ReceiptProcessor = require(script.Parent.Parent:WaitForChild("Purchases").ReceiptProcessor)
 local PlayerDataService = require(script.Parent.PlayerDataService)
 local PolicyGate = require(script.Parent.PolicyGate)
+local Result = require(Shared.Domain.Result)
+local Router = require(script.Parent.Parent:WaitForChild("Net").Router)
 
-local OFFER_COOLDOWN = 2 -- seconds between offer requests per player
 local DELIVERY_WAIT = 15 -- seconds a receipt waits for the profile and policy after join
 
 local PurchaseService = {}
 
-local lastOffer: { [Player]: number } = {}
-
-local function onOfferRequested(player: Player, productKey: unknown)
-	local now = os.clock()
-	if now - (lastOffer[player] or -math.huge) < OFFER_COOLDOWN then
-		return
-	end
-	lastOffer[player] = now
-	if typeof(productKey) ~= "string" or #productKey > 64 then
-		return
-	end
-	local product = Monetization.RobuxEggsByKey[productKey]
-	local profile = PlayerDataService.getProfile(player.UserId)
-	if product == nil or profile == nil then
-		return
+-- Offer: rate-limited and payload-checked by the Router (Shop.RequestRobuxEgg).
+local function onOfferRequested(player: Player, args: { [string]: any }, profile: any)
+	local product = Monetization.RobuxEggsByKey[args.productKey]
+	if product == nil then
+		return Result.fail("UnknownProduct")
 	end
 	local offer = PolicyRules.robuxEggOffer(PolicyGate.get(player), profile, product)
 	if not offer.ok then
-		print(`[Purchase] offer refused for {player.UserId} {productKey}: {offer.err}`)
-		return
+		return offer
 	end
 	MarketplaceService:PromptProductPurchase(player, product.productId :: number)
+	return Result.ok(nil)
 end
 
 local function processReceipt(receipt: any): Enum.ProductPurchaseDecision
@@ -74,25 +65,16 @@ local function processReceipt(receipt: any): Enum.ProductPurchaseDecision
 	end
 	local purchaseId = if typeof(receipt) == "table" then tostring(receipt.PurchaseId) else "?"
 	print(`[Purchase] receipt {purchaseId} user {userId}: {decision} ({reason})`)
+	if decision == "Granted" and player then
+		PlayerDataService.push(player)
+	end
 	return if decision == "Granted"
 		then Enum.ProductPurchaseDecision.PurchaseGranted
 		else Enum.ProductPurchaseDecision.NotProcessedYet
 end
 
 function PurchaseService.init()
-	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
-	if remotes == nil then
-		remotes = Instance.new("Folder")
-		remotes.Name = "Remotes"
-		remotes.Parent = ReplicatedStorage
-	end
-	local request = Instance.new("RemoteEvent")
-	request.Name = "RequestRobuxEgg"
-	request.Parent = remotes
-	request.OnServerEvent:Connect(onOfferRequested)
-	Players.PlayerRemoving:Connect(function(player)
-		lastOffer[player] = nil
-	end)
+	Router.handle("Shop.RequestRobuxEgg", onOfferRequested, { mutates = false })
 	MarketplaceService.ProcessReceipt = processReceipt
 end
 

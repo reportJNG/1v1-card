@@ -41,8 +41,10 @@ out = ["local FILES = {"]
 for path, cls, src in entries:
     out.append(f"\t{{ path = {json.dumps(path)}, class = {json.dumps(cls)}, src = {long(src) if src is not None else 'nil'} }},")
 out.append("}")
+entry = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--entry=")), None)
+out.append(f"local ENTRY = {json.dumps(entry) if entry else 'nil'}")
 out.append(open(os.path.join(HERE, "shim.luau")).read())
 os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
-dest = os.path.join(ROOT, "build", "headless.luau")
+dest = os.path.join(ROOT, "build", "headless.luau" if entry is None else "entry.luau")
 open(dest, "w").write("\n".join(out))
 print(f"bundled {len(entries)} instances -> {os.path.relpath(dest, ROOT)}")

@@ -3,6 +3,34 @@
 -- Values are starting points; the M3 economy simulation tunes them.
 
 return table.freeze({
+	StartingCoins = 500, -- every new profile starts with this
+
+	-- Ranked rewards. No entry fee and no stakes: the purse is paid by the game, never by the
+	-- opponent (Roblox bans simulated gambling, so players never wager against each other).
+	Matches = table.freeze({
+		purseByLeague = table.freeze({ Bronze = 120, Silver = 220, Gold = 360, Diamond = 550 }) :: { [string]: number },
+		lossCoinsByLeague = table.freeze({ Bronze = 25, Silver = 40, Gold = 60, Diamond = 80 }) :: { [string]: number },
+		dailyFullRewardWins = 10, -- after this many wins in a UTC day, Coins pay reducedFactor
+		reducedFactor = 0.25,
+		trophyWin = 30,
+		trophyLoss = 20,
+		trophyGapDivisor = 25, -- each 25 trophies of gap moves the swing by 1
+		trophyWinRange = table.freeze({ 20, 40 }),
+		trophyLossRange = table.freeze({ 10, 30 }),
+		minRoundsForReward = 3, -- forfeits before round 3 pay nothing
+		maxRepeatsPerDay = 3, -- the same two players: only the first 3 matches a day pay
+		timeoutsVoidReward = 3, -- a player who timed out this many rounds earns nothing
+	}),
+
+	-- First-clear rewards for each world's Guardian Trial.
+	Trials = table.freeze({
+		trophyGrant = 40,
+		coinsByWorld = table.freeze({ 300, 450, 650, 900, 1200, 1600, 2100, 2700, 3400, 4200 }),
+		gemsFirstClear = 25,
+		goldenEggFirstClear = true, -- the world's first egg, Golden, into the Egg Bag
+		retryCooldown = 30, -- seconds between attempts
+	}),
+
 	-- Card storage holds individual card copies.
 	CardStorage = table.freeze({
 		startSlots = 300,
@@ -108,4 +136,13 @@ return table.freeze({
 	}),
 
 	EggBag = table.freeze({ maxPerStack = 99 }),
+
+	-- NPC merchant price for a spare copy of a character the player already has at max level.
+	CardSale = table.freeze({
+		Common = 150,
+		Rare = 400,
+		Epic = 1_000,
+		Legendary = 2_500,
+		Mythical = 6_000,
+	}) :: { [string]: number },
 })

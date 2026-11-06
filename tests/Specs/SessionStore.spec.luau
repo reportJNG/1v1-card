@@ -6,6 +6,7 @@ local Hatch = require(Shared.Domain.Hatch)
 local Cards = require(Shared.Domain.Cards)
 local SessionStore = require(ServerScriptService:WaitForChild("Server").Persistence.SessionStore)
 local MockDataStore = require(script.Parent.Parent.Mocks.MockDataStore)
+local Economy = require(Shared.Config.Economy)
 
 local USER = 4242
 
@@ -80,7 +81,7 @@ return function()
 			local profileA = if pa.ok then pa.value else nil :: any
 			profileA.coins = 999999
 			expect(err(a:save(USER, profileA))).to.equal("LockLost")
-			expect(store:peek(`player_{USER}`).data.coins).to.equal(0)
+			expect(store:peek(`player_{USER}`).data.coins).to.equal(Economy.StartingCoins)
 		end)
 
 		it("lets the next server load right after a release", function()
@@ -141,7 +142,7 @@ return function()
 			p.coins = -1
 			local found = string.find(err(a:save(USER, p)), "InvalidProfile", 1, true)
 			expect(found).to.be.ok()
-			expect(store:peek(`player_{USER}`).data.coins).to.equal(0)
+			expect(store:peek(`player_{USER}`).data.coins).to.equal(Economy.StartingCoins)
 		end)
 
 		it("refuses to load, and leaves untouched, data from a newer version", function()

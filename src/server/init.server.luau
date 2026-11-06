@@ -19,7 +19,14 @@ if #report.errors > 0 then
 end
 
 local Services = script:WaitForChild("Services")
-local ORDER = { "PolicyGate", "PlayerDataService", "PurchaseService", "PolicySelfCheck" } -- explicit dependency order; append new services here
+local ORDER = {
+	"PolicyGate",
+	"PlayerDataService",
+	"NetService",
+	"EconomyService",
+	"PurchaseService",
+	"PolicySelfCheck",
+} -- explicit dependency order; append new services here
 
 local loaded: { any } = {}
 for _, name in ORDER do

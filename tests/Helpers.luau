@@ -11,6 +11,7 @@ Helpers.NOW = 1_800_000_000
 
 function Helpers.profile(overrides: { [string]: any }?): Types.PlayerProfile
 	local p = ProfileSchema.new(123456)
+	p.coins = 0 -- unit tests start from an empty wallet; new real profiles get Economy.StartingCoins
 	if overrides then
 		for k, v in overrides do
 			(p :: any)[k] = v

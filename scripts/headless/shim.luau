@@ -183,8 +183,17 @@ local function requireNode(node: any): any
 	return result
 end
 
-local runTests = requireNode(game.ServerScriptService.Tests.RunTests)
-local summary = runTests()
+local entryPath: string = (ENTRY :: any) or "ServerScriptService/Tests/RunTests"
+local node: any = game
+for _, part in string.split(entryPath, "/") do
+	node = methods.WaitForChild(node, part)
+end
+local entry = requireNode(node)
+if entryPath ~= "ServerScriptService/Tests/RunTests" then
+	print(entry())
+	return
+end
+local summary = entry()
 print(summary.report)
 if summary.failed > 0 then
 	for _, f in summary.failures do

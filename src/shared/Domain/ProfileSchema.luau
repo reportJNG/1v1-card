@@ -10,15 +10,26 @@ export type Migration = (data: { [string]: any }) -> { [string]: any }
 
 local ProfileSchema = {}
 
-ProfileSchema.CURRENT_VERSION = 1
+ProfileSchema.CURRENT_VERSION = 2
 
 -- Migrations[n] upgrades a profile from version n to n + 1. Append only; never edit a shipped one.
-ProfileSchema.Migrations = table.freeze({}) :: { [number]: Migration }
+ProfileSchema.Migrations = table.freeze({
+	-- 1 -> 2: worlds, ranked anti-farming, quests, Guardian Trials, stats and settings.
+	[1] = function(data: { [string]: any }): { [string]: any }
+		data.currentWorld = data.currentWorld or 1
+		data.opponentsToday = data.opponentsToday or {}
+		data.questDay = data.questDay or -1
+		data.trials = data.trials or {}
+		data.stats = data.stats or { wins = 0, losses = 0, matches = 0, trialsCleared = 0 }
+		data.settings = data.settings or { music = true, sfx = true, reducedMotion = false }
+		return data
+	end,
+}) :: { [number]: Migration }
 
 function ProfileSchema.new(userId: number): Types.PlayerProfile
 	return {
 		schemaVersion = ProfileSchema.CURRENT_VERSION,
-		coins = 0,
+		coins = Economy.StartingCoins,
 		gems = 0,
 		trophies = 0,
 		highestTrophies = 0,
@@ -37,6 +48,12 @@ function ProfileSchema.new(userId: number): Types.PlayerProfile
 		recentTx = {},
 		ledger = {},
 		flags = {},
+		currentWorld = 1,
+		opponentsToday = {},
+		questDay = -1,
+		trials = {},
+		stats = { wins = 0, losses = 0, matches = 0, trialsCleared = 0 },
+		settings = { music = true, sfx = true, reducedMotion = false },
 	}
 end
 

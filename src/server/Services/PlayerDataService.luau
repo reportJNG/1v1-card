@@ -8,7 +8,9 @@ local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
-local Types = require(ReplicatedStorage:WaitForChild("Shared").Types)
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Types = require(Shared.Types)
+local ClientView = require(Shared.Domain.ClientView)
 local Persistence = script.Parent.Parent:WaitForChild("Persistence")
 local SessionStore = require(Persistence.SessionStore)
 local ProfileManager = require(Persistence.ProfileManager)
@@ -22,6 +24,9 @@ local PlayerDataService = {}
 
 local manager: ProfileManager.ProfileManager? = nil
 local usingMemoryStore = false
+local shadows: { [Player]: ClientView.View } = {} -- last view sent to each client
+local sender: ((Player, string, any) -> ())? = nil -- set by NetService
+local loadedCallbacks: { (Player, Types.PlayerProfile) -> () } = {}
 
 local function getManager(): ProfileManager.ProfileManager
 	assert(manager, "PlayerDataService not initialised")
@@ -70,9 +75,14 @@ local function onPlayerAdded(player: Player)
 		return
 	end
 	player:SetAttribute("ProfileLoaded", true)
+	for _, callback in loadedCallbacks do
+		task.spawn(callback, player, loaded.value)
+	end
+	PlayerDataService.push(player)
 end
 
 local function onPlayerRemoving(player: Player)
+	shadows[player] = nil
 	local released = getManager():release(player.UserId)
 	if not released.ok then
 		-- Kept in memory; autosaveTick retries the release (and BindToClose flushes it).
@@ -103,6 +113,41 @@ end
 
 function PlayerDataService.saveNow(userId: number): Types.Result<nil>
 	return getManager():saveNow(userId)
+end
+
+-- Sends the client what changed since the last push (a full snapshot the first time).
+function PlayerDataService.push(player: Player)
+	local profile = PlayerDataService.getProfile(player.UserId)
+	if profile == nil or sender == nil then
+		return
+	end
+	local view = ClientView.build(profile)
+	local old = shadows[player]
+	if old == nil then
+		shadows[player] = view
+		sender(player, "Profile.Snapshot", view)
+		return
+	end
+	local delta = ClientView.diff(old, view)
+	if delta then
+		shadows[player] = view
+		sender(player, "Profile.Delta", delta)
+	end
+end
+
+function PlayerDataService.setSender(fn: (Player, string, any) -> ())
+	sender = fn
+	for player in shadows do
+		shadows[player] = nil -- resend snapshots through the new sender
+	end
+	for _, player in Players:GetPlayers() do
+		PlayerDataService.push(player)
+	end
+end
+
+-- Runs `callback(player, profile)` each time a profile finishes loading.
+function PlayerDataService.onLoaded(callback: (Player, Types.PlayerProfile) -> ())
+	table.insert(loadedCallbacks, callback)
 end
 
 function PlayerDataService.isUsingMemoryStore(): boolean

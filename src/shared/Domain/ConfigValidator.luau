@@ -21,12 +21,14 @@ local Odds = require(script.Parent.Odds)
 export type Report = { errors: { string }, warnings: { string } }
 
 local EPSILON = 1e-9
-local STATUSES: { [string]: boolean } = table.freeze({
-	Burn = true,
-	Chill = true,
-	Weaken = true,
-	Shield = true,
-	Reflect = true,
+-- Statuses an ability may apply (Shield is an absorb amount, not a timed status).
+local APPLIED_STATUSES: { [string]: boolean } = table.freeze({ Burn = true, Chill = true, Weaken = true })
+local PASSIVE_KINDS: { [string]: boolean } = table.freeze({
+	BonusVsStatus = true,
+	CritBonus = true,
+	Lifesteal = true,
+	LowHpStat = true,
+	EnergyOnFirst = true,
 })
 local STATS: { [string]: boolean } =
 	table.freeze({ hp = true, atk = true, def = true, spd = true, crit = true })
@@ -83,10 +85,21 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 		if s.kind == "Stance" and not (typeof(s.blockFraction) == "number" and s.blockFraction > 0) then
 			err(`Characters: {c.id} stance special needs blockFraction`)
 		end
+		if s.kind == "Shield" and (s.shieldFraction == nil or s.shieldFraction <= 0) then
+			err(`Characters: {c.id} shield special needs shieldFraction`)
+		end
+		local e = c.passive.effect
+		if e == nil or not PASSIVE_KINDS[e.kind] then
+			err(`Characters: {c.id} passive needs a known effect kind`)
+		elseif e.kind == "BonusVsStatus" and not APPLIED_STATUSES[e.status or ""] then
+			err(`Characters: {c.id} BonusVsStatus needs a status`)
+		elseif e.kind == "LowHpStat" and (e.stat ~= "atk" and e.stat ~= "def" or (e.threshold or 0) <= 0) then
+			err(`Characters: {c.id} LowHpStat needs stat atk/def and a threshold`)
+		end
 		local applies = s.applies
 		if applies then
 			for _, application in applies do
-				if not STATUSES[application.status] then
+				if not APPLIED_STATUSES[application.status] then
 					err(`Characters: {c.id} applies unknown status {application.status}`)
 				end
 				if application.target ~= "Self" and application.target ~= "Opponent" then

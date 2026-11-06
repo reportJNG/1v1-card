@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local ProfileSchema = require(Shared.Domain.ProfileSchema)
 local Helpers = require(script.Parent.Parent.Helpers)
+local Economy = require(Shared.Config.Economy)
 
 return function()
 	describe("ProfileSchema", function()
@@ -13,6 +14,28 @@ return function()
 			expect(p.uidPrefix).to.equal("77")
 			expect(p.schemaVersion).to.equal(ProfileSchema.CURRENT_VERSION)
 			expect(ProfileSchema.validate(p :: any).ok).to.equal(true)
+		end)
+
+		it("gives new players the starting Coins", function()
+			expect(ProfileSchema.new(1).coins).to.equal(Economy.StartingCoins)
+			expect(Economy.StartingCoins).to.equal(500)
+		end)
+
+		it("upgrades a version 1 save to version 2 without touching its Coins or cards", function()
+			local v1: any = ProfileSchema.new(77)
+			for _, key in { "currentWorld", "opponentsToday", "questDay", "trials", "stats", "settings" } do
+				v1[key] = nil
+			end
+			v1.schemaVersion = 1
+			v1.coins = 1234
+			local loaded = ProfileSchema.load(v1, 77)
+			expect(loaded.ok).to.equal(true)
+			local p = (loaded :: any).value
+			expect(p.schemaVersion).to.equal(2)
+			expect(p.coins).to.equal(1234)
+			expect(p.currentWorld).to.equal(1)
+			expect(p.stats.matches).to.equal(0)
+			expect(p.settings.sfx).to.equal(true)
 		end)
 
 		it("runs migrations in order", function()

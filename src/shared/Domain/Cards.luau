@@ -242,6 +242,63 @@ function Cards.expandStorage(profile: Types.PlayerProfile, txRef: string, now: n
 	return Result.ok(profile.cardSlots)
 end
 
+-- True if the player owns a max-level copy of this character (other than `exceptUid`).
+function Cards.hasMaxedCopy(profile: Types.PlayerProfile, characterId: string, exceptUid: string?): boolean
+	for uid, copy in profile.cards do
+		if uid ~= exceptUid and copy.characterId == characterId and copy.level >= Progression.maxLevel then
+			return true
+		end
+	end
+	return false
+end
+
+-- Sells spare copies to the NPC merchant. Only spares of characters the player already has at
+-- max level qualify, so selling never removes the last way to level a card. All checks first.
+function Cards.sellSpares(
+	profile: Types.PlayerProfile,
+	uids: { string },
+	txRef: string,
+	now: number
+): Types.Result<number>
+	if #uids == 0 or #uids > 100 then
+		return Result.fail("BadCardList")
+	end
+	local seen: { [string]: boolean } = {}
+	local total = 0
+	for _, uid in uids do
+		if typeof(uid) ~= "string" or seen[uid] then
+			return Result.fail("BadCardList")
+		end
+		seen[uid] = true
+		local copy = profile.cards[uid]
+		if copy == nil then
+			return Result.fail("NotOwned")
+		end
+		if copy.lockedBy ~= nil then
+			return Result.fail("CardLocked")
+		end
+		if Cards.isInDeck(profile, uid) then
+			return Result.fail("CardInDeck")
+		end
+		if not Cards.isBaseCopy(copy) then
+			return Result.fail("NotASpare")
+		end
+		if not Cards.hasMaxedCopy(profile, copy.characterId, uid) then
+			return Result.fail("NoMaxedCopy")
+		end
+		total += Economy.CardSale[Characters.ById[copy.characterId].rarity]
+	end
+	local check = Wallet.check(profile, "coins", total, txRef)
+	if not check.ok then
+		return Result.fail(check.err)
+	end
+	for _, uid in uids do
+		profile.cards[uid] = nil
+	end
+	Wallet.apply(profile, "coins", total, "card_sale", txRef, now)
+	return Result.ok(total)
+end
+
 -- Effective stats of a copy at a given level (ranked passes a league-capped level).
 function Cards.statsAt(characterId: string, level: number): Types.Stats
 	local Roles = require(Config.Roles)
