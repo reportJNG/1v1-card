@@ -140,6 +140,7 @@ local Requests: { [string]: RequestDef } = {
 			return if worldId then { worldId = worldId } else nil
 		end),
 	},
+	["World.Hub"] = { rate = 1, burst = 2, parse = empty },
 	["Queue.Join"] = { rate = 1, burst = 2, parse = empty },
 	["Queue.Leave"] = { rate = 1, burst = 2, parse = empty },
 	["Trial.Start"] = {

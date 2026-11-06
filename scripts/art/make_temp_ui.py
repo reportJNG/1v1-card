@@ -191,6 +191,11 @@ spec("action_special", (192, 192), None, 0, "Special action button art",
      "a round action button for a card battle, purple-pink glowing rim, a bold star-burst symbol", "Battle")
 spec("vs_badge", (256, 160), None, 0, "VS badge between the two decks",
      "the letters V and S as a fiery gold and red emblem with lightning, bold anime game style", "Battle")
+spec("petal", (64, 64), None, 0, "Falling cherry-blossom petal particle (hub)",
+     "a single soft pink cherry blossom petal, notched tip, light gradient from white-pink to pink", "VFX")
+spec("portal_swirl", (512, 512), None, 0, "Rotating swirl inside the Worlds portal",
+     "a glowing magical vortex swirl seen head-on, violet and pink spiral arms with a bright white core, "
+     "transparent edges", "VFX")
 spec("banner_victory", (1024, 384), None, 0, "Victory banner (text 'Victory!' is drawn on top in code)",
      "a golden winged banner with a crown on top, ornate gold ribbon across the middle left blank for a word, "
      "light glow behind, anime game victory screen style", "Results")
@@ -786,6 +791,38 @@ def draw_icon(c, slot):
                    WHITE, H("#C8D2E8"))
 
 
+def draw_petal(c, w, h):
+    cx = w / 2
+
+    def f(x, y):
+        # a rounded teardrop with a notch at the top
+        dx, dy = (x - cx) / (w * 0.32), (y - h * 0.55) / (h * 0.4)
+        d = (dx * dx + dy * dy * (1.3 if dy < 0 else 1.0)) ** 0.5 - 1
+        notch = sd_circle(x, y, cx, h * 0.12, w * 0.09)
+        a = cover(max(d * w * 0.3, -notch))
+        if a <= 0:
+            return None
+        return mix(H("#FFF0F7"), H("#FF8AC8"), (y / h) ** 0.8), a
+    c.shade(f)
+
+
+def draw_swirl(c, w, h):
+    cx, cy = w / 2, h / 2
+
+    def f(x, y):
+        dx, dy = x - cx, y - cy
+        r = math.hypot(dx, dy) / (w / 2)
+        if r > 1:
+            return None
+        ang = math.atan2(dy, dx)
+        arms = max(0.0, math.cos(3 * ang + r * 9)) ** 3
+        core = math.exp(-(r / 0.18) ** 2)
+        edge = (1 - smooth(0.75, 1.0, r))
+        col = ramp([(0, WHITE), (0.25, PINK), (0.6, PURPLE), (1, VIOLET)], r)
+        return col, min(1.0, (arms * 0.75 * (1 - r * 0.5) + core + 0.18) * edge)
+    c.shade(f)
+
+
 def draw(slot):
     s = next(x for x in SPECS if x["slot"] == slot)
     w, h = s["size"]
@@ -849,6 +886,10 @@ def draw(slot):
         draw_action(c, w, h, BLUE, sym_shield)
     elif slot == "action_special":
         draw_action(c, w, h, H("#D46BFF"), sym_burst)
+    elif slot == "petal":
+        draw_petal(c, w, h)
+    elif slot == "portal_swirl":
+        draw_swirl(c, w, h)
     elif slot == "vs_badge":
         draw_vs(c, w, h)
     elif slot in ("banner_victory", "banner_defeat"):

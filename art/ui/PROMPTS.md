@@ -354,6 +354,21 @@ flat vector drawings made by `scripts/art/make_temp_ui.py`, and are marked Place
 
 > the letters V and S as a fiery gold and red emblem with lightning, bold anime game style. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
 
+## VFX
+
+| Slot | Size (px) | 9-slice | Bleed | Used for |
+| --- | --- | --- | --- | --- |
+| `petal` | 64×64 | none | 0 | Falling cherry-blossom petal particle (hub) |
+| `portal_swirl` | 512×512 | none | 0 | Rotating swirl inside the Worlds portal |
+
+**`petal`** (64×64)
+
+> a single soft pink cherry blossom petal, notched tip, light gradient from white-pink to pink. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`portal_swirl`** (512×512)
+
+> a glowing magical vortex swirl seen head-on, violet and pink spiral arms with a bright white core, transparent edges. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
 ## Results
 
 | Slot | Size (px) | 9-slice | Bleed | Used for |

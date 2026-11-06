@@ -3,21 +3,41 @@
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
-      "Shared": { "$path": "src/shared" }
+      "Shared": {
+        "$path": "src/shared"
+      }
     },
     "ServerScriptService": {
-      "Server": { "$path": "src/server" },
-      "E2ESetup": { "$path": "scripts/e2e/Setup.server.luau" }
+      "Server": {
+        "$path": "src/server"
+      },
+      "E2ESetup": {
+        "$path": "scripts/e2e/Setup.server.luau"
+      }
     },
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "Client": { "$path": "src/client" },
-        "E2EDriver": { "$path": "scripts/e2e/Driver.client.luau" }
+        "Client": {
+          "$path": "src/client"
+        },
+        "E2EDriver": {
+          "$path": "scripts/e2e/Driver.client.luau"
+        }
       }
     },
     "Workspace": {
       "$className": "Workspace",
-      "$properties": { "StreamingEnabled": true }
+      "$properties": {
+        "StreamingEnabled": true
+      }
+    },
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Technology": "Future",
+        "GlobalShadows": true,
+        "ClockTime": 20.5
+      }
     }
   }
 }

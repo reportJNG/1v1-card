@@ -24,6 +24,14 @@
       "$properties": {
         "StreamingEnabled": true
       }
+    },
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Technology": "Future",
+        "GlobalShadows": true,
+        "ClockTime": 20.5
+      }
     }
   }
 }

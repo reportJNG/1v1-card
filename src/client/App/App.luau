@@ -472,6 +472,10 @@ function App.start(deps: Deps): Ctx
 	hud = buildHud(ctx, hudLayer)
 	local refreshHud = (hud :: Hud).refresh
 	ctx.state.changed:connect(function(what)
+		if what == "battle" then
+			-- The battle screen is full-screen: hide the hub HUD under it.
+			hudLayer.Visible = ctx.state.battle == nil
+		end
 		if what == "profile" then
 			refreshHud()
 			if current and current.refresh then

@@ -433,6 +433,14 @@ local Slots: { [string]: Slot } = {
 		temp = "rbxassetid://71769641407898",
 		final = nil,
 	},
+	petal = { size = { 64, 64 }, slice = nil, bleed = 0, temp = "rbxassetid://95650948030931", final = nil },
+	portal_swirl = {
+		size = { 512, 512 },
+		slice = nil,
+		bleed = 0,
+		temp = "rbxassetid://100694584131507",
+		final = nil,
+	},
 	banner_victory = {
 		size = { 1024, 384 },
 		slice = nil,

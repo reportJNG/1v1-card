@@ -1,6 +1,7 @@
 --!strict
--- Worlds on a Hub server: builds the 10 blockout worlds, puts each character in the player's
--- current world, and handles World.Travel (unlocked worlds only). Battle servers build no worlds.
+-- Worlds on a Hub server: builds the hub plaza and the 10 blockout worlds, spawns each character
+-- in the hub (World attribute 0), and handles World.Travel (unlocked worlds only) and World.Hub
+-- (back to the plaza). Battle servers build no worlds.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
@@ -10,6 +11,7 @@ local WorldLayout = require(Shared.Domain.WorldLayout)
 local Server = script.Parent.Parent
 local Router = require(Server:WaitForChild("Net").Router)
 local WorldBuilder = require(Server:WaitForChild("World").WorldBuilder)
+local HubBuilder = require(Server:WaitForChild("World").HubBuilder)
 local PlayerDataService = require(script.Parent.PlayerDataService)
 local Telemetry = require(script.Parent.Telemetry)
 
@@ -29,6 +31,15 @@ local function place(player: Player, worldId: number)
 	player:SetAttribute("World", worldId)
 end
 
+-- The hub plaza (World attribute 0): where every character spawns.
+local function placeInHub(player: Player)
+	local character = player.Character
+	if character and character:FindFirstChild("HumanoidRootPart") then
+		character:PivotTo(CFrame.new(HubBuilder.spawnPosition()) * CFrame.Angles(0, 0, 0))
+	end
+	player:SetAttribute("World", 0)
+end
+
 -- The server-side position of a player's character, for range checks (never sent by the client).
 function WorldService.positionOf(player: Player): WorldLayout.Point?
 	local character = player.Character
@@ -46,6 +57,7 @@ function WorldService.init()
 		return
 	end
 	WorldBuilder.buildAll(workspace)
+	HubBuilder.build(workspace)
 
 	Router.handle("World.Travel", function(player, args, profile)
 		local r = Progress.travel(profile :: any, args.worldId)
@@ -57,14 +69,14 @@ function WorldService.init()
 		return Result.ok({ worldId = args.worldId })
 	end)
 
+	Router.handle("World.Hub", function(player, _args, _profile)
+		placeInHub(player)
+		return Result.ok({ worldId = 0 })
+	end)
+
 	local function onCharacter(player: Player)
-		local profile = PlayerDataService.getProfile(player.UserId)
-		if profile then
-			-- A world can't re-lock (highest trophies), but check anyway before placing.
-			local worldId = if Progress.isWorldUnlocked(profile, profile.currentWorld)
-				then profile.currentWorld
-				else 1
-			task.defer(place, player, worldId)
+		if PlayerDataService.getProfile(player.UserId) then
+			task.defer(placeInHub, player)
 		end
 	end
 	Players.PlayerAdded:Connect(function(player)

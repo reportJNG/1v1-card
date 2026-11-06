@@ -11,6 +11,7 @@ local App = require(AppFolder:WaitForChild("App"))
 local Screens = AppFolder:WaitForChild("Screens")
 local Battle = require(Screens:WaitForChild("Battle"))
 local WorldInteraction = require(AppFolder:WaitForChild("WorldInteraction"))
+local AreaFx = require(AppFolder:WaitForChild("AreaFx"))
 
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -83,3 +84,4 @@ net.on("Battle.End", function(data)
 end)
 
 WorldInteraction.start(ctx)
+AreaFx.start(ctx)

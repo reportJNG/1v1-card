@@ -15,6 +15,18 @@ local C = Theme.Color
 
 return function(ctx: any, layer: Frame, _arg: any?): any
 	local p = Ui.panel(layer, "Worlds", ctx.close, UDim2.fromOffset(770, 420), "icon_worlds")
+	local home = Ui.button("Back to Hub", "secondary", function()
+		local reply = ctx.request("World.Hub")
+		if reply.ok then
+			ctx.close()
+		end
+	end, {
+		Name = "Hub",
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -60, 0.5, 0),
+		Size = UDim2.fromOffset(150, 34),
+	})
+	home.instance.Parent = p.header
 	local strip = Ui.scroll({
 		Size = UDim2.fromScale(1, 1),
 		ScrollingDirection = Enum.ScrollingDirection.X,

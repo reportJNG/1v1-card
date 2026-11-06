@@ -16,6 +16,7 @@ return table.freeze({
 		questRewards = "Quest targets and rewards are starting values.",
 		characterArt = "Characters are procedural placeholder rigs (Shared/Art/RigBuilder); hero-quality models and card art need a 3D artist.",
 		cardFrames = "Rarity card frames are TEMP stand-in images (Config/UiAssets card_frame_*) until final frame art exists.",
+		hubArt = "The hub plaza uses generated meshes (Config/HubLayout) and a code-drawn sky; awaiting the owner's vertical-slice approval.",
 		uiArt = "Every UI image is a TEMP stand-in drawn by scripts/art/make_temp_ui.py until the owner's final art (art/ui/PROMPTS.md) is uploaded.",
 		guardianDecks = "Guardian decks come from each world's own eggs; the difficulty curve needs playtesting.",
 	}) :: { [string]: string },

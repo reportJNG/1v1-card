@@ -92,7 +92,7 @@ function WorldBuilder.buildWorld(worldId: number, root: Instance): Model
 	spawn.Name = "Spawn"
 	spawn.Anchored = true
 	spawn.Neutral = true
-	spawn.Enabled = worldId == 1 -- everyone spawns in World 1; WorldService moves them to their world
+	spawn.Enabled = false -- everyone spawns in the hub (HubBuilder); travel moves them here
 	spawn.Size = Vector3.new(12, 1, 12)
 	spawn.Position = v3(WorldLayout.spawn(worldId)) - Vector3.new(0, 3.5, 0)
 	spawn.Color = Color3.fromHex(layout.theme.accent)

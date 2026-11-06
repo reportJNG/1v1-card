@@ -1,6 +1,7 @@
 --!strict
--- The in-world prompts built by Server/World/WorldBuilder: Harvest a node, Sell at the merchant,
--- Challenge the Guardian. The prompt only starts a request; the server checks range, cooldown
+-- The in-world prompts built by Server/World/WorldBuilder and HubBuilder: Harvest a node, Sell at
+-- the merchant, Challenge the Guardian, and the hub's Arena / Worlds portal / egg stall (which only
+-- open a screen). The prompt only starts a request; the server checks range, cooldown
 -- and inventory itself. A harvested node dims for this player until it respawns.
 local ProximityPromptService = game:GetService("ProximityPromptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -45,6 +46,12 @@ function WorldInteraction.start(ctx: any)
 			end
 		elseif prompt.Name == "Sell" then
 			ctx.open("Merchant")
+		elseif prompt.Name == "HubArena" then
+			ctx.open("Play")
+		elseif prompt.Name == "HubPortal" then
+			ctx.open("Worlds")
+		elseif prompt.Name == "HubShop" then
+			ctx.open("Shop")
 		elseif prompt.Name == "Challenge" then
 			local worldId = worldOf(part)
 			if worldId == nil then
