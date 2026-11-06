@@ -18,6 +18,10 @@ them first, then continue with the next unfinished step without waiting to be as
 
 The owner's original brief files and concept board are in `docs/brief/`.
 
+Claude tooling: project skills are in `.claude/skills/` (start with `game-director`) and
+specialist agents in `.claude/agents/`. The Roblox Studio and Blender MCP setup is described in
+`docs/CLAUDE-SETUP.md`.
+
 ## What the game is
 
 An original, anime-inspired collectible card battler on Roblox.
