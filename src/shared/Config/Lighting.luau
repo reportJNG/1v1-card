@@ -72,28 +72,217 @@ local Presets: { [string]: Preset } = {
 		sunRays = { intensity = 0, spread = 0 },
 		sky = HUB_SKY,
 	},
-	-- Farming worlds until each world gets its own block (docs/ART_STYLE.md: worlds 1-3 day-lit).
-	world = {
-		clockTime = 14,
-		brightness = 2.4,
-		exposure = 0,
-		ambient = "#4A4A66",
-		outdoorAmbient = "#7A7A9A",
+}
+
+-- One preset per farming world, "world<n>" (docs/ART_STYLE.md section 6: worlds 1-3 day-lit and
+-- saturated, darker and more neon from world 5). Skies are drawn by scripts/art/make_sky.py
+-- (world mode), ids in art/sky/ids.json.
+local function sky(ft: string, bk: string, lf: string, rt: string, up: string, dn: string)
+	return { ft = ft, bk = bk, lf = lf, rt = rt, up = up, dn = dn, stars = 0 }
+end
+
+local function world(
+	clock: number,
+	brightness: number,
+	ambient: { string }, -- { Ambient, OutdoorAmbient }
+	atmosphere: { any }, -- { density, color, decay, haze, glare }
+	color: { any }, -- { contrast, saturation, tint, exposure }
+	bloom: number,
+	rays: number,
+	worldSky: any
+): Preset
+	return {
+		clockTime = clock,
+		brightness = brightness,
+		exposure = color[4] or 0,
+		ambient = ambient[1],
+		outdoorAmbient = ambient[2],
 		envDiffuse = 0.7,
 		envSpecular = 0.6,
 		atmosphere = {
-			density = 0.28,
+			density = atmosphere[1],
 			offset = 0.2,
-			color = "#C7D3FF",
-			decay = "#6E7FB8",
-			glare = 0.2,
-			haze = 1.2,
+			color = atmosphere[2],
+			decay = atmosphere[3],
+			haze = atmosphere[4],
+			glare = atmosphere[5],
 		},
-		bloom = { intensity = 0.5, size = 24, threshold = 1.6 },
-		color = { brightness = 0.03, contrast = 0.1, saturation = 0.2, tint = "#FFFFFF" },
-		sunRays = { intensity = 0.08, spread = 0.7 },
-		sky = nil,
-	},
-}
+		bloom = { intensity = bloom, size = 26, threshold = 1.4 },
+		color = { brightness = 0.02, contrast = color[1], saturation = color[2], tint = color[3] },
+		sunRays = { intensity = rays, spread = 0.7 },
+		sky = worldSky,
+	}
+end
+
+Presets.world1 = world(
+	14,
+	2.6,
+	{ "#5A6A7A", "#8A9AB0" },
+	{ 0.24, "#CFE8FF", "#8FB8E0", 0.8, 0.3 },
+	{ 0.1, 0.25, "#FFFDF4" },
+	0.5,
+	0.1,
+	sky(
+		"rbxassetid://98982950516711",
+		"rbxassetid://105072157112572",
+		"rbxassetid://110586097553669",
+		"rbxassetid://73061165559884",
+		"rbxassetid://134403471903442",
+		"rbxassetid://97209244090774"
+	)
+)
+Presets.world2 = world(
+	17.6,
+	2.2,
+	{ "#4A3A7A", "#7A6AB0" },
+	{ 0.28, "#B07CD8", "#3A2A6A", 0.9, 0.2 },
+	{ 0.16, 0.32, "#F4ECFF" },
+	0.8,
+	0.06,
+	sky(
+		"rbxassetid://107888646817327",
+		"rbxassetid://77801997105453",
+		"rbxassetid://120289086887461",
+		"rbxassetid://76773214706851",
+		"rbxassetid://79734195900396",
+		"rbxassetid://73953330993832"
+	)
+)
+Presets.world3 = world(
+	13,
+	2.8,
+	{ "#7A6A50", "#B09A78" },
+	{ 0.22, "#FFE2B0", "#E0B070", 0.8, 0.4 },
+	{ 0.14, 0.24, "#FFF6E6", -0.1 },
+	0.5,
+	0.14,
+	sky(
+		"rbxassetid://116112236117044",
+		"rbxassetid://125579908830680",
+		"rbxassetid://120602377739188",
+		"rbxassetid://123567460047086",
+		"rbxassetid://102794194574402",
+		"rbxassetid://75326749418391"
+	)
+)
+Presets.world4 = world(
+	15.5,
+	2.4,
+	{ "#5A6A8A", "#9AB0D0" },
+	{ 0.26, "#E6F4FF", "#9FC4E8", 0.9, 0.3 },
+	{ 0.16, 0.18, "#F0F8FF", -0.15 },
+	0.5,
+	0.1,
+	sky(
+		"rbxassetid://109427756514765",
+		"rbxassetid://103798396942406",
+		"rbxassetid://127144889939950",
+		"rbxassetid://86589748911840",
+		"rbxassetid://133871028306445",
+		"rbxassetid://107136009697026"
+	)
+)
+Presets.world5 = world(
+	17.8,
+	2.4,
+	{ "#8A4A30", "#B06A44" },
+	{ 0.28, "#8A3A20", "#2A0E06", 1.0, 0.2 },
+	{ 0.18, 0.15, "#FFF0E6" },
+	0.9,
+	0.12,
+	sky(
+		"rbxassetid://127226897556085",
+		"rbxassetid://99035555445924",
+		"rbxassetid://80498119072053",
+		"rbxassetid://132577684591291",
+		"rbxassetid://130145891354120",
+		"rbxassetid://96862622063790"
+	)
+)
+Presets.world6 = world(
+	17.5,
+	3,
+	{ "#A05A7A", "#C07090" },
+	{ 0.16, "#A04A6A", "#3A1020", 0.5, 0.2 },
+	{ 0.2, 0.1, "#FFE6EE", 0.4 },
+	0.9,
+	0.04,
+	sky(
+		"rbxassetid://72719645584560",
+		"rbxassetid://98903869532718",
+		"rbxassetid://122647014153059",
+		"rbxassetid://139172340701105",
+		"rbxassetid://84411904654915",
+		"rbxassetid://72155719328078"
+	)
+)
+Presets.world7 = world(
+	12,
+	2.2,
+	{ "#7A8AA8", "#B0C4E8" },
+	{ 0.2, "#FFFFFF", "#CFE4FF", 0.6, 0.3 },
+	{ 0.16, 0.25, "#FFFFF4", -0.3 },
+	0.4,
+	0.12,
+	sky(
+		"rbxassetid://102432478612923",
+		"rbxassetid://110880250592206",
+		"rbxassetid://114069738973229",
+		"rbxassetid://136152770924675",
+		"rbxassetid://139121252969793",
+		"rbxassetid://117159923234760"
+	)
+)
+Presets.world8 = world(
+	16.8,
+	2.4,
+	{ "#6A5038", "#A88A60" },
+	{ 0.22, "#FFC98A", "#B87A50", 0.8, 0.3 },
+	{ 0.16, 0.26, "#FFF0DC" },
+	0.6,
+	0.16,
+	sky(
+		"rbxassetid://81428548952495",
+		"rbxassetid://106472169213256",
+		"rbxassetid://134095904172977",
+		"rbxassetid://106605010623996",
+		"rbxassetid://128326433407550",
+		"rbxassetid://78486891048513"
+	)
+)
+Presets.world9 = world(
+	0,
+	2.2,
+	{ "#7A6AC0", "#8A7AD8" },
+	{ 0.2, "#4A3A8A", "#0A0418", 0.7, 0.1 },
+	{ 0.22, 0.3, "#EDE6FF", 0.45 },
+	1.1,
+	0,
+	sky(
+		"rbxassetid://130452168371962",
+		"rbxassetid://123457209411585",
+		"rbxassetid://132194691447164",
+		"rbxassetid://73259108289480",
+		"rbxassetid://121849505429113",
+		"rbxassetid://115328538786740"
+	)
+)
+Presets.world10 = world(
+	13,
+	2.6,
+	{ "#8A7A60", "#D0C098" },
+	{ 0.22, "#FFF0C8", "#E0C080", 0.7, 0.4 },
+	{ 0.18, 0.22, "#FFFBEA", -0.3 },
+	0.6,
+	0.16,
+	sky(
+		"rbxassetid://112665634830239",
+		"rbxassetid://117072080474088",
+		"rbxassetid://84840356244799",
+		"rbxassetid://122851940592421",
+		"rbxassetid://112926565435479",
+		"rbxassetid://132255223074190"
+	)
+)
 
 return table.freeze(Presets)

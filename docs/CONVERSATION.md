@@ -413,3 +413,50 @@ The owner asked for the game to look and feel like `docs/brief/concept-board.png
 - **Not done (blocked).**
   - Character models, animations and card renders: they need the owner's images.
   - Blender's generators and libraries are switched off.
+
+### Session 3: lobby, worlds as maps, card upgrade (2026-11-07, owner away: "keep going")
+The owner set a new focus, in order: (1) the lobby as the spawn point with a world picker, (2) the
+10 worlds as separate themed maps, (3) a brighter layered card system. Rule from the owner: never
+use real anime or franchise character images or names (no character datasets), only the original
+roster's art.
+
+**Part 1: lobby as the spawn point**
+- **Always the lobby.** Characters spawn in the lobby on join and on every respawn (world spawns are
+  disabled), return there after every settled battle (`BattleService.onMatchEnd` →
+  `WorldService`), and are brought back if they fall below y = -120 (the Celestial and Divine
+  islands float).
+- **The picker** (`Screens/Worlds`, opened from the lobby's Worlds portal or the menu) shows 10
+  world cards: art, name, trophies needed, locked or unlocked from `highestTrophies`, and the
+  Guardian Trial status. Locked worlds have no Travel button and the server refuses them anyway
+  (`Progress.travel`, checked in Play: `WorldLocked`, `BadRequest` for an unknown id).
+- **Guardian Trials start at each world's trial gate**, not from the picker, so the picker has one
+  job.
+- **Back to the lobby:** each world has a Back to Lobby portal behind its spawn, and the HUD shows a
+  "Back to Lobby" button while the player is in a world. Both send `World.Hub`.
+- **The client knows its area** from the server's `World` attribute (`State.area`), so the HUD
+  button and the picker's "You are here" update when the server moves the character.
+- **Bug found in Play:** after a battle the camera stayed on the battle's saved subject (the old
+  character), so it didn't follow the character back to the lobby. `BattleStage.destroy` now points
+  the camera at the current character. The hub's prompts were also moved to chest height with a
+  22-stud range: the Worlds portal prompt hung 16 studs up and was out of reach.
+
+**Part 2: worlds as separate maps**
+- **One place, ten maps.** `Workspace.Worlds.World01..World10` are Models (streamable), 2,000
+  studs apart and 2,400 from the lobby, each with `Spawn`, `Farm/Nodes`, `Merchant`,
+  `GuardianTrial`, `LobbyPortal`, `Decor`, `Bounds` and `Ambience`. A world is built only from its
+  own data (`Config/WorldLayouts` entry, `Config/WorldProps`, `Config/Lighting world<n>`, its
+  sky and music), so it can move into its own place later.
+- **Terrain is generated from data** (`TerrainSpec`): Terrain is one object per place and can't live
+  in a world's model. The farm field stays flat at y = 0 so the server's node range checks are
+  unchanged; hills ring the edge, with islands for worlds 7 and 10. **Terrain material colours are
+  global to the place**, so a material is never given two colours (a spec enforces it); the first
+  build had World 6 recolouring World 1's hills.
+- **Props are generated meshes**, 62 of them (`Config/WorldProps`, `docs/ASSETS.md`): no Creator
+  Store models. Nodes are an invisible prompt part at the exact range-check position with the mesh
+  under it, so farming logic didn't change. Scenery placement is a pure, seeded function
+  (`WorldLayout.decor`) that keeps clear of nodes, NPCs, the spawn, the portal and the path.
+- **Look per world:** a code-drawn skybox (`make_sky.py world`), its own Lighting / Atmosphere /
+  Bloom / ColorCorrection / SunRays preset applied on the client when the World attribute changes,
+  ambient particles (≤ 18/s) and an APM music track. Presets were tuned from Studio captures (the
+  first pass was too foggy in 2, 5, 6 and 9 and blown out in 7 and 10).
+- **Picker thumbnails** are Studio captures of the built worlds, marked TEMP until key art exists.

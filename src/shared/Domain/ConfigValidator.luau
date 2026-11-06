@@ -20,6 +20,8 @@ local WorldLayouts = require(Config.WorldLayouts)
 local QuestsCfg = require(Config.Quests)
 local Guardians = require(Config.Guardians)
 local UiAssets = require(Config.UiAssets)
+local WorldProps = require(Config.WorldProps)
+local Lighting = require(Config.Lighting)
 local Odds = require(script.Parent.Odds)
 
 export type Report = { errors: { string }, warnings: { string } }
@@ -409,6 +411,22 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 			if not isPositiveInt(res.yield[1]) or res.yield[2] < res.yield[1] then
 				err(`WorldLayouts: {res.itemId} has a bad yield range`)
 			end
+			if WorldProps.Models[res.model] == nil then
+				err(`WorldLayouts: {res.itemId} nodes use unknown model {res.model}`)
+			end
+		end
+		for _, d in layout.theme.decor do
+			if WorldProps.Models[d.model] == nil then
+				err(`WorldLayouts: world {world.id} decor uses unknown model {d.model}`)
+			end
+		end
+		if UiAssets[layout.theme.ambience.texture] == nil then
+			err(
+				`WorldLayouts: world {world.id} ambience uses unknown image slot {layout.theme.ambience.texture}`
+			)
+		end
+		if Lighting[`world{world.id}`] == nil then
+			err(`Lighting: world {world.id} has no world{world.id} preset`)
 		end
 		local guardian = Guardians.ByWorld[world.id]
 		if guardian == nil or #guardian.deck ~= 3 then

@@ -99,8 +99,88 @@ return function()
 					expect(WorldLayout.distance(node.position, WorldLayout.guardian(world.id)) > 20).to.equal(
 						true
 					)
+					expect(WorldLayout.distance(node.position, WorldLayout.lobbyPortal(world.id)) > 20).to.equal(
+						true
+					)
 				end
 			end
+		end)
+
+		it(
+			"places each world's scenery inside its walls, clear of nodes, NPCs, the spawn and the path",
+			function()
+				local half = WorldLayouts.WORLD_SIZE / 2
+				for _, world in Worlds.List do
+					local o = WorldLayout.origin(world.id)
+					local placed = WorldLayout.decor(world.id)
+					local wanted = 0
+					for _, d in WorldLayouts.ByWorld[world.id].theme.decor do
+						wanted += d.count
+					end
+					expect(#placed).to.equal(wanted)
+					local spots = {
+						WorldLayout.spawn(world.id),
+						WorldLayout.merchant(world.id),
+						WorldLayout.guardian(world.id),
+						WorldLayout.lobbyPortal(world.id),
+					}
+					for _, d in placed do
+						local p = d.position
+						expect(math.abs(p.x - o.x) < half and math.abs(p.z - o.z) < half).to.equal(true)
+						for _, node in WorldLayout.nodes(world.id) do
+							local flat = { x = node.position.x, y = 0, z = node.position.z }
+							expect(WorldLayout.distance(p, flat) >= WorldLayout.CLEAR_NODE).to.equal(true)
+						end
+						for _, s in spots do
+							local flat = { x = s.x, y = 0, z = s.z }
+							expect(WorldLayout.distance(p, flat) >= WorldLayout.CLEAR_SPOT).to.equal(true)
+						end
+					end
+				end
+			end
+		)
+
+		it("never gives a terrain material two colours (material colours are shared by the place)", function()
+			local seen: { [string]: string } = {}
+			for _, layout in WorldLayouts.List do
+				for material, hex in layout.theme.terrain.colors do
+					if seen[material] then
+						expect(`{material} {hex}`).to.equal(`{material} {seen[material]}`)
+					end
+					seen[material] = hex
+				end
+			end
+		end)
+
+		it("lays out the same scenery every time (every server builds the same map)", function()
+			local a = WorldLayout.decor(3)
+			local b = WorldLayout.decor(3)
+			expect(a).to.equal(b) -- cached
+			for i, d in a do
+				expect(d.model).to.equal(b[i].model)
+				expect(d.position.x).to.equal(b[i].position.x)
+			end
+		end)
+
+		it("gives every world its node meshes, scenery, lighting preset and music", function()
+			local WorldProps = require(Shared.Config.WorldProps)
+			local Lighting = require(Shared.Config.Lighting)
+			local Sounds = require(Shared.Config.Sounds)
+			for _, world in Worlds.List do
+				local layout = WorldLayouts.ByWorld[world.id]
+				for _, res in layout.resources do
+					expect(WorldProps.Models[res.model]).to.be.ok()
+				end
+				for _, d in layout.theme.decor do
+					expect(WorldProps.Models[d.model]).to.be.ok()
+				end
+				local preset = Lighting[`world{world.id}`]
+				expect(preset).to.be.ok()
+				expect(preset.sky).to.be.ok()
+				expect(Sounds[`music_world{world.id}`]).to.be.ok()
+			end
+			expect(WorldProps.Models.merchant_cart).to.be.ok()
+			expect(WorldProps.Models.guardian_gate).to.be.ok()
 		end)
 	end)
 

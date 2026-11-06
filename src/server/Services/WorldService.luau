@@ -1,8 +1,12 @@
 --!strict
--- Worlds on a Hub server: builds the hub plaza and the 10 blockout worlds, spawns each character
--- in the hub (World attribute 0), and handles World.Travel (unlocked worlds only) and World.Hub
--- (back to the plaza). Battle servers build no worlds.
+-- Worlds on a Hub server: builds the hub lobby and the 10 world maps, and keeps the lobby the
+-- spawn point: every character spawns there (on join and on respawn), returns there after every
+-- battle, and is brought back there if it falls out of a map. Handles World.Travel (unlocked
+-- worlds only, checked on the profile) and World.Hub (the lobby portal in each world and the HUD's
+-- Lobby button). The World attribute is 0 in the lobby, 1-10 in a world. Battle servers build no
+-- worlds.
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Result = require(Shared.Domain.Result)
@@ -56,7 +60,7 @@ function WorldService.init()
 	if isBattleServer() then
 		return
 	end
-	WorldBuilder.buildAll(workspace)
+	WorldBuilder.buildAll(workspace, workspace.Terrain)
 	HubBuilder.build(workspace)
 
 	Router.handle("World.Travel", function(player, args, profile)
@@ -86,6 +90,37 @@ function WorldService.init()
 	end)
 	PlayerDataService.onLoaded(function(player)
 		onCharacter(player)
+	end)
+end
+
+-- Characters below this height have fallen out of a map (the Celestial and Divine islands float).
+local FALL_Y = -120
+
+function WorldService.start()
+	if isBattleServer() then
+		return
+	end
+	-- After every battle (ranked or Trial), the player is back in the lobby.
+	local BattleService = require(script.Parent.BattleService) :: any
+	BattleService.onMatchEnd(function(userId: number)
+		local player = Players:GetPlayerByUserId(userId)
+		if player then
+			placeInHub(player)
+		end
+	end)
+	local elapsed = 0
+	RunService.Heartbeat:Connect(function(dt)
+		elapsed += dt
+		if elapsed < 1 then
+			return
+		end
+		elapsed = 0
+		for _, player in Players:GetPlayers() do
+			local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if root and root.Position.Y < FALL_Y then
+				placeInHub(player)
+			end
+		end
 	end)
 end
 

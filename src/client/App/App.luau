@@ -242,6 +242,20 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 	})
 	Ui.fit(hintText, 14, 9)
 
+	-- Back to Lobby (bottom-left), shown only while the player is in a world (World attribute
+	-- 1-10). The server moves the character (World.Hub); each world also has a lobby portal.
+	local lobby = Ui.button("Back to Lobby", "primary", function()
+		ctx.request("World.Hub")
+	end, {
+		Name = "Lobby",
+		AnchorPoint = Vector2.new(0, 1),
+		Position = UDim2.new(0, 12, 1, -14),
+		Size = UDim2.fromOffset(150, 40),
+		TextSize = 15,
+	})
+	lobby.instance.Visible = false
+	lobby.instance.Parent = root
+
 	local shown: { [string]: number } = {}
 	local function setCount(label: TextLabel, key: string, value: number)
 		local before = shown[key]
@@ -259,6 +273,7 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 
 	return {
 		refresh = function()
+			lobby.instance.Visible = ctx.state.area ~= 0
 			local v = ctx.state.view
 			if v == nil then
 				return
@@ -486,6 +501,12 @@ function App.start(deps: Deps): Ctx
 		if what == "battle" then
 			-- The battle screen is full-screen: hide the hub HUD under it.
 			hudLayer.Visible = ctx.state.battle == nil
+		end
+		if what == "area" then
+			refreshHud()
+			if current and current.refresh then
+				current.refresh()
+			end
 		end
 		if what == "profile" then
 			refreshHud()

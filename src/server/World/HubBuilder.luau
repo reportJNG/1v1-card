@@ -4,11 +4,11 @@
 -- lantern lights, the Worlds portal core, signs, interaction prompts, falling petals and the
 -- spawn. The floor and spawn exist on return; the meshes stream in on a background thread.
 -- Idempotent: rebuilding replaces the previous hub. Runs on Hub servers only.
-local AssetService = game:GetService("AssetService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local HubLayout = require(Shared.Config.HubLayout)
 local UiAssets = require(Shared.Config.UiAssets)
+local MeshLibrary = require(script.Parent.MeshLibrary)
 
 local HubBuilder = {}
 
@@ -43,50 +43,17 @@ local function slab(props: { [string]: any }, parent: Instance): Part
 	return p
 end
 
--- One template MeshPart per model, loaded once (a failed load is reported, never retried in a
--- loop, so a bad id can't stall the server).
-local templates: { [string]: MeshPart | false } = {}
-
-local function template(name: string): MeshPart?
-	local cached = templates[name]
-	if cached == false then
-		return nil
-	elseif cached ~= nil then
-		return cached :: MeshPart
-	end
-	local def = HubLayout.Models[name]
-	local ok, mesh = pcall(function()
-		return AssetService:CreateMeshPartAsync(def.mesh)
-	end)
-	if not ok or mesh == nil then
-		warn(`[HubBuilder] could not load mesh for {name}: {mesh}`)
-		templates[name] = false
-		return nil
-	end
-	local mp = mesh :: MeshPart
-	mp.TextureID = def.texture
-	mp.Anchored = true
-	mp.Name = name
-	templates[name] = mp
-	return mp
-end
-
 local light: (BasePart, Vector3, string, number, number) -> ()
 
 -- One model piece at `origin + at`, standing on the ground.
 local function place(piece: HubLayout.Piece, i: number, origin: Vector3, parent: Instance)
-	local t = template(piece.model)
-	if t == nil then
+	local def = HubLayout.Models[piece.model]
+	local m = MeshLibrary.place(piece.model, def, origin + v(piece.at), piece.rotY, piece.scale)
+	if m == nil then
 		return
 	end
-	local def = HubLayout.Models[piece.model]
-	local scale = piece.scale or 1
-	local size = v(def.size) * scale
-	local m = t:Clone()
+	local size = m.Size
 	m.Name = `{piece.model}_{i}`
-	m.Size = size
-	m.CFrame = CFrame.new(origin + v(piece.at) + Vector3.new(0, size.Y / 2, 0))
-		* CFrame.Angles(0, math.rad(piece.rotY or 0), 0)
 	local far = piece.model == "sky_island"
 	m.CanCollide = not far
 	m.CastShadow = not far
@@ -203,7 +170,7 @@ local function prompt(at: Vector3, def: { name: string, action: string, object: 
 	pp.Name = def.name
 	pp.ActionText = def.action
 	pp.ObjectText = def.object
-	pp.MaxActivationDistance = 16
+	pp.MaxActivationDistance = 22 -- the anchors sit inside the arena, portal and stall meshes
 	pp.HoldDuration = 0
 	pp.RequiresLineOfSight = false
 	pp.Parent = p
@@ -311,7 +278,9 @@ function HubBuilder.build(parent: Instance): Model
 			portalCore(at, f.rotY or 0, HubLayout.PORTAL_CORE_RADIUS, hub)
 		end
 		if f.prompt then
-			prompt(at, f.prompt, hub)
+			-- At chest height, whatever the feature's height (the portal core floats at 16 studs,
+			-- which put its prompt at the edge of its range).
+			prompt(Vector3.new(at.X, origin.Y + 3, at.Z), f.prompt, hub)
 		end
 		if f.sign then
 			sign(

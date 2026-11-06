@@ -64,6 +64,14 @@ local ctx = App.start({
 	},
 })
 
+-- Lobby vs world (the server sets the World attribute on travel, return and respawn).
+local function syncArea()
+	local world = player:GetAttribute("World")
+	ctx.state:setArea(if typeof(world) == "number" then world else 0)
+end
+player:GetAttributeChangedSignal("World"):Connect(syncArea)
+syncArea()
+
 local battle: Battle.Handle? = nil
 net.on("Battle.Start", function(start)
 	ctx.close()

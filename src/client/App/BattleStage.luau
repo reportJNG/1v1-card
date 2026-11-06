@@ -6,6 +6,7 @@
 -- approved model exists (CharacterDef.assets.model).
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
@@ -437,6 +438,13 @@ function BattleStage.destroy(self: Stage)
 	cam.FieldOfView = self.saved.fov
 	if self.saved.cameraType == Enum.CameraType.Scriptable then
 		cam.CFrame = self.saved.cframe
+	end
+	-- The server moves the character back to the lobby when a battle ends (and it may have
+	-- respawned meanwhile), so follow the current character, not the one the battle started with.
+	local player = Players.LocalPlayer
+	local humanoid = player and player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		cam.CameraSubject = humanoid
 	end
 end
 

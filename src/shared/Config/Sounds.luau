@@ -29,6 +29,18 @@ local Sounds: { [string]: Sound } = {
 	-- Music
 	music_hub = { id = "rbxassetid://1840401478", volume = 0.25, kind = "music", looped = true }, -- APM "Yachiyo-Jishi"
 	music_battle = { id = "rbxassetid://9048541013", volume = 0.25, kind = "music", looped = true }, -- APM "Battleground"
+	-- One track per world (App/AreaFx plays music_world<n>). Picked from APMOfficial by title and
+	-- description only; the owner should listen and confirm (docs/WAITING_ON_YOU.md).
+	music_world1 = { id = "rbxassetid://1836352521", volume = 0.25, kind = "music", looped = true }, -- APM "Sunny Sights"
+	music_world2 = { id = "rbxassetid://1838926651", volume = 0.25, kind = "music", looped = true }, -- APM "Natural Planet"
+	music_world3 = { id = "rbxassetid://1840540809", volume = 0.25, kind = "music", looped = true }, -- APM "Sunset Song"
+	music_world4 = { id = "rbxassetid://9039666736", volume = 0.25, kind = "music", looped = true }, -- APM "Magical Night (b)"
+	music_world5 = { id = "rbxassetid://1839685565", volume = 0.25, kind = "music", looped = true }, -- APM "Light The Fire"
+	music_world6 = { id = "rbxassetid://9043600381", volume = 0.25, kind = "music", looped = true }, -- APM "Mystery Mansion (b)"
+	music_world7 = { id = "rbxassetid://1844581845", volume = 0.25, kind = "music", looped = true }, -- APM "Space Fantasy"
+	music_world8 = { id = "rbxassetid://1838829561", volume = 0.25, kind = "music", looped = true }, -- APM "Mysterious Gate"
+	music_world9 = { id = "rbxassetid://9044407121", volume = 0.25, kind = "music", looped = true }, -- APM "Back to the Shadows Underscore"
+	music_world10 = { id = "rbxassetid://1840939025", volume = 0.25, kind = "music", looped = true }, -- APM "Ideal World (a)"
 }
 
 return table.freeze(Sounds)

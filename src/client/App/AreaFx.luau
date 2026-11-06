@@ -1,7 +1,8 @@
 --!strict
--- Client-side area presentation: applies the Config/Lighting preset for where the player is
--- (World attribute 0 = hub, 1-10 = a farming world, or "arena" while a battle screen is open)
--- and animates the hub's Worlds portal swirl. Purely visual; nothing here affects game state.
+-- Client-side area presentation: applies the Config/Lighting preset and the music for where the
+-- player is (World attribute 0 = hub, n = world n with preset "world<n>" and music
+-- "music_world<n>", or "arena" while a battle screen is open) and animates the portal swirls in
+-- the hub and in every world. Purely visual; nothing here affects game state.
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -29,8 +30,8 @@ end
 
 local current: string? = nil
 
--- Applies a preset by name ("hub", "arena", "world"). `instant` skips the tween (edit-mode
--- previews and the first apply).
+-- Applies a preset by name ("hub", "arena", "world1".."world10"). `instant` skips the tween
+-- (edit-mode previews and the first apply).
 function AreaFx.apply(name: string, instant: boolean?)
 	local p = Presets[name]
 	if p == nil or current == name then
@@ -153,8 +154,9 @@ local function refresh()
 		AreaFx.apply("hub")
 		playMusic("music_hub")
 	else
-		AreaFx.apply("world")
-		playMusic("music_hub")
+		AreaFx.apply(`world{world}`)
+		local music = `music_world{world}`
+		playMusic(if Sounds[music] then music else "music_hub")
 	end
 end
 
@@ -209,6 +211,26 @@ function AreaFx.start(ctx: any)
 		if hub then
 			spinPortal(hub)
 		end
+	end)
+	-- The Back to Lobby portals stream in with their worlds (StreamingEnabled).
+	task.spawn(function()
+		local worlds = workspace:WaitForChild("Worlds", 60)
+		if worlds == nil then
+			return
+		end
+		local function spin(inst: Instance)
+			if inst:IsA("ImageLabel") and inst.Name == "Swirl" then
+				TweenService:Create(
+					inst,
+					TweenInfo.new(6, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
+					{ Rotation = 360 }
+				):Play()
+			end
+		end
+		for _, d in worlds:GetDescendants() do
+			spin(d)
+		end
+		worlds.DescendantAdded:Connect(spin)
 	end)
 end
 

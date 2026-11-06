@@ -2,6 +2,19 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
+## 0. Review the lobby, world picker and the 10 worlds (session 3)
+- **Screenshots:** `docs/screens/12-15` (lobby spawn, world picker for a new player and at 760
+  trophies, arriving in World 1) and `docs/screens/worlds/world01..10-*.jpg`.
+- **World art is a first pass.** Each world has generated terrain, 6 generated meshes (Roblox
+  `generate_mesh`, original), a code-drawn sky, its own lighting and particles. Say which worlds to
+  push further and in what direction. Hero props or a terrain pass in Studio by hand would lift them
+  the most.
+- **Listen to the 10 world tracks** (`Config/Sounds`, `music_world1..10`). They are APMOfficial
+  tracks picked by title and description only, because Claude can't hear audio. Replace any id you
+  don't like.
+- **World picker art:** the thumbnails are Studio captures of each world (`art/worlds/TEMP_*`). If
+  you want painted key art, make 384×216 images and Claude will swap them in.
+
 ## 1. Turn on Blender's generators and libraries (5 minutes)
 Blender 5.2 and the MCP addon are connected and up to date, but every 3D generator and asset
 library is **off**, so image-to-3D (Hyper3D Rodin / Hunyuan3D) and Poly Haven textures can't run.

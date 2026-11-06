@@ -1,4 +1,4 @@
-# 1v1 CARD: status (2026-11-06, visual vertical slice built)
+# 1v1 CARD: status (2026-11-07, lobby + 10 world maps + layered cards)
 
 ## Implemented (real logic, tested)
 
@@ -14,14 +14,14 @@
 | MatchRunner (12 s picks, timeouts, forfeit, 5 s KO pick) and MatchHost (AI, 30 s reconnect) | `Server/Battle` | MatchRunner, MatchHost specs |
 | Guardian AI (identical to `sim/balance.py` reader on 300 seeds) and Guardian Trials | `Server/Battle/BattleAI`, `Shared/Domain/Trials` | BattleAI, Trials specs |
 | Matchmaking: pairing, lease, MemoryStore queue, match records, battle servers, reconnect | `Server/Matchmaking`, `Services/MatchmakingService` | Matchmaking.spec (mocked MemoryStore) |
-| Worlds 1-10: layouts, builder, farming (range, profile-stored respawns), merchants | `Config/WorldLayouts`, `Shared/Domain/Farming`, `Server/World` | Worlds.spec, e2e |
+| Worlds 1-10 as separate maps (`Workspace.Worlds.World01..10`): generated terrain, 62 generated meshes, nodes, merchant, Guardian Trial gate, Back to Lobby portal, walls, ambience; farming (range, profile-stored respawns), merchants | `Config/WorldLayouts`, `Config/WorldProps`, `Shared/Domain/WorldLayout`, `Shared/Domain/Farming`, `Server/World` | Worlds.spec (layout, decor clearances, material colours, props/lighting/music per world), Play mode (travel, harvest, sell, Trial, lobby portal), `docs/screens/worlds` |
 | Quests (3 daily + achievements, Secret Egg reveal) and 7-day streak | `Shared/Domain/Quests`, `Shared/Domain/Streak` | Worlds.spec |
 | Client UI: HUD, shop + Odds + Robux gating, hatch, collection, deck, arena/queue, battle, results, worlds, quests, settings, merchant | `src/client/App` | ui-check (real Studio), e2e |
 | 100-character roster, 24 themed egg pools, Guardian decks | `Config/Characters`, `Config/EggPools`, `Config/Guardians` | ConfigValidator.spec, `sim/balance.py`, `sim/trials.py` |
 | Telemetry events and counters | `Services/Telemetry` | e2e (no errors) |
 | Image-based UI kit (9-slice skins, fonts, motion, sounds, theme pass) | `App/Ui`, `App/Theme`, `Config/UiAssets`, `Config/Sounds` | Studio previews (`tests/Tools/UiPreview`), validator spec |
-| Hub plaza (generated meshes, lanterns, portal, petals, signs, prompts), spawn in hub, `World.Hub` | `Config/HubLayout`, `Server/World/HubBuilder`, `Services/WorldService` | Play mode in Studio (spawned at hub, World = 0) |
-| Area lighting + sky + music | `Config/Lighting`, `App/AreaFx` | Play mode in Studio |
+| Lobby as the spawn point: join, respawn, after every battle, fall-out; world picker (art, trophies, lock state), World.Travel (server-checked), Back to Lobby (portal + HUD) | `Config/HubLayout`, `Server/World/HubBuilder`, `Services/WorldService`, `Screens/Worlds`, `Config/WorldArt` | Play mode in Studio: spawn, picker from the portal, locked world refused, travel, respawn, Trial → lobby, lobby portal |
+| Area lighting + sky + music per area (hub, arena, world1..10) | `Config/Lighting`, `Config/Sounds`, `App/AreaFx` | Play mode in Studio, world captures |
 | Card component on frame art, hatch sequence, 3D battle stage, battle UI, results | `App/Visuals`, `Screens/Hatch`, `App/BattleStage`, `Screens/Battle` | Play mode: a real Guardian Trial round and forfeit |
 | 100 character art briefs | `Config/Characters` (`look`), `sim/roster_looks.py` | ConfigValidator spec |
 
@@ -35,7 +35,7 @@
 | Odds bands, egg prices, economy prices, item prices, quest rewards | Starting values |
 | Character numbers | Pass the balance gate; still need real playtests |
 | Guardian decks | Difficulty curve needs playtests (`sim/trials.py`: 36-53% for a random deck) |
-| World art | Data-driven blockouts |
+| World art | First pass: generated terrain and meshes, code-drawn skies, Studio-captured picker thumbnails, APM tracks picked by title |
 | Party Egg odds | Stand-in Event band |
 | All UI images | TEMP code-drawn stand-ins (`art/ui/temp`) until the owner's art (`art/ui/PROMPTS.md`) |
 | Hub art | Generated meshes and a code-drawn sky, awaiting slice approval |

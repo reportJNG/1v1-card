@@ -12,7 +12,7 @@ return table.freeze({
 		economyPrices = "Card storage, item slot and merge prices are starting values.",
 		characterNumbers = "All 100 characters pass sim/balance.py (47-53% win rate each), but numbers need real playtest tuning.",
 		items = "Item names and merchant prices for all 10 worlds are starting values pending the economy simulation.",
-		worldArt = "Worlds are data-driven blockouts (flat ground, node and NPC markers) until world art exists.",
+		worldArt = "Worlds are a first art pass (generated terrain, generate_mesh props, code-drawn skies, picker thumbnails captured in Studio) awaiting the owner's review and a hero pass.",
 		questRewards = "Quest targets and rewards are starting values.",
 		characterArt = "Characters are procedural placeholder rigs (Shared/Art/RigBuilder); hero-quality models and card art need a 3D artist.",
 		cardFrames = "Rarity card frames are TEMP stand-in images (Config/UiAssets card_frame_*) until final frame art exists.",
