@@ -20,6 +20,7 @@ return table.freeze({
 		minRoundsForReward = 3, -- forfeits before round 3 pay nothing
 		maxRepeatsPerDay = 3, -- the same two players: only the first 3 matches a day pay
 		timeoutsVoidReward = 3, -- a player who timed out this many rounds earns nothing
+		settledMemory = 300, -- matchIds kept for idempotency; the oldest are dropped past this
 	}),
 
 	-- First-clear rewards for each world's Guardian Trial.

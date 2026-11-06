@@ -11,3 +11,4 @@ wally.lock
 .DS_Store
 Thumbs.db
 build/
+__pycache__/

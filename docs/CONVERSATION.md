@@ -163,3 +163,29 @@ policy risk before building anything.
 - Battle rules or characters changed? See "Regenerate" in `HANDOFF.md`.
 - Commit messages end with:
   `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`
+
+---
+
+## Decisions made in the CLI
+
+Made by Claude while working autonomously on "finish every stage in HANDOFF.md and verify it"
+(from 2026-11-06). Each one can be reopened by the owner.
+
+### Tooling on this machine
+- The machine had no Python, Luau, Rojo, StyLua, Selene or luau-lsp on PATH. Rather than install
+  anything system-wide, I downloaded the versions pinned in `rokit.toml` (plus the Luau CLI, the
+  embeddable Python 3.13 and TestEZ into `DevPackages/`, which is git-ignored) into the session's
+  temp folder. To reproduce: `rokit install`, install Python 3, and follow the README.
+
+### Settlement (`Shared/Domain/Settlement`)
+- **Void rules.** A voided *win* earns no Coins and no trophies. A voided *loss* still costs trophies,
+  so quitting early is never free. The exception is the repeat-opponent rule: past 3 matches a day
+  between the same two players, nothing moves for either side, which stops win-trading.
+- **Loss Coins.** These are the `lossCoinsByLeague` consolation. Once a player has 10 paid wins that
+  day, they also drop to the reduced rate, so loss farming isn't a loophole.
+- **League.** The purse is paid for the league the player was in when the match was played.
+- **Coin cap.** If the wallet is at its cap, the purse is skipped but the match still settles. A
+  settlement must never get stuck retrying.
+- **Bounded memory.** `settledMatches` keeps the last `Economy.Matches.settledMemory` (300) matchIds.
+  The authoritative match record lives in the battle server for far less time than 300 matches
+  take, so a replay can't come in after its id has been dropped.
