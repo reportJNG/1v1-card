@@ -344,7 +344,7 @@ local List: { Types.CharacterDef } = {
 	},
 	{
 		id = "sorin_embervale",
-		displayName = "Sorin Embervale",
+		displayName = "Cassius Emberreach",
 		family = "Flame",
 		rarity = "Legendary",
 		role = "Skirmisher",
@@ -1217,7 +1217,7 @@ local List: { Types.CharacterDef } = {
 	},
 	{
 		id = "nessa_fangwood",
-		displayName = "Nessa Fangwood",
+		displayName = "Wrenna Fangwood",
 		family = "Beast",
 		rarity = "Epic",
 		role = "Trickster",
@@ -1608,7 +1608,7 @@ local List: { Types.CharacterDef } = {
 	},
 	{
 		id = "duran_oakblade",
-		displayName = "Duran Oakblade",
+		displayName = "Halvard Oakblade",
 		family = "Warrior",
 		rarity = "Epic",
 		role = "Guardian",
@@ -2962,7 +2962,7 @@ local List: { Types.CharacterDef } = {
 	},
 	{
 		id = "corran_ashenhorn",
-		displayName = "Corran Ashenhorn",
+		displayName = "Brakus Ashenhorn",
 		family = "Demon",
 		rarity = "Legendary",
 		role = "Skirmisher",

@@ -129,6 +129,16 @@ NEW = [
     ("Ruska Sinmaw", "Mythical", "Skirmisher", "burst", "crit", "Sin Maw", "Cruel Fortune"),
 ]
 
+# Display names changed after a web name check (2026-11-06) because they were too close to existing
+# characters (Corran Horn, Duran of Trials of Mana, Sorin Markov / the Embervale setting, Nessa of
+# Pokemon). Ids stay the original slugs: ids are permanent and already saved in profiles.
+DISPLAY_RENAME = {
+    "corran_ashenhorn": "Brakus Ashenhorn",
+    "duran_oakblade": "Halvard Oakblade",
+    "sorin_embervale": "Cassius Emberreach",
+    "nessa_fangwood": "Wrenna Fangwood",
+}
+
 FAMILIES = ["Flame"] * 6 + ["Ice"] * 6 + ["Lightning"] * 6 + ["Shadow"] * 6 + ["Divine"] * 6 + ["Beast"] * 6 \
     + ["Dragon"] * 6 + ["Warrior"] * 7 + ["Ninja"] * 7 + ["Royal"] * 6 + ["Cosmic"] * 7 + ["Ancient"] * 6 \
     + ["Mystic"] * 6 + ["Spirit"] * 6 + ["Demon"] * 6
@@ -222,7 +232,7 @@ def build(knobs):
     for (name, rarity, role, arche, pcode, sname, pname), family in zip(NEW, FAMILIES):
         cid = slug(name)
         out.append({
-            "id": cid, "displayName": name, "family": family, "rarity": rarity, "role": role,
+            "id": cid, "displayName": DISPLAY_RENAME.get(cid, name), "family": family, "rarity": rarity, "role": role,
             "special": special_of(arche, sname, knobs[cid]),
             "passive": passive_of(pcode, family, arche, pname),
             "arche": arche,

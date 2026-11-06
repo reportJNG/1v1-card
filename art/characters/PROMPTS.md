@@ -16,6 +16,12 @@ weapon and the silhouette note. Rarity is never in the prompt: it only changes t
 
 ## Flame
 
+### Cassius Emberreach (`sorin_embervale`)
+
+Flame · Legendary · Skirmisher → `art/characters/sorin_embervale/front.png`
+
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, tailored crimson frock coat with gold buttons, high boots, ember-lined collar; colour scheme crimson red (#C2412D), ember orange (#FFB347) and near-black violet (#1E1A2B); holding a slim rapier wreathed in sparks; signature silhouette: the tall flared coat collar and a raised rapier; expression and pose suggest: elegant duellist with a short temper.
+
 ### Cyrus Coalbrand (`cyrus_coalbrand`)
 
 Flame · Mythical · Skirmisher → `art/characters/cyrus_coalbrand/front.png`
@@ -45,12 +51,6 @@ Flame · Epic · Bruiser → `art/characters/pyrelle_ashveil/front.png`
 Flame · Rare · Striker → `art/characters/ren_emberfang/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, sleeveless red brigandine over a charcoal undershirt, ember-stitched sash, bracers with brass rivets; colour scheme crimson red (#C2412D), ember orange (#FFB347) and charcoal (#2B2B33); holding a broad single-edged fang-shaped cleaver; signature silhouette: swept-back flame-shaped red hair and the oversized curved cleaver on one shoulder; expression and pose suggest: hot-headed and loyal, first to charge in and first to apologise.
-
-### Sorin Embervale (`sorin_embervale`)
-
-Flame · Legendary · Skirmisher → `art/characters/sorin_embervale/front.png`
-
-> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, tailored crimson frock coat with gold buttons, high boots, ember-lined collar; colour scheme crimson red (#C2412D), ember orange (#FFB347) and near-black violet (#1E1A2B); holding a slim rapier wreathed in sparks; signature silhouette: the tall flared coat collar and a raised rapier; expression and pose suggest: elegant duellist with a short temper.
 
 ### Tomo Kilnfist (`tomo_kilnfist`)
 
@@ -260,12 +260,6 @@ Beast · Rare · Skirmisher → `art/characters/lyra_wildpelt/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, short fur tunic, leather wraps, wolf-pelt hood with ears; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and tan (#D9B48A); holding a pair of bone claw-knives; signature silhouette: a wolf-ear pelt hood and a long bushy tail; expression and pose suggest: free spirit raised by wolves, loves the hunt.
 
-### Nessa Fangwood (`nessa_fangwood`)
-
-Beast · Epic · Trickster → `art/characters/nessa_fangwood/front.png`
-
-> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, green and brown leaf-cloak over fitted leathers, fang earrings, bare feet with wraps; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and jade green (#2F7A4D); holding a long fang-tipped spear; signature silhouette: a leaf cloak with jagged edges and the fang spear; expression and pose suggest: sly forest stalker who loves riddles.
-
 ### Tavi Howlstride (`tavi_howlstride`)
 
 Beast · Rare · Trickster → `art/characters/tavi_howlstride/front.png`
@@ -277,6 +271,12 @@ Beast · Rare · Trickster → `art/characters/tavi_howlstride/front.png`
 Beast · Common · Guardian → `art/characters/tusk_boulderhide/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, thick hide armour with stone plates, carved tusk shoulder guards; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and steel grey (#7B8794); holding a boulder-sized round stone shield; signature silhouette: two huge upturned tusk shoulder guards; expression and pose suggest: slow, kind and utterly immovable.
+
+### Wrenna Fangwood (`nessa_fangwood`)
+
+Beast · Epic · Trickster → `art/characters/nessa_fangwood/front.png`
+
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, green and brown leaf-cloak over fitted leathers, fang earrings, bare feet with wraps; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and jade green (#2F7A4D); holding a long fang-tipped spear; signature silhouette: a leaf cloak with jagged edges and the fang spear; expression and pose suggest: sly forest stalker who loves riddles.
 
 ## Dragon
 
@@ -330,7 +330,7 @@ Warrior · Legendary · Support → `art/characters/asha_warbanner/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, polished steel cuirass with red cape, plumed helm under the arm; colour scheme steel grey (#7B8794), scarlet (#D2462E) and gold (#FFC54B); holding a war-banner spear; signature silhouette: a tall banner flowing above her head; expression and pose suggest: inspiring general, booming voice, warm smile.
 
-### Duran Oakblade (`duran_oakblade`)
+### Halvard Oakblade (`duran_oakblade`)
 
 Warrior · Epic · Guardian → `art/characters/duran_oakblade/front.png`
 
@@ -608,7 +608,7 @@ Spirit · Epic · Trickster → `art/characters/tamsin_ghostbloom/front.png`
 
 ## Demon
 
-### Corran Ashenhorn (`corran_ashenhorn`)
+### Brakus Ashenhorn (`corran_ashenhorn`)
 
 Demon · Legendary · Skirmisher → `art/characters/corran_ashenhorn/front.png`
 
