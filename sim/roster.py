@@ -464,6 +464,114 @@ def write():
     print(f"wrote {len(chars)} characters and {len(pools)} pools (sizes {min(sizes)}-{max(sizes)}); uncovered: {missing}")
 
 
+# ------------------------------------------------------------------- art briefs
+
+FAMILY_COLORS = {  # mirrors Config/Art.FamilyColors (body, accent)
+    "Flame": ("#C2412D", "#FFB347"), "Ice": ("#7FB8E0", "#E8F6FF"), "Lightning": ("#3A55C8", "#FFE14D"),
+    "Shadow": ("#2B2540", "#9B7BFF"), "Divine": ("#F1E6C8", "#FFD45C"), "Beast": ("#8A5A3B", "#D9B48A"),
+    "Dragon": ("#2F7A4D", "#FF6A2B"), "Warrior": ("#7B8794", "#D2462E"), "Ninja": ("#22303F", "#4FD1C5"),
+    "Royal": ("#5B2A86", "#FFC54B"), "Cosmic": ("#1C1F4A", "#FF7BE5"), "Ancient": ("#9C8B6E", "#5FD3A0"),
+    "Mystic": ("#3E2A6B", "#B98CFF"), "Spirit": ("#A9D8D0", "#FFFFFF"), "Demon": ("#4A1022", "#FF3B3B"),
+}
+
+NAMED_COLORS = {
+    "crimson red": "#C2412D", "ember orange": "#FFB347", "ice blue": "#7FB8E0", "frost white": "#E8F6FF",
+    "royal blue": "#3A55C8", "electric yellow": "#FFE14D", "dark plum": "#2B2540", "lavender": "#9B7BFF",
+    "cream": "#F1E6C8", "warm gold": "#FFD45C", "chestnut brown": "#8A5A3B", "tan": "#D9B48A",
+    "jade green": "#2F7A4D", "flame orange": "#FF6A2B", "steel grey": "#7B8794", "scarlet": "#D2462E",
+    "midnight navy": "#22303F", "teal": "#4FD1C5", "royal purple": "#5B2A86", "gold": "#FFC54B",
+    "deep indigo": "#1C1F4A", "neon pink": "#FF7BE5", "sandstone": "#9C8B6E", "mint green": "#5FD3A0",
+    "violet": "#3E2A6B", "soft lilac": "#B98CFF", "pale seafoam": "#A9D8D0", "white": "#FFFFFF",
+    "blood maroon": "#4A1022", "bright red": "#FF3B3B", "charcoal": "#2B2B33", "slate blue": "#4A6FA5",
+    "silver white": "#F2F5FF", "pale lilac grey": "#C9C2D9", "peach": "#FF9F6B", "gunmetal": "#5E6A73",
+    "ash grey": "#B5B0A8", "dark brown": "#3A2A24", "grey": "#6B7280", "pale parchment": "#F4E3C1",
+    "deep blue": "#2D3A6B", "pale sky blue": "#BFE6FF", "rose pink": "#FF5E7E", "straw beige": "#D9C08A",
+    "sky blue": "#45BEFF", "rose": "#FF668F", "dusty violet": "#6B5B95", "pale violet": "#DCD6F7",
+    "cool grey": "#A3A3B5", "amethyst": "#6E4BC4", "sea teal": "#3FA7A0", "periwinkle": "#9EAED3",
+    "blossom pink": "#FF9AD5", "emerald": "#48DA97", "moss green": "#5E8A3A", "amber": "#C98A1C",
+    "pale gold": "#FFF1B8", "light gold": "#FFE27A", "orange": "#FF8A3D", "lantern amber": "#FFB45A",
+    "purple": "#A469FF", "navy": "#2A3760", "pale silver": "#C0C7D6", "khaki": "#E8C98A",
+    "near-black violet": "#1E1A2B", "leaf green": "#9AD06B", "orchid pink": "#E85D9C", "rust red": "#C84B31",
+    "sage": "#8FB3A3",
+}
+
+
+def _rgb(h):
+    h = h.lstrip("#")
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def color_name(hexv):
+    """The nearest named colour, so prompts say 'teal (#4FD1C5)' rather than a bare hex code."""
+    r = _rgb(hexv)
+    return min(NAMED_COLORS, key=lambda n: sum((a - b) ** 2 for a, b in zip(_rgb(NAMED_COLORS[n]), r)))
+
+
+PROMPT_TEMPLATE = ("full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded "
+                   "game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), "
+                   "crisp dark outlines, flat two-tone shading, no text, no logo, original design")
+
+
+def all_characters():
+    """[(id, displayName, family, rarity, role)] for all 100, in config order."""
+    base = json.load(open(CONTENT))
+    src = open(os.path.join(ROOT, "src", "shared", "Config", "Characters.luau"), encoding="utf-8").read()
+    names = {m.group(1): m.group(2) for m in re.finditer(r'\tid = "([a-z0-9_]+)",\n\t\tdisplayName = "([^"]+)"', src)}
+    return [(c["id"], names[c["id"]], c["family"], c["rarity"], c["role"]) for c in base["characters"]]
+
+
+def write_looks():
+    """Writes each character's `look` into Config/Characters.luau and art/characters/PROMPTS.md."""
+    from roster_looks import LOOKS
+    chars = all_characters()
+    assert {c[0] for c in chars} == set(LOOKS), "LOOKS must cover exactly the roster"
+    path = os.path.join(ROOT, "src", "shared", "Config", "Characters.luau")
+    src = open(path, encoding="utf-8").read()
+    for cid, _name, family, _rarity, _role in chars:
+        personality, outfit, personal, weapon, silhouette = LOOKS[cid]
+        body, accent = FAMILY_COLORS[family]
+        block = ("\t\tlook = {\n"
+                 f"\t\t\tpersonality = {lua(personality, 0)},\n"
+                 f"\t\t\toutfit = {lua(outfit, 0)},\n"
+                 f'\t\t\tcolors = {{ "{body}", "{accent}", "{personal}" }},\n'
+                 f"\t\t\tweapon = {lua(weapon, 0)},\n"
+                 f"\t\t\tsilhouette = {lua(silhouette, 0)},\n"
+                 "\t\t},\n")
+        a = src.index(f'\tid = "{cid}",')
+        b = src.index("\t\tenabled = true,", a)
+        entry = re.sub(r"\t\tlook = \{\n(?:\t\t\t[^\n]*\n)*?\t\t\},\n", "", src[a:b])
+        src = src[:a] + entry + block + src[b:]
+    open(path, "w", encoding="utf-8").write(src)
+
+    lines = ["# Character image prompts", "",
+             "One prompt per character, all from the same template, so the roster shares one camera, pose and",
+             "style (docs/ART_STYLE.md section 5). Generated by `python sim/roster.py looks` from",
+             "`sim/roster_looks.py`: edit the brief there, not here.", "",
+             "**Deliver:** `art/characters/<id>/front.png`, about 1024 px tall (never more), on the plain light-grey",
+             "background. These images feed the Blender pipeline (image-to-3D, cleanup, cel-shading, R15 rig).", "",
+             "**Template:**", "", f"> {PROMPT_TEMPLATE}, <character description>", "",
+             "The description gives the outfit, the three colours (family body, family accent, personal), the",
+             "weapon and the silhouette note. Rarity is never in the prompt: it only changes the card frame.", ""]
+    fam = None
+    order = list(FAMILY_COLORS)
+    for cid, name, family, rarity, role in sorted(chars, key=lambda c: (order.index(c[2]), c[1])):
+        if family != fam:
+            fam = family
+            lines += [f"## {family}", ""]
+        personality, outfit, personal, weapon, silhouette = LOOKS[cid]
+        body, accent = FAMILY_COLORS[family]
+        cols = (f"colour scheme {color_name(body)} ({body}), {color_name(accent)} ({accent}) "
+                f"and {color_name(personal)} ({personal})")
+        desc = (f"{outfit}; {cols}; holding {weapon}; signature silhouette: {silhouette}; "
+                f"expression and pose suggest: {personality[0].lower() + personality[1:]}")
+        lines += [f"### {name} (`{cid}`)", "", f"{family} · {rarity} · {role} → `art/characters/{cid}/front.png`", "",
+                  f"> {PROMPT_TEMPLATE}, {desc}.", ""]
+    os.makedirs(os.path.join(ROOT, "art", "characters"), exist_ok=True)
+    with open(os.path.join(ROOT, "art", "characters", "PROMPTS.md"), "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+    print(f"wrote looks for {len(chars)} characters and art/characters/PROMPTS.md")
+
+
 if __name__ == "__main__":
     sys.path.insert(0, HERE)
     cmd = sys.argv[1] if len(sys.argv) > 1 else "tune"
@@ -471,3 +579,6 @@ if __name__ == "__main__":
         tune(int(sys.argv[2]) if len(sys.argv) > 2 else 10)
     elif cmd == "write":
         write()
+        write_looks()
+    elif cmd == "looks":
+        write_looks()

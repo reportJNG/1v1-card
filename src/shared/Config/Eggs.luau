@@ -25,7 +25,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Basic Egg/256w/Egg 256px.png",
+			normalAssetId = "rbxassetid://95156206031766",
 			goldenFile = PACK .. "Basic Egg/256w/Golden Egg 256px.png",
+			goldenAssetId = "rbxassetid://72616919962092",
 			contentBox = { x = 33, y = 14, width = 190, height = 228 },
 		},
 	},
@@ -42,7 +44,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Spotted Egg/256w/Spotted Egg 256px.png",
+			normalAssetId = "rbxassetid://115300527997658",
 			goldenFile = PACK .. "Spotted Egg/256w/Spotted Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://132020541637752",
 			contentBox = { x = 33, y = 14, width = 201, height = 228 },
 		},
 	},
@@ -59,7 +63,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Cracked Egg/256w/Cracked Egg 256px.png",
+			normalAssetId = "rbxassetid://91745396836946",
 			goldenFile = PACK .. "Cracked Egg/256w/Cracked Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://99113522480326",
 			contentBox = { x = 33, y = 14, width = 190, height = 228 },
 		},
 	},
@@ -76,7 +82,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Cat Egg/256w/Cat Egg 256px.png",
+			normalAssetId = "rbxassetid://95948044098267",
 			goldenFile = PACK .. "Cat Egg/256w/Cat Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://75094265705959",
 			contentBox = { x = 34, y = 15, width = 188, height = 226 },
 		},
 	},
@@ -93,7 +101,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Dog Egg/256w/Dog Egg 256px.png",
+			normalAssetId = "rbxassetid://97531672789997",
 			goldenFile = PACK .. "Dog Egg/256w/Dog Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://79496532777054",
 			contentBox = { x = 28, y = 12, width = 200, height = 232 },
 		},
 	},
@@ -110,6 +120,7 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Rainbow Egg/256w/Rainbow Egg 256px.png",
+			normalAssetId = "rbxassetid://109256628372538",
 			goldenFile = nil,
 			contentBox = { x = 33, y = 14, width = 190, height = 228 },
 		},
@@ -127,7 +138,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Sandcastle Egg/256w/Sandcastle Egg 256px.png",
+			normalAssetId = "rbxassetid://101998438351904",
 			goldenFile = PACK .. "Sandcastle Egg/256w/Sandcastle Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://85213380578780",
 			contentBox = { x = 15, y = 12, width = 226, height = 232 },
 		},
 	},
@@ -144,7 +157,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Coconut Egg/256w/Coconut Egg 256px.png",
+			normalAssetId = "rbxassetid://133239476672732",
 			goldenFile = PACK .. "Coconut Egg/256w/Coconut Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://85414712315203",
 			contentBox = { x = 33, y = 15, width = 190, height = 227 },
 		},
 	},
@@ -161,7 +176,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Royal Egg/256w/Royal Egg 256px.png",
+			normalAssetId = "rbxassetid://115290990409174",
 			goldenFile = PACK .. "Royal Egg/256w/Royal Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://94104872564937",
 			contentBox = { x = 33, y = 14, width = 190, height = 228 },
 		},
 	},
@@ -178,7 +195,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Ice Egg/256w/Ice Egg 256px.png",
+			normalAssetId = "rbxassetid://114009226669237",
 			goldenFile = PACK .. "Ice Egg/256w/Ice Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://116737769525266",
 			contentBox = { x = 34, y = 14, width = 188, height = 228 },
 		},
 	},
@@ -195,7 +214,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Yeti Egg/256w/Yeti Egg 256px.png",
+			normalAssetId = "rbxassetid://77234176861696",
 			goldenFile = PACK .. "Yeti Egg/256w/Yeti Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://127000180475529",
 			contentBox = { x = 17, y = 16, width = 222, height = 224 },
 		},
 	},
@@ -212,7 +233,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Mine Egg/256w/Mine Egg 256px.png",
+			normalAssetId = "rbxassetid://85354526114918",
 			goldenFile = PACK .. "Mine Egg/256w/Mine Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://91866519634945",
 			contentBox = { x = 31, y = 15, width = 204, height = 226 },
 		},
 	},
@@ -229,7 +252,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Dragon Egg/256w/Dragon Egg 256px.png",
+			normalAssetId = "rbxassetid://119809122534482",
 			goldenFile = PACK .. "Dragon Egg/256w/Dragon Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://128761572444763",
 			contentBox = { x = 13, y = 31, width = 230, height = 194 },
 		},
 	},
@@ -246,7 +271,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Demon Egg/256w/Demon Egg 256px.png",
+			normalAssetId = "rbxassetid://114837649388770",
 			goldenFile = PACK .. "Demon Egg/256w/Demon Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://136242816414244",
 			contentBox = { x = 12, y = 26, width = 232, height = 197 },
 		},
 	},
@@ -263,7 +290,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Angel Egg/256w/Angel Egg 256px.png",
+			normalAssetId = "rbxassetid://123216246177874",
 			goldenFile = PACK .. "Angel Egg/256w/Angel Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://107635666056312",
 			contentBox = { x = 12, y = 53, width = 232, height = 164 },
 		},
 	},
@@ -280,7 +309,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Kraken Egg/256w/Kraken Egg 256px.png",
+			normalAssetId = "rbxassetid://116791050140829",
 			goldenFile = PACK .. "Kraken Egg/256w/Kraken Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://122781249978532",
 			contentBox = { x = 13, y = 18, width = 230, height = 220 },
 		},
 	},
@@ -297,7 +328,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Dominus Egg/256w/Dominus Egg 256px.png",
+			normalAssetId = "rbxassetid://123105625894444",
 			goldenFile = PACK .. "Dominus Egg/256w/Dominus Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://116796434840516",
 			contentBox = { x = 13, y = 43, width = 230, height = 170 },
 		},
 	},
@@ -314,7 +347,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Legendary Egg/256w/Legendary Egg 256px.png",
+			normalAssetId = "rbxassetid://124727747667010",
 			goldenFile = PACK .. "Legendary Egg/256w/Legendary Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://88539591794710",
 			contentBox = { x = 33, y = 14, width = 190, height = 228 },
 		},
 	},
@@ -331,7 +366,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Glitched Egg/256w/Glitched Egg 256px.png",
+			normalAssetId = "rbxassetid://99373448477003",
 			goldenFile = PACK .. "Glitched Egg/256w/Glitched Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://94270820280316",
 			contentBox = { x = 27, y = 14, width = 211, height = 228 },
 		},
 	},
@@ -348,7 +385,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Black Hole Egg/256w/Black Hole Egg 256px.png",
+			normalAssetId = "rbxassetid://126143601862662",
 			goldenFile = PACK .. "Black Hole Egg/256w/Black Hole Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://98232931945414",
 			contentBox = { x = 29, y = 17, width = 202, height = 224 },
 		},
 	},
@@ -365,7 +404,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = "quest_reveal_secret_egg",
 		icon = {
 			normalFile = PACK .. "Secret Egg/256w/Secret Egg 256px.png",
+			normalAssetId = "rbxassetid://97384459361327",
 			goldenFile = PACK .. "Secret Egg/256w/Secret Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://138082343342954",
 			contentBox = { x = 33, y = 14, width = 190, height = 228 },
 		},
 	},
@@ -382,7 +423,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "AngelDemon Egg/256w/AngelDemon 256px.png",
+			normalAssetId = "rbxassetid://136379476083139",
 			goldenFile = PACK .. "AngelDemon Egg/256w/AngelDemon Golden 256px.png",
+			goldenAssetId = "rbxassetid://74064632691288",
 			contentBox = { x = 12, y = 19, width = 232, height = 198 },
 		},
 	},
@@ -399,7 +442,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Mythical Egg/256w/Mythical Egg 256px.png",
+			normalAssetId = "rbxassetid://86302215627891",
 			goldenFile = PACK .. "Mythical Egg/256w/Mythical Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://132391057038968",
 			contentBox = { x = 33, y = 14, width = 190, height = 228 },
 		},
 	},
@@ -416,7 +461,9 @@ local List: { Types.EggDef } = {
 		hiddenUntilQuest = nil,
 		icon = {
 			normalFile = PACK .. "Party Egg/256w/Party Egg 256px.png",
+			normalAssetId = "rbxassetid://81739943650201",
 			goldenFile = PACK .. "Party Egg/256w/Party Egg Golden 256px.png",
+			goldenAssetId = "rbxassetid://140113563216127",
 			contentBox = { x = 43, y = 15, width = 170, height = 226 },
 		},
 	},

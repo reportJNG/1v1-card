@@ -82,6 +82,16 @@ export type PassiveDef = {
 	effect: PassiveEffect,
 }
 
+-- The written art brief for a character. Colours are hex: the family body and accent colours
+-- (Config/Art.FamilyColors) plus one personal colour.
+export type CharacterLook = {
+	personality: string,
+	outfit: string,
+	colors: { string },
+	weapon: string,
+	silhouette: string,
+}
+
 export type CharacterDef = {
 	id: string, -- stable forever, never reused
 	displayName: string,
@@ -91,6 +101,7 @@ export type CharacterDef = {
 	special: AbilityDef,
 	passive: PassiveDef,
 	enabled: boolean, -- false hides a character from pools without touching saves
+	look: CharacterLook, -- art brief (docs/ART_STYLE.md section 5, art/characters/PROMPTS.md)
 	assets: {
 		model: string?, -- rbxassetid, set when the model is approved (M2)
 		cardArt: string?,

@@ -15,7 +15,8 @@ return table.freeze({
 		worldArt = "Worlds are data-driven blockouts (flat ground, node and NPC markers) until world art exists.",
 		questRewards = "Quest targets and rewards are starting values.",
 		characterArt = "Characters are procedural placeholder rigs (Shared/Art/RigBuilder); hero-quality models and card art need a 3D artist.",
-		cardFrames = "Rarity card frames are code-drawn placeholders (Config/Art) until final frame art exists.",
+		cardFrames = "Rarity card frames are TEMP stand-in images (Config/UiAssets card_frame_*) until final frame art exists.",
+		uiArt = "Every UI image is a TEMP stand-in drawn by scripts/art/make_temp_ui.py until the owner's final art (art/ui/PROMPTS.md) is uploaded.",
 		guardianDecks = "Guardian decks come from each world's own eggs; the difficulty curve needs playtesting.",
 	}) :: { [string]: string },
 })

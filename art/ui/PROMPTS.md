@@ -10,7 +10,7 @@ flat vector drawings made by `scripts/art/make_temp_ui.py`, and are marked Place
 
 ## How to use this list
 - **Style line**: add it to every prompt. _"Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo"_
-- **9-slice margins** are `left, top, right, bottom` in pixels: the corners outside them never stretch.
+- **9-slice** is the stretchable centre rectangle `x0, y0, x1, y1` in pixels (Roblox `SliceCenter`); everything outside it (corners, edges) never stretches.
   Keep borders and rounded corners inside the margins and keep the middle plain.
 - **Bleed** is how far the glow reaches outside the visible shape. Leave that many pixels of glow on every
   side; the code offsets the image so the visible edge lines up with the layout.

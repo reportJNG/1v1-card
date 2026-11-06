@@ -13,7 +13,7 @@ local OPTIONS = {
 }
 
 return function(ctx: any, layer: Frame, _arg: any?): any
-	local p = Ui.panel(layer, "Settings", ctx.close, UDim2.fromOffset(620, 420))
+	local p = Ui.panel(layer, "Settings", ctx.close, UDim2.fromOffset(620, 420), "icon_settings")
 	local list = Ui.frame({ BackgroundTransparency = 1, Parent = p.body }, { Ui.list(false, 8) })
 
 	local function render()
@@ -27,7 +27,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			)
 			Ui.text({
 				Text = opt.label,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				Size = UDim2.new(1, -120, 1, 0),
 				Parent = row,
 			})

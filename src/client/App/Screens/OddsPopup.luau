@@ -37,7 +37,7 @@ function OddsPopup.show(ctx: any, egg: Types.EggDef, golden: boolean)
 			})
 			Ui.text({
 				Text = def.displayName,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				Position = UDim2.fromOffset(10, 0),
 				Size = UDim2.fromScale(0.5, 1),
 				Parent = r,
@@ -51,7 +51,7 @@ function OddsPopup.show(ctx: any, egg: Types.EggDef, golden: boolean)
 			})
 			Ui.text({
 				Text = row.text,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				TextXAlignment = Enum.TextXAlignment.Right,
 				Position = UDim2.fromScale(0.75, 0),
 				Size = UDim2.new(0.25, -10, 1, 0),

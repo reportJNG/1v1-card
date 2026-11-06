@@ -142,6 +142,37 @@ return function()
 			end
 			expect(eggErrors).to.equal(24)
 		end)
+
+		it(
+			"refuses a release build while UI images are TEMP stand-ins, and only warns in development",
+			function()
+				local release = ConfigValidator.validate({ release = true })
+				local tempErrors = 0
+				for _, message in release.errors do
+					if string.find(message, "TEMP stand-in", 1, true) then
+						tempErrors += 1
+					end
+				end
+				expect(tempErrors > 0).to.equal(true)
+				local dev = ConfigValidator.validate()
+				for _, message in dev.errors do
+					expect((string.find(message, "UiAssets", 1, true))).to.equal(nil)
+				end
+			end
+		)
+	end)
+
+	describe("Art briefs", function()
+		it("gives every character a complete look with three #RRGGBB colours led by its family", function()
+			local Art = require(Shared.Config.Art)
+			for _, c in Characters.List do
+				expect(c.look).to.be.ok()
+				expect(#c.look.colors).to.equal(3)
+				expect(c.look.colors[1]).to.equal(Art.FamilyColors[c.family].body)
+				expect(c.look.colors[2]).to.equal(Art.FamilyColors[c.family].accent)
+				expect(#c.look.outfit > 0 and #c.look.weapon > 0 and #c.look.silhouette > 0).to.equal(true)
+			end
+		end)
 	end)
 
 	describe("Character catalog", function()

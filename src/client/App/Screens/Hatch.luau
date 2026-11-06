@@ -40,7 +40,7 @@ function Hatch.show(ctx: any, cards: { any }, egg: Types.EggDef, golden: boolean
 		local stage = Ui.frame({ BackgroundTransparency = 1, Parent = layer })
 		local title = Ui.text({
 			Text = if golden then "GOLDEN HATCH" else "Hatching...",
-			Font = Theme.Font.Title,
+			FontFace = Theme.Face.Title,
 			TextSize = 30,
 			TextColor3 = if golden then C.Gold else C.Text,
 			TextXAlignment = Enum.TextXAlignment.Center,
@@ -98,7 +98,7 @@ function Hatch.show(ctx: any, cards: { any }, egg: Types.EggDef, golden: boolean
 				Visuals.portrait(slot, card.characterId, card.golden, Vector2.new(150, 200), true)
 				Ui.text({
 					Text = `{def.displayName} · {def.rarity}`,
-					Font = Theme.Font.Bold,
+					FontFace = Theme.Face.Bold,
 					TextSize = Theme.Size.small,
 					TextColor3 = Theme.Rarity[def.rarity],
 					TextXAlignment = Enum.TextXAlignment.Center,

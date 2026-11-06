@@ -20,7 +20,7 @@ local function band(waited: number): number
 end
 
 return function(ctx: any, layer: Frame, _arg: any?): any
-	local p = Ui.panel(layer, "1v1 Arena", ctx.close, UDim2.fromOffset(700, 430))
+	local p = Ui.panel(layer, "1v1 Arena", ctx.close, UDim2.fromOffset(700, 430), "icon_play")
 	local deckRow = Ui.frame(
 		{ BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 170), Parent = p.body },
 		{
@@ -53,7 +53,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		local purse = Economy.Matches.purseByLeague[league.id]
 		Ui.text({
 			Text = `{league.id} League · 🏆 {Format.number(view.trophies)} · cards fight at up to level {league.rankedLevelCap}`,
-			Font = Theme.Font.Bold,
+			FontFace = Theme.Face.Bold,
 			TextXAlignment = Enum.TextXAlignment.Center,
 			LayoutOrder = 1,
 			Parent = info,
@@ -70,7 +70,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			Ui.text({
 				Text = `Deck Power {Power.deck(specs).total}`,
 				TextColor3 = C.Green,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				LayoutOrder = 3,
 				Parent = info,
@@ -78,7 +78,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		end
 		queueText = Ui.text({
 			Text = "",
-			Font = Theme.Font.Bold,
+			FontFace = Theme.Face.Bold,
 			TextColor3 = C.Blue,
 			TextXAlignment = Enum.TextXAlignment.Center,
 			LayoutOrder = 4,

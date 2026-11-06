@@ -14,7 +14,7 @@ local Format = require(App.Format)
 local C = Theme.Color
 
 return function(ctx: any, layer: Frame, _arg: any?): any
-	local p = Ui.panel(layer, "Worlds", ctx.close, UDim2.fromOffset(880, 420))
+	local p = Ui.panel(layer, "Worlds", ctx.close, UDim2.fromOffset(770, 420), "icon_worlds")
 	local strip = Ui.scroll({
 		Size = UDim2.fromScale(1, 1),
 		ScrollingDirection = Enum.ScrollingDirection.X,
@@ -54,7 +54,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			)
 			Ui.text({
 				Text = `{if unlocked then "" else "🔒 "}{world.id}`,
-				Font = Theme.Font.Title,
+				FontFace = Theme.Face.Title,
 				TextSize = 28,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				Size = UDim2.new(1, 0, 0, 34),
@@ -63,7 +63,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			})
 			Ui.text({
 				Text = world.displayName,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				Size = UDim2.new(1, 0, 0, 40),
 				LayoutOrder = 2,

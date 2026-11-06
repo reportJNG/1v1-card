@@ -23,7 +23,7 @@ local function rewardText(def: any): string
 end
 
 return function(ctx: any, layer: Frame, _arg: any?): any
-	local p = Ui.panel(layer, "Quests", ctx.close, UDim2.fromOffset(780, 460))
+	local p = Ui.panel(layer, "Quests", ctx.close, UDim2.fromOffset(760, 460), "icon_quests")
 	local list =
 		Ui.scroll({ Position = UDim2.fromOffset(0, 96), Size = UDim2.new(1, 0, 1, -96), Parent = p.body })
 	Ui.list(false, 6).Parent = list
@@ -41,7 +41,12 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		)
 		local progress = if entry then entry.progress else 0
 		Ui.fit(
-			Ui.text({ Text = def.text, Font = Theme.Font.Bold, Size = UDim2.new(0.6, 0, 0, 18), Parent = row }),
+			Ui.text({
+				Text = def.text,
+				FontFace = Theme.Face.Bold,
+				Size = UDim2.new(0.6, 0, 0, 18),
+				Parent = row,
+			}),
 			Theme.Size.body
 		)
 		Ui.text({
@@ -97,7 +102,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 					then `💰 {Economy.Streak.coins[day]}`
 					else `💎 {Economy.Streak.day7Gems}\n+ Golden egg`}`,
 				TextSize = Theme.Size.small,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				TextColor3 = if done then C.Background else C.Text,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				Size = UDim2.fromScale(1, 1),
@@ -121,7 +126,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		local order = 0
 		Ui.text({
 			Text = "Daily quests",
-			Font = Theme.Font.Title,
+			FontFace = Theme.Face.Title,
 			TextSize = 16,
 			LayoutOrder = order,
 			Parent = list,
@@ -136,7 +141,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		order += 1
 		Ui.text({
 			Text = "Achievements",
-			Font = Theme.Font.Title,
+			FontFace = Theme.Face.Title,
 			TextSize = 16,
 			LayoutOrder = order,
 			Parent = list,

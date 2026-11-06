@@ -19,6 +19,7 @@ local ContentStatus = require(Config.ContentStatus)
 local WorldLayouts = require(Config.WorldLayouts)
 local QuestsCfg = require(Config.Quests)
 local Guardians = require(Config.Guardians)
+local UiAssets = require(Config.UiAssets)
 local Odds = require(script.Parent.Odds)
 
 export type Report = { errors: { string }, warnings: { string } }
@@ -65,6 +66,26 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 		seen[c.id] = true
 		if not string.match(c.id, "^[a-z][a-z0-9_]*$") then
 			err(`Characters: id {c.id} must be lower_snake_case`)
+		end
+		-- Every character has a complete art brief (sim/roster_looks.py, art/characters/PROMPTS.md).
+		local look = c.look
+		if
+			look == nil
+			or look.personality == ""
+			or look.outfit == ""
+			or look.weapon == ""
+			or look.silhouette == ""
+			or #look.colors ~= 3
+		then
+			err(
+				`Characters: {c.id} needs a complete look (personality, outfit, 3 colours, weapon, silhouette)`
+			)
+		else
+			for _, hex in look.colors do
+				if not string.match(hex, "^#%x%x%x%x%x%x$") then
+					err(`Characters: {c.id} look colour {hex} is not #RRGGBB`)
+				end
+			end
 		end
 		if Rarities.Defs[c.rarity] == nil then
 			err(`Characters: {c.id} has unknown rarity {c.rarity}`)
@@ -238,6 +259,29 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 	end
 	for area, note in ContentStatus.Placeholder do
 		launchGap(`Placeholder ({area}): {note}`)
+	end
+
+	-- UI images: every slot has an uploaded stand-in; release needs the final art for each.
+	local tempSlots = 0
+	for slot, def in UiAssets do
+		if def.temp == "" and (def.final == nil or def.final == "") then
+			err(`UiAssets: {slot} has no image`)
+		end
+		if #def.size ~= 2 or def.size[1] > 1024 or def.size[2] > 1024 then
+			err(`UiAssets: {slot} must be at most 1024 px on each side`)
+		end
+		if def.slice and #def.slice ~= 4 then
+			err(`UiAssets: {slot} slice needs 4 numbers`)
+		end
+		if def.final == nil or def.final == "" then
+			tempSlots += 1
+			if release then
+				err(`UiAssets: {slot} still uses its TEMP stand-in`)
+			end
+		end
+	end
+	if tempSlots > 0 and not release then
+		table.insert(warnings, `UiAssets: {tempSlots} UI images are TEMP stand-ins`)
 	end
 
 	-- Worlds

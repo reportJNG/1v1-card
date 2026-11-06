@@ -21,6 +21,28 @@ local OddsPopup = require(script.Parent.OddsPopup)
 
 local C = Theme.Color
 
+-- Glow behind each egg, by odds band (the egg art itself is never tinted or edited).
+local BAND_GLOW: { [string]: Color3 } = {
+	A = Theme.Rarity.Common,
+	B = Theme.Rarity.Rare,
+	C = Theme.Rarity.Epic,
+	D = Theme.Rarity.Legendary,
+	E = Theme.Rarity.Mythical,
+	Event = C.Green,
+}
+local RARITY_ORDER = { "Mythical", "Legendary", "Epic", "Rare", "Common" }
+
+-- The rarest rarity this egg can drop (its pool keys).
+local function bestRarity(egg: Types.EggDef): string
+	for _, r in RARITY_ORDER do
+		local ids = (egg.pool :: any)[r]
+		if ids and #ids > 0 then
+			return r
+		end
+	end
+	return "Common"
+end
+
 local function robuxProducts(eggId: string): { Types.RobuxEggProduct }
 	local out = {}
 	for _, product in Monetization.RobuxEggs do
@@ -36,7 +58,7 @@ end
 
 return function(ctx: any, layer: Frame, arg: any?): any
 	local view = ctx.state.view
-	local p = Ui.panel(layer, "Egg Shop", ctx.close, UDim2.fromOffset(800, 460))
+	local p = Ui.panel(layer, "Egg Shop", ctx.close, UDim2.fromOffset(770, 460), "icon_shop")
 	local today = ctx.now() // 86400
 
 	-- World tabs: unlocked worlds plus the next locked one (so players see what's coming).
@@ -51,13 +73,13 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		Size = UDim2.new(0.62, -8, 1, -40),
 		Parent = p.body,
 	})
-	Ui.grid(Vector2.new(146, 168), 8).Parent = grid
-	local detailBox = Ui.frame({
-		BackgroundColor3 = C.Raised,
+	Ui.grid(Vector2.new(140, 176), 10).Parent = grid
+	Ui.pad(4).Parent = grid
+	local detailBox = Ui.inset({
 		Position = UDim2.new(0.62, 0, 0, 40),
 		Size = UDim2.new(0.38, 0, 1, -40),
 		Parent = p.body,
-	}, { Ui.corner(12), Ui.stroke(C.Gold, 1.5, 0.3), Ui.pad(10) })
+	}, { Ui.pad(10) })
 	local detail = Ui.scroll({ Parent = detailBox })
 
 	local function owned(eggId: string): (number, number)
@@ -75,44 +97,74 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			end
 			local available = view ~= nil and Progress.isEggAvailable(view :: any, egg)
 			local hidden = egg.hiddenUntilQuest ~= nil and not available
-			local tile = Ui.new("TextButton", {
-				Text = "",
-				AutoButtonColor = true,
-				BackgroundColor3 = if selectedEgg == egg then C.Stroke else C.Raised,
+			local tile = Ui.tile("TextButton", {
 				LayoutOrder = i,
+				Name = egg.id,
 				Parent = grid,
-			}, { Ui.corner(10), Ui.stroke(if selectedEgg == egg then C.Gold else C.Stroke, 1.5) })
-			local icon = Visuals.egg(tile, egg, false, 84)
-			icon.Position = UDim2.fromOffset(31, 26)
-			Ui.text({
+			}, selectedEgg == egg)
+			local glow = Ui.image("egg_glow", {
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.new(0.5, 0, 0, 78),
+				Size = UDim2.fromOffset(120, 120),
+				ImageColor3 = BAND_GLOW[egg.oddsBand] or C.Purple,
+				ImageTransparency = 0.55,
+				Parent = tile,
+			})
+			glow.ZIndex = 1
+			local icon = Visuals.egg(tile, egg, false, 92)
+			icon.AnchorPoint = Vector2.new(0.5, 0.5)
+			icon.Position = UDim2.new(0.5, 0, 0, 80)
+			icon.ZIndex = 2
+			local nameLabel = Ui.text({
 				Text = if hidden then "???" else egg.displayName,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Title,
+				TextSize = 15,
+				TextWrapped = false,
 				TextXAlignment = Enum.TextXAlignment.Center,
-				Position = UDim2.fromOffset(0, 4),
-				Size = UDim2.new(1, 0, 0, 20),
+				Position = UDim2.fromOffset(4, 6),
+				Size = UDim2.new(1, -8, 0, 20),
+				ZIndex = 2,
 				Parent = tile,
 			})
+			Ui.outline(C.Night, 1, 0.3).Parent = nameLabel
+			Ui.fit(nameLabel, 15, 9)
 			local n, g = owned(egg.id)
+			if egg.coinPrice then
+				Ui.price(Format.number(egg.coinPrice), "icon_coin", 20, {
+					Position = UDim2.new(0, 0, 1, -46),
+					ZIndex = 2,
+					Parent = tile,
+				})
+			else
+				Ui.text({
+					Text = "Event egg",
+					FontFace = Theme.Face.Bold,
+					TextColor3 = C.Green,
+					TextXAlignment = Enum.TextXAlignment.Center,
+					Position = UDim2.new(0, 0, 1, -46),
+					Size = UDim2.new(1, 0, 0, 20),
+					ZIndex = 2,
+					Parent = tile,
+				})
+			end
 			Ui.text({
-				Text = if egg.coinPrice then `💰 {Format.number(egg.coinPrice)}` else "Event egg",
-				Font = Theme.Font.Bold,
-				TextColor3 = C.Gold,
-				TextXAlignment = Enum.TextXAlignment.Center,
-				Position = UDim2.new(0, 0, 1, -42),
-				Size = UDim2.new(1, 0, 0, 18),
-				Parent = tile,
-			})
-			Ui.text({
-				Text = if available
-					then `Owned {n}{if g > 0 then ` · Golden {g}` else ""}`
-					else "🔒 Locked",
+				Text = if available then `Owned {n}{if g > 0 then ` · Golden {g}` else ""}` else "Locked",
 				TextSize = Theme.Size.small,
 				TextColor3 = if available then C.Muted else C.Red,
 				TextXAlignment = Enum.TextXAlignment.Center,
-				Position = UDim2.new(0, 0, 1, -22),
+				Position = UDim2.new(0, 0, 1, -24),
 				Size = UDim2.new(1, 0, 0, 16),
+				ZIndex = 2,
 				Parent = tile,
 			})
+			if not available then
+				Ui.icon("icon_lock", 30, {
+					AnchorPoint = Vector2.new(1, 0),
+					Position = UDim2.new(1, -6, 0, 26),
+					ZIndex = 3,
+					Parent = tile,
+				})
+			end
 			tile.Activated:Connect(function()
 				selectedEgg = egg
 				renderGrid()
@@ -137,53 +189,70 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			Size = UDim2.new(1, -8, 0, 0),
 			Parent = detail,
 		}, { Ui.list(false, 6) })
-		Ui.text({
+		local title = Ui.display({
 			Text = egg.displayName,
-			Font = Theme.Font.Title,
-			TextSize = Theme.Size.heading + 2,
-			TextColor3 = C.Gold,
-			TextXAlignment = Enum.TextXAlignment.Center,
+			TextSize = 26,
+			TextWrapped = false,
+			Size = UDim2.new(1, 0, 0, 30),
 			LayoutOrder = 1,
 			Parent = content,
-		})
-		local iconRow = Ui.frame({
+		}, true)
+		Ui.fit(title, 26, 12)
+		local stage = Ui.frame({
 			BackgroundTransparency = 1,
-			Size = UDim2.new(1, 0, 0, 96),
+			Size = UDim2.new(1, 0, 0, 150),
 			LayoutOrder = 2,
 			Parent = content,
 		})
-		local icon = Visuals.egg(iconRow, egg, false, 96)
-		icon.AnchorPoint = Vector2.new(0.5, 0)
-		icon.Position = UDim2.fromScale(0.5, 0)
+		Ui.image("egg_pedestal", {
+			AnchorPoint = Vector2.new(0.5, 1),
+			Position = UDim2.new(0.5, 0, 1, 6),
+			Size = UDim2.fromOffset(230, 115),
+			Parent = stage,
+		})
+		Ui.image("egg_glow", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.45),
+			Size = UDim2.fromOffset(190, 190),
+			ImageColor3 = BAND_GLOW[egg.oddsBand] or C.Purple,
+			ImageTransparency = 0.35,
+			Parent = stage,
+		})
+		local icon = Visuals.egg(stage, egg, false, 124)
+		icon.AnchorPoint = Vector2.new(0.5, 0.5)
+		icon.Position = UDim2.fromScale(0.5, 0.42)
 		local world = Worlds.ById[egg.world or 0]
+		local best = bestRarity(egg)
 		Ui.text({
-			Text = if world then `World {world.id}: {world.displayName}` else "Event egg",
-			TextSize = Theme.Size.small,
-			TextColor3 = C.Muted,
+			Text = `Get a {best} character or better · {if world then `World {world.id}` else "Event"}`,
+			FontFace = Theme.Face.Bold,
+			TextSize = 13,
+			TextColor3 = Theme.Rarity[best] or C.Text,
 			TextXAlignment = Enum.TextXAlignment.Center,
 			LayoutOrder = 3,
 			Parent = content,
 		})
 		local oddsButton = Ui.button("Odds", "secondary", function()
 			OddsPopup.show(ctx, egg, false)
-		end, { LayoutOrder = 4, Size = UDim2.new(1, 0, 0, 32), Name = "Odds" })
+		end, { LayoutOrder = 4, Size = UDim2.new(1, 0, 0, 34), Name = "Odds" })
 		oddsButton.instance.Parent = content
 
 		if available and egg.coinPrice then
-			local buy = Ui.button(`Buy for 💰 {Format.number(egg.coinPrice)}`, "primary", function()
+			Ui.price(Format.number(egg.coinPrice), "icon_coin", 26, { LayoutOrder = 5, Parent = content })
+			local buy = Ui.button("Buy", "primary", function()
 				local reply = ctx.request("Shop.BuyEgg", { eggId = egg.id, requestId = ctx.guid() })
 				if reply.ok then
 					Hatch.show(ctx, reply.value.cards, egg, false)
 				end
-			end, { LayoutOrder = 5, Name = "BuyCoins" })
+			end, { LayoutOrder = 6, Name = "BuyCoins", Size = UDim2.new(1, 0, 0, 46) })
 			buy.setEnabled(view ~= nil and view.coins >= egg.coinPrice)
 			buy.instance.Parent = content
 		elseif not available then
 			Ui.text({
 				Text = if world
-					then `🔒 Unlocks at {Format.number(world.trophiesToUnlock)} trophies`
+					then `Unlocks at {Format.number(world.trophiesToUnlock)} trophies`
 					else "Granted by events",
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				TextColor3 = C.Red,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				LayoutOrder = 5,
@@ -194,10 +263,10 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		-- Robux: only eggs of unlocked worlds, only while the server allows paid random items.
 		if available and egg.robuxPurchasable and ctx.attr("PaidRandomItemsAllowed") == true then
 			for i, product in robuxProducts(egg.id) do
-				local b = Ui.button(`Buy {product.quantity} with Robux`, "purple", function()
+				local b = Ui.button(`Buy {product.quantity} with Robux`, "robux", function()
 					ctx.request("Shop.RequestRobuxEgg", { productKey = product.key })
 				end, {
-					LayoutOrder = 5 + i,
+					LayoutOrder = 6 + i,
 					Size = UDim2.new(1, 0, 0, 34),
 					Name = `Robux{product.quantity}`,
 				})
@@ -256,8 +325,8 @@ return function(ctx: any, layer: Frame, arg: any?): any
 				shownLocked = true
 			end
 			local b = Ui.button(
-				`{if unlocked then "" else "🔒"}{world.id}`,
-				if world.id == worldId then "purple" else "ghost",
+				if unlocked then `World {world.id}` else `World {world.id} (locked)`,
+				if world.id == worldId then "purple" else "tab",
 				function()
 					worldId = world.id
 					selectedEgg = nil
@@ -265,7 +334,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 					renderGrid()
 					renderDetail()
 				end,
-				{ Size = UDim2.fromOffset(52, 30), LayoutOrder = world.id }
+				{ Size = UDim2.fromOffset(if unlocked then 84 else 128, 32), LayoutOrder = world.id }
 			)
 			b.instance.Parent = tabs
 		end

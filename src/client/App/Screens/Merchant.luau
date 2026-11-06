@@ -40,7 +40,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			)
 			Ui.text({
 				Text = `{item.displayName} ×{n}`,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				Size = UDim2.fromScale(0.5, 1),
 				Parent = row,
 			})

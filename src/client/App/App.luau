@@ -49,98 +49,244 @@ export type Deps = {
 
 local App = {}
 
+local Worlds = require(Shared.Config.Worlds)
+
+-- Left menu (concept board order). Trade is V2 and not built, so it is not shown.
 local MENU = {
-	{ id = "Play", icon = "⚔", label = "Play" },
-	{ id = "Collection", icon = "🃏", label = "Cards" },
-	{ id = "Deck", icon = "🛡", label = "Deck" },
-	{ id = "Shop", icon = "🥚", label = "Shop" },
-	{ id = "Worlds", icon = "🌍", label = "Worlds" },
-	{ id = "Quests", icon = "📜", label = "Quests" },
-	{ id = "Settings", icon = "⚙", label = "Settings" },
+	{ id = "Play", icon = "icon_play", label = "Play" },
+	{ id = "Collection", icon = "icon_cards", label = "Cards" },
+	{ id = "Deck", icon = "icon_deck", label = "Deck" },
+	{ id = "Shop", icon = "icon_shop", label = "Shop" },
+	{ id = "Worlds", icon = "icon_worlds", label = "Worlds" },
+	{ id = "Quests", icon = "icon_quests", label = "Quests" },
+	{ id = "Settings", icon = "icon_settings", label = "Settings" },
 }
 
-local function buildHud(ctx: Ctx, root: Frame): () -> ()
+type Hud = { refresh: () -> (), select: (id: string?) -> () }
+
+local function buildHud(ctx: Ctx, root: Frame): Hud
+	local F = Theme.Face
+
+	-- Logo (top-left): display type until the logo art exists.
+	local logo = Ui.frame({
+		Name = "Logo",
+		BackgroundTransparency = 1,
+		Position = UDim2.fromOffset(14, 6),
+		Size = UDim2.fromOffset(150, 76),
+		Parent = root,
+	})
+	Ui.display({
+		Text = "1v1",
+		TextSize = 44,
+		Rotation = -4,
+		Size = UDim2.new(1, 0, 0, 44),
+		Parent = logo,
+	}, true)
+	Ui.display({
+		Text = "CARD",
+		TextSize = 30,
+		Rotation = -4,
+		Position = UDim2.fromOffset(6, 38),
+		Size = UDim2.new(1, 0, 0, 32),
+		Parent = logo,
+	})
+
+	-- Currency badges (top centre). Coins and Gems are earned, never bought, so "+" shows
+	-- where to earn them (Worlds for Coins, Quests for Gems).
 	local top = Ui.frame({
 		Name = "TopBar",
 		BackgroundTransparency = 1,
-		Size = UDim2.new(1, 0, 0, 48),
-		Parent = root,
-	})
-	Ui.text({
-		Text = "1v1 CARD",
-		Font = Theme.Font.Title,
-		TextSize = 26,
-		TextColor3 = C.Gold,
-		Position = UDim2.fromOffset(14, 8),
-		Size = UDim2.fromOffset(140, 32),
-		Parent = top,
-	})
-	local chips = Ui.frame({
-		BackgroundTransparency = 1,
 		AnchorPoint = Vector2.new(0.5, 0),
-		Position = UDim2.new(0.5, 0, 0, 8),
-		Size = UDim2.fromOffset(520, 32),
-		Parent = top,
-	}, { Ui.list(true, 10, Enum.HorizontalAlignment.Center) })
-	local function chip(icon: string, color: Color3, order: number): TextLabel
+		Position = UDim2.new(0.5, 10, 0, 12),
+		Size = UDim2.fromOffset(560, 40),
+		Parent = root,
+	}, { Ui.list(true, 14, Enum.HorizontalAlignment.Center) })
+
+	local function badge(name: string, icon: string, order: number, onPlus: (() -> ())?): TextLabel
 		local f = Ui.frame({
-			BackgroundColor3 = C.Panel,
-			Size = UDim2.fromOffset(150, 32),
+			Name = name,
+			BackgroundTransparency = 1,
+			Size = UDim2.fromOffset(if onPlus then 168 else 156, 36),
 			LayoutOrder = order,
-			Parent = chips,
-		}, { Ui.corner(16), Ui.stroke(color, 1, 0.4) })
-		Ui.text({
-			Text = icon,
-			TextSize = 18,
-			TextXAlignment = Enum.TextXAlignment.Center,
-			Size = UDim2.fromOffset(30, 32),
-			Parent = f,
+			Parent = top,
 		})
-		return Ui.text({
+		Ui.skin(f, "currency_badge", 0.5)
+		Ui.icon(icon, 34, { Position = UDim2.new(0, -6, 0.5, 0), ZIndex = 2, Parent = f })
+		local value = Ui.text({
 			Name = "Value",
 			Text = "0",
-			Font = Theme.Font.Bold,
-			TextSize = 16,
-			TextColor3 = color,
-			Position = UDim2.fromOffset(30, 0),
-			Size = UDim2.new(1, -36, 1, 0),
+			FontFace = F.Number,
+			TextSize = 18,
+			TextWrapped = false,
+			Position = UDim2.fromOffset(34, 0),
+			Size = UDim2.new(1, if onPlus then -72 else -40, 1, 0),
+			ZIndex = 2,
 			Parent = f,
 		})
+		Ui.outline(C.Night, 1.5).Parent = value
+		Ui.fit(value, 18, 10)
+		if onPlus then
+			local plus: ImageButton = Ui.new("ImageButton", {
+				Name = "Plus",
+				Image = Ui.asset("button_plus"),
+				BackgroundTransparency = 1,
+				AnchorPoint = Vector2.new(1, 0.5),
+				Position = UDim2.new(1, -4, 0.5, 0),
+				Size = UDim2.fromOffset(28, 28),
+				ZIndex = 2,
+				Parent = f,
+			})
+			Ui.juice(plus)
+			plus.Activated:Connect(function()
+				Ui.sound("click")
+				onPlus()
+			end)
+		end
+		return value
 	end
-	local coins = chip("💰", C.Gold, 1)
-	local gems = chip("💎", C.Blue, 2)
-	local trophies = chip("🏆", C.Text, 3)
+	local coins = badge("Coins", "icon_coin", 1, function()
+		ctx.open("Worlds")
+	end)
+	local gems = badge("Gems", "icon_gem", 2, function()
+		ctx.open("Quests")
+	end)
+	local trophies = badge("Trophies", "icon_trophy", 3, nil)
 
+	-- Top icons (top-right): daily rewards and quests.
+	local icons = Ui.frame({
+		Name = "TopIcons",
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(1, 0),
+		Position = UDim2.new(1, -14, 0, 8),
+		Size = UDim2.fromOffset(110, 48),
+		Parent = root,
+	}, { Ui.list(true, 8, Enum.HorizontalAlignment.Right) })
+	for i, item in { { "Daily", "icon_gift" }, { "QuestsIcon", "icon_calendar" } } do
+		local b: ImageButton = Ui.new("ImageButton", {
+			Name = item[1],
+			Image = Ui.asset(item[2]),
+			BackgroundTransparency = 1,
+			ScaleType = Enum.ScaleType.Fit,
+			Size = UDim2.fromOffset(46, 46),
+			LayoutOrder = i,
+			Parent = icons,
+		})
+		Ui.juice(b)
+		b.Activated:Connect(function()
+			Ui.sound("click")
+			ctx.open("Quests")
+		end)
+	end
+
+	-- Left menu.
 	local menu = Ui.frame({
 		Name = "Menu",
 		BackgroundTransparency = 1,
-		Position = UDim2.fromOffset(10, 60),
-		Size = UDim2.fromOffset(132, 7 * 48),
+		Position = UDim2.fromOffset(12, 96),
+		Size = UDim2.fromOffset(150, 7 * 50),
 		Parent = root,
 	}, { Ui.list(false, 6) })
+	local rows: { [string]: { skin: ImageLabel, label: TextLabel } } = {}
 	for i, item in MENU do
-		local b = Ui.button(`{item.icon}  {item.label}`, "ghost", function()
-			ctx.open(item.id)
-		end, {
+		local row: TextButton = Ui.new("TextButton", {
 			Name = item.id,
+			Text = "",
+			AutoButtonColor = false,
+			BackgroundTransparency = 1,
 			LayoutOrder = i,
-			TextXAlignment = Enum.TextXAlignment.Left,
-			Size = UDim2.new(1, 0, 0, 42),
+			Size = UDim2.new(1, 0, 0, Theme.Size.tap),
+			Parent = menu,
 		})
-		Ui.new("UIPadding", { PaddingLeft = UDim.new(0, 12), Parent = b.instance })
-		Ui.stroke(C.Stroke, 1).Parent = b.instance
-		b.instance.Parent = menu
+		local skin = Ui.skin(row, "menu_item", 0.69)
+		Ui.icon(item.icon, 32, { Position = UDim2.new(0, 8, 0.5, 0), ZIndex = 2, Parent = row })
+		local label = Ui.text({
+			Text = item.label,
+			FontFace = F.Title,
+			TextSize = 17,
+			TextWrapped = false,
+			Position = UDim2.fromOffset(48, 0),
+			Size = UDim2.new(1, -52, 1, 0),
+			ZIndex = 2,
+			Parent = row,
+		})
+		Ui.outline(C.Night, 1, 0.3).Parent = label
+		Ui.juice(row)
+		row.Activated:Connect(function()
+			Ui.sound("click")
+			ctx.open(item.id)
+		end)
+		rows[item.id] = { skin = skin, label = label }
 	end
 
-	return function()
-		local v = ctx.state.view
-		if v == nil then
+	-- Bottom hint: the next world and the trophies it needs.
+	local hint = Ui.frame({
+		Name = "Hint",
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(0.5, 1),
+		Position = UDim2.new(0.5, 40, 1, -12),
+		Size = UDim2.fromOffset(400, 32),
+		Parent = root,
+	})
+	Ui.skin(hint, "toast", 0.44)
+	Ui.icon("icon_trophy", 26, { Position = UDim2.new(0, 10, 0.5, 0), ZIndex = 2, Parent = hint })
+	local hintText = Ui.text({
+		Text = "",
+		FontFace = F.Bold,
+		TextSize = 14,
+		TextWrapped = false,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		Position = UDim2.fromOffset(34, 0),
+		Size = UDim2.new(1, -44, 1, 0),
+		ZIndex = 2,
+		Parent = hint,
+	})
+	Ui.fit(hintText, 14, 9)
+
+	local shown: { [string]: number } = {}
+	local function setCount(label: TextLabel, key: string, value: number)
+		local before = shown[key]
+		shown[key] = value
+		if before == nil or before == value or ctx.reducedMotion() then
+			label.Text = Format.number(value)
 			return
 		end
-		coins.Text = Format.number(v.coins)
-		gems.Text = Format.number(v.gems)
-		trophies.Text = `{Format.number(v.trophies)} · {Progress.leagueFor(v.trophies).id}`
+		Ui.countUp(label, before, value, Format.number)
+		Ui.pulse(label.Parent :: GuiObject, 0.08)
+		if value > before then
+			Ui.sound("coin")
+		end
 	end
+
+	return {
+		refresh = function()
+			local v = ctx.state.view
+			if v == nil then
+				return
+			end
+			setCount(coins, "coins", v.coins)
+			setCount(gems, "gems", v.gems)
+			trophies.Text = `{Format.number(v.trophies)} · {Progress.leagueFor(v.trophies).id}`
+			local nextWorld = nil
+			for _, w in Worlds.List do
+				if v.highestTrophies < w.trophiesToUnlock then
+					nextWorld = w
+					break
+				end
+			end
+			hint.Visible = nextWorld ~= nil
+			if nextWorld then
+				hintText.Text =
+					`Reach {Format.number(nextWorld.trophiesToUnlock)} trophies to unlock World {nextWorld.id}: {nextWorld.displayName}`
+			end
+		end,
+		select = function(id: string?)
+			for key, r in rows do
+				local on = key == id
+				Ui.reskin(r.skin, if on then "tab_on" else "menu_item")
+				r.label.TextColor3 = if on then C.White else C.Text
+			end
+		end,
+	}
 end
 
 function App.start(deps: Deps): Ctx
@@ -165,8 +311,11 @@ function App.start(deps: Deps): Ctx
 	local function fit()
 		local vp = gui.AbsoluteSize
 		if vp.X > 0 and vp.Y > 0 then
-			local s = math.min(vp.X / Theme.Size.base.X, vp.Y / Theme.Size.base.Y)
-			uiScale.Scale = math.clamp(s, 0.5, 2)
+			-- Scale so the 960 x 540 design space fits, then let the root fill the screen in design
+			-- units, so edge-anchored HUD pieces sit at the real screen edges on wide phones.
+			local s = math.clamp(math.min(vp.X / Theme.Size.base.X, vp.Y / Theme.Size.base.Y), 0.5, 2)
+			uiScale.Scale = s
+			root.Size = UDim2.fromOffset(vp.X / s, vp.Y / s)
 		end
 	end
 	gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
@@ -176,7 +325,7 @@ function App.start(deps: Deps): Ctx
 	local dim = Ui.frame({
 		Name = "Dim",
 		BackgroundColor3 = C.Black,
-		BackgroundTransparency = 0.45,
+		BackgroundTransparency = 0.55,
 		Visible = false,
 		Size = UDim2.fromScale(4, 4),
 		Position = UDim2.fromScale(-1.5, -1.5),
@@ -201,6 +350,7 @@ function App.start(deps: Deps): Ctx
 	})
 
 	local current: Screen? = nil
+	local hud: Hud? = nil
 	local overlays: { Screen } = {}
 	local toastCount = 0
 	local ctx: Ctx
@@ -212,6 +362,9 @@ function App.start(deps: Deps): Ctx
 		current = nil
 		Ui.clear(panelLayer)
 		dim.Visible = false
+		if hud then
+			hud.select(nil)
+		end
 	end
 
 	ctx = {
@@ -226,6 +379,9 @@ function App.start(deps: Deps): Ctx
 			close()
 			dim.Visible = true
 			current = build(ctx, panelLayer, arg)
+			if hud then
+				hud.select(name)
+			end
 		end,
 		close = close,
 		overlay = function(build: (layer: Frame) -> Screen): Screen
@@ -257,7 +413,7 @@ function App.start(deps: Deps): Ctx
 			}, { Ui.corner(10), Ui.stroke(color, 1.5) })
 			Ui.text({
 				Text = text,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				Size = UDim2.fromScale(1, 1),
 				Parent = t,
@@ -313,7 +469,8 @@ function App.start(deps: Deps): Ctx
 		end,
 	}
 
-	local refreshHud = buildHud(ctx, hudLayer)
+	hud = buildHud(ctx, hudLayer)
+	local refreshHud = (hud :: Hud).refresh
 	ctx.state.changed:connect(function(what)
 		if what == "profile" then
 			refreshHud()

@@ -189,7 +189,7 @@ function Visuals.portrait(
 	Ui.text({
 		Visible = not withFigure,
 		Text = initials,
-		Font = Theme.Font.Title,
+		FontFace = Theme.Face.Title,
 		TextSize = math.floor(size.Y * 0.32),
 		TextColor3 = rarityColor,
 		TextXAlignment = Enum.TextXAlignment.Center,
@@ -199,7 +199,7 @@ function Visuals.portrait(
 	})
 	local rarityLabel = Ui.text({
 		Text = def.rarity:upper() .. (if golden then " · GOLDEN" else ""),
-		Font = Theme.Font.Bold,
+		FontFace = Theme.Face.Bold,
 		TextSize = math.max(9, math.floor(size.Y * 0.075)),
 		TextColor3 = if golden then C.Gold else rarityColor,
 		TextXAlignment = Enum.TextXAlignment.Center,
@@ -209,7 +209,7 @@ function Visuals.portrait(
 	})
 	local nameLabel = Ui.text({
 		Text = def.displayName,
-		Font = Theme.Font.Bold,
+		FontFace = Theme.Face.Bold,
 		TextSize = math.max(10, math.floor(size.Y * 0.085)),
 		TextXAlignment = Enum.TextXAlignment.Center,
 		Position = UDim2.new(0, 2, 1, -math.floor(size.Y * 0.3)),

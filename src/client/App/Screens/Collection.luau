@@ -76,7 +76,7 @@ end
 
 return function(ctx: any, layer: Frame, _arg: any?): any
 	local view = ctx.state.view
-	local p = Ui.panel(layer, "Collection", ctx.close, UDim2.fromOffset(820, 470))
+	local p = Ui.panel(layer, "Collection", ctx.close, UDim2.fromOffset(770, 470), "icon_cards")
 	local tab = "Cards"
 	local page = 1
 	local PAGE_SIZE = 60 -- storage holds up to 1,000 copies; never build them all at once
@@ -128,7 +128,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		}, { Ui.list(false, 2) })
 		Ui.text({
 			Text = def.displayName,
-			Font = Theme.Font.Title,
+			FontFace = Theme.Face.Title,
 			TextSize = 18,
 			LayoutOrder = 1,
 			Parent = info,
@@ -143,7 +143,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		local stats = Power.deck({ { characterId = card.characterId, level = card.level } }).units[1]
 		Ui.text({
 			Text = `Level {card.level}/{Economy.Progression.maxLevel} · Power {stats.power}`,
-			Font = Theme.Font.Bold,
+			FontFace = Theme.Face.Bold,
 			LayoutOrder = 3,
 			Parent = info,
 		})
@@ -318,7 +318,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			end
 			Ui.text({
 				Text = `Lv {card.level}{if inDeck(view, card.uid) then " · ⚔" else ""}`,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				TextSize = Theme.Size.small,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				Position = UDim2.fromOffset(0, 104),
@@ -343,7 +343,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			)
 			Ui.text({
 				Text = `{item.displayName}  ×{stack.count}`,
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				Size = UDim2.fromScale(0.6, 1),
 				Parent = row,
 			})

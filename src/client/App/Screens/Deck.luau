@@ -19,7 +19,7 @@ local STAT_NAME = { hp = "HP", atk = "ATK", def = "DEF", spd = "SPD", crit = "cr
 
 return function(ctx: any, layer: Frame, _arg: any?): any
 	local view = ctx.state.view
-	local p = Ui.panel(layer, "Deck Builder", ctx.close, UDim2.fromOffset(820, 470))
+	local p = Ui.panel(layer, "Deck Builder", ctx.close, UDim2.fromOffset(770, 470), "icon_deck")
 	local slots: { string? } = { view.deck[1], view.deck[2], view.deck[3] }
 	local active = 1
 
@@ -82,7 +82,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				portrait.Position = UDim2.fromOffset(6, 6)
 				Ui.text({
 					Text = `Lv {card.level} · ⚡ {Power.card(card.characterId, card.level)}`,
-					Font = Theme.Font.Bold,
+					FontFace = Theme.Face.Bold,
 					TextXAlignment = Enum.TextXAlignment.Center,
 					Position = UDim2.fromOffset(0, 172),
 					Size = UDim2.new(1, 0, 0, 20),
@@ -109,7 +109,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			local league = Progress.leagueFor(view.trophies)
 			Ui.text({
 				Text = `Deck Power: {preview.total}`,
-				Font = Theme.Font.Title,
+				FontFace = Theme.Face.Title,
 				TextSize = 20,
 				TextColor3 = C.Green,
 				TextXAlignment = Enum.TextXAlignment.Center,

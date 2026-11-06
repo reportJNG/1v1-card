@@ -93,7 +93,7 @@ function Battle.open(ctx: any, start: any): Handle
 
 	local header = Ui.text({
 		Text = "",
-		Font = Theme.Font.Title,
+		FontFace = Theme.Face.Title,
 		TextSize = 20,
 		TextXAlignment = Enum.TextXAlignment.Center,
 		Position = UDim2.fromOffset(0, 8),
@@ -102,7 +102,7 @@ function Battle.open(ctx: any, start: any): Handle
 	})
 	local timer = Ui.text({
 		Text = "",
-		Font = Theme.Font.Title,
+		FontFace = Theme.Face.Title,
 		TextSize = 34,
 		TextColor3 = C.Gold,
 		TextXAlignment = Enum.TextXAlignment.Center,
@@ -113,7 +113,7 @@ function Battle.open(ctx: any, start: any): Handle
 	})
 	local first = Ui.text({
 		Text = "",
-		Font = Theme.Font.Bold,
+		FontFace = Theme.Face.Bold,
 		TextColor3 = C.Blue,
 		TextXAlignment = Enum.TextXAlignment.Center,
 		Position = UDim2.fromOffset(0, 76),
@@ -150,7 +150,7 @@ function Battle.open(ctx: any, start: any): Handle
 	}, { Ui.list(true, 14, Enum.HorizontalAlignment.Center) })
 	local status = Ui.text({
 		Text = "",
-		Font = Theme.Font.Bold,
+		FontFace = Theme.Face.Bold,
 		TextXAlignment = Enum.TextXAlignment.Center,
 		AnchorPoint = Vector2.new(0.5, 1),
 		Position = UDim2.new(0.5, 0, 1, -92),
@@ -185,7 +185,7 @@ function Battle.open(ctx: any, start: any): Handle
 		local def = Characters.ById[u.characterId]
 		Ui.text({
 			Text = `{if side == you then "You" else "Opponent"}: {names[if side == you then 1 else 2]}`,
-			Font = Theme.Font.Bold,
+			FontFace = Theme.Face.Bold,
 			TextColor3 = if side == you then C.Blue else C.Red,
 			Size = UDim2.new(1, 0, 0, 18),
 			Parent = f,
@@ -201,14 +201,14 @@ function Battle.open(ctx: any, start: any): Handle
 		}, { Ui.list(false, 4) })
 		Ui.text({
 			Text = def.displayName,
-			Font = Theme.Font.Title,
+			FontFace = Theme.Face.Title,
 			TextSize = 16,
 			LayoutOrder = 1,
 			Parent = info,
 		})
 		Ui.text({
 			Text = `HP {u.hp}/{u.maxHp}{if u.shield > 0 then ` · 🛡 {u.shield}` else ""}`,
-			Font = Theme.Font.Bold,
+			FontFace = Theme.Face.Bold,
 			LayoutOrder = 2,
 			Parent = info,
 		})
@@ -345,7 +345,7 @@ function Battle.open(ctx: any, start: any): Handle
 		chooser.Visible = true
 		Ui.text({
 			Text = "Your card was knocked out. Choose who comes in next:",
-			Font = Theme.Font.Bold,
+			FontFace = Theme.Face.Bold,
 			Size = UDim2.new(1, 0, 0, 40),
 			Parent = chooser,
 		})
@@ -451,7 +451,7 @@ function Battle.open(ctx: any, start: any): Handle
 			)
 			Ui.text({
 				Text = if won then "Victory!" else "Defeat",
-				Font = Theme.Font.Title,
+				FontFace = Theme.Face.Title,
 				TextSize = 40,
 				TextColor3 = if won then C.Gold else C.Red,
 				TextXAlignment = Enum.TextXAlignment.Center,
@@ -512,7 +512,7 @@ function Battle.open(ctx: any, start: any): Handle
 			end
 			Ui.text({
 				Text = table.concat(lines, "\n"),
-				Font = Theme.Font.Bold,
+				FontFace = Theme.Face.Bold,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				Size = UDim2.new(1, 0, 0, 100),
 				LayoutOrder = 3,
