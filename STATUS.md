@@ -1,4 +1,4 @@
-# 1v1 CARD: status (2026-11-06, all HANDOFF stages built)
+# 1v1 CARD: status (2026-11-06, visual vertical slice built)
 
 ## Implemented (real logic, tested)
 
@@ -19,19 +19,27 @@
 | Client UI: HUD, shop + Odds + Robux gating, hatch, collection, deck, arena/queue, battle, results, worlds, quests, settings, merchant | `src/client/App` | ui-check (real Studio), e2e |
 | 100-character roster, 24 themed egg pools, Guardian decks | `Config/Characters`, `Config/EggPools`, `Config/Guardians` | ConfigValidator.spec, `sim/balance.py`, `sim/trials.py` |
 | Telemetry events and counters | `Services/Telemetry` | e2e (no errors) |
+| Image-based UI kit (9-slice skins, fonts, motion, sounds, theme pass) | `App/Ui`, `App/Theme`, `Config/UiAssets`, `Config/Sounds` | Studio previews (`tests/Tools/UiPreview`), validator spec |
+| Hub plaza (generated meshes, lanterns, portal, petals, signs, prompts), spawn in hub, `World.Hub` | `Config/HubLayout`, `Server/World/HubBuilder`, `Services/WorldService` | Play mode in Studio (spawned at hub, World = 0) |
+| Area lighting + sky + music | `Config/Lighting`, `App/AreaFx` | Play mode in Studio |
+| Card component on frame art, hatch sequence, 3D battle stage, battle UI, results | `App/Visuals`, `Screens/Hatch`, `App/BattleStage`, `Screens/Battle` | Play mode: a real Guardian Trial round and forfeit |
+| 100 character art briefs | `Config/Characters` (`look`), `sim/roster_looks.py` | ConfigValidator spec |
 
 ## Placeholder (marked in `Config/ContentStatus` / `status = "Placeholder"`; release builds refuse them)
 
 | Content | Why |
 | --- | --- |
-| Character art and card frames | Procedural rigs and code-drawn frames. Hero models need a 3D artist |
-| Egg icons, character asset ids, Developer Product ids | Not uploaded or created yet (launch gaps) |
+| Character art | Procedural placeholder rigs until the owner's images go through the pipeline |
+| Character asset ids, Developer Product ids | Not created yet (launch gaps). Egg icons are uploaded unedited (session 2) |
 | Egg pools | Designed (8-10 per egg, every character covered) but await owner review |
 | Odds bands, egg prices, economy prices, item prices, quest rewards | Starting values |
 | Character numbers | Pass the balance gate; still need real playtests |
 | Guardian decks | Difficulty curve needs playtests (`sim/trials.py`: 36-53% for a random deck) |
 | World art | Data-driven blockouts |
 | Party Egg odds | Stand-in Event band |
+| All UI images | TEMP code-drawn stand-ins (`art/ui/temp`) until the owner's art (`art/ui/PROMPTS.md`) |
+| Hub art | Generated meshes and a code-drawn sky, awaiting slice approval |
+| Most SFX | Empty slots (silent) until ids are chosen |
 
 ## Designed but not built (by decision)
 - V2 player store (`Config/Market`, `enabled = false`), trading, cosmetics shop.
@@ -41,7 +49,9 @@
 | Check | Result |
 | --- | --- |
 | StyLua, Selene, luau-lsp strict, Rojo build (default, dev, e2e) | clean |
-| TestEZ headless | 240 passed, 0 failed |
+| TestEZ headless (session 2) | 242 passed, 0 failed |
+| TestEZ in real Studio (session 2, `build/slice.rbxlx`) | 242 passed, 0 failed |
+| TestEZ headless (session 1) | 240 passed, 0 failed |
 | TestEZ in real Studio (the owner's `live.rbxlx`, Rojo-synced) | 240 passed, 0 failed |
 | Server boot in Studio Run mode (`scripts/studio/boot-check`) | 27 remotes, 10 worlds, 130 nodes, 0 errors |
 | Every screen in Studio (`scripts/studio/ui-check`) | 0 failures, 0 text overflows, Robux button hidden/shown with the attribute, all 100 rigs build |

@@ -378,3 +378,38 @@ Made by Claude while working autonomously on "finish every stage in HANDOFF.md a
 - **Place1.** The MCP can't save the open place to a file, so `Place1.rbxlx` is a Rojo build of
   `default.project.json`: the shipping tree, without tests. It sits in the repo root and is
   git-ignored like every place file.
+
+### Visual overhaul, session 2 (2026-11-06, owner away: "never stop to wait")
+The owner asked for the game to look and feel like `docs/brief/concept-board.png`: a style guide, the
+100 art briefs, a UI image list, then a vertical slice (hub, HUD, shop + hatch, battle).
+- **Style guide.** `docs/ART_STYLE.md` covers palette, fonts (Luckiest Guy + Builder Sans), UI rules,
+  character proportions, lighting, VFX and pipeline. Everything after it follows it.
+- **The UI is image-based.** `Ui` skins every panel, button, tab, tile and bar with 9-slice images
+  from `Config/UiAssets`. Each slot uses the owner's `final` image once uploaded, else a `temp` one.
+  The 65 TEMP images are drawn in code by `scripts/art/make_temp_ui.py` (pure Python, no third-party
+  art). That script also writes `art/ui/PROMPTS.md`. `Ui.skinify` is a theme pass that turns
+  leftover code-drawn tiles into tile art. Release builds refuse TEMP slots (validator, with a spec).
+- **Egg icons are uploaded unedited** (47 files; the pack has no Golden Rainbow) and referenced in
+  `Config/Eggs`.
+- **The hub is new.** Players now spawn in a hub plaza (World attribute 0), built at runtime from
+  `Config/HubLayout` by `Server/World/HubBuilder`. A new `World.Hub` remote returns there from a
+  world. Hub props are original meshes from Studio's `generate_mesh`, so no Creator Store models
+  were needed. Studio-made instances can't be saved back to the repo, which is why the layout is
+  data (mesh + texture ids). Meshes load in the background so server boot never waits on them.
+- **Lighting** per area comes from `Config/Lighting`, applied client-side by `App/AreaFx`.
+  `Technology = Future` is set in the Rojo project files. The hub sky is drawn by
+  `scripts/art/make_sky.py`.
+- **Battles have a 3D stage**: `App/BattleStage`, built locally per client, with backdrop props from
+  `ReplicatedStorage.StageProps`. It only plays the server's event packets: hit-stop, shake,
+  floating damage, family-coloured bursts, Special camera cuts, parry bubbles and a KO fall. The
+  camera is bound after the default camera module.
+- **Character briefs.** All 100 have a `look` (personality, outfit, 3 colours, weapon, silhouette)
+  from `sim/roster_looks.py`, written by `python sim/roster.py looks` (also `art/characters/PROMPTS.md`).
+  A web name check renamed 4 display names; ids are unchanged (see `WAITING_ON_YOU.md`).
+- **Honest odds copy.** The shop shows "Drops X up to Y (see Odds)". The board's "Get a Legendary or
+  better" would read as a guarantee on a paid random item, so it is not used.
+- **Audio.** Only Roblox-licensed APMOfficial tracks are used: hub and battle music, the victory
+  sting, and the open swipe. Other SFX slots are empty until the owner picks ids.
+- **Not done (blocked).**
+  - Character models, animations and card renders: they need the owner's images.
+  - Blender's generators and libraries are switched off.

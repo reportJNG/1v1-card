@@ -33,13 +33,27 @@ python3 scripts/headless/bundle.py && luau build/headless.luau
 ```
 New characters: edit `sim/roster.py`, then `python sim/roster.py tune` and `python sim/roster.py write`.
 
+## Session 2: the visual slice
+- Read `docs/ART_STYLE.md` first; `docs/WAITING_ON_YOU.md` lists what the owner owes; screenshots are
+  in `docs/screens/`.
+- Studio loop used this session: build `dev.project.json` to `build/slice.rbxlx`, open it in Studio,
+  then in the Command Bar (or MCP `execute_luau`, Edit mode):
+  `local P = require(game.ServerScriptService.Tests.Tools.UiPreview); P.show("Shop", {world = 1})`
+  (also `P.hud()`, `P.hatch(golden)`, `P.battle(rounds)`, `P.result(win)`, `P.odds()`), and
+  `require(game.ServerScriptService.Server.World.HubBuilder).build(workspace)` for the hub.
+- New UI art: put the PNG in `art/ui/<slot>.png`, upload it, add the id to `art/ui/ids.json`, then run
+  `python scripts/art/make_temp_ui.py luau`.
+- Next for the slice: 2 characters through the pipeline once their images exist, SFX ids,
+  per-world lighting, the Families panel in the deck builder, the inspect box and the
+  remaining emoji labels.
+
 ## What needs the owner
 1. **Player Emulator, the remaining 3 policy combinations** (Test → Player Emulator → Policies; see
    README). One combination (unrestricted, trading allowed) already printed `MATCH`.
 2. **Publish to a test universe** to exercise real DataStores, MemoryStore matchmaking, ReserveServer
    and teleports with two accounts. Turn on Studio Access to API Services.
-3. **Create the Developer Products** and fill `Config/Monetization`; upload egg icons (unedited) and
-   fill their asset ids.
+3. **Create the Developer Products** and fill `Config/Monetization` (egg icons are already uploaded unedited, session 2).
+
 4. **Character art:** commission or produce hero models (DESIGN.md section 4), and fill
    `CharacterDef.assets`.
 5. **Review:** egg pools, prices and the Taren/Vesper roles (their Specials sit at the 1.15 floor).

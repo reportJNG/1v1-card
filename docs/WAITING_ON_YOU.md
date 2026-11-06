@@ -25,7 +25,7 @@ Generate every image in `art/ui/PROMPTS.md` at the exact size, with a transparen
 some, Claude uploads them, fills `art/ui/ids.json` and runs `python scripts/art/make_temp_ui.py luau`.
 
 ## 4. Approve the vertical slice
-Screenshots are in `docs/screens/`. Look at them against `docs/brief/concept-board.png` and say what
+Screenshots are in `docs/screens/` (01 hub HUD, 02 hub in Play mode, 03 egg shop, 04 hatch, 05-06 battle, 07 victory, 08 defeat, 09 collection, 10 deck builder, 11 arena). Look at them against `docs/brief/concept-board.png` and say what
 to change. Scaling to every screen and all 100 characters continues in the meantime, but nothing
 from the slice is called final until you approve it.
 
