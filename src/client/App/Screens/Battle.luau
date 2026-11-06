@@ -429,6 +429,11 @@ function Battle.open(ctx: any, start: any): Handle
 			view = data.view or view
 			renderAll()
 			chooser.Visible = false
+			-- The match is over: show the rounds actually played and stop the clock and prompts.
+			header.Text =
+				`{if start.mode == "Trial" then "Guardian Trial" else "Ranked"} · {data.result.rounds} rounds`
+			timer.Text = ""
+			status.Text = ""
 			local won = data.result.winner == you
 			local reward: any = data.reward or {}
 			resultBox = Ui.frame({

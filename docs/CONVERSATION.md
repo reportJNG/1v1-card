@@ -361,3 +361,20 @@ Made by Claude while working autonomously on "finish every stage in HANDOFF.md a
   - Added: session_start, deck_set, storage_expand, trial_start, battle_forfeit, robux_egg_granted.
   - Counter-only (`Telemetry.increment`, never sent per event, to stay under analytics limits):
     harvests, replayed receipts, held receipts by reason.
+
+### Final verification (Studio MCP session)
+- **Studio sync.** This session had the Roblox Studio MCP. The owner's `live.rbxlx` was Rojo-synced
+  to `dev.project.json`, and the TestEZ suite ran there: 240/240.
+- **End-to-end Play test.** `execute_luau` has its own module cache and can't touch the running
+  game's services, so the test lives in Studio-only scripts (`scripts/e2e/`):
+  - The scripts were inserted into the place for one Play session and then deleted.
+  - A real client drove every remote, with 40/40 steps passing.
+  - The only bug found was cosmetic: after a match the battle screen kept the timer and the
+    "Pick your action" text. It's fixed.
+- **Player Emulator: 1 of 4.** Only the Studio-default policy (unrestricted, trading allowed) ran,
+  and it printed `MATCH`. `PlayerEmulatorService` isn't reachable from the MCP context, and its
+  mouse and keyboard input only reach the game viewport, so the other three combinations need the
+  owner at the Test ribbon.
+- **Place1.** The MCP can't save the open place to a file, so `Place1.rbxlx` is a Rojo build of
+  `default.project.json`: the shipping tree, without tests. It sits in the repo root and is
+  git-ignored like every place file.

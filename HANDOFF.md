@@ -1,25 +1,28 @@
-# Handoff: where work stopped (2026-11-06)
+# Handoff (2026-11-06)
 
-Open this folder in Claude Code (`claude` in this directory). `CLAUDE.md` loads automatically;
-read this file and `STATUS.md` first. The full plan is the design doc
-(https://claude.ai/artifact/Bdc9fe3tjh3ybZnVVBVMfg), section 8 "Roadmap".
+Every stage listed in the previous handoff is built, tested and committed (Settlement, MatchRunner +
+BattleService + Guardian Trials, M4 matchmaking, M6 worlds, M5 client UI, the 100-character roster
+and egg pools, M2 placeholder art, M7 prep). `STATUS.md` has what is real vs placeholder and every
+check's result; `docs/CONVERSATION.md` ("Decisions made in the CLI") has every decision made along
+the way.
 
-## Done since the Stage 1 commit
-- **M1 economy core**
-  - `Shared/Net/Remotes` lists every remote; `Shared/Net/Check` validates payloads.
-  - `Server/Net/Dispatcher`: rate limit → validate → profile → handler → save → push.
-  - `Server/Net/Router` creates the remotes.
-  - `Services/NetService`, `EconomyService` (buy/open eggs, daily free egg, merge, sell spares, deck, storage), `Telemetry`.
-  - `Shared/Domain/ClientView`: profile snapshot plus deltas, with nothing secret sent.
-  - `Cards.sellSpares`.
-  - Tests: `M1Acceptance.spec` (10,000 purchases chi-square, 50 forced crashes, receipt ×100), `Net.spec`.
-- **M3 battle engine**
-  - `Shared/Battle/BattleRules` and `Prng`, ported from `sim/engine.py`. `Config/Battle` holds the rules.
-  - Passives are data (`passive.effect`).
-  - `BattleParity.spec`: 1,000 seeded matches identical to Python.
-  - Tuning pass applied: guardVsAttack 0.35; Vesper 1.33, Taren 2.09, Rai 1.5. `python3 sim/balance.py`: all design targets met.
-- **Profile schema v2** (migration 1→2): currentWorld, opponentsToday, questDay, trials, stats, settings. New players start with 500 Coins.
-- `Economy.Matches` (game-paid purse, no stakes) and `Economy.Trials` config.
+## How to check everything
+```
+stylua src tests && selene src tests
+rojo sourcemap dev.project.json -o sourcemap.json
+luau-lsp analyze --definitions=globalTypes.d.luau --definitions=testez.d.luau --sourcemap=sourcemap.json src tests
+python scripts/headless/bundle.py && luau build/headless.luau
+```
+In Studio (Rojo-synced `dev.project.json`), Command Bar:
+`print(require(game.ServerScriptService.Tests.RunTests)().report)`
+
+Real-Studio scripts (run with `run-in-roblox --place build/dev.rbxlx --script <file>`):
+- `scripts/studio/run-tests.server.luau`: the TestEZ suite.
+- `scripts/studio/boot-check.server.luau`: boots the real server in Run mode and checks it.
+- `scripts/studio/ui-check.server.luau`: builds every screen and all 100 rigs, holds each for screenshots.
+- `scripts/e2e/` + `e2e.project.json`: a Studio-only Play test. `Setup.server.luau` grants test
+  cards; `Driver.client.luau` plays every remote as a client. Build `e2e.project.json` and press Play,
+  or insert both scripts into a synced place, Play, read the `E2E` lines, then delete them.
 
 ## Regenerate after changing characters or battle rules
 ```
@@ -28,16 +31,24 @@ luau build/entry.luau > sim/content.json
 python3 sim/parity.py && python3 sim/ai_parity.py && python3 sim/balance.py && python3 sim/trials.py
 python3 scripts/headless/bundle.py && luau build/headless.luau
 ```
+New characters: edit `sim/roster.py`, then `python sim/roster.py tune` and `python sim/roster.py write`.
 
-## Next, in order
-1. `Shared/Domain/Settlement`: trophies ±, purse, daily cap, low-quality rules, `settledMatches` idempotency. Add tests.
-2. `Server/Battle/MatchRunner`: picks, 12 s timers, timeouts → Attack, 3 timeouts → forfeit, KO replacement (5 s, default `BattleRules.defaultNext`). Add tests.
-3. `BattleService`: local 1v1 plus Guardian Trials (PvE; the AI policy is the "adaptive" reader in `sim/balance.py`).
-4. M4: MemoryStore queue and lease, pairing (pure, tested), ReserveServer and teleport, match record, reconnect window, league level caps.
-5. M6: worlds 1-10 config and blockout builder, farming nodes, merchants, quests, daily streak.
-6. M5: client UI (shop with Odds, hatch, collection, deck builder, battle screen). Hide the Robux button when the `PaidRandomItemsAllowed` attribute is false.
-7. 100-character roster (balance gate: `sim/balance.py`) and real egg pools.
-8. Verify in Studio: tests, the Player Emulator with all 4 combinations (`[PolicySelfCheck]` lines), and save Place1.
+## What needs the owner
+1. **Player Emulator, the remaining 3 policy combinations** (Test → Player Emulator → Policies; see
+   README). One combination (unrestricted, trading allowed) already printed `MATCH`.
+2. **Publish to a test universe** to exercise real DataStores, MemoryStore matchmaking, ReserveServer
+   and teleports with two accounts. Turn on Studio Access to API Services.
+3. **Create the Developer Products** and fill `Config/Monetization`; upload egg icons (unedited) and
+   fill their asset ids.
+4. **Character art:** commission or produce hero models (DESIGN.md section 4), and fill
+   `CharacterDef.assets`.
+5. **Review:** egg pools, prices and the Taren/Vesper roles (their Specials sit at the 1.15 floor).
+6. **The maturity questionnaire** on the Creator Dashboard.
 
-## Decisions made while you were away
-- No player-staked wagers: Roblox bans simulated gambling, and "no wagers" was a locked decision. Winners get a game-paid purse instead.
+## Next highest-priority work
+1. A live two-account ranked match on a published place: matchmaking → teleport → battle →
+   settlement → return.
+2. An economy simulation (Coins in vs out per hour by world) to replace the starting prices.
+3. World art passes (terrain, props, lighting) on the blockout layouts, keeping node positions.
+4. Battle presentation: real animations on the R15-named rig joints, hit VFX, sound.
+5. A tutorial for the first session (deck → first Trial → first ranked match).

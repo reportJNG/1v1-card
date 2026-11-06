@@ -1,0 +1,23 @@
+{
+  "name": "1v1card-e2e",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Shared": { "$path": "src/shared" }
+    },
+    "ServerScriptService": {
+      "Server": { "$path": "src/server" },
+      "E2ESetup": { "$path": "scripts/e2e/Setup.server.luau" }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Client": { "$path": "src/client" },
+        "E2EDriver": { "$path": "scripts/e2e/Driver.client.luau" }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": { "StreamingEnabled": true }
+    }
+  }
+}
