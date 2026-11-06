@@ -12,5 +12,6 @@ return table.freeze({
 		economyPrices = "Card storage, item slot and merge prices are starting values.",
 		characterNumbers = "Character stats and abilities come from the reference simulation and need playtest tuning.",
 		items = "Only World 1 items exist; worlds 2-10 items are designed in M6.",
+		guardianDecks = "Guardian Trial decks use the launch characters until the full roster exists.",
 	}) :: { [string]: string },
 })

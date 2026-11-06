@@ -174,6 +174,16 @@ local function est(src: Unit, dst: Unit): number
 	return BattleRules.effAtk(src) * Rules.kDef / (Rules.kDef + BattleRules.effDef(dst))
 end
 
+-- Chance that `side` acts first this round when neither player guards (the "You act first: 64%"
+-- display). Reads state only; it never draws from the match RNG, so it can't change a result.
+function BattleRules.firstChance(m: Match, side: number): number
+	local mine, theirs =
+		BattleRules.effSpd(BattleRules.activeUnit(m, side)),
+		BattleRules.effSpd(BattleRules.activeUnit(m, 3 - side))
+	local g = Rules.initSlope * (mine - theirs) / (mine + theirs)
+	return 0.5 + math.max(-Rules.initCap, math.min(Rules.initCap, g))
+end
+
 -- Bench slots (1-based) that can come in.
 function BattleRules.bench(m: Match, side: number): { number }
 	local s = m.sides[side]

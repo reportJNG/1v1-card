@@ -27,6 +27,8 @@ local usingMemoryStore = false
 local shadows: { [Player]: ClientView.View } = {} -- last view sent to each client
 local sender: ((Player, string, any) -> ())? = nil -- set by NetService
 local loadedCallbacks: { (Player, Types.PlayerProfile) -> () } = {}
+local retainers: { (userId: number) -> boolean } = {} -- "keep this profile after the player leaves"
+local retained: { [number]: boolean } = {}
 
 local function getManager(): ProfileManager.ProfileManager
 	assert(manager, "PlayerDataService not initialised")
@@ -74,6 +76,7 @@ local function onPlayerAdded(player: Player)
 		getManager():release(player.UserId) -- left while loading
 		return
 	end
+	retained[player.UserId] = nil
 	player:SetAttribute("ProfileLoaded", true)
 	for _, callback in loadedCallbacks do
 		task.spawn(callback, player, loaded.value)
@@ -81,13 +84,25 @@ local function onPlayerAdded(player: Player)
 	PlayerDataService.push(player)
 end
 
-local function onPlayerRemoving(player: Player)
-	shadows[player] = nil
-	local released = getManager():release(player.UserId)
+local function release(userId: number)
+	local released = getManager():release(userId)
 	if not released.ok then
 		-- Kept in memory; autosaveTick retries the release (and BindToClose flushes it).
-		warn(`[PlayerData] release failed for {player.UserId}: {released.err}`)
+		warn(`[PlayerData] release failed for {userId}: {released.err}`)
 	end
+end
+
+local function onPlayerRemoving(player: Player)
+	shadows[player] = nil
+	for _, keep in retainers do
+		if keep(player.UserId) then
+			-- In a live match: keep the session (and its lock) so the result can be settled and a
+			-- quick rejoin finds the same profile. BattleService calls releaseIfAbsent afterwards.
+			retained[player.UserId] = true
+			return
+		end
+	end
+	release(player.UserId)
 end
 
 function PlayerDataService.getProfile(userId: number): Types.PlayerProfile?
@@ -148,6 +163,19 @@ end
 -- Runs `callback(player, profile)` each time a profile finishes loading.
 function PlayerDataService.onLoaded(callback: (Player, Types.PlayerProfile) -> ())
 	table.insert(loadedCallbacks, callback)
+end
+
+-- `keep(userId)` is asked when a player leaves; while it returns true the profile stays loaded.
+function PlayerDataService.retainWhile(keep: (userId: number) -> boolean)
+	table.insert(retainers, keep)
+end
+
+-- Releases a profile kept by retainWhile once its owner is no longer on this server.
+function PlayerDataService.releaseIfAbsent(userId: number)
+	if retained[userId] and Players:GetPlayerByUserId(userId) == nil then
+		retained[userId] = nil
+		release(userId)
+	end
 end
 
 function PlayerDataService.isUsingMemoryStore(): boolean

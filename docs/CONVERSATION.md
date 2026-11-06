@@ -189,3 +189,33 @@ Made by Claude while working autonomously on "finish every stage in HANDOFF.md a
 - **Bounded memory.** `settledMatches` keeps the last `Economy.Matches.settledMemory` (300) matchIds.
   The authoritative match record lives in the battle server for far less time than 300 matches
   take, so a replay can't come in after its id has been dropped.
+
+### Battles (`Server/Battle`, `BattleService`)
+- `MatchRunner` is a pure state machine (Picking → Choosing → Ended) with the clock injected.
+  `MatchHost` runs all of a server's matches, and `BattleService` wires them to remotes. Both are
+  tested with mocks.
+- **Both players time out together.** If both reach 3 timeouts in the same round, the side with
+  more HP share wins, and the match is voided for pay (Timeouts rule).
+- **Disconnects.** When a player drops mid-match, their profile session stays loaded on this
+  server (`PlayerDataService.retainWhile`). The result can then be settled even if they never
+  return, and a rejoin within 30 s finds the same profile and seat. The profile is released after
+  settlement.
+- **Guardian Trials.**
+  - The Guardian plays the "adaptive" reader from `sim/balance.py`, ported to `BattleAI` and
+    checked against Python on 300 seeded matches.
+  - The player fights with real card levels (no league cap in PvE).
+  - Repeat clears pay nothing. Retries wait 30 s (`Economy.Trials.retryCooldown`).
+  - Guardian names are original.
+  - The decks use launch characters and are marked Placeholder (`guardianDecks`).
+- **Clock.** Battles use `workspace:GetServerTimeNow()`, so clients can count down to the same
+  deadline.
+
+### Studio verification without the Studio MCP
+- The roblox-mcp-pro server wasn't installed or connected in this CLI session; the plugin's
+  bridge on 127.0.0.1:3690 had no listener. Instead I use `run-in-roblox` 0.3.0, which opens real
+  Roblox Studio on a Rojo-built `build/dev.rbxlx` and runs a script. Two scripts:
+  - `scripts/studio/run-tests.server.luau` runs the whole TestEZ suite inside Studio.
+  - `scripts/studio/boot-check.server.luau` starts Run mode, so the real server Script boots,
+    then checks the services and remotes and that the log has no errors.
+- Run mode has no client and no Player Emulator. Client UI play-tests and the four
+  PolicyService combinations still need someone at Studio (see README).

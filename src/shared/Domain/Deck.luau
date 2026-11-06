@@ -56,4 +56,22 @@ function Deck.set(profile: Types.PlayerProfile, uids: { any }): Types.Result<nil
 	return valid
 end
 
+-- The saved deck as battle specs, re-validated. `levelCap` is the ranked league cap: a card above
+-- it fights at the cap.
+function Deck.specs(
+	profile: Types.PlayerProfile,
+	levelCap: number?
+): Types.Result<{ { characterId: string, level: number } }>
+	local valid = Deck.validate(profile, profile.deck)
+	if not valid.ok then
+		return Result.fail(if valid.err == "DeckSize" then "NoDeck" else valid.err)
+	end
+	local out = {}
+	for i, uid in profile.deck do
+		local copy = profile.cards[uid]
+		out[i] = { characterId = copy.characterId, level = math.min(copy.level, levelCap or copy.level) }
+	end
+	return Result.ok(out)
+end
+
 return table.freeze(Deck)
