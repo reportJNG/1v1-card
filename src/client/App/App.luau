@@ -13,6 +13,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Progress = require(Shared.Domain.Progress)
 local HudBadges = require(Shared.Ui.HudBadges)
 local WorldsCfg = require(Shared.Config.Worlds)
+local HubLayout = require(Shared.Config.HubLayout)
 local UiFlow = require(Shared.Ui.UiFlow)
 local MainMenu = require(script.Parent.MainMenu)
 local Theme = require(script.Parent.Theme)
@@ -78,6 +79,22 @@ local MENU = {
 	{ id = "Settings", icon = "icon_settings", label = "Settings", accent = Color3.fromHex("#8D9BC4") },
 }
 local TILE = 48 -- dock tile size (design px)
+
+-- Waits (up to `timeout` s) until the local character stands at the hub spawn, after the server
+-- has moved it there (World.Hub). The server's PivotTo replicates a moment after its reply.
+local function waitForLobby(timeout: number)
+	local o, s = HubLayout.ORIGIN, HubLayout.SPAWN
+	local spawn = Vector3.new(o[1] + s[1], o[2] + s[2] + 3, o[3] + s[3])
+	local deadline = os.clock() + timeout
+	while os.clock() < deadline do
+		local player = Players.LocalPlayer
+		local root = player and player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		if root == nil or not root:IsA("BasePart") or (root.Position - spawn).Magnitude < 40 then
+			return
+		end
+		task.wait()
+	end
+end
 
 type Hud = {
 	refresh: () -> (),
@@ -894,11 +911,28 @@ function App.start(deps: Deps): Ctx
 
 	hud = buildHud(ctx, hudLayer)
 	fit()
+	local leaving = false
 	menu = MainMenu.build(menuLayer, {
 		play = function()
 			-- PLAY always lands in the lobby, wherever the player was (server-checked World.Hub).
-			task.spawn(ctx.request, "World.Hub")
-			ui("play")
+			if ctx.state.area == 0 then
+				task.spawn(ctx.request, "World.Hub")
+				ui("play")
+				return
+			end
+			-- From a world, the menu stays up until the character is back in the lobby, so the
+			-- fade and the camera fly-in start there and not in the world the player left.
+			if leaving then
+				return
+			end
+			leaving = true
+			task.spawn(function()
+				if ctx.request("World.Hub").ok then
+					waitForLobby(3)
+				end
+				leaving = false
+				ui("play")
+			end)
 		end,
 		open = function(name: string)
 			ctx.open(name)
