@@ -26,7 +26,7 @@ local Worlds = require(Shared.Config.Worlds)
 local Items = require(Shared.Config.Items)
 local Guardians = require(Shared.Config.Guardians)
 local WorldLayout = require(Shared.Domain.WorldLayout)
-local RigBuilder = require(Shared.Art.RigBuilder)
+local Standee = require(Shared.Art.Standee)
 local MeshLibrary = require(script.Parent.MeshLibrary)
 
 local WorldBuilder = {}
@@ -316,20 +316,14 @@ local function buildGuardian(worldId: number, model: Model, accent: string): () 
 	label(npc, "GUARDIAN TRIAL", Color3.fromHex(accent), 9.5)
 	prompt(npc, "Challenge", def.displayName, 14, "Challenge")
 	light(npc, "#A469FF", 22, 2.2)
-	-- The Guardian stands in the gate: the placeholder rig of its lead card, scaled up.
-	local ok, rig = pcall(RigBuilder.build, def.deck[1].characterId)
-	if ok and rig then
-		local figure = rig :: Model
+	-- The Guardian stands in the gate: a standee of its lead card (Shared/Art/Standee), scaled up,
+	-- facing the spawn.
+	local ok, standee = pcall(Standee.build, def.deck[1].characterId)
+	if ok and standee then
+		local figure = standee :: Model
 		figure.Name = "Figure"
 		figure:ScaleTo(1.6)
-		local _, ext = figure:GetBoundingBox()
-		figure:PivotTo(CFrame.new(at.X, ext.Y / 2, at.Z - 2) * CFrame.Angles(0, math.rad(200), 0))
-		for _, d in figure:GetDescendants() do
-			if d:IsA("BasePart") then
-				d.Anchored = true
-				d.CanCollide = false
-			end
-		end
+		figure:PivotTo(CFrame.new(at.X, 0, at.Z - 2) * CFrame.Angles(0, math.rad(200), 0))
 		figure.Parent = folder
 	end
 	return function()

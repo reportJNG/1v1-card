@@ -28,6 +28,7 @@ local BattleRules = require(Shared.Battle.BattleRules)
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
 local CardFx = require(script.Parent.CardFx)
+local Cutout = require(Shared.Art.Cutout)
 
 local C = Theme.Color
 
@@ -132,31 +133,21 @@ function Card.stats(characterId: string, level: number): { hp: number, atk: numb
 	}
 end
 
--- The TEMP cutout: the role's 4 layers, tinted with the character's look colours (outfit = its
--- first colour, accent = its second), plus a rim light in the family accent behind it.
-local function tempCutout(parent: Instance, def: any, accent: Color3): Frame
-	local role = string.lower(def.role)
-	local colors = def.look and def.look.colors or {}
-	local outfit = if colors[1]
-		then Color3.fromHex(colors[1])
-		else Color3.fromHex(Art.FamilyColors[def.family].body)
-	local trim = if colors[2] then Color3.fromHex(colors[2]) else accent
+-- The character's cut-out (Shared/Art/Cutout: its card art, or the TEMP role silhouette tinted
+-- with its colours), with the rim light behind it.
+local function cutout(parent: Instance, characterId: string): Frame
 	local holder = Ui.frame({ Name = "Cutout", BackgroundTransparency = 1, Parent = parent })
-	img(`cutout_{role}_line`, {
-		Name = "Rim",
-		ImageColor3 = accent,
-		ImageTransparency = 0.15,
-		ScaleType = Enum.ScaleType.Fit,
-		Position = UDim2.fromScale(0.018, -0.012),
-		Size = UDim2.fromScale(1, 1),
-		Parent = holder,
-	})
-	for _, layer in { "line", "outfit", "skin", "accent" } do
-		img(`cutout_{role}_{layer}`, {
-			Name = layer,
-			ImageColor3 = if layer == "outfit" then outfit elseif layer == "accent" then trim else C.White,
+	for i, layer in Cutout.layers(characterId) do
+		Ui.new("ImageLabel", {
+			Name = layer.name,
+			Image = layer.image,
+			ImageColor3 = layer.color,
+			ImageTransparency = layer.transparency,
+			BackgroundTransparency = 1,
 			ScaleType = Enum.ScaleType.Fit,
+			Position = UDim2.fromScale(layer.offset.X, layer.offset.Y),
 			Size = UDim2.fromScale(1, 1),
+			ZIndex = i,
 			Parent = holder,
 		})
 	end
@@ -255,19 +246,8 @@ function Card.build(parent: Instance, o: Options): Frame
 		Size = UDim2.fromScale(1.02, 0.78),
 		Parent = art,
 	})
-	local placeholder = def.assets.cardArt == nil
-	if placeholder then
-		tempCutout(character, def, accent)
-	else
-		Ui.new("ImageLabel", {
-			Name = "CardArt",
-			Image = def.assets.cardArt,
-			BackgroundTransparency = 1,
-			ScaleType = Enum.ScaleType.Fit,
-			Size = UDim2.fromScale(1, 1),
-			Parent = character,
-		})
-	end
+	local placeholder = Cutout.isTemp(def.id)
+	cutout(character, def.id)
 	local fx = Ui.frame({ Name = "Fx", BackgroundTransparency = 1, ZIndex = 3, Parent = art })
 
 	local shine: GuiObject? = nil

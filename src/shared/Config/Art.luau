@@ -1,6 +1,6 @@
 --!strict
 -- PLACEHOLDER art direction data (ContentStatus: characterArt, cardFrames). Until real models and
--- card art exist, characters are drawn as procedural rigs (Shared/Art/RigBuilder): the silhouette
+-- card art exist, characters are TEMP cut-outs (Shared/Art/Cutout, Standee in 3D): the silhouette
 -- and prop come from the role, the colours from the family, the trim from the rarity. Card frames
 -- differ by rarity in border, gradient and shine only (design rule 6: same card silhouette).
 

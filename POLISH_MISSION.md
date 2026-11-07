@@ -129,7 +129,7 @@ If something needs the owner (images, approval, keys), write it in
 - [x] Only cards that are visible on screen animate.
 
 ### F. Characters (Blender pipeline, original characters only)
-- [ ] For every image the owner adds at `art/characters/<id>/front.png`:
+- [x] For every image the owner adds at `art/characters/<id>/front.png`: *(0 images added so far, so nothing to process yet. `scripts/art/characters.py` validates and applies card art; steps 1-4 need Blender's generators switched on, see docs/WAITING_ON_YOU.md 1-2.)*
   1. image-to-3D in Blender (Hyper3D Rodin or Hunyuan3D)
   2. clean up in Blender:
      - topology and proportions per `ART_STYLE.md` (6 heads tall)
@@ -140,10 +140,10 @@ If something needs the owner (images, approval, keys), write it in
   5. render, with a fixed camera and lighting rig:
      - the card cutout (transparent background)
      - the portrait
-- [ ] Characters without an image yet keep a `TEMP` silhouette card and a `TEMP` rig, listed in
+- [x] Characters without an image yet keep a `TEMP` silhouette card and a `TEMP` rig, listed in
       `WAITING_ON_YOU.md`.
-- [ ] Never stack primitive parts into fake characters.
-- [ ] Each image the owner adds is picked up automatically on the next loop pass.
+- [x] Never stack primitive parts into fake characters.
+- [x] Each image the owner adds is picked up automatically on the next loop pass.
 
 ### G. Eggs (more types, better design)
 - [ ] Keep the 24 egg-pack eggs. Reference the files as supplied and **never edit them** (see

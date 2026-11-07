@@ -202,7 +202,12 @@ function BattleService.init()
 			worldId = args.worldId,
 			seed = rng:NextInteger(1, 2_147_483_646),
 			seats = {
-				{ userId = userId, name = player.DisplayName, deck = prepared.value.deck },
+				{
+					userId = userId,
+					name = player.DisplayName,
+					trophies = (profile :: any).trophies,
+					deck = prepared.value.deck,
+				},
 				{ name = prepared.value.guardian.displayName, deck = prepared.value.guardian.deck },
 			},
 		})

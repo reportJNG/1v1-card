@@ -2,8 +2,9 @@
 -- The 3D battle stage (ART_STYLE sections 6-7), built locally on the client: a dark stage with a
 -- glowing ring, spotlights on both marks, the two active fighters, and a scripted camera. It only
 -- PLAYS the event packets the server sends (Hit, Parry, Shield, KO, Enter...): every number shown
--- comes from the server. Placeholder rigs (Shared/Art/RigBuilder) stand in until a character's
--- approved model exists (CharacterDef.assets.model).
+-- comes from the server. Fighters are standees (Shared/Art/Standee: the character's cut-out art
+-- on a panel, turned to the camera) until a character's approved model exists
+-- (CharacterDef.assets.model).
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
@@ -12,7 +13,7 @@ local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Characters = require(Shared.Config.Characters)
 local Art = require(Shared.Config.Art)
-local RigBuilder = require(Shared.Art.RigBuilder)
+local Standee = require(Shared.Art.Standee)
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
 
@@ -196,22 +197,14 @@ function BattleStage.enter(self: Stage, side: number, characterId: string)
 		old:Destroy()
 	end
 	self.ids[side] = characterId
-	local rig = RigBuilder.build(characterId)
+	local rig = Standee.build(characterId)
 	local mark = markPos(side, self.you)
 	local facing = markPos(3 - side, self.you)
-	local _, size = rig:GetBoundingBox()
-	rig:PivotTo(
-		CFrame.lookAt(
-			mark + Vector3.new(0, size.Y / 2, 0),
-			Vector3.new(facing.X, mark.Y + size.Y / 2, facing.Z)
-		)
-	)
-	for _, d in rig:GetDescendants() do
-		if d:IsA("BasePart") then
-			d.Anchored = true
-			d.CanCollide = false
-		end
-	end
+	-- Face the camera, turned a little toward the opponent; the pivot is the standee's feet.
+	local toCamera = Vector3.new(HOME_CAM.Position.X, mark.Y, HOME_CAM.Position.Z) - mark
+	local toFoe = (facing - mark).Unit
+	local look = (toCamera.Unit * 0.8 + toFoe * 0.35).Unit
+	rig:PivotTo(CFrame.lookAt(mark, mark + look))
 	rig.Parent = self.model
 	self.fighters[side] = rig
 	local rim = self.model:FindFirstChild(`Rim{side}`)
@@ -322,10 +315,11 @@ function BattleStage.lunge(self: Stage, side: number, distance: number)
 		return
 	end
 	local home = rig:GetPivot()
+	local toward = (markPos(3 - side, self.you) - markPos(side, self.you)).Unit
 	local v = Instance.new("NumberValue")
 	v.Changed:Connect(function(d)
 		if rig.Parent then
-			rig:PivotTo(home * CFrame.new(0, 0, -d))
+			rig:PivotTo(home + toward * d)
 		end
 	end)
 	local out = TweenService:Create(v, TweenInfo.new(0.16, Enum.EasingStyle.Quad), { Value = distance })
@@ -346,7 +340,8 @@ function BattleStage.flinch(self: Stage, side: number)
 		return
 	end
 	local home = rig:GetPivot()
-	rig:PivotTo(home * CFrame.new(0, 0, 0.8) * CFrame.Angles(math.rad(-8), 0, 0))
+	local away = (markPos(side, self.you) - markPos(3 - side, self.you)).Unit
+	rig:PivotTo((home + away * 0.8) * CFrame.Angles(math.rad(-8), 0, 0))
 	task.delay(0.12, function()
 		if rig.Parent then
 			rig:PivotTo(home)
@@ -381,7 +376,7 @@ function BattleStage.knockOut(self: Stage, side: number)
 	if rig == nil then
 		return
 	end
-	local cf, size = rig:GetBoundingBox()
+	local cf = rig:GetBoundingBox()
 	self:burst(cf.Position, accentOf(self.ids[side]), 30)
 	if self.reduced then
 		rig:Destroy()
@@ -398,12 +393,7 @@ function BattleStage.knockOut(self: Stage, side: number)
 	local v = Instance.new("NumberValue")
 	v.Changed:Connect(function(a)
 		if rig.Parent then
-			rig:PivotTo(
-				home
-					* CFrame.new(0, -size.Y / 2, 0)
-					* CFrame.Angles(math.rad(a), 0, 0)
-					* CFrame.new(0, size.Y / 2, 0)
-			)
+			rig:PivotTo(home * CFrame.Angles(math.rad(a), 0, 0)) -- the pivot is the feet
 		end
 	end)
 	TweenService:Create(v, TweenInfo.new(0.5, Enum.EasingStyle.Quad), { Value = 82 }):Play()

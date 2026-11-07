@@ -172,3 +172,38 @@ Screenshots are in `docs/screens/12-15` and `docs/screens/worlds/`. Everything w
 **Scores:** board 8 · readability 8 · polish 8 · clarity 9 · consistency 9.
 
 **Screens:** `docs/screens/screens/01-14`.
+
+## F. Characters — done as far as the owner's art allows (2026-11-07)
+**Changed**
+- **No more stacked-primitive characters.** `Shared/Art/RigBuilder` (part-built R15-style rigs) is
+  deleted. Characters in 3D are now **standees** (`Shared/Art/Standee`): the character's cut-out art
+  on a thin panel readable from both sides, on a glowing base in the family accent.
+  - The battle stage turns them to the camera, so lunge, flinch, bubble, KO and the drop-in still
+    play.
+  - Each world's Guardian stands in its trial gate as a scaled standee.
+- One source for the art layers (`Shared/Art/Cutout`): the card UI and the standee draw the same
+  thing, either the owner's transparent `cardArt` with a rim light, or the TEMP role silhouette
+  (4 layers tinted with the character's look colours).
+- **Automatic pickup** (`scripts/art/characters.py status|check|urls|apply`):
+  - finds `art/characters/<id>/card.png` and `front.png` for original character ids only
+  - checks PNG, ≤ 1024 px, and a transparent background for the card
+  - lists the upload URLs, then writes the uploaded ids into `CharacterDef.assets.cardArt`
+  - tested end to end on a temporary copy
+- The battle plates no longer show "0 trophies" in Guardian Trials (the Trial seat now carries the
+  player's trophies, and AI seats show none).
+
+**Waiting on the owner:** 0 character images exist yet. The Blender steps (image-to-3D,
+cleanup, R15, animations, renders) need the images and Blender's generators switched on
+(WAITING_ON_YOU 1-2).
+
+**Tested in Play:**
+- Guardian Trial with standees upright, facing the camera, on family-colour bases.
+- An Attack round, captured mid-lunge with the hit burst.
+- The World 1 Guardian standee in its gate.
+- The UI check builds all 100 standees (2 parts each).
+
+**Scores:** board 7 · readability 8 · polish 7 · clarity 9 · consistency 9. "Board" and "polish"
+stay below 8 until real character art replaces the TEMP silhouettes; that is owner-blocked and
+logged.
+
+**Screens:** `docs/screens/characters/01-03`.

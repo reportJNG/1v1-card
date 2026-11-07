@@ -41,8 +41,10 @@ Generate the **card art** first, from `art/characters/PROMPTS.md`: one **transpa
 character, 768 × 1024, the character alone, upper body to knees, dynamic pose, anime cel-shaded, saved
 as `art/characters/<id>/card.png`. Never use images of existing anime or game characters.
 **Start with two:** `ren_emberfang` (Flame Striker) and `yuki_frostveil` (Ice Guardian). Claude
-uploads them and sets `CharacterDef.assets.cardArt`; until then the cards show a TEMP role
-silhouette tinted with the character's colours (labelled "TEMP ART"). The A-pose model reference
+uploads them and sets `CharacterDef.assets.cardArt` (`python scripts/art/characters.py status|check|urls|apply`,
+run on every loop pass); until then every character is a TEMP role silhouette tinted with its colours,
+both on cards (labelled "TEMP ART") and as the 3D standee in battles and at the Guardian gates
+(the old part-built rigs are gone). The A-pose model reference
 (`front.png`) is only needed later for 3D.
 Also optional: 15 painted family backgrounds (`card_bg_<family>`, listed in `art/ui/PROMPTS.md`
 under "Card backgrounds") to replace the code-drawn ones.

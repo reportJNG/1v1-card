@@ -321,7 +321,9 @@ function Battle.open(ctx: any, start: any): Handle
 		Ui.outline(C.Night, 1.5).Parent = nameLabel
 		Ui.fit(nameLabel, 17, 10)
 		Ui.text({
-			Text = `{names[side]} · {Format.number(trophies[side] or 0)} trophies · {def.rarity} {def.family}`,
+			Text = `{names[side]}{if trophies[side]
+				then ` · {Format.number(trophies[side])} trophies`
+				else ""} · {def.rarity} {def.family}`,
 			TextSize = 11,
 			TextColor3 = if mine then C.Blue else C.Red,
 			TextWrapped = false,

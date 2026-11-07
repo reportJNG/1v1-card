@@ -265,28 +265,28 @@ check("Battle", function()
 end)
 hold(gui, "Result")
 
--- Placeholder art: every character's rig builds in the real engine, jointed and marked.
+-- Characters in 3D: every character's standee builds in the real engine, two parts (the art
+-- panel and its base, never a stack of primitives) with the art on both faces, marked TEMP while
+-- the character has no card art.
 local Characters = require(Shared.Config.Characters)
-local RigBuilder = require(Shared.Art.RigBuilder)
-check("rigs for all 100 characters", function()
-	local parts, joints = 0, 0
+local Standee = require(Shared.Art.Standee)
+check("standees for all 100 characters", function()
+	local layers = 0
 	for _, def in Characters.List do
-		local rig = RigBuilder.build(def.id)
-		assert(rig:GetAttribute("Placeholder") == true, `{def.id} rig not marked Placeholder`)
-		local j = 0
-		for _, d in rig:GetDescendants() do
+		local standee = Standee.build(def.id)
+		local parts = 0
+		for _, d in standee:GetDescendants() do
 			if d:IsA("BasePart") then
 				parts += 1
-				assert(d:GetAttribute("Placeholder") == true, `{def.id}: unmarked part {d.Name}`)
-			elseif d:IsA("Motor6D") then
-				j += 1
+			elseif d:IsA("ImageLabel") then
+				layers += 1
 			end
 		end
-		assert(j >= 6, `{def.id}: only {j} joints`)
-		joints += j
-		rig:Destroy()
+		assert(parts == 2, `{def.id}: {parts} parts`)
+		assert(standee:GetAttribute("Placeholder") == (def.assets.cardArt == nil), `{def.id} TEMP mark`)
+		standee:Destroy()
 	end
-	print(`UI RIGS {#Characters.List} rigs, {parts} parts, {joints} joints`)
+	print(`UI STANDEES {#Characters.List} standees, {layers} art layers`)
 end)
 
 check("art gallery", function()
