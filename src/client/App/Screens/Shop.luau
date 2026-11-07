@@ -125,6 +125,9 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			end
 			local reply =
 				ctx.request("Shop.BuyEgg", { eggId = egg.id, requestId = ctx.guid(), count = count })
+			if reply.ok then
+				Ui.sound("purchase")
+			end
 			return if reply.ok then reply.value.cards else nil
 		end
 		local known = Hatch.known(ctx.state.view)

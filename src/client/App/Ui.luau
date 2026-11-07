@@ -225,11 +225,17 @@ function Ui.countUp(label: TextLabel, from: number, to: number, format: (number)
 	tween:Play()
 end
 
--- Hover glow and press squash for any clickable GuiObject (ART_STYLE section 4).
+-- Hover glow, a soft hover tick (at most one every 0.08 s) and press squash for any clickable
+-- GuiObject (ART_STYLE section 4).
+local lastHover = 0
 function Ui.juice(button: GuiButton, skin: ImageLabel?)
 	local scale = button:FindFirstChildOfClass("UIScale") or Ui.new("UIScale", { Parent = button })
 	local base = if skin then skin.ImageColor3 else C.White
 	button.MouseEnter:Connect(function()
+		if os.clock() - lastHover > 0.08 then
+			lastHover = os.clock()
+			Ui.sound("hover")
+		end
 		TweenService:Create(scale, M.hover, { Scale = 1.04 }):Play()
 		if skin then
 			TweenService:Create(skin, M.hover, { ImageColor3 = base:Lerp(C.White, 0.6) }):Play()

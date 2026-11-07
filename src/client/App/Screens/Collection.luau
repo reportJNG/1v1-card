@@ -321,6 +321,10 @@ return function(ctx: any, layer: Frame, arg: any?): any
 					{ targetUid = card.uid, spareUids = use, requestId = ctx.guid() }
 				)
 				if reply.ok then
+					Ui.sound("merge")
+					if reply.value.toLevel > card.level then
+						task.delay(0.4, Ui.sound, "level_up")
+					end
 					ctx.toast(`{def.displayName} is now level {reply.value.toLevel}!`, "good")
 				end
 			end, { LayoutOrder = 1, Size = UDim2.fromOffset(170, 36), Name = "Merge", TextSize = 14 })
@@ -661,7 +665,9 @@ return function(ctx: any, layer: Frame, arg: any?): any
 							`Add {Economy.CardStorage.slotsPerExpansion} card slots for {Format.number(price)} Coins?`,
 							"Expand",
 							function()
-								ctx.request("Cards.ExpandStorage", { requestId = ctx.guid() })
+								if ctx.request("Cards.ExpandStorage", { requestId = ctx.guid() }).ok then
+									Ui.sound("purchase")
+								end
 							end
 						)
 					end,
@@ -681,7 +687,9 @@ return function(ctx: any, layer: Frame, arg: any?): any
 						`Add an item slot for {Format.number(price)} Coins?`,
 						"Expand",
 						function()
-							ctx.request("Inventory.Expand", { requestId = ctx.guid() })
+							if ctx.request("Inventory.Expand", { requestId = ctx.guid() }).ok then
+								Ui.sound("purchase")
+							end
 						end
 					)
 				end, { Size = UDim2.fromOffset(200, 30), LayoutOrder = 9, TextSize = 12, Name = "Expand" })

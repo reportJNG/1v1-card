@@ -1,36 +1,41 @@
 --!strict
 -- Every sound slot the game plays (docs/ART_STYLE.md section 7). `id` is a Creator Store audio asset
 -- listed in docs/ASSETS.md; a slot with no id stays silent (the game never plays a stand-in sound).
+-- Only Roblox's licensed libraries are used: APMOfficial (APM Music) and ProSoundEffects (PSE).
 -- Volumes are relative (0-1); the client applies the player's music/SFX settings on top.
 
 export type Sound = { id: string?, volume: number, kind: "sfx" | "music", looped: boolean? }
 
 local Sounds: { [string]: Sound } = {
 	-- UI
-	click = { id = nil, volume = 0.5, kind = "sfx" },
-	hover = { id = nil, volume = 0.2, kind = "sfx" },
+	click = { id = "rbxassetid://9119717523", volume = 0.5, kind = "sfx" }, -- PSE "Switch Click On Or Off Toggle Button 2"
+	hover = { id = "rbxassetid://9119717529", volume = 0.12, kind = "sfx" }, -- PSE "Switch Click On Or Off Toggle Button 1"
 	open = { id = "rbxassetid://1837834196", volume = 0.25, kind = "sfx" }, -- APM "Reverse Quick Swipe - Light Swipe 02"
-	close = { id = nil, volume = 0.3, kind = "sfx" },
-	coin = { id = nil, volume = 0.5, kind = "sfx" },
-	error = { id = nil, volume = 0.4, kind = "sfx" },
+	close = { id = "rbxassetid://9120972321", volume = 0.25, kind = "sfx" }, -- PSE "Wood Whoosh Slicing Air Quick Swings 4"
+	coin = { id = "rbxassetid://9113849492", volume = 0.45, kind = "sfx" }, -- PSE "Coins Or Keys Jingle 6"
+	error = { id = "rbxassetid://9113085764", volume = 0.25, kind = "sfx" }, -- PSE "Alarm Buzzer 5"
+	purchase = { id = "rbxassetid://9113704038", volume = 0.45, kind = "sfx" }, -- PSE "Candy Machine Coin Drops Insert Vending 4"
+	-- Rewards
+	merge = { id = "rbxassetid://9116406610", volume = 0.55, kind = "sfx" }, -- PSE "Magic Poofs Thumpy Wheezy Exhale 1"
+	level_up = { id = "rbxassetid://94590027038118", volume = 0.5, kind = "sfx" }, -- APM "Victorious Journey Sting"
 	-- Hatching (Screens/Hatch): every beat, then one reveal per best rarity
-	hatch_shake = { id = nil, volume = 0.5, kind = "sfx" },
-	hatch_crack = { id = nil, volume = 0.6, kind = "sfx" },
-	hatch_burst = { id = nil, volume = 0.6, kind = "sfx" },
-	card_flip = { id = nil, volume = 0.4, kind = "sfx" },
-	reveal_common = { id = nil, volume = 0.5, kind = "sfx" },
-	reveal_rare = { id = nil, volume = 0.55, kind = "sfx" },
-	reveal_epic = { id = nil, volume = 0.6, kind = "sfx" },
-	reveal_legendary = { id = nil, volume = 0.7, kind = "sfx" },
-	reveal_mythical = { id = nil, volume = 0.75, kind = "sfx" },
+	hatch_shake = { id = "rbxassetid://9116797024", volume = 0.3, kind = "sfx" }, -- PSE "Metal Rattle Thick Shake 2"
+	hatch_crack = { id = "rbxassetid://9113959343", volume = 0.7, kind = "sfx" }, -- PSE "Crack Egg Crunchy 11"
+	hatch_burst = { id = "rbxassetid://9125648149", volume = 0.6, kind = "sfx" }, -- PSE "Magic Zoom Up Sharp Tubular Whoosh Fast Hiss 8"
+	card_flip = { id = "rbxassetid://9120972444", volume = 0.3, kind = "sfx" }, -- PSE "Wood Whoosh Slicing Air Quick Swings 1"
+	reveal_common = { id = "rbxassetid://9116394545", volume = 0.4, kind = "sfx" }, -- PSE "Magic Glows Soft Clusters Of Chiming Hits 1"
+	reveal_rare = { id = "rbxassetid://9116395089", volume = 0.5, kind = "sfx" }, -- PSE "Magic Glows Soft Clusters Of Chiming Hits 4"
+	reveal_epic = { id = "rbxassetid://9116395085", volume = 0.6, kind = "sfx" }, -- PSE "Magic Glows Soft Clusters Of Chiming Hits 5"
+	reveal_legendary = { id = "rbxassetid://9042730928", volume = 0.6, kind = "sfx" }, -- APM "Homeland (sting)"
+	reveal_mythical = { id = "rbxassetid://9045742086", volume = 0.65, kind = "sfx" }, -- APM "To the Fray (sting b)"
 	-- Battle
-	tick = { id = nil, volume = 0.25, kind = "sfx" },
-	hit = { id = nil, volume = 0.6, kind = "sfx" },
-	hit_special = { id = nil, volume = 0.7, kind = "sfx" },
-	parry = { id = nil, volume = 0.6, kind = "sfx" },
-	ko = { id = nil, volume = 0.7, kind = "sfx" },
+	tick = { id = "rbxassetid://9125434359", volume = 0.2, kind = "sfx" }, -- PSE "Cell Phone Volume Button Pressing Double Clicks 36"
+	hit = { id = "rbxassetid://9120728815", volume = 0.6, kind = "sfx" }, -- PSE "Whoosh Heavy Punches 1"
+	hit_special = { id = "rbxassetid://9125404320", volume = 0.6, kind = "sfx" }, -- PSE "Boom Impact Deep Distant Thumping Hits Booming 36"
+	parry = { id = "rbxassetid://9119072660", volume = 0.6, kind = "sfx" }, -- PSE "Shield Clang As Hit Metal Sword Hubcap 1"
+	ko = { id = "rbxassetid://9113225986", volume = 0.7, kind = "sfx" }, -- PSE "Axe Impact Giant Thuddy Hits On Wood Floor 5"
 	victory = { id = "rbxassetid://1844384292", volume = 0.5, kind = "sfx" }, -- APM "Sports Fanfare"
-	defeat = { id = nil, volume = 0.6, kind = "sfx" },
+	defeat = { id = "rbxassetid://125909120236588", volume = 0.5, kind = "sfx" }, -- APM "Mounting Consequences StingA"
 	-- Music
 	music_menu = { id = "rbxassetid://1837864564", volume = 0.25, kind = "music", looped = true }, -- APM "Team of Heroes (Mus)"
 	music_hub = { id = "rbxassetid://1840401478", volume = 0.25, kind = "music", looped = true }, -- APM "Yachiyo-Jishi"
