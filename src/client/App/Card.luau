@@ -324,12 +324,26 @@ function Card.build(parent: Instance, o: Options): Frame
 			ImageColor3 = rdef.colors[4],
 			ImageTransparency = 0.1,
 			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.fromScale(0.5, 0.62),
-			Size = UDim2.fromScale(1.5, 0.42),
+			Position = UDim2.fromScale(0.5, 0.68),
+			Size = UDim2.fromScale(1.55, 0.46),
 			ScaleType = Enum.ScaleType.Stretch,
 			Rotation = -12,
 			ZIndex = 1,
 			Parent = face,
+		})
+		-- The far side of the orbit: the same arc turned half a turn, so the ribbon reads as a ring
+		-- around the card (board 07).
+		Kit.image("ribbon_orbit", {
+			Name = "OrbitBack",
+			ImageColor3 = rdef.colors[1],
+			ImageTransparency = 0.25,
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromScale(1, 1),
+			ScaleType = Enum.ScaleType.Stretch,
+			Rotation = 180,
+			ZIndex = 1,
+			Parent = orbit,
 		})
 	end
 

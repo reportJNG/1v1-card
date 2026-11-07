@@ -388,3 +388,10 @@ Built before MISSION.md landed, under CARDS_EGGS_MISSION (now merged into MISSIO
   backgrounds, old HUD pieces) are left out of `Config/UiAssets`.
 - Still TEMP: `egg_pedestal` (tier pedestals come in section 7) and the 24 `cutout_*` role
   silhouettes (character placeholders until phase 2 art).
+- **Card animations (6.5):** `docs/screens/step5/compare_anim.png` (Play mode, Rare / Epic /
+  Legendary auras, Legendary orbit ribbon now drawn front and back), frame strip
+  `anim_strip.png`. Scores: reference 8 · quality 8 · readability 9 · motion 8 · consistency 9.
+- **Cards everywhere (6.7):** every call site uses App/Card (HUD deck bar, main-menu showcase,
+  battle plates, KO picker, results, inventory grid and inspect, card stats, deck slots and picker,
+  hatch, arena).
+- `docs/GUI_AUDIT.md` (section 4.2) and `art/ui/PROMPTS_V2.md` (route O prompts) written.
