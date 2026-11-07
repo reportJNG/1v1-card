@@ -27,6 +27,7 @@ local Sounds: { [string]: Sound } = {
 	victory = { id = "rbxassetid://1844384292", volume = 0.5, kind = "sfx" }, -- APM "Sports Fanfare"
 	defeat = { id = nil, volume = 0.6, kind = "sfx" },
 	-- Music
+	music_menu = { id = "rbxassetid://1837864564", volume = 0.25, kind = "music", looped = true }, -- APM "Team of Heroes (Mus)"
 	music_hub = { id = "rbxassetid://1840401478", volume = 0.25, kind = "music", looped = true }, -- APM "Yachiyo-Jishi"
 	music_battle = { id = "rbxassetid://9048541013", volume = 0.25, kind = "music", looped = true }, -- APM "Battleground"
 	-- One track per world (App/AreaFx plays music_world<n>). Picked from APMOfficial by title and

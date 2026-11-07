@@ -12,6 +12,7 @@ local Screens = AppFolder:WaitForChild("Screens")
 local Battle = require(Screens:WaitForChild("Battle"))
 local WorldInteraction = require(AppFolder:WaitForChild("WorldInteraction"))
 local AreaFx = require(AppFolder:WaitForChild("AreaFx"))
+local UiEffects = require(AppFolder:WaitForChild("UiEffects"))
 
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -52,6 +53,7 @@ local ctx = App.start({
 	guid = function(): string
 		return HttpService:GenerateGUID(false)
 	end,
+	effects = UiEffects.new(),
 	screens = {
 		Play = require(Screens:WaitForChild("Play")) :: any,
 		Collection = require(Screens:WaitForChild("Collection")) :: any,

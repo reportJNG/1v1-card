@@ -32,6 +32,12 @@
         "GlobalShadows": true,
         "ClockTime": 20.5
       }
+    },
+    "StarterGui": {
+      "$className": "StarterGui",
+      "$properties": {
+        "ScreenOrientation": "LandscapeSensor"
+      }
     }
   }
 }

@@ -80,6 +80,9 @@ function Hatch.show(ctx: any, cards: { any }, egg: Types.EggDef, golden: boolean
 	local spin: Tween? = nil
 
 	local handle
+	if ctx.ui then
+		ctx.ui("hatchStart") -- the hub HUD hides; the panel it came from stays under the hatch
+	end
 	handle = ctx.overlay(function(layer)
 		-- Camera focus: blur the world behind the hatch.
 		local b = Instance.new("BlurEffect")
@@ -293,6 +296,9 @@ function Hatch.show(ctx: any, cards: { any }, egg: Types.EggDef, golden: boolean
 		end
 		return {
 			destroy = function()
+				if ctx.ui then
+					ctx.ui("hatchEnd")
+				end
 				if spin then
 					spin:Cancel()
 				end

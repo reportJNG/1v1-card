@@ -1,11 +1,16 @@
 --!strict
--- The client shell: HUD (top bar + left menu), one open panel at a time, full-screen overlays
--- (hatch, battle), toasts and confirmations. Screens get a Ctx with everything injected, so the
--- Studio UI check can build every screen with fake data (scripts/studio/ui-check).
+-- The client shell: the main menu, the HUD (top bar + left menu), one modal panel at a time,
+-- full-screen overlays (hatch, battle), toasts and confirmations. One state machine
+-- (Shared/Ui/UiFlow) decides what is shown: App feeds it events and applies its view (HUD mode,
+-- blur, input lock, menu camera through `deps.effects`). Screens get a Ctx with everything
+-- injected, so the Studio UI check can build every screen with fake data (scripts/studio/ui-check).
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Progress = require(Shared.Domain.Progress)
+local UiFlow = require(Shared.Ui.UiFlow)
+local MainMenu = require(script.Parent.MainMenu)
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
 local Format = require(script.Parent.Format)
@@ -36,6 +41,8 @@ export type Ctx = {
 	now: () -> number,
 	guid: () -> string,
 	reducedMotion: () -> boolean,
+	ui: (event: string, arg: string?) -> (), -- feeds the UI state machine (UiFlow)
+	flow: UiFlow.Flow,
 }
 
 export type Deps = {
@@ -45,6 +52,9 @@ export type Deps = {
 	now: () -> number,
 	guid: () -> string,
 	screens: { [string]: (ctx: Ctx, layer: Frame, arg: any?) -> Screen },
+	-- World-side effects of the UI state (App/UiEffects). Without them (previews, checks) the
+	-- app skips the main menu and starts in the game view.
+	effects: any?,
 }
 
 local App = {}
@@ -62,7 +72,12 @@ local MENU = {
 	{ id = "Settings", icon = "icon_settings", label = "Settings" },
 }
 
-type Hud = { refresh: () -> (), select: (id: string?) -> () }
+type Hud = {
+	refresh: () -> (),
+	select: (id: string?) -> (),
+	setMode: (mode: string, instant: boolean?) -> (),
+	layout: (width: number) -> (),
+}
 
 local function buildHud(ctx: Ctx, root: Frame): Hud
 	local F = Theme.Face
@@ -256,6 +271,72 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 	lobby.instance.Visible = false
 	lobby.instance.Parent = root
 
+	-- Menu (top-right, left of the daily icons): back to the main menu.
+	local pause = Ui.button("Menu", "secondary", function()
+		ctx.ui("menu")
+	end, {
+		Name = "MenuButton",
+		AnchorPoint = Vector2.new(1, 0),
+		Position = UDim2.new(1, -132, 0, 16),
+		Size = UDim2.fromOffset(78, 32),
+		TextSize = 14,
+	})
+	pause.instance.Parent = root
+
+	-- HUD modes (UiFlow view): "full", "currencies" (only the top bar) or "hidden". Pieces slide
+	-- off their nearest edge and back.
+	local wanted: { [GuiObject]: boolean } = { [hint] = true, [lobby.instance] = false, [logo] = true }
+	local pieces: { { obj: GuiObject, home: UDim2, away: UDim2, keep: boolean } } = {
+		{ obj = logo, home = logo.Position, away = logo.Position - UDim2.fromOffset(260, 0), keep = false },
+		{
+			obj = pause.instance,
+			home = pause.instance.Position,
+			away = pause.instance.Position - UDim2.fromOffset(340, 0),
+			keep = false,
+		},
+		{ obj = menu, home = menu.Position, away = menu.Position - UDim2.fromOffset(200, 0), keep = false },
+		{
+			obj = icons,
+			home = icons.Position,
+			away = icons.Position + UDim2.fromOffset(180, 0),
+			keep = false,
+		},
+		{ obj = hint, home = hint.Position, away = hint.Position + UDim2.fromOffset(0, 80), keep = false },
+		{
+			obj = lobby.instance,
+			home = lobby.instance.Position,
+			away = lobby.instance.Position + UDim2.fromOffset(0, 80),
+			keep = false,
+		},
+		{ obj = top, home = top.Position, away = top.Position - UDim2.fromOffset(0, 80), keep = true },
+	}
+	local mode = "full"
+	local function setMode(m: string, instant: boolean?)
+		mode = m
+		local info = if instant or ctx.reducedMotion()
+			then TweenInfo.new(0.01)
+			else TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+		for _, piece in pieces do
+			local show = m == "full" or (m == "currencies" and piece.keep)
+			local content = wanted[piece.obj] ~= false
+			if show and content then
+				piece.obj.Visible = true
+			end
+			local tween =
+				TweenService:Create(piece.obj, info, { Position = if show then piece.home else piece.away })
+			tween.Completed:Connect(function()
+				if mode == m then
+					piece.obj.Visible = show and content
+				end
+			end)
+			tween:Play()
+		end
+	end
+	local function want(obj: GuiObject, on: boolean)
+		wanted[obj] = on
+		obj.Visible = on and mode == "full"
+	end
+
 	local shown: { [string]: number } = {}
 	local function setCount(label: TextLabel, key: string, value: number)
 		local before = shown[key]
@@ -273,7 +354,7 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 
 	return {
 		refresh = function()
-			lobby.instance.Visible = ctx.state.area ~= 0
+			want(lobby.instance, ctx.state.area ~= 0)
 			local v = ctx.state.view
 			if v == nil then
 				return
@@ -288,11 +369,32 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 					break
 				end
 			end
-			hint.Visible = nextWorld ~= nil
+			want(hint, nextWorld ~= nil)
 			if nextWorld then
 				hintText.Text =
 					`Reach {Format.number(nextWorld.trophiesToUnlock)} trophies to unlock World {nextWorld.id}: {nextWorld.displayName}`
 			end
+		end,
+		setMode = setMode,
+		-- Narrow screens (phones held upright, ~720 design px wide): no big logo and the currency
+		-- bar fills the space left of the icons. Below tablet width the Menu button drops under the
+		-- icons.
+		layout = function(width: number)
+			local narrow = width < 860
+			wanted[logo] = not narrow
+			for _, piece in pieces do
+				if piece.obj == top then
+					piece.home = if narrow
+						then UDim2.fromOffset((width - 124) / 2, 12)
+						else UDim2.new(0.5, 10, 0, 12)
+					piece.away = piece.home - UDim2.fromOffset(0, 80)
+				elseif piece.obj == pause.instance then
+					-- Up to tablet widths the top bar reaches the icons: the Menu button goes under them.
+					piece.home = if width < 1040 then UDim2.new(1, -18, 0, 62) else UDim2.new(1, -132, 0, 16)
+					piece.away = piece.home + UDim2.fromOffset(260, 0)
+				end
+			end
+			setMode(mode, true)
 		end,
 		select = function(id: string?)
 			for key, r in rows do
@@ -323,6 +425,8 @@ function App.start(deps: Deps): Ctx
 		Parent = gui,
 	})
 	local uiScale = Ui.new("UIScale", { Parent = root })
+	local hud: Hud? = nil
+	local panelFit: UIScale? = nil
 	local function fit()
 		local vp = gui.AbsoluteSize
 		if vp.X > 0 and vp.Y > 0 then
@@ -331,12 +435,19 @@ function App.start(deps: Deps): Ctx
 			local s = math.clamp(math.min(vp.X / Theme.Size.base.X, vp.Y / Theme.Size.base.Y), 0.5, 2)
 			uiScale.Scale = s
 			root.Size = UDim2.fromOffset(vp.X / s, vp.Y / s)
+			if hud then
+				hud.layout(vp.X / s)
+			end
+			if panelFit then
+				panelFit.Scale = math.min(1, (vp.X / s - 16) / 820)
+			end
 		end
 	end
 	gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
 	fit()
 
 	local hudLayer = Ui.frame({ Name = "Hud", BackgroundTransparency = 1, Parent = root })
+	local menuLayer = Ui.frame({ Name = "Menu", BackgroundTransparency = 1, Parent = root })
 	local dim = Ui.frame({
 		Name = "Dim",
 		BackgroundColor3 = C.Black,
@@ -346,7 +457,17 @@ function App.start(deps: Deps): Ctx
 		Position = UDim2.fromScale(-1.5, -1.5),
 		Parent = root,
 	})
-	local panelLayer = Ui.frame({ Name = "Panels", BackgroundTransparency = 1, Parent = root })
+	-- Panels are centred; on narrow screens (phones held upright) the whole layer scales down so
+	-- the widest panel (800 design px) and its close button stay on screen.
+	local panelLayer = Ui.frame({
+		Name = "Panels",
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Parent = root,
+	})
+	panelFit = Ui.new("UIScale", { Name = "Fit", Parent = panelLayer })
+	fit()
 	local overlayLayer = Ui.frame({ Name = "Overlays", BackgroundTransparency = 1, Parent = root })
 	local toastLayer = Ui.frame({
 		Name = "Toasts",
@@ -365,20 +486,81 @@ function App.start(deps: Deps): Ctx
 	})
 
 	local current: Screen? = nil
-	local hud: Hud? = nil
 	local overlays: { Screen } = {}
 	local toastCount = 0
 	local ctx: Ctx
+	local flow = UiFlow.new()
+	local effects = deps.effects
+	local menu: MainMenu.Menu
 
-	local function close()
-		if current then
-			current.destroy()
-		end
+	-- Removes the open panel's UI. `animated`: a quick scale-out first (0.12 s).
+	local function dropPanel(animated: boolean)
+		local screen = current
 		current = nil
-		Ui.clear(panelLayer)
 		dim.Visible = false
 		if hud then
 			hud.select(nil)
+		end
+		local frames = panelLayer:GetChildren()
+		local function finish()
+			if screen then
+				screen.destroy()
+			end
+			for _, f in frames do
+				if f == panelFit then
+					continue -- the layer's own fit scale stays
+				end
+				f:Destroy()
+			end
+		end
+		local panel = panelLayer:FindFirstChild("Panel")
+		if animated and panel and panel:IsA("GuiObject") and not ctx.reducedMotion() then
+			local scale = panel:FindFirstChildOfClass("UIScale") or Ui.new("UIScale", { Parent = panel })
+			local out = TweenService:Create(scale, Theme.Motion.close, { Scale = 0.86 })
+			out.Completed:Connect(finish)
+			out:Play()
+		else
+			finish()
+		end
+	end
+
+	-- Applies the state machine's view: HUD mode, the main menu, blur, input lock, menu camera.
+	local function apply(instant: boolean?)
+		local view = UiFlow.view(flow)
+		if current and flow.top ~= "Panel" and flow.top ~= "Hatching" then -- a panel stays under a hatch
+			dropPanel(not instant)
+		end
+		if hud then
+			hud.setMode(view.hud, instant)
+		end
+		local onMenu = flow.base == "MainMenu" or flow.base == "Loading"
+		menu.setLoading(flow.base == "Loading")
+		if onMenu ~= menuLayer.Visible or instant then
+			menuLayer.Visible = onMenu
+			menu.show(onMenu)
+		end
+		ctx.state.changed:fire("ui") -- AreaFx follows (menu music)
+		if effects then
+			effects.reduced = ctx.reducedMotion()
+			effects.setBlur(view.blur)
+			effects.setInputLocked(view.inputLocked)
+			effects.setMenuShot(view.menuShot, instant)
+		end
+	end
+
+	local function ui(event: string, arg: string?)
+		if UiFlow.send(flow, event :: any, arg) then
+			apply()
+		end
+	end
+
+	local function close()
+		if flow.top == "Panel" then
+			UiFlow.send(flow, "close")
+			dropPanel(true)
+			apply()
+		elseif current then
+			dropPanel(false)
 		end
 	end
 
@@ -391,13 +573,20 @@ function App.start(deps: Deps): Ctx
 			if build == nil then
 				return
 			end
-			close()
+			if flow.top == "Panel" and flow.panel == name then
+				return -- already open: a double click opens nothing twice
+			end
+			if not UiFlow.send(flow, "open", name) then
+				return -- not over a battle, a hatch or the loading screen
+			end
+			dropPanel(false)
 			dim.Visible = true
 			current = build(ctx, panelLayer, arg)
 			Ui.skinify(panelLayer)
 			if hud then
 				hud.select(name)
 			end
+			apply()
 		end,
 		close = close,
 		overlay = function(build: (layer: Frame) -> Screen): Screen
@@ -493,14 +682,51 @@ function App.start(deps: Deps): Ctx
 			local v = ctx.state.view
 			return v ~= nil and v.settings ~= nil and v.settings.reducedMotion == true
 		end,
+		ui = ui,
+		flow = flow,
 	}
 
 	hud = buildHud(ctx, hudLayer)
+	fit()
+	menu = MainMenu.build(menuLayer, {
+		play = function()
+			ui("play")
+		end,
+		open = function(name: string)
+			ctx.open(name)
+		end,
+	}, ctx.reducedMotion)
+	apply(true)
+
+	-- Esc, gamepad B and Backspace close the top panel (the X button does too).
+	UserInputService.InputBegan:Connect(function(input: InputObject, processed: boolean)
+		local key = input.KeyCode
+		if
+			key == Enum.KeyCode.ButtonB
+			or key == Enum.KeyCode.Escape
+			or (key == Enum.KeyCode.Backspace and not processed)
+		then
+			if flow.top == "Panel" then
+				close()
+			end
+		end
+	end)
+
 	local refreshHud = (hud :: Hud).refresh
+	local loaded = false
 	ctx.state.changed:connect(function(what)
 		if what == "battle" then
-			-- The battle screen is full-screen: hide the hub HUD under it.
-			hudLayer.Visible = ctx.state.battle == nil
+			-- A battle takes over the whole screen; its end returns to the game view.
+			ui(if ctx.state.battle ~= nil then "battleStart" else "resultDone")
+		elseif what == "queue" then
+			ui(if ctx.state.queue.state == "Searching" then "queueJoin" else "queueLeave")
+		end
+		if what == "profile" and not loaded then
+			loaded = true
+			ui("loaded")
+			if effects == nil then
+				ui("play") -- previews and checks: straight to the game view
+			end
 		end
 		if what == "area" then
 			refreshHud()

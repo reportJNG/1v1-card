@@ -144,10 +144,15 @@ function AreaFx.setMusic(on: boolean)
 	end
 end
 
+local onMenu = false
+
 local function refresh()
 	local player = Players.LocalPlayer
 	local world = if player then player:GetAttribute("World") else 0
-	if battleOpen then
+	if onMenu and not battleOpen then
+		AreaFx.apply("hub")
+		playMusic("music_menu")
+	elseif battleOpen then
 		AreaFx.apply("arena")
 		playMusic("music_battle")
 	elseif world == 0 or world == nil then
@@ -192,7 +197,13 @@ function AreaFx.start(ctx: any)
 		player:GetAttributeChangedSignal("World"):Connect(refresh)
 	end
 	ctx.state.changed:connect(function(what: string)
-		if what == "battle" then
+		if what == "ui" then
+			local menu = ctx.flow ~= nil and (ctx.flow.base == "MainMenu" or ctx.flow.base == "Loading")
+			if menu ~= onMenu then
+				onMenu = menu
+				refresh()
+			end
+		elseif what == "battle" then
 			AreaFx.setBattle(ctx.state.battle ~= nil)
 		elseif what == "profile" then
 			-- The player's audio settings (saved on the server, Settings.Set).

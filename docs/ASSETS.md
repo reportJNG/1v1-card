@@ -51,6 +51,7 @@ scripts. The worlds reuse the hub's `portal` mesh for the Back to Lobby portal.
 
 | Slot (`Config/Sounds`) | Asset id | Name | Creator | Notes |
 | --- | --- | --- | --- | --- |
+| `music_menu` | 1837864564 | Team of Heroes (Mus) | APMOfficial | Main menu |
 | `music_hub` | 1840401478 | Yachiyo-Jishi | APMOfficial | Hub |
 | `music_battle` | 9048541013 | Battleground | APMOfficial | Battles |
 | `victory` | 1844384292 | Sports Fanfare | APMOfficial | Victory sting |

@@ -456,11 +456,18 @@ function Ui.button(text: string, style: string, onClick: () -> (), props: { [str
 	end
 	Ui.juice(b, skin)
 	local enabled = true
+	local lastClick = -math.huge
 	b.Activated:Connect(function()
 		if not enabled then
 			Ui.sound("error")
 			return
 		end
+		-- Debounce: a double click (or a double tap) acts once.
+		local now = os.clock()
+		if now - lastClick < 0.35 then
+			return
+		end
+		lastClick = now
 		Ui.sound("click")
 		onClick()
 	end)
@@ -510,8 +517,8 @@ function Ui.panel(parent: Instance, title: string, onClose: (() -> ())?, size: U
 		Name = "Panel",
 		BackgroundTransparency = 1,
 		AnchorPoint = Vector2.new(0.5, 0.5),
-		-- Centred in the space right of the left menu (172 design px), as on the concept board.
-		Position = UDim2.new(0.5, 86, 0.5, 18),
+		-- Centred on screen: the left menu slides away while a modal is open (UiFlow).
+		Position = UDim2.new(0.5, 0, 0.5, 18),
 		Size = size or UDim2.fromOffset(760, 440),
 		Parent = parent,
 	})

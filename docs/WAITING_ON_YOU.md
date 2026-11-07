@@ -2,6 +2,14 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
+## 00. Decisions POLISH_MISSION.md needs from you (it conflicts with locked rules)
+- **New egg types (mission G).** CLAUDE.md locks the game to exactly the 24 icon-pack eggs. Say
+  "allow new original eggs" (and how many) to unlock it; until then no egg is added.
+- **Cosmetics shop (mission C, the Gems +).** Gems buy cosmetics, but the cosmetics shop is V2 and
+  not built. The Gems + explains that for now. Say if you want the cosmetics shop in V1.
+- **Character models (mission F).** These need your character images and Blender's generators
+  switched on (items 1-2 below).
+
 ## 0. Review the lobby, world picker, the 10 worlds and the new cards (session 3)
 - **Cards:** `docs/screens/cards/` (every rarity at level 1, level 15 and Golden; large Legendary and
   Mythical; hatch, collection, battle, results and deck builder). Say if the effects should be

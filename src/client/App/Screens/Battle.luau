@@ -628,6 +628,9 @@ function Battle.open(ctx: any, start: any): Handle
 			renderAll()
 		end,
 		finish = function(data)
+			if ctx.ui then
+				ctx.ui("battleEnd")
+			end
 			closed = true
 			running = false
 			view = data.view or view
