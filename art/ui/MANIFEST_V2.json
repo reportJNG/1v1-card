@@ -1615,6 +1615,18 @@
    "id": "rbxassetid://129181494466706"
   },
   {
+   "slot": "logo_1v1card",
+   "file": "art/ui/kit/logo_1v1card.png",
+   "size": [
+    1024,
+    512
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://88220264952603"
+  },
+  {
    "slot": "odds_row_n",
    "file": "art/ui/kit/odds_row_n.png",
    "size": [

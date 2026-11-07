@@ -1,7 +1,7 @@
 --!strict
 -- Worlds on a Hub server: builds the hub lobby and the 10 world maps, and keeps the lobby the
--- spawn point: every character spawns there (on join and on respawn), returns there after every
--- battle, and is brought back there if it falls out of a map. Handles World.Travel (unlocked
+-- spawn point: every character spawns there (on PLAY and on respawn) and is brought back there if
+-- it falls out of a map; after a battle SessionService puts it back where it stood. Handles World.Travel (unlocked
 -- worlds only, checked on the profile) and World.Hub (the lobby portal in each world and the HUD's
 -- Lobby button). The World attribute is 0 in the lobby, 1-10 in a world. Battle servers build no
 -- worlds.
@@ -20,6 +20,12 @@ local PlayerDataService = require(script.Parent.PlayerDataService)
 local Telemetry = require(script.Parent.Telemetry)
 
 local WorldService = {}
+
+-- The session gate (SessionService), required lazily: SessionService requires this module's peers.
+local function sessionAllows(player: Player, action: string): boolean
+	local SessionService = require(script.Parent.SessionService) :: any
+	return SessionService.allows(player, action)
+end
 
 local function isBattleServer(): boolean
 	return game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0
@@ -64,6 +70,9 @@ function WorldService.init()
 	HubBuilder.build(workspace)
 
 	Router.handle("World.Travel", function(player, args, profile)
+		if not sessionAllows(player, "travel") then
+			return Result.fail("NotPlaying")
+		end
 		local r = Progress.travel(profile :: any, args.worldId)
 		if not r.ok then
 			return r
@@ -74,11 +83,18 @@ function WorldService.init()
 	end)
 
 	Router.handle("World.Hub", function(player, _args, _profile)
+		if not sessionAllows(player, "hub") then
+			return Result.fail("NotPlaying")
+		end
 		placeInHub(player)
 		return Result.ok({ worldId = 0 })
 	end)
 
 	local function onCharacter(player: Player)
+		local SessionService = require(script.Parent.SessionService) :: any
+		if SessionService.isRestoring(player.UserId) then
+			return -- back from a battle server: SessionService puts it on the saved spot
+		end
 		if PlayerDataService.getProfile(player.UserId) then
 			task.defer(placeInHub, player)
 		end
@@ -100,14 +116,7 @@ function WorldService.start()
 	if isBattleServer() then
 		return
 	end
-	-- After every battle (ranked or Trial), the player is back in the lobby.
-	local BattleService = require(script.Parent.BattleService) :: any
-	BattleService.onMatchEnd(function(userId: number)
-		local player = Players:GetPlayerByUserId(userId)
-		if player then
-			placeInHub(player)
-		end
-	end)
+	-- After a battle the player goes back to the spot they left (SessionService, MISSION 2.4).
 	local elapsed = 0
 	RunService.Heartbeat:Connect(function(dt)
 		elapsed += dt

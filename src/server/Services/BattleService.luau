@@ -126,9 +126,39 @@ local function settleTrial(record: MatchHost.Record, result: MatchRunner.EndInfo
 	return rewards
 end
 
+local startHooks: { (userId: number, record: MatchHost.Record) -> () } = {}
+
+-- Runs the start hooks (SessionService saves the return spot) for every player seat.
+local function started(record: MatchHost.Record)
+	for _, seat in record.seats do
+		if seat.userId then
+			for _, hook in startHooks do
+				task.spawn(hook, seat.userId :: number, record)
+			end
+		end
+	end
+end
+
 -- Starts a ranked match whose players are both on this server (profiles loaded).
 function BattleService.startRanked(record: MatchHost.Record): Types.Result<nil>
-	return getHost():create(record)
+	local r = getHost():create(record)
+	if r.ok then
+		started(record)
+	end
+	return r
+end
+
+-- `hook(userId, record)` runs when a match starts (before the first pick).
+function BattleService.onMatchStart(hook: (userId: number, record: MatchHost.Record) -> ())
+	table.insert(startHooks, hook)
+end
+
+-- Forfeits the player's current match through the normal path (the leaving screen uses it).
+function BattleService.forfeit(userId: number): Types.Result<any>
+	if host == nil or not getHost():isInMatch(userId) then
+		return Result.fail("NotInMatch")
+	end
+	return getHost():forfeit(userId)
 end
 
 function BattleService.isInMatch(userId: number): boolean
@@ -179,6 +209,10 @@ function BattleService.init()
 
 	Router.handle("Trial.Start", function(player, args, profile)
 		local userId = player.UserId
+		local SessionService = require(script.Parent.SessionService) :: any
+		if not SessionService.allows(player, "trial") then
+			return Result.fail("NotPlaying")
+		end
 		if getHost():isInMatch(userId) then
 			return Result.fail("AlreadyInMatch")
 		end
@@ -214,6 +248,7 @@ function BattleService.init()
 		if not created.ok then
 			return Result.fail(created.err)
 		end
+		started({ matchId = matchId, mode = "Trial", seats = { { userId = userId } } } :: any)
 		Telemetry.event(player, "trial_start", { world = args.worldId })
 		return Result.ok({ matchId = matchId })
 	end, { mutates = false })

@@ -475,3 +475,45 @@ def stage_marks():
 
 ALL = [stickers, family_gems, stat_icons, button_icons, bars, opening_fx, auras, misc, rarity_strips,
        card_backs, stage_marks]
+
+
+def logo():
+    """The 1v1 CARD logo (MISSION 4.4): heavy display letters with a purple-to-pink gradient, a
+    thick dark stroke, a gold crown over the "1v1", and a soft violet splash behind."""
+    w, h, ss = 1024, 512, 2
+    f = K.font("LuckiestGuy-Regular.ttf", 200 * ss)
+    top = K.text_mask("1v1", f, w, h, ss, cy=h * 0.36, shear=0.12)
+    f2 = K.font("LuckiestGuy-Regular.ttf", 170 * ss)
+    bottom = K.text_mask("CARD", f2, w, h, ss, cy=h * 0.74, shear=0.12, tracking=6)
+    m = np.clip(top + bottom, 0, 1)
+    d = K.distance_outside(m, 30)
+    outline = np.clip(1 - (d - 26) / 2.5, 0, 1)
+    rim = np.clip(1 - (d - 12) / 2.5, 0, 1)
+    x, y = K.grid(w, h, ss)
+    img = K.blank(w, h, ss)
+    # splash: a soft violet-pink burst behind the letters
+    r = np.hypot(x / 1.6, y)
+    ang = np.arctan2(y, x)
+    burst = np.clip(1 - r / (210 + 40 * np.sin(ang * 9)), 0, 1) ** 1.2
+    img[..., :3] = K.hexc("#7B2CFF")
+    img[..., 3] = burst * 0.75
+    K.add_light(img, K.hexc("#FF5FD2"), np.clip(K.fast_blur(outline, 18 * ss) * 1.4, 0, 1) * 0.8)
+    K.over(img, K.hexc(INK), outline)
+    K.over(img, K.hexc("#2A0C5E"), rim)
+    t = np.clip((y + h * 0.3) / (h * 0.6), 0, 1)[..., None]
+    col = K.hexc("#F4E8FF") * (1 - t) ** 3 + (K.hexc("#B46CFF") * (1 - t) + K.hexc("#FF4FB8") * t) * (1 - (1 - t) ** 3)
+    K.over(img, np.clip(col, 0, 1), m)
+    gloss = m * np.clip((np.abs(y - (-h * 0.14)) < h * 0.05) * 1.0, 0, 1) * 0.0
+    K.add_light(img, K.hexc("#FFFFFF"), m * np.clip(1 - np.abs((y + h * 0.2) / (h * 0.05)), 0, 1) * 0.25 + gloss)
+    # crown over the "1v1"
+    crown = Image.open(os.path.join(KIT, "emblem_crown_gold.png")).convert("RGBA").resize((150 * ss, 150 * ss), Image.LANCZOS)
+    out_path = os.path.join(KIT, "logo_1v1card.png")
+    K.edge_fade(img, ss, 6)
+    K.save(img, ss, out_path)
+    out = Image.open(out_path)
+    crown = crown.resize((150, 150), Image.LANCZOS).rotate(-12, Image.BICUBIC, expand=True)
+    out.alpha_composite(crown, (w // 2 + 150, 10))
+    out.save(out_path, optimize=True)
+
+
+ALL.append(logo)

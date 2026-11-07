@@ -25,6 +25,7 @@ local ORDER = {
 	"NetService",
 	"EconomyService",
 	"WorldService",
+	"SessionService",
 	"FarmService",
 	"QuestService",
 	"BattleService",

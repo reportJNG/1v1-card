@@ -89,6 +89,15 @@ local function run()
 	local gui = player:WaitForChild("PlayerGui"):WaitForChild("OneVOneCard", 10)
 	report(gui ~= nil and gui:FindFirstChild("Root", true) ~= nil, "client UI booted")
 
+	-- The main menu: world actions are refused until PLAY spawns the character (MISSION 2.5).
+	local early = call("World.Travel", { worldId = 1 })
+	report(not early.ok and early.err == "NotPlaying", "world actions refused on the main menu")
+	local play = call("Session.Play")
+	report(play.ok and player:GetAttribute("Session") == "playing", "PLAY starts the session")
+	report(waitFor(function()
+		return player.Character ~= nil and player.Character:FindFirstChild("HumanoidRootPart") ~= nil
+	end, 15), "PLAY spawns a character")
+
 	-- Economy
 	local coins0 = view.coins
 	local free = call("Daily.ClaimFreeEgg")

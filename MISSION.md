@@ -137,13 +137,13 @@ Rules on this screen:
   - add tests
 
 ### 2.6 Flow checklist
-- [ ] Launch loading with the card animation and real preload
-- [ ] Main menu as the only path to playing
-- [ ] PLAY → lobby, fresh
-- [ ] Battle → back to the saved spot (1v1, Trial, cross-server fallback)
-- [ ] Menu → leaving screen → main menu, with a full reset
-- [ ] No path back to screen 1
-- [ ] Specs plus Play-mode screenshots `docs/screens/flow/01..06`
+- [x] Launch loading with the card animation and real preload
+- [x] Main menu as the only path to playing
+- [x] PLAY → lobby, fresh
+- [x] Battle → back to the saved spot (1v1, Trial, cross-server fallback)
+- [x] Menu → leaving screen → main menu, with a full reset
+- [x] No path back to screen 1
+- [x] Specs plus Play-mode screenshots `docs/screens/flow/01..06`
 
 ---
 
@@ -631,8 +631,8 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 ---
 
 ## 15. Master checklist
-- [ ] Old mission files archived
-- [ ] **Flow:** launch loading, main menu, playing, leaving screen, reset, return-to-spot fix (2.6)
+- [x] Old mission files archived
+- [x] **Flow:** launch loading, main menu, playing, leaving screen, reset, return-to-spot fix (2.6)
 - [ ] **In-game HUD**, clean and light (3.3)
 - [ ] `docs/GUI_AUDIT.md`, plus the UI kit replacing all TEMP images, plus the logo
 - [ ] Rarity display config

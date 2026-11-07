@@ -93,6 +93,15 @@ net.on("Battle.End", function(data)
 	end
 end)
 
+-- The leaving screen resets the client: the battle screen goes (the server has forfeited it).
+ctx.onLeave(function()
+	if battle then
+		battle.destroy()
+		battle = nil
+	end
+	ctx.state:setBattle(nil)
+end)
+
 WorldInteraction.start(ctx)
 require(AppFolder:WaitForChild("Prompts")).start()
 AreaFx.start(ctx)

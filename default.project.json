@@ -38,6 +38,12 @@
       "$properties": {
         "ScreenOrientation": "LandscapeSensor"
       }
+    },
+    "ReplicatedFirst": {
+      "$className": "ReplicatedFirst",
+      "Loading": {
+        "$path": "src/first/Loading.client.luau"
+      }
     }
   }
 }

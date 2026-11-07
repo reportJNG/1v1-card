@@ -327,3 +327,40 @@ shown as "not on sale yet" until product ids exist) and the Odds popup for the B
   - The hatch title for cards already owned.
   - The main-menu music never loading (in I).
 - The report is `docs/POLISH_REPORT.md`. 263 specs pass.
+
+---
+
+# MISSION.md (master mission, 2026-11-07)
+
+## Cards: frames, template, stats panel, favourite, evolution, animations (sections 5-6)
+Built before MISSION.md landed, under CARDS_EGGS_MISSION (now merged into MISSION.md).
+- **Frames (6.1):** `scripts/art/card_kit.py`, 5 rarities x 3 sizes, separate frame / glow /
+  energy / panel layers, italic badges, Golden overlay. Compare: `docs/screens/step5/compare_frames.png`.
+  Scores: reference 8 · quality 8 · readability 9 · motion 8 · consistency 9. First pass scored 7
+  (thin band, no inward corner blades); fixed by thickening the band and adding the blades.
+- **Template card (6.2):** `docs/screens/step5/compare_template.png`, `template_gallery.png` (Play
+  mode, every rarity and kit size, Golden). Scores: 8 · 8 · 9 · 8 · 9.
+- **Stats panel + Favorite (6.4):** `docs/screens/step5/compare_stats.png` (Play mode). Upgrade
+  merged Lv 1 -> 3 through the server, Equip set the deck, Favorite toggled, Evolve and Preview
+  open. Scores: 9 · 8 · 9 · 8 · 9.
+- **Evolution (6.6):** `docs/screens/step5/evolution.png` (Play mode). Scores: 8 · 8 · 9 · 8 · 9.
+
+## Section 2: the four-screen flow
+- **Launch loading:** `src/first/Loading.client.luau` (ReplicatedFirst). Real PreloadAsync of 300+
+  images and core sounds plus the profile wait; card fan N -> UR flips; tips; min 1.5 s, 20 s
+  timeout. Play mode: 0% -> 24% -> 67% -> 100%, then fades into the menu
+  (`docs/screens/flow/01-launch-loading.png`, `02-main-menu.png`).
+- **Session state (server):** `Domain/PlayState`, `Services/SessionService`; characters no longer
+  auto-load; `Session.Play` / `Session.Leave`; travel, hub, harvest, sell, queue and Trial refuse
+  players who aren't playing (checked in Play: `Farm.Harvest` on the menu -> `NotPlaying`).
+- **PLAY:** a fresh character at the lobby spawn (Play mode: -2400, 4.5, 74 both times, also after
+  leaving from World 1). `docs/screens/flow/03-play-lobby.png`.
+- **Return-to-spot fix:** `Domain/ReturnSpot` (spot -> world spawn -> lobby). Play mode: travel to
+  World 1, stand at (40, 6, 60), Guardian Trial, forfeit -> back at (40, 6, 60), 0.00 studs off,
+  still World 1 (`04-after-trial-same-spot.png`). Ranked across servers carries the spot in the
+  teleport data both ways (logic tested; ReserveServer doesn't run in Studio).
+- **Leaving:** Menu -> confirm (forfeit warning in a battle) -> leaving screen (logo, flipping
+  card, ~1 s) -> menu; server forfeits, leaves the queue, removes the character, saves
+  (`05-menu-confirm.png`, `06-leaving.png`, `07-back-to-menu.png`).
+- Specs: Flow.spec (PlayState, ReturnSpot), UiFlow `leave`; e2e driver checks the menu gate and PLAY.
+- Scores (flow, no board): function 9 · clarity 9 · motion 8 · consistency 9.

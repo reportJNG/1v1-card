@@ -193,6 +193,9 @@ local function onAssigned(player: Player, assignment: Queue.Assignment)
 	end
 	local options = Instance.new("TeleportOptions")
 	options.ReservedServerAccessCode = assignment.accessCode :: string
+	-- The spot to come back to after the match (SessionService / Domain/ReturnSpot, MISSION 2.4).
+	local SessionService = require(script.Parent.SessionService) :: any
+	options:SetTeleportData({ returnSpot = SessionService.captureSpot(player) } :: any)
 	local ok, err = pcall(function()
 		TeleportService:TeleportAsync(game.PlaceId, { player }, options)
 	end)
@@ -299,22 +302,38 @@ end
 
 -- ---------------------------------------------------------------- battle server
 
+-- Battle servers keep each player's return spot from their join data and send it back home with
+-- them, so the Hub puts them where they stood before the match (validated there again).
+local returnSpots: { [number]: any } = {}
+
 local function sendHome(players: { Player })
-	if #players == 0 then
-		return
-	end
-	local ok, err = pcall(function()
-		TeleportService:TeleportAsync(game.PlaceId, players)
-	end)
-	if not ok then
-		warn(`[Matchmaking] return teleport failed: {err}`)
-		for _, p in players do
+	for _, p in players do
+		local options = Instance.new("TeleportOptions")
+		options:SetTeleportData({ fromBattle = true, returnSpot = returnSpots[p.UserId] } :: any)
+		local ok, err = pcall(function()
+			TeleportService:TeleportAsync(game.PlaceId, { p }, options)
+		end)
+		if not ok then
+			warn(`[Matchmaking] return teleport failed: {err}`)
 			p:Kick("The match is over. Please rejoin the game.")
 		end
 	end
 end
 
 local function runBattleServer()
+	local function keepSpot(p: Player)
+		local ok, data = pcall(function()
+			return p:GetJoinData()
+		end)
+		local tp: any = ok and data and (data :: any).TeleportData
+		if typeof(tp) == "table" and typeof(tp.returnSpot) == "table" then
+			returnSpots[p.UserId] = tp.returnSpot
+		end
+	end
+	Players.PlayerAdded:Connect(keepSpot)
+	for _, p in Players:GetPlayers() do
+		keepSpot(p)
+	end
 	local record: MatchRecord.Record? = nil
 	for _ = 1, 10 do
 		record = readRecord(`ps:{game.PrivateServerId}`)
@@ -367,6 +386,14 @@ end
 
 -- ---------------------------------------------------------------- lifecycle
 
+-- Takes the player out of the queue, if queued (the leaving screen's reset). Already-matched
+-- players are left to the normal assignment path.
+function MatchmakingService.cancel(player: Player)
+	if queued[player.UserId] then
+		leaveQueue(player)
+	end
+end
+
 function MatchmakingService.isQueued(userId: number): boolean
 	return queued[userId] ~= nil
 end
@@ -397,6 +424,10 @@ function MatchmakingService.init()
 	BattleService.isQueued = MatchmakingService.isQueued
 
 	Router.handle("Queue.Join", function(player, _args, profile)
+		local SessionService = require(script.Parent.SessionService) :: any
+		if not SessionService.allows(player, "queue") then
+			return Result.fail("NotPlaying")
+		end
 		return joinQueue(player, profile)
 	end, { mutates = false })
 	Router.handle("Queue.Leave", function(player)

@@ -58,6 +58,7 @@ local ERRORS: { [string]: string } = {
 	SpareNotBaseCopy = "Only level-1 copies that were never merged can be used as spares.",
 	SpareInDeck = "A spare can't be in your deck.",
 	CardInDeck = "Take the card out of your deck first.",
+	NotPlaying = "Press PLAY on the main menu first.",
 	CardFavorite = "This card is a favourite. Unmark it to sell it.",
 	SpareFavorite = "Favourite cards can't be used as spares. Unmark it first.",
 	NoMaxedCopy = "You can sell spares only once you have this character at max level.",

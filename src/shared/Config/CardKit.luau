@@ -189,6 +189,7 @@ local Slots: { [string]: Slot } = {
 	light_pillar = { id = "rbxassetid://133696950991333", size = { 256, 1024 }, slice = nil, route = "C" },
 	light_rays = { id = "rbxassetid://90629415129721", size = { 512, 512 }, slice = nil, route = "C" },
 	lock_overlay = { id = "rbxassetid://129181494466706", size = { 256, 256 }, slice = nil, route = "C" },
+	logo_1v1card = { id = "rbxassetid://88220264952603", size = { 1024, 512 }, slice = nil, route = "C" },
 	odds_row_n = {
 		id = "rbxassetid://117719384670576",
 		size = { 512, 64 },

@@ -159,6 +159,8 @@ local Requests: { [string]: RequestDef } = {
 	["World.Hub"] = { rate = 1, burst = 2, parse = empty },
 	["Queue.Join"] = { rate = 1, burst = 2, parse = empty },
 	["Queue.Leave"] = { rate = 1, burst = 2, parse = empty },
+	["Session.Play"] = { rate = 1, burst = 3, parse = empty },
+	["Session.Leave"] = { rate = 1, burst = 3, parse = empty },
 	["Trial.Start"] = {
 		rate = 0.5,
 		burst = 1,

@@ -8,8 +8,9 @@
 --                          └──────menu────────┘
 --   Over MainMenu / Playing / Queue:   Panel (one modal at a time; opening one replaces the other)
 --   Full screen, over anything:        Hatching → back to what was under it
---                                       Battle → Result → Playing (the server returns the
---                                       character to the lobby after every battle)
+--                                       Battle → Result → Playing (the server puts the character
+--                                       back where it stood before the battle)
+--   leave (the Menu button's leaving screen): from anything but Loading → MainMenu, all cleared
 -- `back` (Esc, gamepad B, the X button) closes the top layer: a panel, or skips the result screen.
 
 export type Base = "Loading" | "MainMenu" | "Playing" | "Queue"
@@ -80,6 +81,7 @@ export type Event =
 	| "back"
 	| "hatchStart"
 	| "hatchEnd"
+	| "leave"
 	| "queueJoin"
 	| "queueLeave"
 	| "battleStart"
@@ -106,6 +108,15 @@ function UiFlow.send(f: Flow, event: Event, arg: string?): boolean
 			f.base = "MainMenu"
 			f.top = "None"
 			f.panel = nil
+		end
+	elseif event == "leave" then
+		-- The leaving screen (MISSION 2.5): from anywhere but loading, back to the main menu with
+		-- nothing left open (the server has forfeited any battle and cleared the queue).
+		if f.base ~= "Loading" then
+			f.base = "MainMenu"
+			f.top = "None"
+			f.panel = nil
+			f.resume, f.resumePanel = "None", nil
 		end
 	elseif event == "open" then
 		if arg and f.base ~= "Loading" and (f.top == "None" or f.top == "Panel") then

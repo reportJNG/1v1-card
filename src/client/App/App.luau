@@ -19,6 +19,7 @@ local MainMenu = require(script.Parent.MainMenu)
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
 local CardFx = require(script.Parent.CardFx)
+local Kit = require(script.Parent.Kit)
 local Format = require(script.Parent.Format)
 local State = require(script.Parent.State)
 
@@ -42,6 +43,8 @@ export type Ctx = {
 	overlay: (build: (layer: Frame) -> Screen) -> Screen,
 	toast: (text: string, kind: string?) -> (),
 	confirm: (title: string, body: string, yes: string, onYes: () -> ()) -> (),
+	leaveToMenu: () -> (),
+	onLeave: (fn: () -> ()) -> (),
 	request: (name: string, payload: any?, quiet: boolean?) -> Reply,
 	attr: (name: string) -> any,
 	now: () -> number,
@@ -90,7 +93,7 @@ local function waitForLobby(timeout: number)
 	while os.clock() < deadline do
 		local player = Players.LocalPlayer
 		local root = player and player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-		if root == nil or not root:IsA("BasePart") or (root.Position - spawn).Magnitude < 40 then
+		if root and root:IsA("BasePart") and (root.Position - spawn).Magnitude < 40 then
 			return
 		end
 		task.wait()
@@ -426,7 +429,7 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 
 	-- Menu (top-right, left of the daily icons): back to the main menu.
 	local pause = Ui.button("Menu", "secondary", function()
-		ctx.ui("menu")
+		ctx.leaveToMenu()
 	end, {
 		Name = "MenuButton",
 		AnchorPoint = Vector2.new(1, 0),
@@ -775,6 +778,87 @@ function App.start(deps: Deps): Ctx
 		end
 	end
 
+	-- Screen 4, leaving (MISSION 2.5): a short screen (darken, the logo, "Returning to menu...", a
+	-- flipping card), while the server resets the session (Session.Leave: forfeit, queue, character,
+	-- save). Then the main menu. Returns a function that removes the screen.
+	local function leavingScreen(): () -> ()
+		local screen = Ui.frame({
+			Name = "Leaving",
+			BackgroundColor3 = Color3.fromHex("#06061B"),
+			BackgroundTransparency = 1,
+			Size = UDim2.fromScale(1, 1),
+			ZIndex = 500,
+			Parent = root,
+		})
+		TweenService:Create(screen, TweenInfo.new(0.25), { BackgroundTransparency = 0 }):Play()
+		Kit.image("logo_1v1card", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.36),
+			Size = UDim2.fromOffset(320, 160),
+			ZIndex = 501,
+			Parent = screen,
+		})
+		local spinner = Kit.image("card_back_ur", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.62),
+			Size = UDim2.fromOffset(52, 72),
+			ScaleType = Enum.ScaleType.Stretch,
+			ZIndex = 501,
+			Parent = screen,
+		})
+		Ui.text({
+			Text = "Returning to menu...",
+			FontFace = Theme.Face.Title,
+			TextSize = 20,
+			TextXAlignment = Enum.TextXAlignment.Center,
+			AnchorPoint = Vector2.new(0.5, 0),
+			Position = UDim2.fromScale(0.5, 0.71),
+			Size = UDim2.fromOffset(320, 26),
+			ZIndex = 501,
+			Parent = screen,
+		})
+		local spin = true
+		task.spawn(function()
+			local t0 = os.clock()
+			while spin and spinner.Parent do
+				local a = (os.clock() - t0) * 5
+				spinner.Size = UDim2.fromOffset(math.max(2, math.abs(math.cos(a)) * 52), 72)
+				task.wait()
+			end
+		end)
+		return function()
+			spin = false
+			TweenService:Create(screen, TweenInfo.new(0.3), { BackgroundTransparency = 1 }):Play()
+			for _, d in screen:GetDescendants() do
+				if d:IsA("ImageLabel") then
+					TweenService:Create(d, TweenInfo.new(0.3), { ImageTransparency = 1 }):Play()
+				elseif d:IsA("TextLabel") then
+					TweenService:Create(d, TweenInfo.new(0.3), { TextTransparency = 1 }):Play()
+				end
+			end
+			task.delay(0.35, screen.Destroy, screen)
+		end
+	end
+	local leaveHooks: { () -> () } = {}
+	local leavingNow = false
+	local function leave()
+		leavingNow = true
+		local done = leavingScreen()
+		local t0 = os.clock()
+		ctx.request("Session.Leave", nil, true)
+		close()
+		for _, o in table.clone(overlays) do
+			o.destroy()
+		end
+		for _, hook in leaveHooks do
+			task.spawn(hook)
+		end
+		task.wait(math.max(0, 1 - (os.clock() - t0)))
+		ui("leave")
+		done()
+		leavingNow = false
+	end
+
 	ctx = {
 		state = State.new(),
 		net = deps.net,
@@ -853,6 +937,26 @@ function App.start(deps: Deps): Ctx
 				end
 			end)
 		end,
+		-- Menu button: confirm, then the leaving screen and a full reset (MISSION 2.5).
+		leaveToMenu = function()
+			if leavingNow then
+				return
+			end
+			local inBattle = ctx.state.battle ~= nil
+			ctx.confirm(
+				"Main Menu",
+				if inBattle
+					then "Return to the main menu? The battle counts as a forfeit."
+					else "Return to the main menu?",
+				"Main Menu",
+				function()
+					task.spawn(leave)
+				end
+			)
+		end,
+		onLeave = function(fn: () -> ())
+			table.insert(leaveHooks, fn)
+		end,
 		confirm = function(title: string, body: string, yes: string, onYes: () -> ())
 			local box: Screen
 			box = ctx.overlay(function(layer)
@@ -918,21 +1022,16 @@ function App.start(deps: Deps): Ctx
 	local leaving = false
 	menu = MainMenu.build(menuLayer, {
 		play = function()
-			-- PLAY always lands in the lobby, wherever the player was (server-checked World.Hub).
-			if ctx.state.area == 0 then
-				task.spawn(ctx.request, "World.Hub")
-				ui("play")
-				return
-			end
-			-- From a world, the menu stays up until the character is back in the lobby, so the
-			-- fade and the camera fly-in start there and not in the world the player left.
+			-- PLAY always starts fresh (MISSION 2.4): the server spawns a new character at the lobby
+			-- spawn (Session.Play). The menu stays up until it stands there, so the fade and the
+			-- camera fly-in start in the lobby.
 			if leaving then
 				return
 			end
 			leaving = true
 			task.spawn(function()
-				if ctx.request("World.Hub").ok then
-					waitForLobby(3)
+				if ctx.request("Session.Play").ok then
+					waitForLobby(5)
 				end
 				leaving = false
 				ui("play")
@@ -970,8 +1069,10 @@ function App.start(deps: Deps): Ctx
 		if what == "profile" and not loaded then
 			loaded = true
 			ui("loaded")
-			if effects == nil then
-				ui("play") -- previews and checks: straight to the game view
+			Players.LocalPlayer:SetAttribute("UiReady", true) -- the launch loading screen waits for it
+			if effects == nil or Players.LocalPlayer:GetAttribute("Session") == "playing" then
+				-- previews and checks, or back from a battle server: straight to the game view
+				ui("play")
 			end
 		end
 		if what == "area" then
