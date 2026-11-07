@@ -19,6 +19,14 @@ export type HatchResult = { cards: { Types.CardCopy }, alreadyProcessed: boolean
 
 local Hatch = {}
 
+-- How many eggs one Coin purchase or bag open can hatch (x1 / x3 / x8 in the shop).
+Hatch.Counts = table.freeze({ 1, 3, 8 })
+
+local function validCount(count: number?): number?
+	local n = count or 1
+	return if table.find(Hatch.Counts, n) then n else nil
+end
+
 local function rollInto(
 	profile: Types.PlayerProfile,
 	egg: Types.EggDef,
@@ -46,8 +54,13 @@ function Hatch.buyWithCoins(
 	eggId: string,
 	requestId: string,
 	rng: Random,
-	now: number
+	now: number,
+	count: number?
 ): Types.Result<HatchResult>
+	local n = validCount(count)
+	if n == nil then
+		return Result.fail("InvalidQuantity")
+	end
 	local egg = Eggs.ById[eggId]
 	if egg == nil then
 		return Result.fail("UnknownEgg")
@@ -58,16 +71,17 @@ function Hatch.buyWithCoins(
 	if not Progress.isEggAvailable(profile, egg) then
 		return Result.fail("EggLocked")
 	end
-	if Cards.freeSlots(profile) < 1 then
+	if Cards.freeSlots(profile) < n then
 		return Result.fail("CardStorageFull")
 	end
-	local price = egg.coinPrice :: number
+	-- One charge for the whole batch, under the request's id (a replay is refused as a whole).
+	local price = (egg.coinPrice :: number) * n
 	local check = Wallet.check(profile, "coins", -price, requestId)
 	if not check.ok then
 		return Result.fail(check.err)
 	end
 	Wallet.apply(profile, "coins", -price, `egg:{eggId}`, requestId, now)
-	local cards = rollInto(profile, egg, false, 1, "Coins", eggId, rng, now, false)
+	local cards = rollInto(profile, egg, false, n, "Coins", eggId, rng, now, false)
 	return Result.ok({ cards = cards, alreadyProcessed = false })
 end
 
@@ -137,32 +151,37 @@ function Hatch.openFromBag(
 	eggId: string,
 	golden: boolean,
 	rng: Random,
-	now: number
+	now: number,
+	count: number?
 ): Types.Result<HatchResult>
+	local n = validCount(count)
+	if n == nil then
+		return Result.fail("InvalidQuantity")
+	end
 	local egg = Eggs.ById[eggId]
 	local stack = profile.eggBag[eggId]
 	if egg == nil or stack == nil then
 		return Result.fail("NotOwned")
 	end
 	local have = if golden then stack.golden else stack.normal
-	if have < 1 then
+	if have < n then
 		return Result.fail("NotOwned")
 	end
 	if golden and not egg.goldenAllowed then
 		return Result.fail("NoGoldenVersion")
 	end
-	if Cards.freeSlots(profile) < 1 then
+	if Cards.freeSlots(profile) < n then
 		return Result.fail("CardStorageFull")
 	end
 	if golden then
-		stack.golden -= 1
+		stack.golden -= n
 	else
-		stack.normal -= 1
+		stack.normal -= n
 	end
 	if stack.golden == 0 and stack.normal == 0 then
 		profile.eggBag[eggId] = nil
 	end
-	local cards = rollInto(profile, egg, golden, 1, "Reward", eggId, rng, now, false)
+	local cards = rollInto(profile, egg, golden, n, "Reward", eggId, rng, now, false)
 	return Result.ok({ cards = cards, alreadyProcessed = false })
 end
 

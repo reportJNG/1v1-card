@@ -207,3 +207,55 @@ stay below 8 until real character art replaces the TEMP silhouettes; that is own
 logged.
 
 **Screens:** `docs/screens/characters/01-03`.
+
+## H. Egg opening — done, except the sound ids (2026-11-07)
+**Changed**
+- **x1 / x3 / x8, decided on the server.** `Shop.BuyEgg` and `Bag.OpenEgg` take an optional
+  `count` (1, 3 or 8; default 1, so old clients still work).
+  - `Domain/Hatch` checks the count, free storage and the bag stack before anything changes.
+  - A Coin batch is one charge (price × count) under one request id, so a replay is refused as a
+    whole. Anything else fails with `InvalidQuantity`.
+- **Shop.** A x1 / x3 / x8 selector, with the total price and "Buy x8". Bag opens take as many as
+  the stack and storage allow ("Open x3 from Egg Bag (4)"). The Auto-open toggle is beside the
+  selector.
+- **Hatch screen** (`Screens/Hatch`, rewritten):
+  - Darker focus backdrop.
+  - A burst in the best rarity's colour, then a grid reveal: 1 large card, 3 in a row, or a 4 × 2
+    grid. The small cards drop the caption because the card already shows name, rarity and stats.
+  - **Legendary and up:** a slow-mo beat (the room darkens, the egg swells, cracks and rays turn
+    gold), then a gold flash.
+  - **Mythical:** three rainbow shockwaves above the flash, plus a screen shake.
+  - **Golden:** gold rays, pedestal, flash, rings and callout.
+  - The colour wash after a flash is a tint, never a solid screen.
+- **Skip** fast-forwards any beat straight to the finished cards.
+- **Auto-open:**
+  - Opens the next batch after 1.4 s.
+  - Stops when the player taps "Stop auto-open", when Coins, storage or the stack run out, or when
+    a Legendary or better appears (so it is always seen).
+  - Batches chain inside one overlay.
+- **"NEW!"** marks the first copy of a character, against the cards owned before the request and
+  earlier cards in the same batch. It sits on the card's left edge, clear of the banner.
+- **Sound slots for every beat:** hatch_shake, hatch_crack, hatch_burst, card_flip, and
+  reveal_common through reveal_mythical. They are silent until I fills them.
+
+**Tests:** 3 new specs: x3 and x8 buys (one charge, refusals leave Coins and cards untouched), bag
+x3 and x8, and the sound slots. Net.spec also rejects counts 9, 2.5 and "3". 262 pass headless.
+
+**Tested in Play:**
+- With real server rolls:
+  - Coin buys at x1, x3 and x8.
+  - A Golden x8 bag open.
+  - Auto-open from a bag of 12: x8, then x3, then x1, then a stop at the empty bag with Continue.
+    Skip and Stop were visible on each batch.
+  - Skip pressed mid-shake on a x3 buy: the cards were finished in under a second.
+  - The bag button disappeared when the stack emptied.
+  - "NEW!" appeared only on first copies, including duplicates within one batch.
+- Real rolls almost never give Legendary or Mythical. Those moments were played in Play mode by
+  calling the real `Screens/Hatch` with injected cards (screenshots marked "injected").
+  - A logger counted 3 rings growing to 1,400 px and a shake of up to 16 px.
+- Sizes: the x8 grid at 1600 desktop, phone landscape and portrait (fits, scaled).
+  Reduced motion shows the cards at once.
+
+**Scores:** board 8 · readability 8 · polish 8 · clarity 9 · consistency 9.
+
+**Screens:** `docs/screens/hatch/01-15`.

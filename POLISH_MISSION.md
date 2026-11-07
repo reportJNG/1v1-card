@@ -159,16 +159,17 @@ If something needs the owner (images, approval, keys), write it in
 - [ ] Every policy and odds test keeps passing.
 
 ### H. Egg opening (clean and satisfying)
-- [ ] Sequence: camera focus and blur, then the egg on a pedestal, then a shake that builds up,
+- [x] Sequence: camera focus and blur, then the egg on a pedestal, then a shake that builds up,
       then spreading cracks, then light rays, then a burst in the rarity colour, then the card
       flips in with its frame, name, rarity banner and stats.
-- [ ] Bigger rarities get bigger moments:
+- [x] Bigger rarities get bigger moments:
       - **Legendary** adds slow-mo and a gold flash.
       - **Mythical** adds a rainbow shockwave and screen shake.
       - **Golden** eggs get a gold version of the whole sequence.
-- [ ] Open x1 / x3 / x8 (multi-open shows a grid reveal), a **Skip** button (tap to fast-forward),
+- [x] Open x1 / x3 / x8 (multi-open shows a grid reveal), a **Skip** button (tap to fast-forward),
       an auto-open toggle, and **"New!"** tags on first copies.
 - [ ] A sound for every beat: shake, crack, burst, and a reveal sound per rarity.
+      (Slots wired in `Config/Sounds` and played on every beat; the ids are filled in I.)
 
 ### I. Music and sound
 - [ ] Use **only audio uploaded by the official Roblox account** in the Creator Store

@@ -35,9 +35,13 @@ local Requests: { [string]: RequestDef } = {
 	["Shop.BuyEgg"] = {
 		rate = 4,
 		burst = 4,
-		parse = shape({ "eggId", "requestId" }, function(t)
+		parse = shape({ "eggId", "requestId", "count" }, function(t)
 			local eggId, requestId = Check.id(t.eggId), Check.id(t.requestId, 40)
-			return if eggId and requestId then { eggId = eggId, requestId = requestId } else nil
+			local count = if t.count == nil then 1 else Check.int(t.count, 1, 8)
+			if eggId and requestId and count then
+				return { eggId = eggId, requestId = requestId, count = count }
+			end
+			return nil
 		end),
 	},
 	["Shop.RequestRobuxEgg"] = {
@@ -51,9 +55,13 @@ local Requests: { [string]: RequestDef } = {
 	["Bag.OpenEgg"] = {
 		rate = 4,
 		burst = 4,
-		parse = shape({ "eggId", "golden" }, function(t)
+		parse = shape({ "eggId", "golden", "count" }, function(t)
 			local eggId, golden = Check.id(t.eggId), Check.bool(t.golden)
-			return if eggId and golden ~= nil then { eggId = eggId, golden = golden } else nil
+			local count = if t.count == nil then 1 else Check.int(t.count, 1, 8)
+			if eggId and golden ~= nil and count then
+				return { eggId = eggId, golden = golden, count = count }
+			end
+			return nil
 		end),
 	},
 	["Daily.ClaimFreeEgg"] = { rate = 1, burst = 2, parse = empty },

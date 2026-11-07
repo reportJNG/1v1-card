@@ -430,9 +430,10 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		Ui.fit(label, 11, 8)
 		local golden = entry.golden
 		local open = Ui.button(`Open ×{entry.count}`, if golden then "primary" else "success", function()
+			local known = Hatch.known(ctx.state.view)
 			local reply = ctx.request("Bag.OpenEgg", { eggId = entry.egg.id, golden = golden })
 			if reply.ok then
-				Hatch.show(ctx, reply.value.cards, entry.egg, golden)
+				Hatch.show(ctx, reply.value.cards, entry.egg, golden, { known = known })
 			end
 		end, {
 			Name = "Open",

@@ -50,6 +50,30 @@ return function()
 			expect(Cards.count(p)).to.equal(1)
 		end)
 
+		it("buys x3 and x8 in one charge, and refuses other counts or too little room", function()
+			local price = Eggs.ById.egg_basic.coinPrice :: number
+			local p = Helpers.profile({ coins = price * 11 })
+			local three = Hatch.buyWithCoins(p, "egg_basic", "req-3", Random.new(1), Helpers.NOW, 3)
+			expect(if three.ok then #three.value.cards else 0).to.equal(3)
+			expect(p.coins).to.equal(price * 8)
+			local eight = Hatch.buyWithCoins(p, "egg_basic", "req-8", Random.new(1), Helpers.NOW, 8)
+			expect(if eight.ok then #eight.value.cards else 0).to.equal(8)
+			expect(p.coins).to.equal(0)
+			expect(Cards.count(p)).to.equal(11)
+			local odd = Hatch.buyWithCoins(p, "egg_basic", "req-5", Random.new(1), Helpers.NOW, 5)
+			expect(if odd.ok then "" else odd.err).to.equal("InvalidQuantity")
+			local tight = Helpers.profile({ coins = 1e6, cardSlots = 2 })
+			local r = Hatch.buyWithCoins(tight, "egg_basic", "req-t", Random.new(1), Helpers.NOW, 3)
+			expect(if r.ok then "" else r.err).to.equal("CardStorageFull")
+			expect(tight.coins).to.equal(1e6)
+			local poor = Helpers.profile({ coins = price * 2 })
+			expect(Hatch.buyWithCoins(poor, "egg_basic", "req-p", Random.new(1), Helpers.NOW, 3).ok).to.equal(
+				false
+			)
+			expect(poor.coins).to.equal(price * 2)
+			expect(Cards.count(poor)).to.equal(0)
+		end)
+
 		it("hides the Secret Egg until its quest is claimed, and never sells the event egg", function()
 			local p = Helpers.profile({ coins = 1e7, highestTrophies = 5000 })
 			expect(Hatch.buyWithCoins(p, "egg_secret", "a", Random.new(1), Helpers.NOW).ok).to.equal(false)
@@ -108,11 +132,34 @@ return function()
 			expect(p.eggBag.egg_basic).to.equal(nil)
 		end)
 
+		it("opens x3 and x8 from the bag, and never more than the stack", function()
+			local p = Helpers.profile({ cardSlots = 1000 })
+			expect(Hatch.addToBag(p, "egg_basic", false, 10).ok).to.equal(true)
+			local r = Hatch.openFromBag(p, "egg_basic", false, Random.new(2), Helpers.NOW, 8)
+			expect(if r.ok then #r.value.cards else 0).to.equal(8)
+			expect(p.eggBag.egg_basic.normal).to.equal(2)
+			local over = Hatch.openFromBag(p, "egg_basic", false, Random.new(2), Helpers.NOW, 3)
+			expect(if over.ok then "" else over.err).to.equal("NotOwned")
+			expect(p.eggBag.egg_basic.normal).to.equal(2)
+			expect(Hatch.openFromBag(p, "egg_basic", false, Random.new(2), Helpers.NOW, 2).ok).to.equal(false)
+			expect(Cards.count(p)).to.equal(8)
+		end)
+
 		it("rejects a Golden Rainbow and bag overflow", function()
 			local p = Helpers.profile()
 			expect(Hatch.addToBag(p, "egg_rainbow", true, 1).ok).to.equal(false)
 			expect(Hatch.addToBag(p, "egg_basic", false, 99).ok).to.equal(true)
 			expect(Hatch.addToBag(p, "egg_basic", false, 1).ok).to.equal(false)
+		end)
+
+		it("has a sound slot for every hatch beat and a reveal per rarity", function()
+			local Sounds = require(Shared.Config.Sounds)
+			for _, name in { "hatch_shake", "hatch_crack", "hatch_burst", "card_flip" } do
+				expect(Sounds[name]).to.be.ok()
+			end
+			for _, rarity in { "Common", "Rare", "Epic", "Legendary", "Mythical" } do
+				expect(Sounds[`reveal_{string.lower(rarity)}`]).to.be.ok()
+			end
 		end)
 
 		it("gives one free daily egg per day", function()

@@ -11,6 +11,7 @@ local Eggs = require(Shared.Config.Eggs)
 local Worlds = require(Shared.Config.Worlds)
 local Monetization = require(Shared.Config.Monetization)
 local Progress = require(Shared.Domain.Progress)
+local HatchRules = require(Shared.Domain.Hatch)
 local App = script.Parent.Parent
 local Theme = require(App.Theme)
 local Ui = require(App.Ui)
@@ -75,6 +76,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 	-- World tabs: unlocked worlds plus the next locked one (so players see what's coming).
 	local worldId: number = if arg and arg.world then arg.world else (if view then view.currentWorld else 1)
 	local selectedEgg: Types.EggDef? = nil
+	local qty = 1 -- x1 / x3 / x8 for Coin buys and bag opens
 
 	local tabs = Ui.frame({ BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 32), Parent = p.body }, {
 		Ui.list(true, 6),
@@ -99,6 +101,71 @@ return function(ctx: any, layer: Frame, arg: any?): any
 	end
 
 	local renderDetail: () -> ()
+
+	local function freeSlots(): number
+		local v = ctx.state.view
+		if v == nil then
+			return 0
+		end
+		local n = 0
+		for _ in v.cards do
+			n += 1
+		end
+		return v.cardSlots - n
+	end
+
+	-- Buys `count` with Coins. The first call always asks the server (which explains a refusal);
+	-- auto-open repeats only while the batch is affordable and fits.
+	local function buyCoins(egg: Types.EggDef, count: number)
+		local price = (egg.coinPrice :: number) * count
+		local function once(first: boolean): { any }?
+			local v = ctx.state.view
+			if not first and (v == nil or v.coins < price or freeSlots() < count) then
+				return nil
+			end
+			local reply =
+				ctx.request("Shop.BuyEgg", { eggId = egg.id, requestId = ctx.guid(), count = count })
+			return if reply.ok then reply.value.cards else nil
+		end
+		local known = Hatch.known(ctx.state.view)
+		local cards = once(true)
+		if cards then
+			Hatch.show(ctx, cards, egg, false, {
+				known = known,
+				again = function()
+					return once(false)
+				end,
+			})
+		end
+	end
+
+	-- Opens up to the chosen count from the Egg Bag (as many of 1/3/8 as the stack and storage allow).
+	local function openBag(egg: Types.EggDef, golden: boolean)
+		local function once(first: boolean): { any }?
+			local v = ctx.state.view
+			local stack = v and v.eggBag[egg.id]
+			local have = if stack then (if golden then stack.golden else stack.normal) else 0
+			local k = Hatch.fit(qty, math.min(have, freeSlots()))
+			if k == 0 then
+				if not first then
+					return nil
+				end
+				k = 1
+			end
+			local reply = ctx.request("Bag.OpenEgg", { eggId = egg.id, golden = golden, count = k })
+			return if reply.ok then reply.value.cards else nil
+		end
+		local known = Hatch.known(ctx.state.view)
+		local cards = once(true)
+		if cards then
+			Hatch.show(ctx, cards, egg, golden, {
+				known = known,
+				again = function()
+					return once(false)
+				end,
+			})
+		end
+	end
 
 	local function renderGrid()
 		Ui.clear(grid)
@@ -251,15 +318,41 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		end, { LayoutOrder = 4, Size = UDim2.new(1, 0, 0, 34), Name = "Odds" })
 		oddsButton.instance.Parent = content
 
+		local n, g = owned(egg.id)
+		if available and (egg.coinPrice or n > 0 or g > 0) then
+			-- x1 / x3 / x8 (one charge per batch; the server checks the count, Coins and storage).
+			local qtyRow = Ui.frame({
+				Name = "Quantity",
+				BackgroundTransparency = 1,
+				Size = UDim2.new(1, 0, 0, 30),
+				LayoutOrder = 5,
+				Parent = content,
+			}, { Ui.list(true, 6, Enum.HorizontalAlignment.Center) })
+			for _, count in HatchRules.Counts do
+				local b = Ui.button(`x{count}`, if count == qty then "purple" else "tab", function()
+					qty = count
+					renderDetail()
+				end, { Name = `Qty{count}`, Size = UDim2.fromOffset(44, 30), LayoutOrder = count })
+				b.instance.Parent = qtyRow
+			end
+			local auto = Ui.button(
+				if Hatch.auto then "Auto: On" else "Auto: Off",
+				if Hatch.auto then "success" else "tab",
+				function()
+					Hatch.auto = not Hatch.auto
+					renderDetail()
+				end,
+				{ Name = "AutoOpen", Size = UDim2.fromOffset(78, 30), LayoutOrder = 9 }
+			)
+			auto.instance.Parent = qtyRow
+		end
 		if available and egg.coinPrice then
-			Ui.price(Format.number(egg.coinPrice), "icon_coin", 26, { LayoutOrder = 5, Parent = content })
-			local buy = Ui.button("Buy", "primary", function()
-				local reply = ctx.request("Shop.BuyEgg", { eggId = egg.id, requestId = ctx.guid() })
-				if reply.ok then
-					Hatch.show(ctx, reply.value.cards, egg, false)
-				end
-			end, { LayoutOrder = 6, Name = "BuyCoins", Size = UDim2.new(1, 0, 0, 46) })
-			buy.setEnabled(view ~= nil and view.coins >= egg.coinPrice)
+			local total = (egg.coinPrice :: number) * qty
+			Ui.price(Format.number(total), "icon_coin", 26, { LayoutOrder = 6, Parent = content })
+			local buy = Ui.button(if qty == 1 then "Buy" else `Buy x{qty}`, "primary", function()
+				buyCoins(egg, qty)
+			end, { LayoutOrder = 7, Name = "BuyCoins", Size = UDim2.new(1, 0, 0, 46) })
+			buy.setEnabled(view ~= nil and view.coins >= total and freeSlots() >= qty)
 			buy.instance.Parent = content
 		elseif not available then
 			Ui.text({
@@ -280,7 +373,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 				local b = Ui.button(`Buy {product.quantity} with Robux`, "robux", function()
 					ctx.request("Shop.RequestRobuxEgg", { productKey = product.key })
 				end, {
-					LayoutOrder = 6 + i,
+					LayoutOrder = 8 + i,
 					Size = UDim2.new(1, 0, 0, 34),
 					Name = `Robux{product.quantity}`,
 				})
@@ -292,36 +385,42 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			end
 		end
 
-		local n, g = owned(egg.id)
 		if n > 0 then
-			local open = Ui.button(`Open from Egg Bag ({n})`, "success", function()
-				local reply = ctx.request("Bag.OpenEgg", { eggId = egg.id, golden = false })
-				if reply.ok then
-					Hatch.show(ctx, reply.value.cards, egg, false)
-				end
-			end, { LayoutOrder = 9, Size = UDim2.new(1, 0, 0, 34) })
+			local k = math.max(Hatch.fit(qty, n), 1)
+			local open = Ui.button(
+				if k == 1 then `Open from Egg Bag ({n})` else `Open x{k} from Egg Bag ({n})`,
+				"success",
+				function()
+					openBag(egg, false)
+				end,
+				{ LayoutOrder = 12, Size = UDim2.new(1, 0, 0, 34), Name = "OpenBag" }
+			)
 			open.instance.Parent = content
 		end
 		if g > 0 then
-			local openG = Ui.button(`Open Golden ({g})`, "primary", function()
-				local reply = ctx.request("Bag.OpenEgg", { eggId = egg.id, golden = true })
-				if reply.ok then
-					Hatch.show(ctx, reply.value.cards, egg, true)
-				end
-			end, { LayoutOrder = 10, Size = UDim2.new(1, 0, 0, 34) })
+			local k = math.max(Hatch.fit(qty, g), 1)
+			local openG = Ui.button(
+				if k == 1 then `Open Golden ({g})` else `Open x{k} Golden ({g})`,
+				"primary",
+				function()
+					openBag(egg, true)
+				end,
+				{ LayoutOrder = 13, Size = UDim2.new(1, 0, 0, 34), Name = "OpenGolden" }
+			)
 			openG.instance.Parent = content
 			local goldenOdds = Ui.button("Golden Odds", "ghost", function()
 				OddsPopup.show(ctx, egg, true)
-			end, { LayoutOrder = 11, Size = UDim2.new(1, 0, 0, 28) })
+			end, { LayoutOrder = 14, Size = UDim2.new(1, 0, 0, 28) })
 			goldenOdds.instance.Parent = content
 		end
 		if egg.id == "egg_basic" and view and view.daily.freeEggDay ~= today then
 			local free = Ui.button("Claim free daily egg", "success", function()
+				local known = Hatch.known(ctx.state.view)
 				local reply = ctx.request("Daily.ClaimFreeEgg")
 				if reply.ok then
-					Hatch.show(ctx, reply.value.cards, egg, false)
+					Hatch.show(ctx, reply.value.cards, egg, false, { known = known })
 				end
-			end, { LayoutOrder = 12, Size = UDim2.new(1, 0, 0, 34), Name = "FreeEgg" })
+			end, { LayoutOrder = 15, Size = UDim2.new(1, 0, 0, 34), Name = "FreeEgg" })
 			free.instance.Parent = content
 		end
 	end

@@ -481,3 +481,20 @@ roster's art.
 - **Character prompts** now lead with the card cutout ("transparent background, single character,
   upper body to knees, dynamic pose, anime cel-shaded"); the A-pose model reference stays as the
   second image. `art/ui/PROMPTS.md` gained the 15 family backgrounds and the card layers.
+
+### Polish mission (POLISH_MISSION.md, 2026-11-07, owner away: "dont stop")
+Per-item detail, scores and screenshots are in `docs/POLISH_LOG.md`. Decisions:
+- **Locked rules win over the mission.** The mission's new egg types (G) and cosmetics shop (C)
+  aren't built; they are listed in `docs/WAITING_ON_YOU.md` section 00.
+- **Multi-open (H) is decided on the server.**
+  - `count` is 1, 3 or 8.
+  - A Coin batch is one charge under one request id, so a replay is refused as a whole.
+  - The client never sends prices or results.
+- **Auto-open pauses on Legendary or better**, so a big pull is never skipped past. It also stops
+  when Coins, storage or the bag stack run out. It's a per-session toggle and isn't saved.
+- **"New!" is computed on the client** from the cards it already knew before the request. It's
+  cosmetic only, so no profile field was added.
+- **Testing rare moments.** Real rolls almost never give Legendary or Mythical. Their effects are
+  exercised in Play mode by calling the real hatch screen with injected cards. Those screenshots are
+  labelled "injected". No dev hook ships in the game.
+

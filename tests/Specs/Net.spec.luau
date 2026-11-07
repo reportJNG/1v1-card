@@ -82,6 +82,9 @@ return function()
 				{ eggId = "egg_basic", requestId = string.rep("x", 41) },
 				{ eggId = "egg_basic", requestId = "r", extra = true },
 				{ eggId = 5, requestId = "r" },
+				{ eggId = "egg_basic", requestId = "r", count = 9 },
+				{ eggId = "egg_basic", requestId = "r", count = 2.5 },
+				{ eggId = "egg_basic", requestId = "r", count = "3" },
 			}
 			for i = 1, #bad + 1 do
 				local reply = Dispatcher.run("Shop.BuyEgg", handler, nil, `p{i}`, bad[i], deps)

@@ -49,12 +49,13 @@ end
 
 function EconomyService.init()
 	Router.handle("Shop.BuyEgg", function(player, args, profile)
-		local r = Hatch.buyWithCoins(profile :: any, args.eggId, `egg:{args.requestId}`, rng, os.time())
+		local r =
+			Hatch.buyWithCoins(profile :: any, args.eggId, `egg:{args.requestId}`, rng, os.time(), args.count)
 		return hatchReply(player, profile :: any, args.eggId, "coins", r)
 	end, { saveNow = true })
 
 	Router.handle("Bag.OpenEgg", function(player, args, profile)
-		local r = Hatch.openFromBag(profile :: any, args.eggId, args.golden, rng, os.time())
+		local r = Hatch.openFromBag(profile :: any, args.eggId, args.golden, rng, os.time(), args.count)
 		return hatchReply(player, profile :: any, args.eggId, if args.golden then "bag_golden" else "bag", r)
 	end, { saveNow = true })
 

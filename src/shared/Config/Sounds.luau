@@ -13,11 +13,16 @@ local Sounds: { [string]: Sound } = {
 	close = { id = nil, volume = 0.3, kind = "sfx" },
 	coin = { id = nil, volume = 0.5, kind = "sfx" },
 	error = { id = nil, volume = 0.4, kind = "sfx" },
-	-- Hatching
+	-- Hatching (Screens/Hatch): every beat, then one reveal per best rarity
 	hatch_shake = { id = nil, volume = 0.5, kind = "sfx" },
 	hatch_crack = { id = nil, volume = 0.6, kind = "sfx" },
-	reveal = { id = nil, volume = 0.6, kind = "sfx" },
-	reveal_rare = { id = nil, volume = 0.7, kind = "sfx" }, -- Epic and above
+	hatch_burst = { id = nil, volume = 0.6, kind = "sfx" },
+	card_flip = { id = nil, volume = 0.4, kind = "sfx" },
+	reveal_common = { id = nil, volume = 0.5, kind = "sfx" },
+	reveal_rare = { id = nil, volume = 0.55, kind = "sfx" },
+	reveal_epic = { id = nil, volume = 0.6, kind = "sfx" },
+	reveal_legendary = { id = nil, volume = 0.7, kind = "sfx" },
+	reveal_mythical = { id = nil, volume = 0.75, kind = "sfx" },
 	-- Battle
 	tick = { id = nil, volume = 0.25, kind = "sfx" },
 	hit = { id = nil, volume = 0.6, kind = "sfx" },
