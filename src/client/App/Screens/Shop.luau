@@ -463,6 +463,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 
 	renderTabs()
 	renderGrid()
+	Ui.stagger(grid, ctx.reducedMotion())
 	renderDetail()
 	return {
 		destroy = function() end,

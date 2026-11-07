@@ -203,6 +203,35 @@ function Ui.popIn(obj: GuiObject, reduced: boolean?)
 	TweenService:Create(scale, M.open, { Scale = 1 }):Play()
 end
 
+-- Pops the children of a grid in one after another (a panel's first render). At most 24 animate;
+-- the rest simply appear. Reduced motion shows them at once.
+function Ui.stagger(container: Instance, reduced: boolean?)
+	if reduced then
+		return
+	end
+	local items: { GuiObject } = {}
+	for _, c in container:GetChildren() do
+		if c:IsA("GuiObject") then
+			table.insert(items, c)
+		end
+	end
+	table.sort(items, function(a, b)
+		return a.LayoutOrder < b.LayoutOrder
+	end)
+	for i, obj in items do
+		if i > 24 then
+			break
+		end
+		local scale = obj:FindFirstChildOfClass("UIScale") or Ui.new("UIScale", { Parent = obj })
+		scale.Scale = 0.55
+		task.delay((i - 1) * 0.03, function()
+			if scale.Parent then
+				TweenService:Create(scale, M.open, { Scale = 1 }):Play()
+			end
+		end)
+	end
+end
+
 function Ui.pulse(obj: GuiObject, amount: number?)
 	local scale = obj:FindFirstChildOfClass("UIScale") or Ui.new("UIScale", { Parent = obj })
 	scale.Scale = 1 + (amount or 0.12)

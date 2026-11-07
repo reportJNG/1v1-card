@@ -2,6 +2,15 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
+## 000. Step 3 (the new GUI): look and tell Claude what to change
+- **Screenshots:** `docs/screens/step3/` (main menu, lobby icon HUD, Egg Shop, Inventory, Deck,
+  Arena).
+- **Anime folder:** see `ANIME_FOLDER.md`. The portrait pack in your Downloads has **no license**
+  and isn't any of our characters, so it isn't in the game. Send its license, or drop your own art
+  as described there.
+- **Icons:** the HUD now uses your Free Icon Pack (unedited). Say if you want different icons for
+  any shortcut.
+
 ## 00. Decisions POLISH_MISSION.md needs from you (it conflicts with locked rules)
 - **New egg types (mission G).** CLAUDE.md locks the game to exactly the 24 icon-pack eggs. Say
   "allow new original eggs" (and how many) to unlock it; until then no egg is added.

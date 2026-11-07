@@ -783,5 +783,11 @@ return function(ctx: any, layer: Frame, arg: any?): any
 	end
 
 	render()
+	-- First open only: the sidebar and the grid pop in (later refreshes just redraw).
+	Ui.stagger(header, ctx.reducedMotion())
+	local firstGrid = left:FindFirstChildWhichIsA("ScrollingFrame")
+	if firstGrid then
+		Ui.stagger(firstGrid, ctx.reducedMotion())
+	end
 	return { destroy = function() end, refresh = render }
 end

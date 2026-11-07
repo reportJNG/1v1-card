@@ -508,3 +508,35 @@ Per-item detail, scores and screenshots are in `docs/POLISH_LOG.md`. Decisions:
   the Creator Store comes from its partner accounts APMOfficial and ProSoundEffects, so only those
   are used, and every id is checked to load.
 
+### Step 3: the GUI redesign (2026-11-07, owner: "full gui clean design and sound effects and animations")
+References: `Downloads\now gui` (5 crops of the concept board). The layout and style were taken
+from them. Their copyrighted characters and the "Bet Amount" panel are not used (no copied IP, no
+wagers).
+- **Main menu is its own screen.**
+  - An opaque key-art backdrop: violet gradient, turning rays, drifting card backs, and a fanned
+    Legendary / Golden Mythical / Epic showcase. It never shows the lobby, so the HUD and the world
+    blur are off there (`UiFlow`: MainMenu hud = hidden).
+  - PLAY always sends `World.Hub` (server-checked) and the menu fades away, so the player is in the
+    lobby wherever they were.
+  - The HUD's Menu button comes back to it.
+- **Icon-first HUD.** The left menu is a dock of bright square tiles with one-word labels.
+  - Every HUD icon is from the owner's `Free Icon Pack v3.1` (commercial use allowed), used
+    **unedited** (256 px "Outline" versions, `art/icons`, license copied there). They are wired as
+    the `final` art of the icon slots (`art/ui/ids.json`).
+  - The Lobby button carries the house icon.
+- **Panels.**
+  - `Ui.glowTile`: a deep navy tile with a glowing accent border, gold when selected.
+  - `Ui.pricePill`: a currency icon and the amount on a dark pill.
+  - Egg Shop: band-coloured tiles and a gold featured pane.
+  - Inventory: a vertical icon sidebar (All / Cards / Items / Eggs / +storage) and a glow inspect
+    pane.
+  - Deck: slots edged in their rarity, with a power pill.
+  - Arena: unchanged layout (VS, Find Match, no stakes).
+- **Animations.** Grid tiles pop in one after another on a panel's first render (`Ui.stagger`),
+  notification dots breathe, and the main menu moves. All of it respects reduced motion.
+- **Glitch fixed:** a HUD piece's visibility was decided when its slide began, so the Lobby button
+  could reappear in the lobby after PLAY. It's now decided when the slide ends.
+- **The anime folder** (`ANIME_FOLDER.md`).
+  - The portrait pack in Downloads has no license file and isn't our characters, so it isn't used.
+  - The doc explains how a folder gets in (license, mapping to character ids, the pickup script).
+

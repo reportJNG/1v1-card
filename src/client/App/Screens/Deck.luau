@@ -225,5 +225,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 	end
 
 	render()
+	Ui.stagger(slotRow, ctx.reducedMotion())
+	Ui.stagger(pickList, ctx.reducedMotion())
 	return { destroy = function() end, refresh = render }
 end

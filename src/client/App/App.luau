@@ -278,6 +278,15 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 			ZIndex = 5,
 			Parent = row,
 		}, { Ui.corner(6), Ui.stroke(C.Night, 2) })
+		-- The dot breathes so a ready reward catches the eye.
+		if not ctx.reducedMotion() then
+			local beat = Ui.new("UIScale", { Parent = dot })
+			TweenService:Create(
+				beat,
+				TweenInfo.new(0.7, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+				{ Scale = 1.3 }
+			):Play()
+		end
 		Ui.juice(row)
 		row.Activated:Connect(function()
 			Ui.sound("click")
