@@ -2,7 +2,10 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
-## 0. Review the lobby, world picker and the 10 worlds (session 3)
+## 0. Review the lobby, world picker, the 10 worlds and the new cards (session 3)
+- **Cards:** `docs/screens/cards/` (every rarity at level 1, level 15 and Golden; large Legendary and
+  Mythical; hatch, collection, battle, results and deck builder). Say if the effects should be
+  stronger or calmer per rarity.
 - **Screenshots:** `docs/screens/12-15` (lobby spawn, world picker for a new player and at 760
   trophies, arriving in World 1) and `docs/screens/worlds/world01..10-*.jpg`.
 - **World art is a first pass.** Each world has generated terrain, 6 generated meshes (Roblox
@@ -26,11 +29,15 @@ In Blender: **N panel → BlenderMCP**:
 Then tell Claude "Blender is ready".
 
 ## 2. Character images (the main art blocker)
-Generate one image per character from `art/characters/PROMPTS.md` and save it as
-`art/characters/<id>/front.png` (about 1024 px tall, plain light-grey background).
-**Start with two for the vertical slice.** Suggested: `ren_emberfang` (Flame Striker) and
-`yuki_frostveil` (Ice Guardian), the two launch characters with the most different silhouettes.
-Until they exist, battle and cards use the procedural placeholder rigs.
+Generate the **card art** first, from `art/characters/PROMPTS.md`: one **transparent PNG** per
+character, 768 × 1024, the character alone, upper body to knees, dynamic pose, anime cel-shaded, saved
+as `art/characters/<id>/card.png`. Never use images of existing anime or game characters.
+**Start with two:** `ren_emberfang` (Flame Striker) and `yuki_frostveil` (Ice Guardian). Claude
+uploads them and sets `CharacterDef.assets.cardArt`; until then the cards show a TEMP role
+silhouette tinted with the character's colours (labelled "TEMP ART"). The A-pose model reference
+(`front.png`) is only needed later for 3D.
+Also optional: 15 painted family backgrounds (`card_bg_<family>`, listed in `art/ui/PROMPTS.md`
+under "Card backgrounds") to replace the code-drawn ones.
 
 ## 3. Final UI art
 Generate every image in `art/ui/PROMPTS.md` at the exact size, with a transparent background, as

@@ -303,7 +303,7 @@ function Battle.open(ctx: any, start: any): Handle
 		local s = view.sides[side]
 		local u = s.units[s.active]
 		local def = Characters.ById[u.characterId]
-		local card = Visuals.portrait(plate, u.characterId, false, Vector2.new(70, 98))
+		local card = Visuals.portrait(plate, u.characterId, false, Vector2.new(70, 98), false, u.level)
 		card.Position = if mine then UDim2.fromOffset(12, 14) else UDim2.new(1, -82, 0, 14)
 		card.ZIndex = 2
 		local x = if mine then 92 else 12
@@ -544,7 +544,7 @@ function Battle.open(ctx: any, start: any): Handle
 					ZIndex = 11,
 					Parent = row,
 				})
-				local card = Visuals.portrait(b, u.characterId, false, Vector2.new(140, 196))
+				local card = Visuals.portrait(b, u.characterId, false, Vector2.new(140, 196), true, u.level)
 				card.ZIndex = 12
 				Ui.text({
 					Text = `HP {u.hp}/{u.maxHp}`,
@@ -657,15 +657,15 @@ function Battle.open(ctx: any, start: any): Handle
 				BackgroundTransparency = 1,
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = UDim2.fromScale(0.5, 0.5),
-				Size = UDim2.fromOffset(640, 440),
+				Size = UDim2.fromOffset(640, 490),
 				ZIndex = 21,
 				Parent = resultBox,
 			})
 			if won then
 				local rays = Ui.image("light_rays", {
 					AnchorPoint = Vector2.new(0.5, 0.5),
-					Position = UDim2.fromOffset(320, 110),
-					Size = UDim2.fromOffset(560, 560),
+					Position = UDim2.fromOffset(320, 94),
+					Size = UDim2.fromOffset(520, 520),
 					ImageColor3 = C.Gold,
 					ImageTransparency = 0.5,
 					ZIndex = 21,
@@ -682,17 +682,17 @@ function Battle.open(ctx: any, start: any): Handle
 			local banner = Ui.image(if won then "banner_victory" else "banner_defeat", {
 				AnchorPoint = Vector2.new(0.5, 0),
 				Position = UDim2.fromOffset(320, 0),
-				Size = UDim2.fromOffset(600, 225),
+				Size = UDim2.fromOffset(500, 188),
 				ZIndex = 22,
 				Parent = centre,
 			})
 			Ui.display({
 				Text = if won then "Victory!" else "Defeat",
-				TextSize = 62,
+				TextSize = 54,
 				TextColor3 = if won then C.White else Color3.fromHex("#C9D2E8"),
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = UDim2.fromScale(0.5, 0.6),
-				Size = UDim2.fromOffset(520, 80),
+				Size = UDim2.fromOffset(440, 70),
 				ZIndex = 23,
 				Parent = banner,
 			}, won)
@@ -710,18 +710,55 @@ function Battle.open(ctx: any, start: any): Handle
 				FontFace = F.Title,
 				TextSize = 18,
 				TextXAlignment = Enum.TextXAlignment.Center,
-				Position = UDim2.fromOffset(0, 226),
+				Position = UDim2.fromOffset(0, 182),
 				Size = UDim2.new(1, 0, 0, 26),
 				ZIndex = 22,
 				Parent = centre,
 			})
 			Ui.outline(C.Night, 1.5).Parent = sub
 
+			-- Your team, on their cards (knocked-out cards are dimmed).
+			local team = Ui.frame({
+				Name = "Team",
+				BackgroundTransparency = 1,
+				Position = UDim2.fromOffset(0, 214),
+				Size = UDim2.new(1, 0, 0, 126),
+				ZIndex = 22,
+				Parent = centre,
+			}, { Ui.list(true, 12, Enum.HorizontalAlignment.Center) })
+			for slot, u in view.sides[you].units do
+				local cell = Ui.frame({
+					BackgroundTransparency = 1,
+					Size = UDim2.fromOffset(90, 126),
+					LayoutOrder = slot,
+					ZIndex = 22,
+					Parent = team,
+				})
+				Visuals.portrait(cell, u.characterId, false, Vector2.new(90, 126), true, u.level)
+				if u.hp <= 0 then
+					Ui.frame({
+						BackgroundColor3 = C.Night,
+						BackgroundTransparency = 0.45,
+						Size = UDim2.fromScale(1, 1),
+						ZIndex = 30,
+						Parent = cell,
+					}, { Ui.corner(8) })
+					Ui.display({
+						Text = "KO",
+						TextSize = 30,
+						TextColor3 = C.Red,
+						Size = UDim2.fromScale(1, 1),
+						ZIndex = 31,
+						Parent = cell,
+					})
+				end
+			end
+
 			-- Reward chips (count up), then any notes.
 			local chips = Ui.frame({
 				Name = "Rewards",
 				BackgroundTransparency = 1,
-				Position = UDim2.fromOffset(0, 262),
+				Position = UDim2.fromOffset(0, 348),
 				Size = UDim2.new(1, 0, 0, 44),
 				ZIndex = 22,
 				Parent = centre,
@@ -798,8 +835,8 @@ function Battle.open(ctx: any, start: any): Handle
 				TextSize = 14,
 				TextColor3 = C.Muted,
 				TextXAlignment = Enum.TextXAlignment.Center,
-				Position = UDim2.fromOffset(0, 314),
-				Size = UDim2.new(1, 0, 0, 40),
+				Position = UDim2.fromOffset(0, 394),
+				Size = UDim2.new(1, 0, 0, 32),
 				ZIndex = 22,
 				Parent = centre,
 			})
@@ -808,7 +845,7 @@ function Battle.open(ctx: any, start: any): Handle
 			end, {
 				Name = "Continue",
 				AnchorPoint = Vector2.new(0.5, 0),
-				Position = UDim2.fromOffset(320, 366),
+				Position = UDim2.fromOffset(320, 432),
 				Size = UDim2.fromOffset(240, 50),
 				ZIndex = 22,
 			})

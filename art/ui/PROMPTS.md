@@ -123,34 +123,9 @@ flat vector drawings made by `scripts/art/make_temp_ui.py`, and are marked Place
 
 | Slot | Size (px) | 9-slice | Bleed | Used for |
 | --- | --- | --- | --- | --- |
-| `card_frame_common` | 512×716 | none | 0 | Common card frame overlay (art shows through the middle) |
-| `card_frame_rare` | 512×716 | none | 0 | Rare card frame overlay (art shows through the middle) |
-| `card_frame_epic` | 512×716 | none | 0 | Epic card frame overlay (art shows through the middle) |
-| `card_frame_legendary` | 512×716 | none | 0 | Legendary card frame overlay (art shows through the middle) |
-| `card_frame_mythical` | 512×716 | none | 0 | Mythical card frame overlay (art shows through the middle) |
 | `card_golden_foil` | 512×716 | none | 0 | Golden copy foil overlay (on top of any frame) |
 | `card_back` | 512×716 | none | 0 | Card back (hatch flip, face-down cards) |
 | `card_shine` | 256×716 | none | 0 | Light sweep strip animated across Legendary/Mythical cards |
-
-**`card_frame_common`** (512×716)
-
-> a trading card frame for an anime card game, portrait 5:7, a single clean silver #B9C7DC border, no glow; the inside of the frame is completely transparent (a window for character art), a dark gradient name plate along the bottom 18%, a small blank plate in the top-left corner for the rarity word, a small round blank badge in the top-right for the family icon; same frame geometry as the other rarities, only colours and ornament differ. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
-
-**`card_frame_rare`** (512×716)
-
-> a trading card frame for an anime card game, portrait 5:7, a cyan #45BEFF border with a soft blue inner glow and small corner studs; the inside of the frame is completely transparent (a window for character art), a dark gradient name plate along the bottom 18%, a small blank plate in the top-left corner for the rarity word, a small round blank badge in the top-right for the family icon; same frame geometry as the other rarities, only colours and ornament differ. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
-
-**`card_frame_epic`** (512×716)
-
-> a trading card frame for an anime card game, portrait 5:7, a double violet #A469FF border with a purple glow and faceted corner gems; the inside of the frame is completely transparent (a window for character art), a dark gradient name plate along the bottom 18%, a small blank plate in the top-left corner for the rarity word, a small round blank badge in the top-right for the family icon; same frame geometry as the other rarities, only colours and ornament differ. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
-
-**`card_frame_legendary`** (512×716)
-
-> a trading card frame for an anime card game, portrait 5:7, an ornate double gold #FFC54B border with engraved corner filigree, warm glow and a light sheen; the inside of the frame is completely transparent (a window for character art), a dark gradient name plate along the bottom 18%, a small blank plate in the top-left corner for the rarity word, a small round blank badge in the top-right for the family icon; same frame geometry as the other rarities, only colours and ornament differ. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
-
-**`card_frame_mythical`** (512×716)
-
-> a trading card frame for an anime card game, portrait 5:7, an iridescent border shifting pink #FF668F to violet #A469FF to cyan #45BEFF, ornate corners, sparkles and a strong glow; the inside of the frame is completely transparent (a window for character art), a dark gradient name plate along the bottom 18%, a small blank plate in the top-left corner for the rarity word, a small round blank badge in the top-right for the family icon; same frame geometry as the other rarities, only colours and ornament differ. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
 
 **`card_golden_foil`** (512×716)
 
@@ -388,3 +363,313 @@ flat vector drawings made by `scripts/art/make_temp_ui.py`, and are marked Place
 **`reward_chip`** (256×72)
 
 > a horizontal pill-shaped reward chip, dark navy body, soft gold border glow; blank. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+## Card layers
+
+| Slot | Size (px) | 9-slice | Bleed | Used for |
+| --- | --- | --- | --- | --- |
+| `card_border` | 512×716 | none | 0 | The card frame for every rarity, in greys (tinted per rarity in code) |
+| `card_glow` | 320×420 | none | 0 | Soft outer glow behind a card (tinted, pulsed in code) |
+| `card_holo` | 512×716 | none | 0 | Holo-foil band pattern over Mythical cards (coloured by a moving gradient) |
+| `badge_level` | 96×96 | none | 0 | Level badge (top-left of a card, tinted, number drawn in code) |
+| `badge_crown` | 96×72 | none | 0 | Crown over the level badge at level 15 |
+
+**`card_border`** (512×716)
+
+> a trading card frame for an anime card game, portrait 5:7, drawn entirely in white and light-to-mid grey metal (no colour, it is tinted in code): a bevelled outer border, a thin inner border, a ribbon-shaped banner socket centred on the top edge, round sockets in the top-left and top-right corners, a dark name plate across the bottom 22% with a thin divider above a stat strip, small gems at the four corners; the window inside is completely transparent. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_glow`** (320×420)
+
+> a soft white glow in the shape of a rounded portrait card outline, feathered outward, transparent centre and edges. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_holo`** (512×716)
+
+> a transparent overlay of thin diagonal white holographic foil bands and fine sparkle noise, mostly transparent, for a trading card. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`badge_level`** (96×96)
+
+> a round faceted metal medal badge in white and grey (tinted in code), bevelled rim, blank centre. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`badge_crown`** (96×72)
+
+> a small shiny gold crown with three points and gems, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+## Card backgrounds
+
+| Slot | Size (px) | 9-slice | Bleed | Used for |
+| --- | --- | --- | --- | --- |
+| `card_bg_flame` | 320×448 | none | 0 | Flame family card background (behind the character) |
+| `card_bg_ice` | 320×448 | none | 0 | Ice family card background (behind the character) |
+| `card_bg_lightning` | 320×448 | none | 0 | Lightning family card background (behind the character) |
+| `card_bg_shadow` | 320×448 | none | 0 | Shadow family card background (behind the character) |
+| `card_bg_divine` | 320×448 | none | 0 | Divine family card background (behind the character) |
+| `card_bg_beast` | 320×448 | none | 0 | Beast family card background (behind the character) |
+| `card_bg_dragon` | 320×448 | none | 0 | Dragon family card background (behind the character) |
+| `card_bg_warrior` | 320×448 | none | 0 | Warrior family card background (behind the character) |
+| `card_bg_ninja` | 320×448 | none | 0 | Ninja family card background (behind the character) |
+| `card_bg_royal` | 320×448 | none | 0 | Royal family card background (behind the character) |
+| `card_bg_cosmic` | 320×448 | none | 0 | Cosmic family card background (behind the character) |
+| `card_bg_ancient` | 320×448 | none | 0 | Ancient family card background (behind the character) |
+| `card_bg_mystic` | 320×448 | none | 0 | Mystic family card background (behind the character) |
+| `card_bg_spirit` | 320×448 | none | 0 | Spirit family card background (behind the character) |
+| `card_bg_demon` | 320×448 | none | 0 | Demon family card background (behind the character) |
+| `family_flame` | 64×64 | none | 0 | Flame family glyph (white, tinted in code) |
+| `family_ice` | 64×64 | none | 0 | Ice family glyph (white, tinted in code) |
+| `family_lightning` | 64×64 | none | 0 | Lightning family glyph (white, tinted in code) |
+| `family_shadow` | 64×64 | none | 0 | Shadow family glyph (white, tinted in code) |
+| `family_divine` | 64×64 | none | 0 | Divine family glyph (white, tinted in code) |
+| `family_beast` | 64×64 | none | 0 | Beast family glyph (white, tinted in code) |
+| `family_dragon` | 64×64 | none | 0 | Dragon family glyph (white, tinted in code) |
+| `family_warrior` | 64×64 | none | 0 | Warrior family glyph (white, tinted in code) |
+| `family_ninja` | 64×64 | none | 0 | Ninja family glyph (white, tinted in code) |
+| `family_royal` | 64×64 | none | 0 | Royal family glyph (white, tinted in code) |
+| `family_cosmic` | 64×64 | none | 0 | Cosmic family glyph (white, tinted in code) |
+| `family_ancient` | 64×64 | none | 0 | Ancient family glyph (white, tinted in code) |
+| `family_mystic` | 64×64 | none | 0 | Mystic family glyph (white, tinted in code) |
+| `family_spirit` | 64×64 | none | 0 | Spirit family glyph (white, tinted in code) |
+| `family_demon` | 64×64 | none | 0 | Demon family glyph (white, tinted in code) |
+
+**`card_bg_flame`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #C2412D to near-black navy with rising flame tongues and embers in #FFB347, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_ice`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #7FB8E0 to near-black navy with frost crystal shards and snow motes in #E8F6FF, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_lightning`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #3A55C8 to near-black navy with zig-zag lightning bolts and sparks in #FFE14D, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_shadow`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #2B2540 to near-black navy with curling ink-smoke wisps in #9B7BFF, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_divine`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #F1E6C8 to near-black navy with soft light rays from above and floating feathers in #FFD45C, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_beast`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #8A5A3B to near-black navy with claw slash marks and drifting leaves in #D9B48A, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_dragon`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #2F7A4D to near-black navy with a dragon-scale pattern and sparks in #FF6A2B, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_warrior`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #7B8794 to near-black navy with crossed steel streaks and sparks in #D2462E, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_ninja`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #22303F to near-black navy with spinning leaves and shuriken silhouettes in #4FD1C5, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_royal`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #5B2A86 to near-black navy with a gold diamond lattice and glints in #FFC54B, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_cosmic`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #1C1F4A to near-black navy with a starfield and nebula swirl in #FF7BE5, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_ancient`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #9C8B6E to near-black navy with stone rune circles with a jade glow in #5FD3A0, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_mystic`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #3E2A6B to near-black navy with a glowing glyph circle and motes in #B98CFF, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_spirit`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #A9D8D0 to near-black navy with floating lantern-light orbs in #FFFFFF, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`card_bg_demon`** (320×448)
+
+> an anime trading card background, portrait 5:7, no character: a deep gradient from #4A1022 to near-black navy with glowing red cracks and hellfire embers in #FF3B3B, soft glow behind the centre where the character stands, painterly but clean. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_flame`** (64×64)
+
+> a simple bold white icon glyph for the Flame family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_ice`** (64×64)
+
+> a simple bold white icon glyph for the Ice family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_lightning`** (64×64)
+
+> a simple bold white icon glyph for the Lightning family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_shadow`** (64×64)
+
+> a simple bold white icon glyph for the Shadow family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_divine`** (64×64)
+
+> a simple bold white icon glyph for the Divine family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_beast`** (64×64)
+
+> a simple bold white icon glyph for the Beast family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_dragon`** (64×64)
+
+> a simple bold white icon glyph for the Dragon family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_warrior`** (64×64)
+
+> a simple bold white icon glyph for the Warrior family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_ninja`** (64×64)
+
+> a simple bold white icon glyph for the Ninja family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_royal`** (64×64)
+
+> a simple bold white icon glyph for the Royal family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_cosmic`** (64×64)
+
+> a simple bold white icon glyph for the Cosmic family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_ancient`** (64×64)
+
+> a simple bold white icon glyph for the Ancient family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_mystic`** (64×64)
+
+> a simple bold white icon glyph for the Mystic family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_spirit`** (64×64)
+
+> a simple bold white icon glyph for the Spirit family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`family_demon`** (64×64)
+
+> a simple bold white icon glyph for the Demon family of an anime card game, flat, isolated. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+## Card cutouts (TEMP)
+
+| Slot | Size (px) | 9-slice | Bleed | Used for |
+| --- | --- | --- | --- | --- |
+| `cutout_striker_line` | 384×512 | none | 0 | TEMP Striker character cutout, line layer (replaced by the character's own art) |
+| `cutout_striker_skin` | 384×512 | none | 0 | TEMP Striker character cutout, skin layer (replaced by the character's own art) |
+| `cutout_striker_outfit` | 384×512 | none | 0 | TEMP Striker character cutout, outfit layer (replaced by the character's own art) |
+| `cutout_striker_accent` | 384×512 | none | 0 | TEMP Striker character cutout, accent layer (replaced by the character's own art) |
+| `cutout_guardian_line` | 384×512 | none | 0 | TEMP Guardian character cutout, line layer (replaced by the character's own art) |
+| `cutout_guardian_skin` | 384×512 | none | 0 | TEMP Guardian character cutout, skin layer (replaced by the character's own art) |
+| `cutout_guardian_outfit` | 384×512 | none | 0 | TEMP Guardian character cutout, outfit layer (replaced by the character's own art) |
+| `cutout_guardian_accent` | 384×512 | none | 0 | TEMP Guardian character cutout, accent layer (replaced by the character's own art) |
+| `cutout_skirmisher_line` | 384×512 | none | 0 | TEMP Skirmisher character cutout, line layer (replaced by the character's own art) |
+| `cutout_skirmisher_skin` | 384×512 | none | 0 | TEMP Skirmisher character cutout, skin layer (replaced by the character's own art) |
+| `cutout_skirmisher_outfit` | 384×512 | none | 0 | TEMP Skirmisher character cutout, outfit layer (replaced by the character's own art) |
+| `cutout_skirmisher_accent` | 384×512 | none | 0 | TEMP Skirmisher character cutout, accent layer (replaced by the character's own art) |
+| `cutout_trickster_line` | 384×512 | none | 0 | TEMP Trickster character cutout, line layer (replaced by the character's own art) |
+| `cutout_trickster_skin` | 384×512 | none | 0 | TEMP Trickster character cutout, skin layer (replaced by the character's own art) |
+| `cutout_trickster_outfit` | 384×512 | none | 0 | TEMP Trickster character cutout, outfit layer (replaced by the character's own art) |
+| `cutout_trickster_accent` | 384×512 | none | 0 | TEMP Trickster character cutout, accent layer (replaced by the character's own art) |
+| `cutout_support_line` | 384×512 | none | 0 | TEMP Support character cutout, line layer (replaced by the character's own art) |
+| `cutout_support_skin` | 384×512 | none | 0 | TEMP Support character cutout, skin layer (replaced by the character's own art) |
+| `cutout_support_outfit` | 384×512 | none | 0 | TEMP Support character cutout, outfit layer (replaced by the character's own art) |
+| `cutout_support_accent` | 384×512 | none | 0 | TEMP Support character cutout, accent layer (replaced by the character's own art) |
+| `cutout_bruiser_line` | 384×512 | none | 0 | TEMP Bruiser character cutout, line layer (replaced by the character's own art) |
+| `cutout_bruiser_skin` | 384×512 | none | 0 | TEMP Bruiser character cutout, skin layer (replaced by the character's own art) |
+| `cutout_bruiser_outfit` | 384×512 | none | 0 | TEMP Bruiser character cutout, outfit layer (replaced by the character's own art) |
+| `cutout_bruiser_accent` | 384×512 | none | 0 | TEMP Bruiser character cutout, accent layer (replaced by the character's own art) |
+
+**`cutout_striker_line`** (384×512)
+
+> TEMPORARY stand-in only: the line layer of a flat anime-style Striker silhouette raising a big sword overhead in one hand, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_striker_skin`** (384×512)
+
+> TEMPORARY stand-in only: the skin layer of a flat anime-style Striker silhouette raising a big sword overhead in one hand, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_striker_outfit`** (384×512)
+
+> TEMPORARY stand-in only: the outfit layer of a flat anime-style Striker silhouette raising a big sword overhead in one hand, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_striker_accent`** (384×512)
+
+> TEMPORARY stand-in only: the accent layer of a flat anime-style Striker silhouette raising a big sword overhead in one hand, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_guardian_line`** (384×512)
+
+> TEMPORARY stand-in only: the line layer of a flat anime-style Guardian silhouette braced behind a large shield, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_guardian_skin`** (384×512)
+
+> TEMPORARY stand-in only: the skin layer of a flat anime-style Guardian silhouette braced behind a large shield, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_guardian_outfit`** (384×512)
+
+> TEMPORARY stand-in only: the outfit layer of a flat anime-style Guardian silhouette braced behind a large shield, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_guardian_accent`** (384×512)
+
+> TEMPORARY stand-in only: the accent layer of a flat anime-style Guardian silhouette braced behind a large shield, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_skirmisher_line`** (384×512)
+
+> TEMPORARY stand-in only: the line layer of a flat anime-style Skirmisher silhouette in a low lean with a dagger in each hand and a trailing scarf, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_skirmisher_skin`** (384×512)
+
+> TEMPORARY stand-in only: the skin layer of a flat anime-style Skirmisher silhouette in a low lean with a dagger in each hand and a trailing scarf, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_skirmisher_outfit`** (384×512)
+
+> TEMPORARY stand-in only: the outfit layer of a flat anime-style Skirmisher silhouette in a low lean with a dagger in each hand and a trailing scarf, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_skirmisher_accent`** (384×512)
+
+> TEMPORARY stand-in only: the accent layer of a flat anime-style Skirmisher silhouette in a low lean with a dagger in each hand and a trailing scarf, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_trickster_line`** (384×512)
+
+> TEMPORARY stand-in only: the line layer of a flat anime-style Trickster silhouette fanning three cards in one hand, cape flaring, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_trickster_skin`** (384×512)
+
+> TEMPORARY stand-in only: the skin layer of a flat anime-style Trickster silhouette fanning three cards in one hand, cape flaring, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_trickster_outfit`** (384×512)
+
+> TEMPORARY stand-in only: the outfit layer of a flat anime-style Trickster silhouette fanning three cards in one hand, cape flaring, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_trickster_accent`** (384×512)
+
+> TEMPORARY stand-in only: the accent layer of a flat anime-style Trickster silhouette fanning three cards in one hand, cape flaring, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_support_line`** (384×512)
+
+> TEMPORARY stand-in only: the line layer of a flat anime-style Support silhouette holding a tall staff topped with a glowing orb, long robe, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_support_skin`** (384×512)
+
+> TEMPORARY stand-in only: the skin layer of a flat anime-style Support silhouette holding a tall staff topped with a glowing orb, long robe, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_support_outfit`** (384×512)
+
+> TEMPORARY stand-in only: the outfit layer of a flat anime-style Support silhouette holding a tall staff topped with a glowing orb, long robe, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_support_accent`** (384×512)
+
+> TEMPORARY stand-in only: the accent layer of a flat anime-style Support silhouette holding a tall staff topped with a glowing orb, long robe, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_bruiser_line`** (384×512)
+
+> TEMPORARY stand-in only: the line layer of a flat anime-style Bruiser silhouette with broad shoulders and huge gauntlet fists raised, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_bruiser_skin`** (384×512)
+
+> TEMPORARY stand-in only: the skin layer of a flat anime-style Bruiser silhouette with broad shoulders and huge gauntlet fists raised, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_bruiser_outfit`** (384×512)
+
+> TEMPORARY stand-in only: the outfit layer of a flat anime-style Bruiser silhouette with broad shoulders and huge gauntlet fists raised, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.
+
+**`cutout_bruiser_accent`** (384×512)
+
+> TEMPORARY stand-in only: the accent layer of a flat anime-style Bruiser silhouette with broad shoulders and huge gauntlet fists raised, upper body to knees, greyscale so it can be tinted. Roblox anime card battler UI, dark navy and purple night theme with neon violet and cyan glow, glossy, clean vector game UI, crisp edges, soft outer glow, centred, isolated on a fully transparent background, no text, no letters, no watermark, no logo.

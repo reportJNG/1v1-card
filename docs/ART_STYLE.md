@@ -151,12 +151,28 @@ Rules:
 - Popups are centred and keep their ratio with `UIAspectRatioConstraint`.
 - Test at phone (844×390), tablet (1024×768) and PC (1920×1080).
 
-### Cards (one silhouette)
-- A 5:7 portrait card. The art fills the card, and the frame overlays it with the rarity tag
-  (top-left, e.g. "EPIC"), the family badge (top-right), the name plate (bottom) and the power
-  chip (bottom-left sword icon + number).
+### Cards (one silhouette, layered, 2.5D) — `App/Card`, animated by `App/CardFx`
+- A 5:7 portrait card built from layers, back to front: drop shadow and outer glow → family
+  background (`card_bg_<family>`) → family-accent rim glow → the character's **transparent cutout**
+  (`art/characters/<id>/card.png`) with a rim light → effects → the frame → Golden foil → plates.
+- Plates: the **rarity banner** (top centre, the rarity word in its colour), the **level badge**
+  (top-left; level 15 adds a crown and a stronger glow), the **family icon** (top-right), the
+  name, and the **stats** (ATK and HP at the card's level, from `BattleRules`).
+- Rarer is more impressive, but the silhouette never changes:
+  | Rarity | Frame | Extra |
+  | --- | --- | --- |
+  | Common | clean silver | soft shadow only |
+  | Rare | bright blue | periodic shine sweep, blue glow |
+  | Epic | purple, animated gradient | turning glow |
+  | Legendary | gold | twinkling sparkles, pulsing glow |
+  | Mythical | prismatic, animated | holo-foil shimmer, rising particles |
+  | Golden copy | gold foil over any rarity | "GOLDEN" in the banner, moving foil sheen |
+- **2.5D:** the background, character and effects shift by depth toward the pointer on hover
+  (PC), while pressed or dragged (touch), and with the device's tilt (mobile accelerometer).
+- **Cheap:** one render-step loop for every card; a card animates only while it's on screen (its
+  ScreenGui enabled, every ancestor visible, not scrolled out of view). Small grid cards use fewer
+  particles and no shine.
 - The rarity tag uses words, never "SSR/UR".
-- Golden copies add the foil overlay and a small "GOLDEN" ribbon.
 
 ## 5. Character style
 

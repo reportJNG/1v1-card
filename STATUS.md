@@ -22,7 +22,8 @@
 | Image-based UI kit (9-slice skins, fonts, motion, sounds, theme pass) | `App/Ui`, `App/Theme`, `Config/UiAssets`, `Config/Sounds` | Studio previews (`tests/Tools/UiPreview`), validator spec |
 | Lobby as the spawn point: join, respawn, after every battle, fall-out; world picker (art, trophies, lock state), World.Travel (server-checked), Back to Lobby (portal + HUD) | `Config/HubLayout`, `Server/World/HubBuilder`, `Services/WorldService`, `Screens/Worlds`, `Config/WorldArt` | Play mode in Studio: spawn, picker from the portal, locked world refused, travel, respawn, Trial → lobby, lobby portal |
 | Area lighting + sky + music per area (hub, arena, world1..10) | `Config/Lighting`, `Config/Sounds`, `App/AreaFx` | Play mode in Studio, world captures |
-| Card component on frame art, hatch sequence, 3D battle stage, battle UI, results | `App/Visuals`, `Screens/Hatch`, `App/BattleStage`, `Screens/Battle` | Play mode: a real Guardian Trial round and forfeit |
+| Layered 2.5D card (shadow, glow, family background, cutout + rim light, effects, rarity-tinted frame, Golden foil, rarity banner, level badge with level-15 crown, family icon, stats), animated only while on screen, parallax on hover / press / tilt; used in collection, inspect, deck builder, hatch reveal, battle, KO picker and results | `App/Card`, `App/CardFx`, `App/Visuals`, `scripts/art/card_layers.py` | Play mode (hatch, collection + inspect, battle, result), `tests/Tools/CardPreview` gallery, CardFx visibility counts in Studio, `docs/screens/cards` |
+| Hatch sequence, 3D battle stage, battle UI, results | `Screens/Hatch`, `App/BattleStage`, `Screens/Battle` | Play mode: a real Guardian Trial round and forfeit |
 | 100 character art briefs | `Config/Characters` (`look`), `sim/roster_looks.py` | ConfigValidator spec |
 
 ## Placeholder (marked in `Config/ContentStatus` / `status = "Placeholder"`; release builds refuse them)
@@ -49,13 +50,16 @@
 | Check | Result |
 | --- | --- |
 | StyLua, Selene, luau-lsp strict, Rojo build (default, dev, e2e) | clean |
+| TestEZ headless (session 3) | 246 passed, 0 failed |
+| TestEZ in real Studio (session 3, run-in-roblox) | 246 passed, 0 failed |
 | TestEZ headless (session 2) | 242 passed, 0 failed |
 | TestEZ in real Studio (session 2, `build/slice.rbxlx`) | 242 passed, 0 failed |
 | TestEZ headless (session 1) | 240 passed, 0 failed |
 | TestEZ in real Studio (the owner's `live.rbxlx`, Rojo-synced) | 240 passed, 0 failed |
-| Server boot in Studio Run mode (`scripts/studio/boot-check`) | 27 remotes, 10 worlds, 130 nodes, 0 errors |
-| Every screen in Studio (`scripts/studio/ui-check`) | 0 failures, 0 text overflows, Robux button hidden/shown with the attribute, all 100 rigs build |
-| End-to-end Play test in Studio (`scripts/e2e`, real client and UI) | 40 passed, 0 failed |
+| Server boot in Studio Run mode (`scripts/studio/boot-check`, session 3) | 29 remotes, 10 worlds, 130 nodes, 160 prompts, 0 errors |
+| Every screen in Studio (`scripts/studio/ui-check`, session 3) | 0 failures, 0 text overflows (2 found and fixed: Shop drop line, hatch caption), Robux button hidden/shown with the attribute, all 100 rigs build |
+| End-to-end Play test in Studio (`scripts/e2e`, real client and UI, session 3) | 40 passed, 0 failed |
+| Lobby / worlds Play test (session 3) | spawn in lobby, picker from the portal, locked world refused, travel, harvest, sell, Trial → back in lobby, respawn → lobby, lobby portal → lobby |
 | `sim/balance.py` (100 characters) | every target met (characters 47.4-52.9%, attack-only 59%, adaptive 60%, length 15.9) |
 | Player Emulator, 4 policy combinations | **1 of 4 run**: known/unrestricted/trading allowed printed `MATCH` (Studio defaults). The other 3 need the Player Emulator UI, which the Studio MCP can't drive. The logic for all 4 is unit-tested (PolicyMatrix.spec) |
 | Cross-server matchmaking and teleports | logic unit-tested with mocks. ReserveServer/TeleportService only work on a published place, so not run live |

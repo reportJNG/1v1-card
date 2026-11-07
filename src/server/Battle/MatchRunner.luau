@@ -52,6 +52,7 @@ export type MatchRunner = typeof(setmetatable(
 		needsNext: { [number]: boolean },
 		timeouts: { number },
 		ended: EndInfo?,
+		levels: { { number } }, -- per side, per slot: the level each card fights at (for the cards' badges)
 		_pickSeconds: number,
 		_nextSeconds: number,
 		_eventCursor: number,
@@ -65,6 +66,10 @@ function MatchRunner.new(options: Options): MatchRunner
 	local self = setmetatable({
 		matchId = options.matchId,
 		match = BattleRules.new(options.decks[1], options.decks[2], options.seed),
+		levels = {
+			{ options.decks[1][1].level, options.decks[1][2].level, options.decks[1][3].level },
+			{ options.decks[2][1].level, options.decks[2][2].level, options.decks[2][3].level },
+		},
 		phase = "Picking" :: Phase,
 		deadline = 0,
 		picks = {},
@@ -91,6 +96,7 @@ function MatchRunner.view(self: MatchRunner): { [string]: any }
 			local status = table.clone(u.status)
 			units[slot] = {
 				characterId = u.characterId,
+				level = self.levels[i][slot],
 				hp = u.hp,
 				maxHp = u.maxHp,
 				shield = u.shield,

@@ -1,4 +1,4 @@
-# Handoff (2026-11-06)
+# Handoff (2026-11-07)
 
 Every stage listed in the previous handoff is built, tested and committed (Settlement, MatchRunner +
 BattleService + Guardian Trials, M4 matchmaking, M6 worlds, M5 client UI, the 100-character roster
@@ -32,6 +32,24 @@ python3 sim/parity.py && python3 sim/ai_parity.py && python3 sim/balance.py && p
 python3 scripts/headless/bundle.py && luau build/headless.luau
 ```
 New characters: edit `sim/roster.py`, then `python sim/roster.py tune` and `python sim/roster.py write`.
+
+## Session 3: lobby, world maps, layered cards
+- The owner's next step is `POLISH_MISSION.md` (every box ticked, each with Play-mode screenshots in
+  `docs/screens`, all tests passing). Session 3's focus (lobby, worlds, cards) is done; see
+  `docs/CONVERSATION.md` "Session 3" for the decisions.
+- **Studio loop used this session.** Studio can't fetch localhost, so code is synced by rebuilding
+  `dev.project.json` to `build/worlds.rbxlx` and reopening it (~15 s). Images upload through the
+  Studio MCP `upload_image` from a local `python -m http.server 8765` in the repo root
+  (`http://127.0.0.1:8765/<path>`).
+- **Previews (Edit mode, Command Bar or MCP):**
+  - `require(game.ServerScriptService.Tests.Tools.WorldPreview).build()` then `.show(n)` (0 = lobby)
+  - `require(game.ServerScriptService.Tests.Tools.CardPreview).show()` (every rarity, Lv 1 / 15 /
+    Golden) or `.show({ big = true, rarity = "Mythical" })`
+- **New art:** world props are `generate_mesh` outputs recorded in `Config/WorldProps`; world skies
+  come from `python scripts/art/make_sky.py world` (`art/sky/ids.json`); card layers come from
+  `scripts/art/card_layers.py` through `make_temp_ui.py` (then `make_temp_ui.py luau`).
+- A character's transparent card art goes in `CharacterDef.assets.cardArt`; the TEMP cutout
+  disappears for that character automatically.
 
 ## Session 2: the visual slice
 - Read `docs/ART_STYLE.md` first; `docs/WAITING_ON_YOU.md` lists what the owner owes; screenshots are

@@ -460,3 +460,24 @@ roster's art.
   ambient particles (≤ 18/s) and an APM music track. Presets were tuned from Studio captures (the
   first pass was too foggy in 2, 5, 6 and 9 and blown out in 7 and 10).
 - **Picker thumbnails** are Studio captures of the built worlds, marked TEMP until key art exists.
+
+**Part 3: the card visual upgrade**
+- **One layered card everywhere** (`App/Card`): collection grid and inspect, deck builder slots and
+  picker, hatch reveal, battle plates, the KO replacement picker and a new "your team" row on the
+  Victory/Defeat screen. `Visuals.portrait` is now a thin wrapper, and every caller passes the
+  copy's level. Battle units carry their level in the client view (`MatchRunner.view`); the battle
+  engine itself is untouched.
+- **One frame image for every rarity.** `card_border` is drawn in greys, and a UIGradient tints and
+  turns it per rarity. That keeps the silhouette identical (design-system rule 6) and makes the
+  animated Epic/Mythical borders cost one property write per frame. The five old per-rarity frame
+  images were removed.
+- **Effects run only on visible cards** (`App/CardFx`): checked every 0.2 s. Verified in Studio: a
+  15-card gallery animates 15 while shown, 0 while hidden, and destroyed cards leave the loop.
+- **TEMP cutouts until the owner's art.** Each of the 6 roles has a 4-layer silhouette (ink line,
+  skin, outfit tinted with the character's first look colour, accent tinted with its second), so
+  every card already works as a layered card. They are labelled "TEMP ART" on big cards and listed
+  as Placeholder; a character's own transparent `card.png` replaces them through
+  `CharacterDef.assets.cardArt`.
+- **Character prompts** now lead with the card cutout ("transparent background, single character,
+  upper body to knees, dynamic pose, anime cel-shaded"); the A-pose model reference stays as the
+  second image. `art/ui/PROMPTS.md` gained the 15 family backgrounds and the card layers.

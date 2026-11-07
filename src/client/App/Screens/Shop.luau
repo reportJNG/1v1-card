@@ -242,6 +242,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			TextSize = 13,
 			TextColor3 = Theme.Rarity[best] or C.Text,
 			TextXAlignment = Enum.TextXAlignment.Center,
+			Size = UDim2.new(1, 0, 0, 34), -- two lines: the world name wraps under the rarity range
 			LayoutOrder = 3,
 			Parent = content,
 		})

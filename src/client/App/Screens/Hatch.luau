@@ -209,7 +209,8 @@ function Hatch.show(ctx: any, cards: { any }, egg: Types.EggDef, golden: boolean
 				ScaleType = Enum.ScaleType.Stretch,
 				Parent = slot,
 			})
-			local face = Visuals.portrait(slot, card.characterId, card.golden, Vector2.new(160, 224), true)
+			local face =
+				Visuals.portrait(slot, card.characterId, card.golden, Vector2.new(160, 224), true, card.level)
 			face.AnchorPoint = Vector2.new(0.5, 0.5)
 			face.Position = UDim2.fromScale(0.5, 0.45)
 			face.Visible = reduced
@@ -225,6 +226,7 @@ function Hatch.show(ctx: any, cards: { any }, egg: Types.EggDef, golden: boolean
 				Parent = slot,
 			})
 			Ui.outline(C.Night, 1).Parent = label
+			Ui.fit(label, Theme.Size.small + 1, 8)
 			if reduced then
 				return
 			end

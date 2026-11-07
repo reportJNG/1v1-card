@@ -107,22 +107,7 @@ spec("toast", (512, 72), (36, 36, 476, 36), 6, "Notification toast",
      "a wide notification pill for a game UI, dark navy body at 90% opacity, thin cyan glowing border; blank",
      "HUD")
 
-for r in ["Common", "Rare", "Epic", "Legendary", "Mythical"]:
-    look = {
-        "Common": "a single clean silver #B9C7DC border, no glow",
-        "Rare": "a cyan #45BEFF border with a soft blue inner glow and small corner studs",
-        "Epic": "a double violet #A469FF border with a purple glow and faceted corner gems",
-        "Legendary": "an ornate double gold #FFC54B border with engraved corner filigree, warm glow and a light "
-                     "sheen",
-        "Mythical": "an iridescent border shifting pink #FF668F to violet #A469FF to cyan #45BEFF, ornate "
-                    "corners, sparkles and a strong glow",
-    }[r]
-    spec(f"card_frame_{r.lower()}", (512, 716), None, 0, f"{r} card frame overlay (art shows through the middle)",
-         f"a trading card frame for an anime card game, portrait 5:7, {look}; the inside of the frame is "
-         "completely transparent (a window for character art), a dark gradient name plate along the bottom 18%, a "
-         "small blank plate in the top-left corner for the rarity word, a small round blank badge in the top-right "
-         "for the family icon; same frame geometry as the other rarities, only colours and ornament differ",
-         "Cards")
+# The rarity frame is one tinted image now (card_border, scripts/art/card_layers.py).
 spec("card_golden_foil", (512, 716), None, 0, "Golden copy foil overlay (on top of any frame)",
      "a transparent overlay for a trading card: thin diagonal gold foil sheen streaks and a gold inner edge "
      "glow, mostly transparent so the card shows through", "Cards")
@@ -204,6 +189,11 @@ spec("banner_defeat", (1024, 384), None, 0, "Defeat banner (text drawn on top in
      "somber game defeat screen style", "Results")
 spec("reward_chip", (256, 72), (36, 36, 220, 36), 4, "Reward pill on the results screen (+Coins, +Trophies)",
      "a horizontal pill-shaped reward chip, dark navy body, soft gold border glow; blank", "Results")
+
+
+import card_layers  # noqa: E402  (the layered card's images: frame, glow, holo, backgrounds, cutouts)
+
+card_layers.register(spec)
 
 
 # ------------------------------------------------------------------------------ drawing
@@ -894,6 +884,8 @@ def draw(slot):
         draw_vs(c, w, h)
     elif slot in ("banner_victory", "banner_defeat"):
         draw_banner(c, w, h, slot.endswith("victory"))
+    elif card_layers.owns(slot):
+        card_layers.draw(c, slot, w, h)
     else:
         raise SystemExit(f"no drawing for {slot}")
     os.makedirs(TEMP, exist_ok=True)
