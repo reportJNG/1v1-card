@@ -88,3 +88,44 @@ captures of the hatch, collection, battle and result. The details are in `docs/C
 
 Screenshots are in `docs/screens/12-15` and `docs/screens/worlds/`. Everything was tested in Play
 (see `docs/CONVERSATION.md` "Session 3, Parts 1-2").
+
+## C. Gameplay HUD — done (2026-11-07)
+**Changed**
+- **Top:** Coins, Gems and Trophies with the league. The Coins **+** opens "How to earn Coins"
+  (Coins are never sold). The Gems **+** opens "What Gems are for": the cosmetics shop isn't in V1
+  (locked: designed, not built), so it explains that instead (`Screens/Tip`).
+- **Top right:** the gift (daily rewards) and calendar (quests) icons, plus a new **Friends** icon
+  that opens the Roblox invite prompt. In Studio it toasts that invites need the published game.
+- **Left:** the icon menu (Play, Inventory, Deck, Shop, Worlds, Quests, Settings), each with a
+  notification dot when something is ready (`Shared/Ui/HudBadges`, unit-tested):
+  - Quests: a finished quest or today's streak
+  - Shop: today's free egg or eggs in the bag
+  - Deck: fewer than 3 cards
+- **Bottom:**
+  - left: the current place ("LOBBY" or "WORLD 3 · DESERT KINGDOM")
+  - centre: the progress hint
+  - right: a quest tracker with a progress bar (taps through to Quests)
+- **Custom prompts** (`App/Prompts`): every world and hub prompt is drawn in the game's style, with
+  a gold key chip (E, the gamepad button, or TAP on touch, where the whole pill is the button), the
+  action and the object. Prompts are off while a modal or the menu is up.
+  - Billboards set to AlwaysOnTop were not drawn at all in this place (verified with a plain
+    test billboard), so prompts sit 6 studs up instead.
+- **Toasts and pop-ups:** reward, unlock and error toasts were already there. Currency gains now
+  float a "+N" up from the badge while it counts up.
+- **No emoji:** all 17 emoji labels were replaced by words or icon images (Coins, Gems, trophies,
+  energy, Power, "In deck").
+
+**Tested in Play (PC)**
+- Dots shown for Deck, Shop and Quests on a new profile; the Quests dot cleared after claiming the
+  streak.
+- The tracker showed "Daily: Harvest 30 resources 0/30".
+- The custom prompt showed at the egg stall, and E opened the Egg Shop.
+- The Coins + tip opened, and "+100" floated up on the streak claim.
+- Note: during a long idle pause with the Shop open, one Basic Egg was bought (ledger
+  `egg:egg_basic`, 35 minutes before it was noticed). It could not be reproduced, and no key or
+  code path buys without a click on Buy, so it was most likely an outside click on the open Studio
+  window.
+
+**Scores:** board 8 · readability 8 · polish 8 · clarity 9 · consistency 9.
+
+**Screens:** `docs/screens/hud/01-04`. The four sizes for the HUD are in `docs/screens/ui/04-07`.

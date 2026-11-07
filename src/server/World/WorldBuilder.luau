@@ -114,6 +114,7 @@ local function prompt(parent: BasePart, action: string, object: string, range: n
 	pp.ObjectText = object
 	pp.MaxActivationDistance = range
 	pp.HoldDuration = 0
+	pp.Style = Enum.ProximityPromptStyle.Custom -- drawn by the client (App/Prompts)
 	pp.RequiresLineOfSight = false
 	pp.Parent = parent
 end

@@ -7,8 +7,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local SocialService = game:GetService("SocialService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Progress = require(Shared.Domain.Progress)
+local HudBadges = require(Shared.Ui.HudBadges)
+local WorldsCfg = require(Shared.Config.Worlds)
 local UiFlow = require(Shared.Ui.UiFlow)
 local MainMenu = require(script.Parent.MainMenu)
 local Theme = require(script.Parent.Theme)
@@ -42,6 +46,7 @@ export type Ctx = {
 	guid: () -> string,
 	reducedMotion: () -> boolean,
 	ui: (event: string, arg: string?) -> (), -- feeds the UI state machine (UiFlow)
+	invite: () -> (), -- the Roblox friend-invite prompt
 	flow: UiFlow.Flow,
 }
 
@@ -64,7 +69,7 @@ local Worlds = require(Shared.Config.Worlds)
 -- Left menu (concept board order). Trade is V2 and not built, so it is not shown.
 local MENU = {
 	{ id = "Play", icon = "icon_play", label = "Play" },
-	{ id = "Collection", icon = "icon_cards", label = "Cards" },
+	{ id = "Collection", icon = "icon_cards", label = "Inventory" },
 	{ id = "Deck", icon = "icon_deck", label = "Deck" },
 	{ id = "Shop", icon = "icon_shop", label = "Shop" },
 	{ id = "Worlds", icon = "icon_worlds", label = "Worlds" },
@@ -160,23 +165,25 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 		return value
 	end
 	local coins = badge("Coins", "icon_coin", 1, function()
-		ctx.open("Worlds")
+		ctx.open("Tip", { kind = "coins" }) -- Coins are earned, never sold
 	end)
 	local gems = badge("Gems", "icon_gem", 2, function()
-		ctx.open("Quests")
+		ctx.open("Tip", { kind = "gems" })
 	end)
 	local trophies = badge("Trophies", "icon_trophy", 3, nil)
 
-	-- Top icons (top-right): daily rewards and quests.
+	-- Top icons (top-right): daily rewards, quests and inviting friends.
 	local icons = Ui.frame({
 		Name = "TopIcons",
 		BackgroundTransparency = 1,
 		AnchorPoint = Vector2.new(1, 0),
 		Position = UDim2.new(1, -14, 0, 8),
-		Size = UDim2.fromOffset(110, 48),
+		Size = UDim2.fromOffset(166, 48),
 		Parent = root,
 	}, { Ui.list(true, 8, Enum.HorizontalAlignment.Right) })
-	for i, item in { { "Daily", "icon_gift" }, { "QuestsIcon", "icon_calendar" } } do
+	for i, item in
+		{ { "Daily", "icon_gift" }, { "QuestsIcon", "icon_calendar" }, { "Friends", "icon_friends" } }
+	do
 		local b: ImageButton = Ui.new("ImageButton", {
 			Name = item[1],
 			Image = Ui.asset(item[2]),
@@ -189,7 +196,11 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 		Ui.juice(b)
 		b.Activated:Connect(function()
 			Ui.sound("click")
-			ctx.open("Quests")
+			if item[1] == "Friends" then
+				ctx.invite()
+			else
+				ctx.open("Quests")
+			end
 		end)
 	end
 
@@ -201,7 +212,7 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 		Size = UDim2.fromOffset(150, 7 * 50),
 		Parent = root,
 	}, { Ui.list(false, 6) })
-	local rows: { [string]: { skin: ImageLabel, label: TextLabel } } = {}
+	local rows: { [string]: { skin: ImageLabel, label: TextLabel, dot: Frame } } = {}
 	for i, item in MENU do
 		local row: TextButton = Ui.new("TextButton", {
 			Name = item.id,
@@ -225,12 +236,23 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 			Parent = row,
 		})
 		Ui.outline(C.Night, 1, 0.3).Parent = label
+		-- Notification dot: something is ready here (HudBadges).
+		local dot = Ui.frame({
+			Name = "Dot",
+			BackgroundColor3 = C.Red,
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(1, -10, 0, 10),
+			Size = UDim2.fromOffset(12, 12),
+			Visible = false,
+			ZIndex = 3,
+			Parent = row,
+		}, { Ui.corner(6), Ui.stroke(C.Night, 2) })
 		Ui.juice(row)
 		row.Activated:Connect(function()
 			Ui.sound("click")
 			ctx.open(item.id)
 		end)
-		rows[item.id] = { skin = skin, label = label }
+		rows[item.id] = { skin = skin, label = label, dot = dot }
 	end
 
 	-- Bottom hint: the next world and the trophies it needs.
@@ -257,14 +279,86 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 	})
 	Ui.fit(hintText, 14, 9)
 
-	-- Back to Lobby (bottom-left), shown only while the player is in a world (World attribute
-	-- 1-10). The server moves the character (World.Hub); each world also has a lobby portal.
+	-- Where the player is (bottom-left): the lobby, or the world number and name.
+	local place = Ui.frame({
+		Name = "Place",
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(0, 1),
+		Position = UDim2.new(0, 12, 1, -12),
+		Size = UDim2.fromOffset(200, 32),
+		Parent = root,
+	})
+	Ui.skin(place, "toast", 0.44)
+	Ui.icon("icon_worlds", 24, { Position = UDim2.new(0, 8, 0.5, 0), ZIndex = 2, Parent = place })
+	local placeText = Ui.text({
+		Name = "Value",
+		Text = "LOBBY",
+		FontFace = F.Title,
+		TextSize = 14,
+		TextWrapped = false,
+		Position = UDim2.fromOffset(38, 0),
+		Size = UDim2.new(1, -46, 1, 0),
+		ZIndex = 2,
+		Parent = place,
+	})
+	Ui.fit(placeText, 14, 9)
+
+	-- Quest tracker (bottom-right): the next daily quest; tap for Quests.
+	local tracker: TextButton = Ui.new("TextButton", {
+		Name = "Tracker",
+		Text = "",
+		AutoButtonColor = false,
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(1, 1),
+		Position = UDim2.new(1, -12, 1, -12),
+		Size = UDim2.fromOffset(230, 50),
+		Parent = root,
+	})
+	Ui.skin(tracker, "toast", 0.6)
+	Ui.icon("icon_quests", 26, { Position = UDim2.new(0, 8, 0.5, 0), ZIndex = 2, Parent = tracker })
+	local trackerText = Ui.text({
+		Text = "",
+		FontFace = F.Bold,
+		TextSize = 13,
+		TextWrapped = false,
+		Position = UDim2.fromOffset(40, 6),
+		Size = UDim2.new(1, -50, 0, 18),
+		ZIndex = 2,
+		Parent = tracker,
+	})
+	Ui.fit(trackerText, 13, 9)
+	local setTrack = Ui.bar(tracker, C.Gold, {
+		Position = UDim2.fromOffset(40, 28),
+		Size = UDim2.new(1, -86, 0, 10),
+		ZIndex = 2,
+	})
+	local trackerCount = Ui.text({
+		Text = "",
+		FontFace = F.Number,
+		TextSize = 12,
+		TextColor3 = C.Gold,
+		TextWrapped = false,
+		TextXAlignment = Enum.TextXAlignment.Right,
+		Position = UDim2.new(1, -44, 0, 24),
+		Size = UDim2.fromOffset(36, 18),
+		ZIndex = 2,
+		Parent = tracker,
+	})
+	Ui.juice(tracker)
+	tracker.Activated:Connect(function()
+		Ui.sound("click")
+		ctx.open("Quests")
+	end)
+
+	-- Back to Lobby (bottom-left, above the place name), shown only while the player is in a world
+	-- (World attribute 1-10). The server moves the character (World.Hub); each world also has a
+	-- lobby portal.
 	local lobby = Ui.button("Back to Lobby", "primary", function()
 		ctx.request("World.Hub")
 	end, {
 		Name = "Lobby",
 		AnchorPoint = Vector2.new(0, 1),
-		Position = UDim2.new(0, 12, 1, -14),
+		Position = UDim2.new(0, 12, 1, -52),
 		Size = UDim2.fromOffset(150, 40),
 		TextSize = 15,
 	})
@@ -277,7 +371,7 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 	end, {
 		Name = "MenuButton",
 		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -132, 0, 16),
+		Position = UDim2.new(1, -188, 0, 16),
 		Size = UDim2.fromOffset(78, 32),
 		TextSize = 14,
 	})
@@ -285,7 +379,8 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 
 	-- HUD modes (UiFlow view): "full", "currencies" (only the top bar) or "hidden". Pieces slide
 	-- off their nearest edge and back.
-	local wanted: { [GuiObject]: boolean } = { [hint] = true, [lobby.instance] = false, [logo] = true }
+	local wanted: { [GuiObject]: boolean } =
+		{ [hint] = true, [lobby.instance] = false, [logo] = true, [tracker] = false }
 	local pieces: { { obj: GuiObject, home: UDim2, away: UDim2, keep: boolean } } = {
 		{ obj = logo, home = logo.Position, away = logo.Position - UDim2.fromOffset(260, 0), keep = false },
 		{
@@ -302,6 +397,13 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 			keep = false,
 		},
 		{ obj = hint, home = hint.Position, away = hint.Position + UDim2.fromOffset(0, 80), keep = false },
+		{ obj = place, home = place.Position, away = place.Position + UDim2.fromOffset(0, 80), keep = false },
+		{
+			obj = tracker,
+			home = tracker.Position,
+			away = tracker.Position + UDim2.fromOffset(0, 90),
+			keep = false,
+		},
 		{
 			obj = lobby.instance,
 			home = lobby.instance.Position,
@@ -349,15 +451,54 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 		Ui.pulse(label.Parent :: GuiObject, 0.08)
 		if value > before then
 			Ui.sound("coin")
+			-- A "+N" that floats up from the badge and fades.
+			local badgeFrame = label.Parent :: GuiObject
+			local pop = Ui.text({
+				Text = `+{Format.number(value - before)}`,
+				FontFace = F.Number,
+				TextSize = 20,
+				TextColor3 = if key == "gems" then C.Blue else C.Gold,
+				TextWrapped = false,
+				TextXAlignment = Enum.TextXAlignment.Center,
+				AnchorPoint = Vector2.new(0.5, 0),
+				Position = UDim2.new(0.5, 0, 1, 2),
+				Size = UDim2.fromOffset(120, 24),
+				ZIndex = 5,
+				Parent = badgeFrame,
+			})
+			Ui.outline(C.Night, 2).Parent = pop
+			local rise = TweenService:Create(
+				pop,
+				TweenInfo.new(1.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+				{ Position = UDim2.new(0.5, 0, 1, 40), TextTransparency = 1 }
+			)
+			rise.Completed:Connect(function()
+				pop:Destroy()
+			end)
+			rise:Play()
 		end
 	end
 
 	return {
 		refresh = function()
 			want(lobby.instance, ctx.state.area ~= 0)
+			local area = ctx.state.area
+			local world = WorldsCfg.ById[area]
+			placeText.Text = if world then `WORLD {area} · {string.upper(world.displayName)}` else "LOBBY"
 			local v = ctx.state.view
 			if v == nil then
 				return
+			end
+			local dots = HudBadges.dots(v, ctx.now())
+			for id, r in rows do
+				r.dot.Visible = (dots :: any)[id] == true
+			end
+			local track = HudBadges.tracker(v)
+			want(tracker, track ~= nil)
+			if track then
+				trackerText.Text = track.text
+				trackerCount.Text = `{track.progress}/{track.target}`
+				setTrack(track.progress / track.target)
 			end
 			setCount(coins, "coins", v.coins)
 			setCount(gems, "gems", v.gems)
@@ -385,12 +526,12 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 			for _, piece in pieces do
 				if piece.obj == top then
 					piece.home = if narrow
-						then UDim2.fromOffset((width - 124) / 2, 12)
+						then UDim2.fromOffset((width - 180) / 2, 12)
 						else UDim2.new(0.5, 10, 0, 12)
 					piece.away = piece.home - UDim2.fromOffset(0, 80)
 				elseif piece.obj == pause.instance then
 					-- Up to tablet widths the top bar reaches the icons: the Menu button goes under them.
-					piece.home = if width < 1040 then UDim2.new(1, -18, 0, 62) else UDim2.new(1, -132, 0, 16)
+					piece.home = if width < 1040 then UDim2.new(1, -18, 0, 62) else UDim2.new(1, -188, 0, 16)
 					piece.away = piece.home + UDim2.fromOffset(260, 0)
 				end
 			end
@@ -490,6 +631,9 @@ function App.start(deps: Deps): Ctx
 	local toastCount = 0
 	local ctx: Ctx
 	local flow = UiFlow.new()
+	if deps.screens.Tip == nil then
+		deps.screens.Tip = require(script.Parent.Screens.Tip) :: any -- the "+" buttons' explainer
+	end
 	local effects = deps.effects
 	local menu: MainMenu.Menu
 
@@ -684,6 +828,22 @@ function App.start(deps: Deps): Ctx
 		end,
 		ui = ui,
 		flow = flow,
+		invite = function()
+			local player = Players.LocalPlayer
+			if player == nil then
+				return
+			end
+			local ok, can = pcall(function()
+				return SocialService:CanSendGameInviteAsync(player)
+			end)
+			if ok and can then
+				pcall(function()
+					SocialService:PromptGameInvite(player)
+				end)
+			else
+				ctx.toast("Invites aren't available here (they work in the published game).")
+			end
+		end,
 	}
 
 	hud = buildHud(ctx, hudLayer)

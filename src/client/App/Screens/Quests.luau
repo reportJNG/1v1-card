@@ -14,10 +14,10 @@ local C = Theme.Color
 local function rewardText(def: any): string
 	local parts = {}
 	if def.coins then
-		table.insert(parts, `💰 {Format.number(def.coins)}`)
+		table.insert(parts, `{Format.number(def.coins)} Coins`)
 	end
 	if def.gems then
-		table.insert(parts, `💎 {def.gems}`)
+		table.insert(parts, `{def.gems} Gems`)
 	end
 	return table.concat(parts, " · ")
 end
@@ -99,8 +99,8 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			})
 			Ui.text({
 				Text = `Day {day}\n{if day < 7
-					then `💰 {Economy.Streak.coins[day]}`
-					else `💎 {Economy.Streak.day7Gems}\n+ Golden egg`}`,
+					then `{Economy.Streak.coins[day]} Coins`
+					else `{Economy.Streak.day7Gems} Gems\n+ Golden egg`}`,
 				TextSize = Theme.Size.small,
 				FontFace = Theme.Face.Bold,
 				TextColor3 = if done then C.Background else C.Text,

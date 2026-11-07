@@ -199,7 +199,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			end
 			local fee = Economy.Progression.coinFeeToNext[card.level]
 			local merge = Ui.button(
-				`Merge {#use} spare{if #use == 1 then "" else "s"} · 💰 {Format.number(fee)}`,
+				`Merge {#use} spare{if #use == 1 then "" else "s"} · {Format.number(fee)} Coins`,
 				"primary",
 				function()
 					local reply = ctx.request(
@@ -224,7 +224,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		if hasMax and #spareList > 0 then
 			local price = Economy.CardSale[def.rarity] or 0
 			local sell = Ui.button(
-				`Sell {#spareList} spare(s) · 💰 {Format.number(price * #spareList)}`,
+				`Sell {#spareList} spare(s) · {Format.number(price * #spareList)} Coins`,
 				"ghost",
 				function()
 					ctx.confirm(
@@ -319,7 +319,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				Ui.stroke(C.Text, 3).Parent = portrait
 			end
 			Ui.text({
-				Text = `Lv {card.level}{if inDeck(view, card.uid) then " · ⚔" else ""}`,
+				Text = `Lv {card.level}{if inDeck(view, card.uid) then " · In deck" else ""}`,
 				FontFace = Theme.Face.Bold,
 				TextSize = Theme.Size.small,
 				TextXAlignment = Enum.TextXAlignment.Center,
@@ -350,7 +350,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				Parent = row,
 			})
 			Ui.text({
-				Text = `💰 {item.sellPrice} each · World {item.world}`,
+				Text = `{item.sellPrice} Coins each · World {item.world}`,
 				TextSize = Theme.Size.small,
 				TextColor3 = C.Muted,
 				TextXAlignment = Enum.TextXAlignment.Right,
@@ -397,7 +397,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			local price = Economy.CardStorage.expansionPrices[idx]
 			if price then
 				local b = Ui.button(
-					`+{Economy.CardStorage.slotsPerExpansion} slots · 💰 {Format.number(price)}`,
+					`+{Economy.CardStorage.slotsPerExpansion} slots · {Format.number(price)} Coins`,
 					"ghost",
 					function()
 						ctx.confirm(
@@ -419,7 +419,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				+ 1
 			local price = Economy.ItemInventory.expansionPrices[idx]
 			if price then
-				local b = Ui.button(`+1 slot · 💰 {Format.number(price)}`, "ghost", function()
+				local b = Ui.button(`+1 slot · {Format.number(price)} Coins`, "ghost", function()
 					ctx.confirm(
 						"Expand inventory",
 						`Add an item slot for {Format.number(price)} Coins?`,

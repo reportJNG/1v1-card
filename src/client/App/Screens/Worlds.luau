@@ -156,8 +156,8 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 					then "You are here"
 					elseif unlocked then (if cleared
 						then "Unlocked · Trial cleared"
-						else `Trial: 🏆 +{Economy.Trials.trophyGrant}`)
-					else `🏆 {Format.number(world.trophiesToUnlock)} to unlock`,
+						else `Trial: +{Economy.Trials.trophyGrant} trophies`)
+					else `{Format.number(world.trophiesToUnlock)} trophies to unlock`,
 				TextSize = 12,
 				TextWrapped = false,
 				TextColor3 = if here then C.Gold elseif unlocked then C.Green else C.Muted,

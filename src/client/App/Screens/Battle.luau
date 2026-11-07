@@ -321,7 +321,7 @@ function Battle.open(ctx: any, start: any): Handle
 		Ui.outline(C.Night, 1.5).Parent = nameLabel
 		Ui.fit(nameLabel, 17, 10)
 		Ui.text({
-			Text = `{names[side]} · {Format.number(trophies[side] or 0)} 🏆 · {def.rarity} {def.family}`,
+			Text = `{names[side]} · {Format.number(trophies[side] or 0)} trophies · {def.rarity} {def.family}`,
 			TextSize = 11,
 			TextColor3 = if mine then C.Blue else C.Red,
 			TextWrapped = false,
@@ -425,7 +425,7 @@ function Battle.open(ctx: any, start: any): Handle
 		local open = view.phase == "Picking" and not picked and not closed
 		setAction("Attack", open)
 		setAction("Defend", open)
-		setAction("Special", open and mine.canSpecial, `SPECIAL {unit.specialCost}⚡`)
+		setAction("Special", open and mine.canSpecial, `SPECIAL · {unit.specialCost} energy`)
 	end
 
 	local function pick(action: string)

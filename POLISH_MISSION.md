@@ -84,19 +84,19 @@ If something needs the owner (images, approval, keys), write it in
 - [x] Menu music, crossfading to lobby music on PLAY.
 
 ### C. Gameplay HUD (short, clean, icon-first, like the board)
-- [ ] **Top:** Coins and Gems with + buttons, plus trophies with a league badge.
-      - The Gems + opens the cosmetics shop.
+- [x] **Top:** Coins and Gems with + buttons, plus trophies with a league badge.
+      - The Gems + opens the cosmetics shop. *(Adapted: the cosmetics shop is V2 by a locked decision; the + explains Gems until it exists. See docs/WAITING_ON_YOU.md.)*
       - The Coins + opens a "How to earn Coins" tip. **Coins are never sold.**
-- [ ] **Top right:** icon buttons for Daily Rewards (gift), Quests (calendar), Friends.
-- [ ] **Left:** a vertical icon menu: Play/Arena, Inventory, Deck, Shop, Worlds, Quests,
+- [x] **Top right:** icon buttons for Daily Rewards (gift), Quests (calendar), Friends.
+- [x] **Left:** a vertical icon menu: Play/Arena, Inventory, Deck, Shop, Worlds, Quests,
       Settings. Each has an icon, a short label, and a notification dot when something is
       claimable.
-- [ ] **Bottom:** current world name, a small quest tracker, and a progress hint (for example
+- [x] **Bottom:** current world name, a small quest tracker, and a progress hint (for example
       "Reach 100 trophies to unlock World 2").
-- [ ] Custom-styled contextual prompts near the portal, egg stall, Arena and merchant (not the
+- [x] Custom-styled contextual prompts near the portal, egg stall, Arena and merchant (not the
       default ProximityPrompt look).
-- [ ] Toasts for rewards, unlocks and errors, plus floating "+Coins" pop-ups.
-- [ ] One consistent icon set (rendered or generated per `art/ui/PROMPTS.md`). **No emoji.**
+- [x] Toasts for rewards, unlocks and errors, plus floating "+Coins" pop-ups.
+- [x] One consistent icon set (rendered or generated per `art/ui/PROMPTS.md`). **No emoji.**
 
 ### D. Every screen, matching the board's panels
 - [ ] Egg Shop

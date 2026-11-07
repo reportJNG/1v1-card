@@ -94,4 +94,5 @@ net.on("Battle.End", function(data)
 end)
 
 WorldInteraction.start(ctx)
+require(AppFolder:WaitForChild("Prompts")).start()
 AreaFx.start(ctx)

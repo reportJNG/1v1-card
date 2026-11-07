@@ -45,7 +45,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				Parent = row,
 			})
 			local all = Ui.button(
-				`Sell all · 💰 {Format.number(item.sellPrice * n)}`,
+				`Sell all · {Format.number(item.sellPrice * n)} Coins`,
 				"primary",
 				function()
 					local reply = ctx.request(
@@ -53,7 +53,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 						{ itemId = itemId, count = n, requestId = ctx.guid() }
 					)
 					if reply.ok then
-						ctx.toast(`Sold for 💰 {Format.number(reply.value)}`, "good")
+						ctx.toast(`Sold for {Format.number(reply.value)} Coins`, "good")
 					end
 				end,
 				{

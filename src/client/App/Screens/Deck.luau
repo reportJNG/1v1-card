@@ -87,7 +87,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				)
 				portrait.Position = UDim2.fromOffset(6, 6)
 				Ui.text({
-					Text = `Lv {card.level} · ⚡ {Power.card(card.characterId, card.level)}`,
+					Text = `Lv {card.level} · Power {Power.card(card.characterId, card.level)}`,
 					FontFace = Theme.Face.Bold,
 					TextXAlignment = Enum.TextXAlignment.Center,
 					Position = UDim2.fromOffset(0, 172),

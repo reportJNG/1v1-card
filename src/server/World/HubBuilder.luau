@@ -172,6 +172,7 @@ local function prompt(at: Vector3, def: { name: string, action: string, object: 
 	pp.ObjectText = def.object
 	pp.MaxActivationDistance = 22 -- the anchors sit inside the arena, portal and stall meshes
 	pp.HoldDuration = 0
+	pp.Style = Enum.ProximityPromptStyle.Custom -- drawn by the client (App/Prompts)
 	pp.RequiresLineOfSight = false
 	pp.Parent = p
 end

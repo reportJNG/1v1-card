@@ -10,6 +10,7 @@ local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 local TweenService = game:GetService("TweenService")
 local ContextActionService = game:GetService("ContextActionService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HubLayout = require(ReplicatedStorage:WaitForChild("Shared").Config.HubLayout)
 
@@ -109,6 +110,8 @@ function UiEffects.new(): Effects
 				return
 			end
 			locked = on
+			-- No world prompts behind the menu or a modal.
+			ProximityPromptService.Enabled = not on
 			local c = controls()
 			if c then
 				if on then
