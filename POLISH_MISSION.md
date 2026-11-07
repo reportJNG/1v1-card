@@ -206,10 +206,10 @@ If something needs the owner (images, approval, keys), write it in
   10. Divine World
 
 ### K. Final pass
-- [ ] Play through as a fresh player: join → main menu → PLAY → hatch → deck → battle →
+- [x] Play through as a fresh player: join → main menu → PLAY → hatch → deck → battle →
       victory → world → farm and sell → back to the main menu. Fix anything that feels off.
-- [ ] Screenshots of every screen in `docs/screens/`.
-- [ ] Final report in `docs/POLISH_REPORT.md`:
+- [x] Screenshots of every screen in `docs/screens/`.
+- [x] Final report in `docs/POLISH_REPORT.md`:
       - what was built
       - before/after screenshots
       - scores

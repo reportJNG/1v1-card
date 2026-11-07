@@ -11,6 +11,7 @@ local RunService = game:GetService("RunService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Types = require(Shared.Types)
 local ClientView = require(Shared.Domain.ClientView)
+local ProfileSchema = require(Shared.Domain.ProfileSchema)
 local Persistence = script.Parent.Parent:WaitForChild("Persistence")
 local SessionStore = require(Persistence.SessionStore)
 local ProfileManager = require(Persistence.ProfileManager)
@@ -78,6 +79,9 @@ local function onPlayerAdded(player: Player)
 		return
 	end
 	retained[player.UserId] = nil
+	if ProfileSchema.grantStarter(loaded.value, os.time()) then
+		PlayerDataService.markDirty(player.UserId)
+	end
 	player:SetAttribute("ProfileLoaded", true)
 	Telemetry.event(player, "session_start", {
 		coins = loaded.value.coins,

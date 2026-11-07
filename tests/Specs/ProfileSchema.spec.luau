@@ -16,6 +16,29 @@ return function()
 			expect(ProfileSchema.validate(p :: any).ok).to.equal(true)
 		end)
 
+		it("gives a player who never owned a card 3 different starter cards as a valid deck, once", function()
+			local Deck = require(Shared.Domain.Deck)
+			local Cards = require(Shared.Domain.Cards)
+			local p = ProfileSchema.new(77)
+			expect(ProfileSchema.grantStarter(p, Helpers.NOW)).to.equal(true)
+			expect(#p.deck).to.equal(#Economy.StarterCards)
+			for i, uid in p.deck do
+				local card = p.cards[uid]
+				expect(card.characterId).to.equal(Economy.StarterCards[i])
+				expect(card.origin).to.equal("Reward")
+				expect(card.provenance.paidLineage).to.equal(false)
+			end
+			expect(Deck.validate(p, p.deck).ok).to.equal(true)
+			expect(ProfileSchema.validate(p).ok).to.equal(true)
+			expect(ProfileSchema.grantStarter(p, Helpers.NOW)).to.equal(false)
+			expect(Cards.count(p)).to.equal(#Economy.StarterCards)
+			-- someone who ever had a card (even one since sold) is never topped up
+			local veteran = ProfileSchema.new(78)
+			veteran.nextCardSerial = 5
+			expect(ProfileSchema.grantStarter(veteran, Helpers.NOW)).to.equal(false)
+			expect(Cards.count(veteran)).to.equal(0)
+		end)
+
 		it("gives new players the starting Coins", function()
 			expect(ProfileSchema.new(1).coins).to.equal(Economy.StartingCoins)
 			expect(Economy.StartingCoins).to.equal(500)

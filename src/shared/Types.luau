@@ -248,7 +248,7 @@ export type PlayerProfile = {
 	heldReceipts: { [string]: HeldReceipt }, -- receipts the player wasn't eligible for; never granted until eligible
 	recentTx: { [string]: number }, -- transaction ref -> time; request idempotency (pruned)
 	ledger: { LedgerEntry }, -- last N currency events, for support
-	flags: { tutorialDone: boolean? },
+	flags: { tutorialDone: boolean?, starterGranted: boolean? },
 	-- schema v2
 	currentWorld: number, -- world the player last travelled to (must be unlocked)
 	opponentsToday: { [string]: number }, -- opponent userId -> ranked matches today (anti-farming)

@@ -4,6 +4,9 @@
 
 return table.freeze({
 	StartingCoins = 500, -- every new profile starts with this
+	-- Three different Commons (all in the Basic Egg) given once to a brand-new profile and set as its
+	-- deck, so a first session can battle at once (a deck needs 3 different characters).
+	StarterCards = table.freeze({ "brannok_ironhide", "hideo_ironvow", "rook_hammerfall" }) :: { string },
 
 	-- Ranked rewards. No entry fee and no stakes: the purse is paid by the game, never by the
 	-- opponent (Roblox bans simulated gambling, so players never wager against each other).

@@ -497,4 +497,14 @@ Per-item detail, scores and screenshots are in `docs/POLISH_LOG.md`. Decisions:
 - **Testing rare moments.** Real rolls almost never give Legendary or Mythical. Their effects are
   exercised in Play mode by calling the real hatch screen with injected cards. Those screenshots are
   labelled "injected". No dev hook ships in the game.
+- **Starter deck (found in K).**
+  - A new player can't otherwise reach a battle: 500 Coins buy 2 eggs, plus the free one, often
+    duplicates, and a deck needs 3 different characters.
+  - So anyone who has never owned a card gets three different Basic-egg Commons as a ready deck
+    (`Economy.StarterCards`, applied once in `PlayerDataService` via `ProfileSchema.grantStarter`).
+  - Card serials are never reused, so no one who has played can be topped up.
+  - The owner can change the three ids or empty the list.
+- **Audio sources.** The mission asks for "the official Roblox account". Roblox's licensed audio in
+  the Creator Store comes from its partner accounts APMOfficial and ProSoundEffects, so only those
+  are used, and every id is checked to load.
 

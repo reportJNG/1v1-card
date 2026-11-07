@@ -5,6 +5,7 @@
 local Types = require(script.Parent.Parent.Types)
 local Economy = require(script.Parent.Parent.Config.Economy)
 local Result = require(script.Parent.Result)
+local Cards = require(script.Parent.Cards)
 
 export type Migration = (data: { [string]: any }) -> { [string]: any }
 
@@ -122,6 +123,22 @@ function ProfileSchema.validate(profile: { [string]: any }): Types.Result<nil>
 		end
 	end
 	return Result.ok(nil)
+end
+
+-- Gives a player who has never owned a card the starter cards (Economy.StarterCards) as a ready
+-- deck, once. Card serials are never reused, so `nextCardSerial == 1` means no card ever existed;
+-- nobody who has played can be topped up. Returns whether it granted.
+function ProfileSchema.grantStarter(profile: Types.PlayerProfile, now: number): boolean
+	if profile.flags.starterGranted or profile.nextCardSerial ~= 1 then
+		return false
+	end
+	for _, characterId in Economy.StarterCards do
+		local made = Cards.create(profile, characterId, "Reward", "starter", false, now)
+		assert(made.ok, `starter card {characterId}`)
+		table.insert(profile.deck, made.value.uid)
+	end
+	profile.flags.starterGranted = true
+	return true
 end
 
 -- Migrates, reconciles and validates raw stored data. `userId` seeds a brand-new profile.

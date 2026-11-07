@@ -358,6 +358,7 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 				isNew[i] = not known[card.characterId]
 				known[card.characterId] = true
 			end
+			local anyNew = table.find(isNew, true) ~= nil
 
 			local eggHolder = Ui.frame({
 				Name = "Egg",
@@ -548,7 +549,11 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 					title.Text = CALLOUT[best]
 					title.TextColor3 = bestColor
 				else
-					title.Text = if golden then "GOLDEN!" elseif multi then "NEW CARDS!" else "NEW CARD!"
+					title.Text = if golden
+						then "GOLDEN!"
+						elseif not anyNew then "YOU GOT"
+						elseif multi then "NEW CARDS!"
+						else "NEW CARD!"
 					callout.Visible = true
 				end
 				Ui.sound(`reveal_{string.lower(best)}`)

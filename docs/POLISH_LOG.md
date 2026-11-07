@@ -318,3 +318,12 @@ shown as "not on sale yet" until product ids exist) and the Odds popup for the B
 - Claude can't hear audio, so the owner should listen and swap any id (WAITING_ON_YOU 5).
 
 **Scores:** board 8 · readability 9 · polish 8 · clarity 9 · consistency 9.
+
+## K. Final pass — done (2026-11-07)
+- A fresh-player playthrough in Play: menu → PLAY → deck → hatch → World 1 → Guardian Trial
+  victory → lobby → farm → sell → main menu. Screens are in `docs/screens/final/01-15`.
+- **Fixed:**
+  - Starter deck for new players (they couldn't form a 3-character deck).
+  - The hatch title for cards already owned.
+  - The main-menu music never loading (in I).
+- The report is `docs/POLISH_REPORT.md`. 263 specs pass.
