@@ -20,6 +20,29 @@ function Format.number(n: number): string
 	return out
 end
 
+-- Short amounts for the HUD (MISSION 3.1): 950, 1.04K, 12.5K, 125K, 1.2M (three significant
+-- digits, trailing zeros dropped).
+function Format.short(n: number): string
+	local a = math.abs(n)
+	if a < 1000 then
+		return tostring(math.floor(n))
+	end
+	local units: { { n: number, s: string } } =
+		{ { n = 1e9, s = "B" }, { n = 1e6, s = "M" }, { n = 1e3, s = "K" } }
+	for _, u in units do
+		if a >= u.n then
+			local v = n / u.n
+			local decimals = if math.abs(v) >= 100 then 0 elseif math.abs(v) >= 10 then 1 else 2
+			local s = string.format(`%.{decimals}f`, math.floor(v * 10 ^ decimals) / 10 ^ decimals)
+			if string.find(s, ".", 1, true) then
+				s = string.gsub(string.gsub(s, "0+$", ""), "%.$", "")
+			end
+			return s .. u.s
+		end
+	end
+	return tostring(n)
+end
+
 function Format.seconds(s: number): string
 	s = math.max(0, math.ceil(s))
 	return string.format("%d:%02d", s // 60, s % 60)

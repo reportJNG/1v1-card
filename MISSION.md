@@ -193,14 +193,14 @@ playing, the screen must stay mostly game world, like top Roblox games.
 - **Battle hides this HUD completely** and shows only the battle UI.
 
 ### 3.3 HUD checklist
-- [ ] Square icon grid
-- [ ] Currency bars
-- [ ] Deck bar
-- [ ] Compact quest tracker
-- [ ] Menu button
-- [ ] Lighter panel style
-- [ ] Less text everywhere
-- [ ] Side-by-side `docs/screens/hud/compare_ingame.png` (reference vs ours), scoring 8+
+- [x] Square icon grid
+- [x] Currency bars
+- [x] Deck bar
+- [x] Compact quest tracker
+- [x] Menu button
+- [x] Lighter panel style
+- [x] Less text everywhere
+- [x] Side-by-side `docs/screens/hud/compare_ingame.png` (reference vs ours), scoring 8+
 
 ---
 
@@ -633,7 +633,7 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 ## 15. Master checklist
 - [x] Old mission files archived
 - [x] **Flow:** launch loading, main menu, playing, leaving screen, reset, return-to-spot fix (2.6)
-- [ ] **In-game HUD**, clean and light (3.3)
+- [x] **In-game HUD**, clean and light (3.3)
 - [ ] `docs/GUI_AUDIT.md`, plus the UI kit replacing all TEMP images, plus the logo
 - [ ] Rarity display config
 - [ ] Card frames (5 × 3 sizes, layers, badges, Golden)

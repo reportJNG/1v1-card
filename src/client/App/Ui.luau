@@ -632,6 +632,13 @@ export type Panel = { frame: Frame, body: Frame, title: TextLabel, header: Frame
 
 -- A centred modal panel: drop shadow, glowing frame, title bar with an optional icon chip, and
 -- the round close button. Opens with the bounce.
+-- Panels opened while playing use the lighter glass (MISSION 3.2); the main menu and the big
+-- showcase screens keep the deep navy panel. App sets the style from the UI flow.
+local panelStyle = "dark"
+function Ui.setPanelStyle(style: string)
+	panelStyle = style
+end
+
 function Ui.panel(parent: Instance, title: string, onClose: (() -> ())?, size: UDim2?, icon: string?): Panel
 	local frame = Ui.frame({
 		Name = "Panel",
@@ -650,7 +657,7 @@ function Ui.panel(parent: Instance, title: string, onClose: (() -> ())?, size: U
 		Parent = frame,
 	})
 	Ui.skin(shadow, "shadow", 1)
-	Ui.skin(frame, "panel", 1)
+	Ui.skin(frame, if panelStyle == "light" then "panel_light" else "panel", 1)
 	local header = Ui.frame({
 		Name = "Header",
 		BackgroundTransparency = 1,

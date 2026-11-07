@@ -127,6 +127,14 @@
   "id": "rbxassetid://99418189872738",
   "sha": "ceeb7ed7b5dc2947"
  },
+ "currency_bar_blue": {
+  "id": "rbxassetid://75718263758512",
+  "sha": "e38508e586c74cb2"
+ },
+ "currency_bar_gold": {
+  "id": "rbxassetid://108882630000282",
+  "sha": "bdd907ba540dad35"
+ },
  "emblem_crown_gold": {
   "id": "rbxassetid://80040896217542",
   "sha": "b4ee90eb1ec588a4"
@@ -431,6 +439,34 @@
   "id": "rbxassetid://124460814009444",
   "sha": "14d1600bac6a9615"
  },
+ "hud_btn_blue": {
+  "id": "rbxassetid://138774101246373",
+  "sha": "407f9b740c5f5889"
+ },
+ "hud_btn_green": {
+  "id": "rbxassetid://97137243950148",
+  "sha": "d30a2792d11d2b7f"
+ },
+ "hud_btn_night": {
+  "id": "rbxassetid://136663428541683",
+  "sha": "c0dd5b453ad69162"
+ },
+ "hud_btn_orange": {
+  "id": "rbxassetid://135127943077428",
+  "sha": "fa3053f2e5665fc0"
+ },
+ "hud_btn_purple": {
+  "id": "rbxassetid://137534469760208",
+  "sha": "0d26d03b2459aeb5"
+ },
+ "hud_btn_red": {
+  "id": "rbxassetid://136074567565248",
+  "sha": "71587ffcc99dc241"
+ },
+ "hud_btn_teal": {
+  "id": "rbxassetid://96344955798341",
+  "sha": "cc58a008b0903175"
+ },
  "icon_atk": {
   "id": "rbxassetid://110312404311904",
   "sha": "a5b4d1982923d269"
@@ -586,6 +622,18 @@
  "panel_ur_small": {
   "id": "rbxassetid://97701797290000",
   "sha": "8c13fe47b087093e"
+ },
+ "plus_blue": {
+  "id": "rbxassetid://93348472393972",
+  "sha": "059cfd5e6f3b8d79"
+ },
+ "plus_gold": {
+  "id": "rbxassetid://85426857013487",
+  "sha": "e3608f94ce31de0c"
+ },
+ "quest_card": {
+  "id": "rbxassetid://106625280844094",
+  "sha": "b963772b48e432f4"
  },
  "ribbon_max": {
   "id": "rbxassetid://109949381015713",

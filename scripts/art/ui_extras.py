@@ -517,3 +517,81 @@ def logo():
 
 
 ALL.append(logo)
+
+
+HUD_COLORS = {  # MISSION 3.1: one colour per HUD button (light, base, deep)
+    "red": ("#FF8A7A", "#E8413C", "#8E1420"),
+    "orange": ("#FFC46A", "#FF8A1F", "#A04A00"),
+    "teal": ("#7FF2DE", "#14B8A6", "#0A5F58"),
+    "green": ("#9CF27A", "#3CC85A", "#17702E"),
+    "purple": ("#D6A8FF", "#9B4DFF", "#4E1A9E"),
+    "blue": ("#8CC8FF", "#2F86FF", "#123F9E"),
+    "night": ("#6A5A9E", "#2E2457", "#120C2C"),
+}
+
+
+def hud():
+    """In-game HUD pieces (MISSION 3.1): chunky square buttons in six colours (thick dark outline,
+    bevel, inner highlight), the menu button base, currency bars, "+" buttons and the quest card."""
+    ss = 4
+    w = 128
+    x, y = K.grid(w, w, ss)
+    for name, (light, base, deep) in HUD_COLORS.items():
+        d = K.sd_round_box(x, y, 56, 56, 18)
+        img = K.blank(w, w, ss)
+        K.over(img, K.hexc("#140A24"), K.cover(d - 7, ss))  # thick dark outline
+        nx, ny, nz, _ = K.bevel_normal(d, 7, ss)
+        col = K.metal(nx, ny, nz, [deep, base, light, "#FFFFFF"], y=y / 56, sheen=0.35, spec=10)
+        K.over(img, col, K.cover(d, ss))
+        # inner highlight: a soft white band over the top third
+        hl = K.sd_round_box(x, y + 30, 44, 16, 12)
+        K.add_light(img, K.hexc("#FFFFFF"), K.cover(hl, ss) * 0.16)
+        # a darker lip at the bottom
+        lip = np.maximum(d + 2, -(y - 40))
+        K.over(img, K.hexc(deep), K.cover(lip, ss) * 0.55)
+        K.edge_fade(img, ss, 2)
+        save(img, ss, f"hud_btn_{name}")
+    # currency bars (9-slice, 384 x 96): a dark capsule with a coloured rim
+    for name, rim, fill in [("gold", "#FFC23A", "#3A2408"), ("blue", "#5AB8FF", "#0A1E44")]:
+        bw, bh = 384, 96
+        x2, y2 = K.grid(bw, bh, ss)
+        d = K.sd_round_box(x2, y2, 186, 40, 40)
+        img = K.blank(bw, bh, ss)
+        K.over(img, K.hexc("#120A20"), K.cover(d - 4, ss))
+        nx, ny, nz, _ = K.bevel_normal(d, 5, ss)
+        K.over(img, K.metal(nx, ny, nz, ["#5A3A00" if name == "gold" else "#0A2A5E", rim, "#FFFFFF", "#FFFFFF"], y=y2 / 40, sheen=0.3), K.cover(d, ss))
+        t = np.clip((y2 + 32) / 64, 0, 1)[..., None]
+        K.over(img, K.hexc(fill) * (1 - t) * 1.6 + K.hexc("#06040E") * t, K.cover(d + 6, ss))
+        save(img, ss, f"currency_bar_{name}")
+        # the "+" button in the same colour
+        pw = 96
+        x3, y3 = K.grid(pw, pw, ss)
+        d = K.sd_round_box(x3, y3, 42, 42, 14)
+        img = K.blank(pw, pw, ss)
+        K.over(img, K.hexc("#140A24"), K.cover(d - 4, ss))
+        nx, ny, nz, _ = K.bevel_normal(d, 6, ss)
+        light, base, deep = ("#FFE680", "#F5B414", "#8A5400") if name == "gold" else ("#A8DCFF", "#2F86FF", "#123F9E")
+        K.over(img, K.metal(nx, ny, nz, [deep, base, light, "#FFFFFF"], y=y3 / 42, sheen=0.3), K.cover(d, ss))
+        plus = K.union(K.sd_round_box(x3, y3, 24, 7, 3), K.sd_round_box(x3, y3, 7, 24, 3))
+        K.over(img, K.hexc("#140A24"), K.cover(plus - 3, ss))
+        K.over(img, K.hexc("#FFFFFF"), K.cover(plus, ss))
+        K.edge_fade(img, ss, 2)
+        save(img, ss, f"plus_{name}")
+    # quest card (9-slice, 512 x 320): navy glass, gold rim, a title band
+    qw, qh = 512, 320
+    x4, y4 = K.grid(qw, qh, ss)
+    d = K.sd_round_box(x4, y4, 248, 148, 20)
+    img = K.blank(qw, qh, ss)
+    K.over(img, K.hexc("#140A24"), K.cover(d - 4, ss))
+    nx, ny, nz, _ = K.bevel_normal(d, 4, ss)
+    K.over(img, K.metal(nx, ny, nz, ["#6A4A00", "#E0A82E", "#FFE680", "#FFFFFF"], y=y4 / 150, sheen=0.3), K.cover(d, ss))
+    t = np.clip((y4 + 140) / 280, 0, 1)[..., None]
+    K.over(img, K.hexc("#1A3A7A") * (1 - t) + K.hexc("#0A1430") * t, K.cover(d + 5, ss) * 0.94)
+    band = np.maximum(d + 5, y4 + 92)
+    K.over(img, K.hexc("#2A5ABF"), K.cover(band, ss) * 0.85)
+    K.add_light(img, K.hexc("#FFFFFF"), K.cover(np.maximum(d + 5, np.abs(y4 + 128) - 6), ss) * 0.12)
+    K.edge_fade(img, ss, 2)
+    save(img, ss, "quest_card")
+
+
+ALL.append(hud)

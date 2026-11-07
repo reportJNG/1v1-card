@@ -74,4 +74,58 @@ function HudBadges.tracker(view: any): Tracker
 	return best
 end
 
+export type QuestRow = { text: string, progress: number, target: number, done: boolean }
+export type QuestCard = { title: string, done: number, total: number, rows: { QuestRow } }
+
+-- The compact quest card (MISSION 3.1): today's daily quests ("Daily", done / total) with up to
+-- two task rows, unfinished first; with no dailies, the unfinished achievements ("Goals"). Nil when
+-- there is nothing to show.
+function HudBadges.questCard(view: any): QuestCard?
+	local dailies: { any }, goals: { any } = {}, {}
+	for id, q in view.quests or {} do
+		local def = QuestsCfg.ById[id]
+		if def then
+			local row = {
+				id = id,
+				text = def.text,
+				progress = math.min(q.progress, def.target),
+				target = def.target,
+				done = q.claimed or q.progress >= def.target,
+			}
+			table.insert(if string.sub(id, 1, 2) == "d_" then dailies else goals, row)
+		end
+	end
+	local function order(a: any, b: any): boolean
+		if a.done ~= b.done then
+			return not a.done
+		end
+		return a.id < b.id
+	end
+	local list: { any }, title = dailies, "Daily"
+	if #dailies == 0 then
+		list, title = {}, "Goals"
+		for _, g in goals do
+			if not g.done then
+				table.insert(list, g)
+			end
+		end
+	end
+	if #list == 0 then
+		return nil
+	end
+	table.sort(list, order)
+	local done = 0
+	for _, r in list do
+		if r.done then
+			done += 1
+		end
+	end
+	local rows: { QuestRow } = {}
+	for i = 1, math.min(2, #list) do
+		local r = list[i]
+		table.insert(rows, { text = r.text, progress = r.progress, target = r.target, done = r.done })
+	end
+	return { title = title, done = done, total = #list, rows = rows }
+end
+
 return table.freeze(HudBadges)

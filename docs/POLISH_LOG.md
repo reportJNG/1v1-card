@@ -364,3 +364,27 @@ Built before MISSION.md landed, under CARDS_EGGS_MISSION (now merged into MISSIO
   (`05-menu-confirm.png`, `06-leaving.png`, `07-back-to-menu.png`).
 - Specs: Flow.spec (PlayState, ReturnSpot), UiFlow `leave`; e2e driver checks the menu gate and PLAY.
 - Scores (flow, no board): function 9 · clarity 9 · motion 8 · consistency 9.
+
+## Section 3: in-game HUD (`ui-refs-3/01-ingame-hud.png`)
+- `App/Hud.luau` replaces the old dock: a 2 x 3 grid of chunky square buttons (red Inventory,
+  orange Eggs, teal Deck, green Daily, purple Worlds, blue Settings) with dots and tooltips, a small
+  Menu button, two currency bars (short amounts, gold / blue "+"), the deck bar (3 small cards,
+  level, stage stars, slot number, tap -> Deck), the 1v1 button, and a compact quest card (title,
+  done/total, two rows with check boxes and bars) that collapses to a trophy with a ring on tap or
+  after 10 s. Removed while playing: the logo, the hint pill, the place label, the Friends icon.
+- Buttons size to ~68 px physical on PC and 56 px on phones (never under 44).
+- Lighter in-game panels: `panel_light` glass while playing, at ~86% scale (about 70% of the
+  screen); the deep navy panel stays on the menu and showcases.
+- Play mode (phone landscape viewport, 844 x 441): `docs/screens/hud/ingame_lobby.png`,
+  `ingame_quest.png`, `ingame_panel_light.png`; compare `docs/screens/hud/compare_ingame.png`.
+- Scores: reference 8 · quality 8 · little text 9 · motion 8 · consistency 8.
+
+## Section 4: UI kit replacing the TEMP images
+- `scripts/art/ui_slots.py` renders final images for every UI slot still on a TEMP stand-in (51
+  slots: panels, header, inset, shadow, close, gold / purple / green / red buttons, tabs, tiles,
+  toast, reward chip, card back, shine, glow, rays, sparkle, cracks, timer ring, energy pips, HP
+  bar, action buttons, VS badge, petal, portal swirl, Victory / Defeat banners, 15 family glyphs),
+  uploaded and recorded as `final` in `art/ui/ids.json`. Retired slots (old card layers, card
+  backgrounds, old HUD pieces) are left out of `Config/UiAssets`.
+- Still TEMP: `egg_pedestal` (tier pedestals come in section 7) and the 24 `cutout_*` role
+  silhouettes (character placeholders until phase 2 art).

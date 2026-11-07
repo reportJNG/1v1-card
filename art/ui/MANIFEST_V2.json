@@ -457,6 +457,40 @@
    "id": "rbxassetid://99418189872738"
   },
   {
+   "slot": "currency_bar_blue",
+   "file": "art/ui/kit/currency_bar_blue.png",
+   "size": [
+    384,
+    96
+   ],
+   "slice": [
+    48,
+    47,
+    336,
+    49
+   ],
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://75718263758512"
+  },
+  {
+   "slot": "currency_bar_gold",
+   "file": "art/ui/kit/currency_bar_gold.png",
+   "size": [
+    384,
+    96
+   ],
+   "slice": [
+    48,
+    47,
+    336,
+    49
+   ],
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://108882630000282"
+  },
+  {
    "slot": "emblem_crown_gold",
    "file": "art/ui/kit/emblem_crown_gold.png",
    "size": [
@@ -1399,6 +1433,90 @@
    "id": "rbxassetid://124460814009444"
   },
   {
+   "slot": "hud_btn_blue",
+   "file": "art/ui/kit/hud_btn_blue.png",
+   "size": [
+    128,
+    128
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://138774101246373"
+  },
+  {
+   "slot": "hud_btn_green",
+   "file": "art/ui/kit/hud_btn_green.png",
+   "size": [
+    128,
+    128
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://97137243950148"
+  },
+  {
+   "slot": "hud_btn_night",
+   "file": "art/ui/kit/hud_btn_night.png",
+   "size": [
+    128,
+    128
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://136663428541683"
+  },
+  {
+   "slot": "hud_btn_orange",
+   "file": "art/ui/kit/hud_btn_orange.png",
+   "size": [
+    128,
+    128
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://135127943077428"
+  },
+  {
+   "slot": "hud_btn_purple",
+   "file": "art/ui/kit/hud_btn_purple.png",
+   "size": [
+    128,
+    128
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://137534469760208"
+  },
+  {
+   "slot": "hud_btn_red",
+   "file": "art/ui/kit/hud_btn_red.png",
+   "size": [
+    128,
+    128
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://136074567565248"
+  },
+  {
+   "slot": "hud_btn_teal",
+   "file": "art/ui/kit/hud_btn_teal.png",
+   "size": [
+    128,
+    128
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://96344955798341"
+  },
+  {
    "slot": "icon_atk",
    "file": "art/ui/kit/icon_atk.png",
    "size": [
@@ -1890,6 +2008,47 @@
    "route": "C",
    "status": "FINAL",
    "id": "rbxassetid://97701797290000"
+  },
+  {
+   "slot": "plus_blue",
+   "file": "art/ui/kit/plus_blue.png",
+   "size": [
+    96,
+    96
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://93348472393972"
+  },
+  {
+   "slot": "plus_gold",
+   "file": "art/ui/kit/plus_gold.png",
+   "size": [
+    96,
+    96
+   ],
+   "slice": null,
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://85426857013487"
+  },
+  {
+   "slot": "quest_card",
+   "file": "art/ui/kit/quest_card.png",
+   "size": [
+    512,
+    320
+   ],
+   "slice": [
+    40,
+    64,
+    472,
+    280
+   ],
+   "route": "C",
+   "status": "FINAL",
+   "id": "rbxassetid://106625280844094"
   },
   {
    "slot": "ribbon_max",

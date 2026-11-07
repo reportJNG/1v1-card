@@ -46,6 +46,14 @@ STYLE = ("Roblox anime card battler UI, dark navy and purple night theme with ne
 # use, prompt. Sizes are the exact pixel sizes to generate; all <= 1024 px.
 SPECS = []
 
+# Slots retired by the step-5 card and HUD kit (scripts/art/card_kit.py, ui_extras.py): nothing
+# reads them any more, so they are left out of Config/UiAssets.
+RETIRED = {
+    "menu_item", "currency_badge", "card_golden_foil", "timer_ring_fill", "card_border", "card_glow",
+    "card_holo", "badge_level", "badge_crown",
+} | {f"card_bg_{f}" for f in ("flame", "ice", "lightning", "shadow", "divine", "beast", "dragon", "warrior",
+                              "ninja", "royal", "cosmic", "ancient", "mystic", "spirit", "demon")}
+
 
 def spec(slot, size, slice_, bleed, use, prompt, group):
     SPECS.append(dict(slot=slot, size=size, slice=slice_, bleed=bleed, use=use, prompt=prompt, group=group))
@@ -56,6 +64,8 @@ spec("panel", (256, 256), (56, 56, 200, 200), 14, "Every popup panel body (9-sli
      "#12192E to #0C1124, a 2-3 px glowing border fading from neon purple #A469FF (top-left) to cyan "
      "#45BEFF (bottom-right), soft purple outer glow 14 px wide, subtle inner top highlight; the centre must be "
      "plain so it can be 9-sliced", "Panels")
+spec("panel_light", (256, 256), (56, 56, 200, 200), 14, "Lighter glass panel for panels opened while playing (MISSION 3.2)",
+     "Lighter translucent glass panel, brighter rim", "panels")
 spec("panel_header", (512, 88), (40, 40, 472, 48), 0, "Title bar strip at the top of a panel (9-slice)",
      "a wide title bar strip for the top of a game panel, rounded top corners only, slightly lighter navy "
      "#1A2340 fading downwards to transparent, thin bright cyan-to-purple glowing line along the bottom edge",
@@ -963,6 +973,8 @@ def write_luau():
         "local Slots: { [string]: Slot } = {",
     ]
     for s in SPECS:
+        if s["slot"] in RETIRED:
+            continue
         w, h = s["size"]
         sl = f"{{ {', '.join(map(str, s['slice']))} }}" if s["slice"] else "nil"
         fin = final.get(s["slot"])

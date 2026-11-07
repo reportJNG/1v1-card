@@ -10,15 +10,13 @@ local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local SocialService = game:GetService("SocialService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local Progress = require(Shared.Domain.Progress)
-local HudBadges = require(Shared.Ui.HudBadges)
-local WorldsCfg = require(Shared.Config.Worlds)
 local HubLayout = require(Shared.Config.HubLayout)
 local UiFlow = require(Shared.Ui.UiFlow)
 local MainMenu = require(script.Parent.MainMenu)
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
 local CardFx = require(script.Parent.CardFx)
+local HudModule = require(script.Parent.Hud)
 local Kit = require(script.Parent.Kit)
 local Format = require(script.Parent.Format)
 local State = require(script.Parent.State)
@@ -69,21 +67,6 @@ export type Deps = {
 
 local App = {}
 
-local Worlds = require(Shared.Config.Worlds)
-
--- Left icon dock (concept board order). Trade is V2 and not built, so it is not shown. Each tile is
--- an icon-pack icon on a bright tile in its own accent, with a one-word label.
-local MENU = {
-	{ id = "Play", icon = "icon_play", label = "1v1", accent = Color3.fromHex("#FF9F2E") },
-	{ id = "Collection", icon = "icon_cards", label = "Cards", accent = Color3.fromHex("#A469FF") },
-	{ id = "Deck", icon = "icon_deck", label = "Deck", accent = Color3.fromHex("#3FA9FF") },
-	{ id = "Shop", icon = "icon_shop", label = "Eggs", accent = Color3.fromHex("#FF6FC8") },
-	{ id = "Worlds", icon = "icon_worlds", label = "Worlds", accent = Color3.fromHex("#2FD6E0") },
-	{ id = "Quests", icon = "icon_quests", label = "Quests", accent = Color3.fromHex("#48DA97") },
-	{ id = "Settings", icon = "icon_settings", label = "Settings", accent = Color3.fromHex("#8D9BC4") },
-}
-local TILE = 48 -- dock tile size (design px)
-
 -- Waits (up to `timeout` s) until the local character stands at the hub spawn, after the server
 -- has moved it there (World.Hub). The server's PivotTo replicates a moment after its reply.
 local function waitForLobby(timeout: number)
@@ -100,516 +83,7 @@ local function waitForLobby(timeout: number)
 	end
 end
 
-type Hud = {
-	refresh: () -> (),
-	select: (id: string?) -> (),
-	setMode: (mode: string, instant: boolean?) -> (),
-	layout: (width: number) -> (),
-}
-
-local function buildHud(ctx: Ctx, root: Frame): Hud
-	local F = Theme.Face
-
-	-- Logo (top-left): display type until the logo art exists.
-	local logo = Ui.frame({
-		Name = "Logo",
-		BackgroundTransparency = 1,
-		Position = UDim2.fromOffset(14, 6),
-		Size = UDim2.fromOffset(150, 76),
-		Parent = root,
-	})
-	Ui.display({
-		Text = "1v1",
-		TextSize = 44,
-		Rotation = -4,
-		Size = UDim2.new(1, 0, 0, 44),
-		Parent = logo,
-	}, true)
-	Ui.display({
-		Text = "CARD",
-		TextSize = 30,
-		Rotation = -4,
-		Position = UDim2.fromOffset(6, 38),
-		Size = UDim2.new(1, 0, 0, 32),
-		Parent = logo,
-	})
-
-	-- Currency badges (top centre). Coins and Gems are earned, never bought, so "+" shows
-	-- where to earn them (Worlds for Coins, Quests for Gems).
-	local top = Ui.frame({
-		Name = "TopBar",
-		BackgroundTransparency = 1,
-		AnchorPoint = Vector2.new(0.5, 0),
-		Position = UDim2.new(0.5, 10, 0, 12),
-		Size = UDim2.fromOffset(560, 40),
-		Parent = root,
-	}, { Ui.list(true, 14, Enum.HorizontalAlignment.Center) })
-
-	local function badge(name: string, icon: string, order: number, onPlus: (() -> ())?): TextLabel
-		local f = Ui.frame({
-			Name = name,
-			BackgroundTransparency = 1,
-			Size = UDim2.fromOffset(if onPlus then 168 else 156, 36),
-			LayoutOrder = order,
-			Parent = top,
-		})
-		Ui.skin(f, "currency_badge", 0.5)
-		Ui.icon(icon, 34, { Position = UDim2.new(0, -6, 0.5, 0), ZIndex = 2, Parent = f })
-		local value = Ui.text({
-			Name = "Value",
-			Text = "0",
-			FontFace = F.Number,
-			TextSize = 18,
-			TextWrapped = false,
-			Position = UDim2.fromOffset(34, 0),
-			Size = UDim2.new(1, if onPlus then -72 else -40, 1, 0),
-			ZIndex = 2,
-			Parent = f,
-		})
-		Ui.outline(C.Night, 1.5).Parent = value
-		Ui.fit(value, 18, 10)
-		if onPlus then
-			local plus: ImageButton = Ui.new("ImageButton", {
-				Name = "Plus",
-				Image = Ui.asset("button_plus"),
-				BackgroundTransparency = 1,
-				AnchorPoint = Vector2.new(1, 0.5),
-				Position = UDim2.new(1, -4, 0.5, 0),
-				Size = UDim2.fromOffset(28, 28),
-				ZIndex = 2,
-				Parent = f,
-			})
-			Ui.juice(plus)
-			plus.Activated:Connect(function()
-				Ui.sound("click")
-				onPlus()
-			end)
-		end
-		return value
-	end
-	local coins = badge("Coins", "icon_coin", 1, function()
-		ctx.open("Tip", { kind = "coins" }) -- Coins are earned, never sold
-	end)
-	local gems = badge("Gems", "icon_gem", 2, function()
-		ctx.open("Tip", { kind = "gems" })
-	end)
-	local trophies = badge("Trophies", "icon_trophy", 3, nil)
-
-	-- Top icons (top-right): daily rewards, quests and inviting friends.
-	local icons = Ui.frame({
-		Name = "TopIcons",
-		BackgroundTransparency = 1,
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -14, 0, 8),
-		Size = UDim2.fromOffset(166, 48),
-		Parent = root,
-	}, { Ui.list(true, 8, Enum.HorizontalAlignment.Right) })
-	for i, item in
-		{ { "Daily", "icon_gift" }, { "QuestsIcon", "icon_calendar" }, { "Friends", "icon_friends" } }
-	do
-		local b: ImageButton = Ui.new("ImageButton", {
-			Name = item[1],
-			Image = Ui.asset(item[2]),
-			BackgroundTransparency = 1,
-			ScaleType = Enum.ScaleType.Fit,
-			Size = UDim2.fromOffset(46, 46),
-			LayoutOrder = i,
-			Parent = icons,
-		})
-		Ui.juice(b)
-		b.Activated:Connect(function()
-			Ui.sound("click")
-			if item[1] == "Friends" then
-				ctx.invite()
-			else
-				ctx.open("Quests")
-			end
-		end)
-	end
-
-	-- Left icon dock: square bright tiles, icon first, a tiny label.
-	local menu = Ui.frame({
-		Name = "Menu",
-		BackgroundTransparency = 1,
-		Position = UDim2.fromOffset(14, 82),
-		Size = UDim2.fromOffset(TILE, #MENU * (TILE + 4)),
-		Parent = root,
-	}, { Ui.list(false, 4) })
-	local rows: { [string]: { stroke: UIStroke, label: TextLabel, dot: Frame } } = {}
-	for i, item in MENU do
-		local row: TextButton = Ui.new("TextButton", {
-			Name = item.id,
-			Text = "",
-			AutoButtonColor = false,
-			BackgroundColor3 = C.White,
-			LayoutOrder = i,
-			Size = UDim2.fromOffset(TILE, TILE),
-			Parent = menu,
-		}, {
-			Ui.new("UICorner", { CornerRadius = UDim.new(0, 12) }),
-			Ui.new("UIGradient", {
-				Rotation = 90,
-				Color = ColorSequence.new({
-					ColorSequenceKeypoint.new(0, item.accent:Lerp(C.White, 0.25)),
-					ColorSequenceKeypoint.new(0.55, item.accent),
-					ColorSequenceKeypoint.new(1, item.accent:Lerp(C.Night, 0.45)),
-				}),
-			}),
-		})
-		local stroke: UIStroke = Ui.new("UIStroke", {
-			Color = C.Night,
-			Thickness = 2,
-			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-			Parent = row,
-		})
-		-- Gloss: a soft white sheen over the top half.
-		Ui.frame({
-			Name = "Gloss",
-			BackgroundColor3 = C.White,
-			BackgroundTransparency = 0.78,
-			Position = UDim2.fromOffset(3, 3),
-			Size = UDim2.new(1, -6, 0.42, 0),
-			ZIndex = 2,
-			Parent = row,
-		}, { Ui.new("UICorner", { CornerRadius = UDim.new(0, 9) }) })
-		Ui.icon(item.icon, 32, {
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.fromScale(0.5, 0.4),
-			ZIndex = 3,
-			Parent = row,
-		})
-		local label = Ui.display({
-			Text = item.label,
-			TextSize = 11,
-			TextWrapped = false,
-			AnchorPoint = Vector2.new(0.5, 1),
-			Position = UDim2.new(0.5, 0, 1, 1),
-			Size = UDim2.new(1, 6, 0, 13),
-			ZIndex = 4,
-			Parent = row,
-		})
-		-- Notification dot: something is ready here (HudBadges).
-		local dot = Ui.frame({
-			Name = "Dot",
-			BackgroundColor3 = C.Red,
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(1, -3, 0, 3),
-			Size = UDim2.fromOffset(12, 12),
-			Visible = false,
-			ZIndex = 5,
-			Parent = row,
-		}, { Ui.corner(6), Ui.stroke(C.Night, 2) })
-		-- The dot breathes so a ready reward catches the eye.
-		if not ctx.reducedMotion() then
-			local beat = Ui.new("UIScale", { Parent = dot })
-			TweenService:Create(
-				beat,
-				TweenInfo.new(0.7, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
-				{ Scale = 1.3 }
-			):Play()
-		end
-		Ui.juice(row)
-		row.Activated:Connect(function()
-			Ui.sound("click")
-			ctx.open(item.id)
-		end)
-		rows[item.id] = { stroke = stroke, label = label, dot = dot }
-	end
-
-	-- Bottom hint: the next world and the trophies it needs.
-	local hint = Ui.frame({
-		Name = "Hint",
-		BackgroundTransparency = 1,
-		AnchorPoint = Vector2.new(0.5, 1),
-		Position = UDim2.new(0.5, 40, 1, -12),
-		Size = UDim2.fromOffset(400, 32),
-		Parent = root,
-	})
-	Ui.skin(hint, "toast", 0.44)
-	Ui.icon("icon_trophy", 26, { Position = UDim2.new(0, 10, 0.5, 0), ZIndex = 2, Parent = hint })
-	local hintText = Ui.text({
-		Text = "",
-		FontFace = F.Bold,
-		TextSize = 14,
-		TextWrapped = false,
-		TextXAlignment = Enum.TextXAlignment.Center,
-		Position = UDim2.fromOffset(34, 0),
-		Size = UDim2.new(1, -44, 1, 0),
-		ZIndex = 2,
-		Parent = hint,
-	})
-	Ui.fit(hintText, 14, 9)
-
-	-- Where the player is (bottom-left): the lobby, or the world number and name.
-	local place = Ui.frame({
-		Name = "Place",
-		BackgroundTransparency = 1,
-		AnchorPoint = Vector2.new(0, 1),
-		Position = UDim2.new(0, 12, 1, -12),
-		Size = UDim2.fromOffset(200, 32),
-		Parent = root,
-	})
-	Ui.skin(place, "toast", 0.44)
-	Ui.icon("icon_worlds", 24, { Position = UDim2.new(0, 8, 0.5, 0), ZIndex = 2, Parent = place })
-	local placeText = Ui.text({
-		Name = "Value",
-		Text = "LOBBY",
-		FontFace = F.Title,
-		TextSize = 14,
-		TextWrapped = false,
-		Position = UDim2.fromOffset(38, 0),
-		Size = UDim2.new(1, -46, 1, 0),
-		ZIndex = 2,
-		Parent = place,
-	})
-	Ui.fit(placeText, 14, 9)
-
-	-- Quest tracker (bottom-right): the next daily quest; tap for Quests.
-	local tracker: TextButton = Ui.new("TextButton", {
-		Name = "Tracker",
-		Text = "",
-		AutoButtonColor = false,
-		BackgroundTransparency = 1,
-		AnchorPoint = Vector2.new(1, 1),
-		Position = UDim2.new(1, -12, 1, -12),
-		Size = UDim2.fromOffset(230, 50),
-		Parent = root,
-	})
-	Ui.skin(tracker, "toast", 0.6)
-	Ui.icon("icon_quests", 26, { Position = UDim2.new(0, 8, 0.5, 0), ZIndex = 2, Parent = tracker })
-	local trackerText = Ui.text({
-		Text = "",
-		FontFace = F.Bold,
-		TextSize = 13,
-		TextWrapped = false,
-		Position = UDim2.fromOffset(40, 6),
-		Size = UDim2.new(1, -50, 0, 18),
-		ZIndex = 2,
-		Parent = tracker,
-	})
-	Ui.fit(trackerText, 13, 9)
-	local setTrack = Ui.bar(tracker, C.Gold, {
-		Position = UDim2.fromOffset(40, 28),
-		Size = UDim2.new(1, -86, 0, 10),
-		ZIndex = 2,
-	})
-	local trackerCount = Ui.text({
-		Text = "",
-		FontFace = F.Number,
-		TextSize = 12,
-		TextColor3 = C.Gold,
-		TextWrapped = false,
-		TextXAlignment = Enum.TextXAlignment.Right,
-		Position = UDim2.new(1, -44, 0, 24),
-		Size = UDim2.fromOffset(36, 18),
-		ZIndex = 2,
-		Parent = tracker,
-	})
-	Ui.juice(tracker)
-	tracker.Activated:Connect(function()
-		Ui.sound("click")
-		ctx.open("Quests")
-	end)
-
-	-- Back to Lobby (bottom-left, above the place name), shown only while the player is in a world
-	-- (World attribute 1-10). The server moves the character (World.Hub); each world also has a
-	-- lobby portal.
-	local lobby = Ui.button("      Lobby", "primary", function()
-		ctx.request("World.Hub")
-	end, {
-		Name = "Lobby",
-		AnchorPoint = Vector2.new(0, 1),
-		Position = UDim2.new(0, 12, 1, -52),
-		Size = UDim2.fromOffset(120, 40),
-		TextSize = 16,
-	})
-	Ui.icon("icon_home", 30, { Position = UDim2.new(0, 8, 0.5, 0), ZIndex = 5, Parent = lobby.instance })
-	lobby.instance.Visible = false
-	lobby.instance.Parent = root
-
-	-- Menu (top-right, left of the daily icons): back to the main menu.
-	local pause = Ui.button("Menu", "secondary", function()
-		ctx.leaveToMenu()
-	end, {
-		Name = "MenuButton",
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -188, 0, 16),
-		Size = UDim2.fromOffset(78, 32),
-		TextSize = 14,
-	})
-	pause.instance.Parent = root
-
-	-- HUD modes (UiFlow view): "full", "currencies" (only the top bar) or "hidden". Pieces slide
-	-- off their nearest edge and back.
-	local wanted: { [GuiObject]: boolean } =
-		{ [hint] = true, [lobby.instance] = false, [logo] = true, [tracker] = false }
-	local pieces: { { obj: GuiObject, home: UDim2, away: UDim2, keep: boolean } } = {
-		{ obj = logo, home = logo.Position, away = logo.Position - UDim2.fromOffset(260, 0), keep = false },
-		{
-			obj = pause.instance,
-			home = pause.instance.Position,
-			away = pause.instance.Position - UDim2.fromOffset(340, 0),
-			keep = false,
-		},
-		{ obj = menu, home = menu.Position, away = menu.Position - UDim2.fromOffset(120, 0), keep = false },
-		{
-			obj = icons,
-			home = icons.Position,
-			away = icons.Position + UDim2.fromOffset(180, 0),
-			keep = false,
-		},
-		{ obj = hint, home = hint.Position, away = hint.Position + UDim2.fromOffset(0, 80), keep = false },
-		{ obj = place, home = place.Position, away = place.Position + UDim2.fromOffset(0, 80), keep = false },
-		{
-			obj = tracker,
-			home = tracker.Position,
-			away = tracker.Position + UDim2.fromOffset(0, 90),
-			keep = false,
-		},
-		{
-			obj = lobby.instance,
-			home = lobby.instance.Position,
-			away = lobby.instance.Position + UDim2.fromOffset(0, 80),
-			keep = false,
-		},
-		{ obj = top, home = top.Position, away = top.Position - UDim2.fromOffset(0, 80), keep = true },
-	}
-	local mode = "full"
-	local function setMode(m: string, instant: boolean?)
-		mode = m
-		local info = if instant or ctx.reducedMotion()
-			then TweenInfo.new(0.01)
-			else TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
-		for _, piece in pieces do
-			local show = m == "full" or (m == "currencies" and piece.keep)
-			local content = wanted[piece.obj] ~= false
-			if show and content then
-				piece.obj.Visible = true
-			end
-			local tween =
-				TweenService:Create(piece.obj, info, { Position = if show then piece.home else piece.away })
-			tween.Completed:Connect(function()
-				if mode == m then
-					-- Read `wanted` now, not at the start: the area can change mid-slide (PLAY sends
-					-- the player to the lobby while the HUD slides in).
-					piece.obj.Visible = show and wanted[piece.obj] ~= false
-				end
-			end)
-			tween:Play()
-		end
-	end
-	local function want(obj: GuiObject, on: boolean)
-		wanted[obj] = on
-		obj.Visible = on and mode == "full"
-	end
-
-	local shown: { [string]: number } = {}
-	local function setCount(label: TextLabel, key: string, value: number)
-		local before = shown[key]
-		shown[key] = value
-		if before == nil or before == value or ctx.reducedMotion() then
-			label.Text = Format.number(value)
-			return
-		end
-		Ui.countUp(label, before, value, Format.number)
-		Ui.pulse(label.Parent :: GuiObject, 0.08)
-		if value > before then
-			Ui.sound("coin")
-			-- A "+N" that floats up from the badge and fades.
-			local badgeFrame = label.Parent :: GuiObject
-			local pop = Ui.text({
-				Text = `+{Format.number(value - before)}`,
-				FontFace = F.Number,
-				TextSize = 20,
-				TextColor3 = if key == "gems" then C.Blue else C.Gold,
-				TextWrapped = false,
-				TextXAlignment = Enum.TextXAlignment.Center,
-				AnchorPoint = Vector2.new(0.5, 0),
-				Position = UDim2.new(0.5, 0, 1, 2),
-				Size = UDim2.fromOffset(120, 24),
-				ZIndex = 5,
-				Parent = badgeFrame,
-			})
-			Ui.outline(C.Night, 2).Parent = pop
-			local rise = TweenService:Create(
-				pop,
-				TweenInfo.new(1.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-				{ Position = UDim2.new(0.5, 0, 1, 40), TextTransparency = 1 }
-			)
-			rise.Completed:Connect(function()
-				pop:Destroy()
-			end)
-			rise:Play()
-		end
-	end
-
-	return {
-		refresh = function()
-			want(lobby.instance, ctx.state.area ~= 0)
-			local area = ctx.state.area
-			local world = WorldsCfg.ById[area]
-			placeText.Text = if world then `WORLD {area} · {string.upper(world.displayName)}` else "LOBBY"
-			local v = ctx.state.view
-			if v == nil then
-				return
-			end
-			local dots = HudBadges.dots(v, ctx.now())
-			for id, r in rows do
-				r.dot.Visible = (dots :: any)[id] == true
-			end
-			local track = HudBadges.tracker(v)
-			want(tracker, track ~= nil)
-			if track then
-				trackerText.Text = track.text
-				trackerCount.Text = `{track.progress}/{track.target}`
-				setTrack(track.progress / track.target)
-			end
-			setCount(coins, "coins", v.coins)
-			setCount(gems, "gems", v.gems)
-			trophies.Text = `{Format.number(v.trophies)} · {Progress.leagueFor(v.trophies).id}`
-			local nextWorld = nil
-			for _, w in Worlds.List do
-				if v.highestTrophies < w.trophiesToUnlock then
-					nextWorld = w
-					break
-				end
-			end
-			want(hint, nextWorld ~= nil)
-			if nextWorld then
-				hintText.Text =
-					`Reach {Format.number(nextWorld.trophiesToUnlock)} trophies to unlock World {nextWorld.id}: {nextWorld.displayName}`
-			end
-		end,
-		setMode = setMode,
-		-- Narrow screens (phones held upright, ~720 design px wide): no big logo and the currency
-		-- bar fills the space left of the icons. Below tablet width the Menu button drops under the
-		-- icons.
-		layout = function(width: number)
-			local narrow = width < 860
-			wanted[logo] = not narrow
-			for _, piece in pieces do
-				if piece.obj == top then
-					piece.home = if narrow
-						then UDim2.fromOffset((width - 180) / 2, 12)
-						else UDim2.new(0.5, 10, 0, 12)
-					piece.away = piece.home - UDim2.fromOffset(0, 80)
-				elseif piece.obj == pause.instance then
-					-- Up to tablet widths the top bar reaches the icons: the Menu button goes under them.
-					piece.home = if width < 1040 then UDim2.new(1, -18, 0, 62) else UDim2.new(1, -188, 0, 16)
-					piece.away = piece.home + UDim2.fromOffset(260, 0)
-				end
-			end
-			setMode(mode, true)
-		end,
-		select = function(id: string?)
-			for key, r in rows do
-				local on = key == id
-				r.stroke.Color = if on then C.Gold else C.Night
-				r.stroke.Thickness = if on then 3 else 2
-			end
-		end,
-	}
-end
+type Hud = HudModule.Hud
 
 function App.start(deps: Deps): Ctx
 	CardFx.setHoverSound(function()
@@ -635,6 +109,7 @@ function App.start(deps: Deps): Ctx
 	local uiScale = Ui.new("UIScale", { Parent = root })
 	local hud: Hud? = nil
 	local panelFit: UIScale? = nil
+	local panelShrink = 1 -- panels opened while playing take at most ~70% of the screen (MISSION 3.2)
 	local function fit()
 		local vp = gui.AbsoluteSize
 		if vp.X > 0 and vp.Y > 0 then
@@ -644,10 +119,10 @@ function App.start(deps: Deps): Ctx
 			uiScale.Scale = s
 			root.Size = UDim2.fromOffset(vp.X / s, vp.Y / s)
 			if hud then
-				hud.layout(vp.X / s)
+				hud.layout(vp.X / s, s)
 			end
 			if panelFit then
-				panelFit.Scale = math.min(1, (vp.X / s - 16) / 820)
+				panelFit.Scale = math.min(1, (vp.X / s - 16) / 820) * panelShrink
 			end
 		end
 	end
@@ -741,6 +216,13 @@ function App.start(deps: Deps): Ctx
 	-- Applies the state machine's view: HUD mode, the main menu, blur, input lock, menu camera.
 	local function apply(instant: boolean?)
 		local view = UiFlow.view(flow)
+		local playing = flow.base == "Playing" or flow.base == "Queue"
+		Ui.setPanelStyle(if playing then "light" else "dark")
+		local shrink = if playing then 0.86 else 1
+		if shrink ~= panelShrink then
+			panelShrink = shrink
+			fit()
+		end
 		if current and flow.top ~= "Panel" and flow.top ~= "Hatching" then -- a panel stays under a hatch
 			dropPanel(not instant)
 		end
@@ -1017,7 +499,7 @@ function App.start(deps: Deps): Ctx
 		end,
 	}
 
-	hud = buildHud(ctx, hudLayer)
+	hud = HudModule.build(ctx, hudLayer)
 	fit()
 	local leaving = false
 	menu = MainMenu.build(menuLayer, {
