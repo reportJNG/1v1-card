@@ -53,7 +53,11 @@ function UiFlow.view(f: Flow): View
 		hud = "hidden"
 		locked = true
 		blur = s == "Loading" -- the hatch runs its own focus blur
-	elseif s == "MainMenu" or s == "Panel" then
+	elseif s == "MainMenu" then
+		-- The main menu is its own screen (an opaque backdrop, not the lobby): no HUD, no world blur.
+		hud = "hidden"
+		locked = true
+	elseif s == "Panel" then
 		hud = "currencies"
 		locked = true
 		blur = true

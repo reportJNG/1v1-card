@@ -149,6 +149,7 @@ ICONS = {
     "icon_hp": "a red heart",
     "icon_odds": "a percent sign on a small purple badge",
     "icon_search": "a magnifying glass, white",
+    "icon_home": "a small house, blue roof (the lobby)",
 }
 for slot, what in ICONS.items():
     spec(slot, (128, 128), None, 0, f"Icon: {slot[5:]}",

@@ -66,16 +66,18 @@ local App = {}
 
 local Worlds = require(Shared.Config.Worlds)
 
--- Left menu (concept board order). Trade is V2 and not built, so it is not shown.
+-- Left icon dock (concept board order). Trade is V2 and not built, so it is not shown. Each tile is
+-- an icon-pack icon on a bright tile in its own accent, with a one-word label.
 local MENU = {
-	{ id = "Play", icon = "icon_play", label = "Play" },
-	{ id = "Collection", icon = "icon_cards", label = "Inventory" },
-	{ id = "Deck", icon = "icon_deck", label = "Deck" },
-	{ id = "Shop", icon = "icon_shop", label = "Shop" },
-	{ id = "Worlds", icon = "icon_worlds", label = "Worlds" },
-	{ id = "Quests", icon = "icon_quests", label = "Quests" },
-	{ id = "Settings", icon = "icon_settings", label = "Settings" },
+	{ id = "Play", icon = "icon_play", label = "1v1", accent = Color3.fromHex("#FF9F2E") },
+	{ id = "Collection", icon = "icon_cards", label = "Cards", accent = Color3.fromHex("#A469FF") },
+	{ id = "Deck", icon = "icon_deck", label = "Deck", accent = Color3.fromHex("#3FA9FF") },
+	{ id = "Shop", icon = "icon_shop", label = "Eggs", accent = Color3.fromHex("#FF6FC8") },
+	{ id = "Worlds", icon = "icon_worlds", label = "Worlds", accent = Color3.fromHex("#2FD6E0") },
+	{ id = "Quests", icon = "icon_quests", label = "Quests", accent = Color3.fromHex("#48DA97") },
+	{ id = "Settings", icon = "icon_settings", label = "Settings", accent = Color3.fromHex("#8D9BC4") },
 }
+local TILE = 48 -- dock tile size (design px)
 
 type Hud = {
 	refresh: () -> (),
@@ -204,47 +206,76 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 		end)
 	end
 
-	-- Left menu.
+	-- Left icon dock: square bright tiles, icon first, a tiny label.
 	local menu = Ui.frame({
 		Name = "Menu",
 		BackgroundTransparency = 1,
-		Position = UDim2.fromOffset(12, 96),
-		Size = UDim2.fromOffset(150, 7 * 50),
+		Position = UDim2.fromOffset(14, 82),
+		Size = UDim2.fromOffset(TILE, #MENU * (TILE + 4)),
 		Parent = root,
-	}, { Ui.list(false, 6) })
-	local rows: { [string]: { skin: ImageLabel, label: TextLabel, dot: Frame } } = {}
+	}, { Ui.list(false, 4) })
+	local rows: { [string]: { stroke: UIStroke, label: TextLabel, dot: Frame } } = {}
 	for i, item in MENU do
 		local row: TextButton = Ui.new("TextButton", {
 			Name = item.id,
 			Text = "",
 			AutoButtonColor = false,
-			BackgroundTransparency = 1,
+			BackgroundColor3 = C.White,
 			LayoutOrder = i,
-			Size = UDim2.new(1, 0, 0, Theme.Size.tap),
+			Size = UDim2.fromOffset(TILE, TILE),
 			Parent = menu,
+		}, {
+			Ui.new("UICorner", { CornerRadius = UDim.new(0, 12) }),
+			Ui.new("UIGradient", {
+				Rotation = 90,
+				Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, item.accent:Lerp(C.White, 0.25)),
+					ColorSequenceKeypoint.new(0.55, item.accent),
+					ColorSequenceKeypoint.new(1, item.accent:Lerp(C.Night, 0.45)),
+				}),
+			}),
 		})
-		local skin = Ui.skin(row, "menu_item", 0.69)
-		Ui.icon(item.icon, 32, { Position = UDim2.new(0, 8, 0.5, 0), ZIndex = 2, Parent = row })
-		local label = Ui.text({
-			Text = item.label,
-			FontFace = F.Title,
-			TextSize = 17,
-			TextWrapped = false,
-			Position = UDim2.fromOffset(48, 0),
-			Size = UDim2.new(1, -52, 1, 0),
-			ZIndex = 2,
+		local stroke: UIStroke = Ui.new("UIStroke", {
+			Color = C.Night,
+			Thickness = 2,
+			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 			Parent = row,
 		})
-		Ui.outline(C.Night, 1, 0.3).Parent = label
+		-- Gloss: a soft white sheen over the top half.
+		Ui.frame({
+			Name = "Gloss",
+			BackgroundColor3 = C.White,
+			BackgroundTransparency = 0.78,
+			Position = UDim2.fromOffset(3, 3),
+			Size = UDim2.new(1, -6, 0.42, 0),
+			ZIndex = 2,
+			Parent = row,
+		}, { Ui.new("UICorner", { CornerRadius = UDim.new(0, 9) }) })
+		Ui.icon(item.icon, 32, {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 0, 0.4, 0),
+			ZIndex = 3,
+			Parent = row,
+		})
+		local label = Ui.display({
+			Text = item.label,
+			TextSize = 11,
+			TextWrapped = false,
+			AnchorPoint = Vector2.new(0.5, 1),
+			Position = UDim2.new(0.5, 0, 1, 1),
+			Size = UDim2.new(1, 6, 0, 13),
+			ZIndex = 4,
+			Parent = row,
+		})
 		-- Notification dot: something is ready here (HudBadges).
 		local dot = Ui.frame({
 			Name = "Dot",
 			BackgroundColor3 = C.Red,
 			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(1, -10, 0, 10),
+			Position = UDim2.new(1, -3, 0, 3),
 			Size = UDim2.fromOffset(12, 12),
 			Visible = false,
-			ZIndex = 3,
+			ZIndex = 5,
 			Parent = row,
 		}, { Ui.corner(6), Ui.stroke(C.Night, 2) })
 		Ui.juice(row)
@@ -252,7 +283,7 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 			Ui.sound("click")
 			ctx.open(item.id)
 		end)
-		rows[item.id] = { skin = skin, label = label, dot = dot }
+		rows[item.id] = { stroke = stroke, label = label, dot = dot }
 	end
 
 	-- Bottom hint: the next world and the trophies it needs.
@@ -353,15 +384,16 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 	-- Back to Lobby (bottom-left, above the place name), shown only while the player is in a world
 	-- (World attribute 1-10). The server moves the character (World.Hub); each world also has a
 	-- lobby portal.
-	local lobby = Ui.button("Back to Lobby", "primary", function()
+	local lobby = Ui.button("      Lobby", "primary", function()
 		ctx.request("World.Hub")
 	end, {
 		Name = "Lobby",
 		AnchorPoint = Vector2.new(0, 1),
 		Position = UDim2.new(0, 12, 1, -52),
-		Size = UDim2.fromOffset(150, 40),
-		TextSize = 15,
+		Size = UDim2.fromOffset(120, 40),
+		TextSize = 16,
 	})
+	Ui.icon("icon_home", 30, { Position = UDim2.new(0, 8, 0.5, 0), ZIndex = 5, Parent = lobby.instance })
 	lobby.instance.Visible = false
 	lobby.instance.Parent = root
 
@@ -389,7 +421,7 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 			away = pause.instance.Position - UDim2.fromOffset(340, 0),
 			keep = false,
 		},
-		{ obj = menu, home = menu.Position, away = menu.Position - UDim2.fromOffset(200, 0), keep = false },
+		{ obj = menu, home = menu.Position, away = menu.Position - UDim2.fromOffset(120, 0), keep = false },
 		{
 			obj = icons,
 			home = icons.Position,
@@ -540,8 +572,8 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 		select = function(id: string?)
 			for key, r in rows do
 				local on = key == id
-				Ui.reskin(r.skin, if on then "tab_on" else "menu_item")
-				r.label.TextColor3 = if on then C.White else C.Text
+				r.stroke.Color = if on then C.Gold else C.Night
+				r.stroke.Thickness = if on then 3 else 2
 			end
 		end,
 	}
@@ -853,6 +885,8 @@ function App.start(deps: Deps): Ctx
 	fit()
 	menu = MainMenu.build(menuLayer, {
 		play = function()
+			-- PLAY always lands in the lobby, wherever the player was (server-checked World.Hub).
+			task.spawn(ctx.request, "World.Hub")
 			ui("play")
 		end,
 		open = function(name: string)
