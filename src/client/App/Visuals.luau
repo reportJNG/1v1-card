@@ -22,8 +22,18 @@ local BAND_TINT: { [string]: Color3 } = {
 	Event = Color3.fromHex("#48DA97"),
 }
 
+-- The egg's icon from the Egg Icon Pack, unedited (MISSION 7.1): the 64 px file for small views,
+-- the 256 px file otherwise, never shown bigger than about 256 physical px (128 design px at the
+-- 1080p scale): big moments get glow, rays and pedestals around the egg instead.
+local EGG_MAX = 128
+local SMALL_UP_TO = 40 -- design px (about 80 physical px on PC, 56 on phones)
+
 function Visuals.egg(parent: Instance, egg: Types.EggDef, golden: boolean, size: number): GuiObject
-	local assetId = if golden then egg.icon.goldenAssetId else egg.icon.normalAssetId
+	size = math.min(size, EGG_MAX)
+	local small = size <= SMALL_UP_TO
+	local assetId = if golden
+		then (if small then egg.icon.goldenSmallAssetId else nil) or egg.icon.goldenAssetId
+		else (if small then egg.icon.smallAssetId else nil) or egg.icon.normalAssetId
 	if assetId then
 		return Ui.new("ImageLabel", {
 			Image = assetId,

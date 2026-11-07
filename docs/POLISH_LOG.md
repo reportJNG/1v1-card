@@ -395,3 +395,23 @@ Built before MISSION.md landed, under CARDS_EGGS_MISSION (now merged into MISSIO
   battle plates, KO picker, results, inventory grid and inspect, card stats, deck slots and picker,
   hatch, arena).
 - `docs/GUI_AUDIT.md` (section 4.2) and `art/ui/PROMPTS_V2.md` (route O prompts) written.
+
+## Section 7: eggs
+- **Pack wired in (7.1):** the Egg Icon Pack copied unchanged to `art/eggs/pack/` (with
+  `License.txt`); 47 64 px icons uploaded (`smallAssetId`, `goldenSmallAssetId`); `Visuals.egg` uses
+  them for small views and never shows an egg above ~256 physical px. Egg tiers come from the odds
+  band (`Config/EggTiers`) and colour the pedestal, glow, pills and summon circle only. Tier
+  pedestals rendered in Blender (`ui_studio.py pedestals`), shard sets drawn in code. Credits in
+  Settings (@gvesster). `docs/ASSETS.md` records the switch away from Blender eggs.
+- **Egg Shop (7.2):** eggs on tier pedestals in one scrollable row grouped by world, label and
+  price pills, idle bob, glow, "World N" locks; the selected egg rises and its ring glows; details
+  with tier pill, "Drops X up to Y · see Odds", price, gold x1 / x3 / x8, Odds, Auto-open, Robux
+  only while allowed (one compact row); Egg Bag tab. Compare `docs/screens/eggs/compare_shop.png`
+  (board 01; the egg art differs by design: the unedited pack). Scores: reference 8 · quality 8 ·
+  readability 8 · motion 8 · consistency 9.
+- **Opening (7.3):** five stages (summon, crack, break, reveal, get card). Play mode: a real x1
+  Common hatch from the shop; injected (labelled) x1 God-tier with the light pillar, x8 Golden with
+  mixed rarities (gold circle, gold shards, Golden foil, row of silhouettes, grid flip), x3 with Skip
+  (tap -> cards). Compares `docs/screens/eggs/compare_opening_stage1..5.png`; frames
+  `opening_ur_stage*.png`, `opening_x3_skip.png`. Scores: reference 8 · quality 8 · readability 8 ·
+  motion 9 · consistency 9.

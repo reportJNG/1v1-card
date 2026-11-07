@@ -103,3 +103,20 @@ libraries, free for use in Roblox experiences. Never use uploads ripped from com
 | What | Where |
 | --- | --- |
 | Fonts: Luckiest Guy, Builder Sans | `Theme.Face` |
+
+## Eggs (MISSION 7.1)
+- **The Egg Icon Pack v2 (Basic) by @gvesster is the game's egg art**, used unedited: the 256 px
+  files for big views and the 64 px files for small tiles, the bag and toasts, normal and Golden.
+  The pack is copied unchanged, with its `License.txt`, to `art/eggs/pack/`. License: commercial
+  use allowed, editing and reselling not allowed; credit appreciated (Settings → Credits).
+- The 47 64 px files were uploaded (ids in `Config/Eggs` `smallAssetId` / `goldenSmallAssetId`).
+- Everything around an egg is our own art on separate layers: tier pedestals
+  (`pedestal_<tier>`, Blender renders), glows, summon circles and runes, crack overlays, shard sets,
+  shockwave, rays and pillar (`scripts/art/ui_extras.py`). The egg image is never tinted, cut or
+  merged into another image.
+- The earlier Blender egg plan (CARDS_EGGS_MISSION 4.7) was replaced by MISSION.md: no egg models.
+
+## Kit and fonts (step 5)
+- Card and UI kit: `art/ui/MANIFEST_V2.json` (every image, route, status, id).
+- Fonts used to draw the kit: Luckiest Guy (Apache 2.0) and Titan One (OFL), in `art/fonts/` with
+  their licenses.

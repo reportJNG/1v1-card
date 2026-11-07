@@ -458,6 +458,65 @@ def emblems():
     return out
 
 
+# ------------------------------------------------------------------ pedestals (MISSION 7.1)
+
+TIERS = {
+    "common": "#E8E6FF",
+    "rare": "#0A5CFF",
+    "epic": "#8A2BFF",
+    "legendary": "#FF9A00",
+    "godtier": "#00C850",
+}
+
+
+def pedestal(tier, color):
+    """A dark stone drum with a bevelled cap, an emissive rim and a glowing ring on its top face."""
+    stone = principled("Stone", "#151024", 0.15, 0.45)
+    rim = principled(f"Rim_{tier}", color, 0.0, 0.2, emit=color, strength=1.6)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=96, radius=1.25, depth=0.34, location=(0, 0, 0.17))
+    drum = bpy.context.active_object
+    drum.data.materials.append(stone)
+    bv = drum.modifiers.new("Bevel", "BEVEL")
+    bv.width = 0.05
+    bv.segments = 4
+    for p in drum.data.polygons:
+        p.use_smooth = True
+    bpy.ops.mesh.primitive_cylinder_add(vertices=96, radius=1.42, depth=0.12, location=(0, 0, 0.06))
+    base = bpy.context.active_object
+    base.data.materials.append(stone)
+    bpy.ops.mesh.primitive_torus_add(major_radius=1.25, minor_radius=0.045, major_segments=128,
+                                     minor_segments=12, location=(0, 0, 0.34))
+    torus = bpy.context.active_object
+    torus.data.materials.append(rim)
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.92, minor_radius=0.025, major_segments=128,
+                                     minor_segments=8, location=(0, 0, 0.345))
+    inner = bpy.context.active_object
+    inner.data.materials.append(rim)
+    bpy.ops.mesh.primitive_torus_add(major_radius=1.42, minor_radius=0.03, major_segments=128,
+                                     minor_segments=8, location=(0, 0, 0.12))
+    low = bpy.context.active_object
+    low.data.materials.append(rim)
+
+
+def pedestals():
+    setup((512, 256))
+    cam = bpy.data.objects["Cam"]
+    cam.data.type = "ORTHO"
+    cam.data.ortho_scale = 3.3
+    cam.location = (0, -8, 3.2)
+    cam.rotation_euler = (math.radians(70), 0, 0)
+    sc = bpy.context.scene
+    sc.render.resolution_x, sc.render.resolution_y = 512, 256
+    out = {}
+    for tier, color in TIERS.items():
+        clear_objects()
+        pedestal(tier, color)
+        path = os.path.join(RAW, f"pedestal_{tier}.png")
+        render(path)
+        out[tier] = path
+    return out
+
+
 # ------------------------------------------------------------------ main
 
 if __name__ == "__main__" and "--" in sys.argv:
@@ -467,6 +526,8 @@ if __name__ == "__main__" and "--" in sys.argv:
     setup()
     if cmd == "emblems":
         print(emblems())
+    elif cmd == "pedestals":
+        print(pedestals())
     elif cmd == "save":
         os.makedirs(os.path.join(ROOT, "art", "blender"), exist_ok=True)
         bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT, "art", "blender", "ui_studio.blend"))

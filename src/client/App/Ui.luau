@@ -536,6 +536,7 @@ export type Button = {
 	label: TextLabel,
 	setEnabled: (enabled: boolean) -> (),
 	setText: (text: string) -> (),
+	setOnClick: (fn: () -> ()) -> (), -- replaces the click handler
 }
 
 -- One dominant primary action per panel (design rule 1): use "primary" once per panel.
@@ -575,6 +576,7 @@ function Ui.button(text: string, style: string, onClick: () -> (), props: { [str
 		Ui.outline(C.Night, 1, 0.5).Parent = label
 	end
 	Ui.juice(b, skin)
+	local handler = onClick
 	local enabled = true
 	local lastClick = -math.huge
 	b.Activated:Connect(function()
@@ -589,7 +591,7 @@ function Ui.button(text: string, style: string, onClick: () -> (), props: { [str
 		end
 		lastClick = now
 		Ui.sound("click")
-		onClick()
+		handler()
 	end)
 	return {
 		instance = b,
@@ -602,6 +604,9 @@ function Ui.button(text: string, style: string, onClick: () -> (), props: { [str
 		end,
 		setText = function(t: string)
 			label.Text = t
+		end,
+		setOnClick = function(fn: () -> ())
+			handler = fn
 		end,
 	}
 end
@@ -699,6 +704,23 @@ function Ui.panel(parent: Instance, title: string, onClose: (() -> ())?, size: U
 	Ui.sound("open")
 	Ui.popIn(frame)
 	return { frame = frame, body = body, title = titleLabel, header = header }
+end
+
+-- A subtitle under a panel's title (MISSION 4.4: "Egg Shop / Collect Powerful Eggs").
+function Ui.subtitle(p: Panel, text: string)
+	p.title.Size = UDim2.new(p.title.Size.X.Scale, p.title.Size.X.Offset, 0, 28)
+	p.title.Position = UDim2.new(p.title.Position.X.Scale, p.title.Position.X.Offset, 0, 4)
+	Ui.text({
+		Name = "Subtitle",
+		Text = text,
+		FontFace = F.Bold,
+		TextSize = 13,
+		TextColor3 = C.Muted,
+		TextWrapped = false,
+		Position = UDim2.new(p.title.Position.X.Scale, p.title.Position.X.Offset, 0, 31),
+		Size = UDim2.new(p.title.Size.X.Scale, p.title.Size.X.Offset, 0, 16),
+		Parent = p.header,
+	})
 end
 
 function Ui.scroll(props: { [string]: any }): ScrollingFrame

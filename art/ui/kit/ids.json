@@ -623,6 +623,26 @@
   "id": "rbxassetid://97701797290000",
   "sha": "8c13fe47b087093e"
  },
+ "pedestal_common": {
+  "id": "rbxassetid://81268222422247",
+  "sha": "bacc38ea6e42d54c"
+ },
+ "pedestal_epic": {
+  "id": "rbxassetid://97722176788036",
+  "sha": "40f33d8aad9f0c90"
+ },
+ "pedestal_godtier": {
+  "id": "rbxassetid://119614828194945",
+  "sha": "91a283a306ae4054"
+ },
+ "pedestal_legendary": {
+  "id": "rbxassetid://85303772371200",
+  "sha": "7f8764bc16355675"
+ },
+ "pedestal_rare": {
+  "id": "rbxassetid://92252409924674",
+  "sha": "6dd35f169a3bb42b"
+ },
  "plus_blue": {
   "id": "rbxassetid://93348472393972",
   "sha": "059cfd5e6f3b8d79"
@@ -642,6 +662,26 @@
  "ribbon_orbit": {
   "id": "rbxassetid://131097745150586",
   "sha": "ae6120127e97ecf5"
+ },
+ "shard_set_common": {
+  "id": "rbxassetid://130636357287438",
+  "sha": "d7fccf8633905a15"
+ },
+ "shard_set_epic": {
+  "id": "rbxassetid://78460499857009",
+  "sha": "c7bc7d39251d0483"
+ },
+ "shard_set_godtier": {
+  "id": "rbxassetid://85428233318353",
+  "sha": "549020713c624316"
+ },
+ "shard_set_legendary": {
+  "id": "rbxassetid://117763140776357",
+  "sha": "3eeff36d3b5b6271"
+ },
+ "shard_set_rare": {
+  "id": "rbxassetid://120536874157672",
+  "sha": "88f756d77d257495"
  },
  "shockwave_ring": {
   "id": "rbxassetid://114685639063983",

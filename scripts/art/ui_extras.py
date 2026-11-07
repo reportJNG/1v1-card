@@ -595,3 +595,48 @@ def hud():
 
 
 ALL.append(hud)
+
+
+TIER_KEYS = {"common": "n", "rare": "r", "epic": "sr", "legendary": "ssr", "godtier": "ur"}
+
+
+def pedestals_finish():
+    """Blender pedestal renders (route B) -> art/ui/kit/pedestal_<tier>.png with a soft tier glow."""
+    import ui_kit as UK
+    for tier, tag in TIER_KEYS.items():
+        UK.finish_render(os.path.join(KIT, "raw", f"pedestal_{tier}.png"), os.path.join(KIT, f"pedestal_{tier}.png"),
+                         (512, 256), PAL[tag][3], glow=0.5, pad=0.05)
+
+
+def shard_sets():
+    """Crystal shards for the egg opening's break stage (MISSION 7.3): six faceted shards in a
+    384 x 64 strip per tier (the game picks one with ImageRectOffset), tinted to the tier."""
+    rng = random.Random(9)
+    shapes = []
+    for _ in range(6):
+        n = rng.randint(4, 6)
+        pts = []
+        for k in range(n):
+            a = k * 2 * math.pi / n + rng.uniform(-0.3, 0.3)
+            r = rng.uniform(14, 28) * (1.4 if k == 0 else 1)
+            pts.append((r * math.cos(a), r * math.sin(a)))
+        shapes.append(pts)
+    ss = 4
+    for tier, tag in TIER_KEYS.items():
+        light, main, deep, glow = (K.hexc(c) for c in PAL[tag])
+        img = K.blank(384, 64, ss)
+        for i, pts in enumerate(shapes):
+            cx = 32 + i * 64
+            m = Image.new("L", (384 * ss, 64 * ss), 0)
+            ImageDraw.Draw(m).polygon([((cx + px) * ss, (32 + py) * ss) for px, py in pts], fill=255)
+            cov = np.asarray(m, dtype=np.float32) / 255
+            x, y = K.grid(384, 64, ss, cx=cx, cy=32)
+            facet = np.where((x * 0.8 - y) > 0, 1.0, 0.55)
+            col = deep * (1 - facet[..., None]) + light * facet[..., None]
+            K.add_light(img, glow, np.clip(K.fast_blur(cov, 3 * ss) * 1.2, 0, 1) * 0.6)
+            K.over(img, K.hexc(INK), np.clip(K.fast_blur(cov, 1.5 * ss) * 2, 0, 1) * 0.8)
+            K.over(img, col, cov)
+        save(img, ss, f"shard_set_{tier}")
+
+
+ALL.extend([pedestals_finish, shard_sets])

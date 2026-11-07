@@ -144,7 +144,7 @@ local Slots: { [string]: Slot } = {
 		slice = nil,
 		bleed = 0,
 		temp = "rbxassetid://72123893411586",
-		final = nil,
+		final = "rbxassetid://89266650337187",
 	},
 	egg_glow = {
 		size = { 256, 256 },

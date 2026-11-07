@@ -171,6 +171,29 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			LayoutOrder = order + 1,
 			Parent = list,
 		})
+		-- Credits (MISSION 7.2; the Egg Icon Pack's author, and the other licensed sources).
+		local credits = Ui.display({
+			Name = "CreditsTitle",
+			Text = "Credits",
+			TextSize = 18,
+			Size = UDim2.new(1, 0, 0, 24),
+			LayoutOrder = order + 2,
+			Parent = list,
+		})
+		credits.TextXAlignment = Enum.TextXAlignment.Left
+		Ui.text({
+			Name = "Credits",
+			Text = "Egg icons: Eggs Icon Pack v2 by @gvesster (linktr.ee/gvesster), used unedited.\n"
+				.. "HUD icons: Free Icon Pack (used unedited).\n"
+				.. "Fonts: Luckiest Guy (Astigmatic, Apache 2.0), Titan One (OFL), Builder Sans (Roblox).\n"
+				.. "Music and sounds: APM Music and ProSoundEffects through the Roblox Creator Store.",
+			TextSize = Theme.Size.small,
+			TextColor3 = C.Muted,
+			TextYAlignment = Enum.TextYAlignment.Top,
+			Size = UDim2.new(1, 0, 0, 70),
+			LayoutOrder = order + 3,
+			Parent = list,
+		})
 	end
 
 	render()

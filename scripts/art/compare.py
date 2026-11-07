@@ -25,7 +25,7 @@ def compare(out, ref, ours, title="", height=520):
     sheet.paste(b, (pad * 2 + a.width, head))
     d = ImageDraw.Draw(sheet)
     f = ImageFont.truetype(FONT, 20)
-    d.text((pad, 10), "Board (owner reference)", font=f, fill=(200, 190, 255))
+    d.text((pad, 10), "Board (owner reference)" if a.width >= 300 else "Board", font=f, fill=(200, 190, 255))
     d.text((pad * 2 + a.width, 10), "Ours (in game)" + (f" - {title}" if title else ""), font=f, fill=(255, 225, 120))
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     sheet.save(out, optimize=True)

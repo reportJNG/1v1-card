@@ -2010,6 +2010,66 @@
    "id": "rbxassetid://97701797290000"
   },
   {
+   "slot": "pedestal_common",
+   "file": "art/ui/kit/pedestal_common.png",
+   "size": [
+    512,
+    256
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://81268222422247"
+  },
+  {
+   "slot": "pedestal_epic",
+   "file": "art/ui/kit/pedestal_epic.png",
+   "size": [
+    512,
+    256
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://97722176788036"
+  },
+  {
+   "slot": "pedestal_godtier",
+   "file": "art/ui/kit/pedestal_godtier.png",
+   "size": [
+    512,
+    256
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://119614828194945"
+  },
+  {
+   "slot": "pedestal_legendary",
+   "file": "art/ui/kit/pedestal_legendary.png",
+   "size": [
+    512,
+    256
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://85303772371200"
+  },
+  {
+   "slot": "pedestal_rare",
+   "file": "art/ui/kit/pedestal_rare.png",
+   "size": [
+    512,
+    256
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://92252409924674"
+  },
+  {
    "slot": "plus_blue",
    "file": "art/ui/kit/plus_blue.png",
    "size": [
@@ -2073,6 +2133,66 @@
    "route": "C",
    "status": "FINAL",
    "id": "rbxassetid://131097745150586"
+  },
+  {
+   "slot": "shard_set_common",
+   "file": "art/ui/kit/shard_set_common.png",
+   "size": [
+    384,
+    64
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://130636357287438"
+  },
+  {
+   "slot": "shard_set_epic",
+   "file": "art/ui/kit/shard_set_epic.png",
+   "size": [
+    384,
+    64
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://78460499857009"
+  },
+  {
+   "slot": "shard_set_godtier",
+   "file": "art/ui/kit/shard_set_godtier.png",
+   "size": [
+    384,
+    64
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://85428233318353"
+  },
+  {
+   "slot": "shard_set_legendary",
+   "file": "art/ui/kit/shard_set_legendary.png",
+   "size": [
+    384,
+    64
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://117763140776357"
+  },
+  {
+   "slot": "shard_set_rare",
+   "file": "art/ui/kit/shard_set_rare.png",
+   "size": [
+    384,
+    64
+   ],
+   "slice": null,
+   "route": "B",
+   "status": "FINAL",
+   "id": "rbxassetid://120536874157672"
   },
   {
    "slot": "shockwave_ring",

@@ -634,7 +634,7 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 - [x] Old mission files archived
 - [x] **Flow:** launch loading, main menu, playing, leaving screen, reset, return-to-spot fix (2.6)
 - [x] **In-game HUD**, clean and light (3.3)
-- [ ] `docs/GUI_AUDIT.md`, plus the UI kit replacing all TEMP images, plus the logo
+- [x] `docs/GUI_AUDIT.md`, plus the UI kit replacing all TEMP images, plus the logo
 - [x] Rarity display config
 - [x] Card frames (5 × 3 sizes, layers, badges, Golden)
 - [x] Template card
@@ -643,9 +643,9 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 - [x] Card animations
 - [x] Evolution stages
 - [x] Cards used everywhere, including the deck bar
-- [ ] Egg pack wired in fully (unedited, 256/64, Golden), tier pedestals, Credits
-- [ ] Egg Shop
-- [ ] Egg opening, all 5 stages, every rarity, x1 / x3 / x8, Skip, Golden
+- [x] Egg pack wired in fully (unedited, 256/64, Golden), tier pedestals, Credits
+- [x] Egg Shop
+- [x] Egg opening, all 5 stages, every rarity, x1 / x3 / x8, Skip, Golden
 - [ ] Silhouettes
 - [ ] Inventory, Deck + Families, Arena (no bet), Victory/Defeat, Worlds, and the remaining
   screens restyled

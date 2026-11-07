@@ -138,6 +138,8 @@ export type EggIcon = {
 	goldenFile: string?,
 	normalAssetId: string?, -- rbxassetid://..., set after upload + moderation
 	goldenAssetId: string?,
+	smallAssetId: string?, -- the pack's 64 px icon, for small tiles, the bag and toasts
+	goldenSmallAssetId: string?,
 	contentBox: { x: number, y: number, width: number, height: number }, -- visible pixels in the 256 px file
 }
 

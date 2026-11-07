@@ -81,4 +81,63 @@ function Gallery.rows(o: { size: Vector2, rows: { Row }, gap: number?, ids: { st
 	return y
 end
 
+-- Plays the real hatch screen (Screens/Hatch) with injected cards, for screenshots of the rare
+-- outcomes a real roll almost never gives. The cards never touch the profile: only the animation
+-- runs, in its own ScreenGui. Screenshots made this way are labelled "injected".
+function Gallery.hatch(eggId: string, rarities: { string }, golden: boolean?, skip: boolean?)
+	local p = Players.LocalPlayer
+	local App = (p :: any).PlayerScripts.Client.App
+	local Hatch = require(App.Screens.Hatch) :: any
+	local Eggs = require(ReplicatedStorage.Shared.Config.Eggs) :: any
+	local old = p.PlayerGui:FindFirstChild("QAHatch")
+	if old then
+		old:Destroy()
+	end
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "QAHatch"
+	gui.DisplayOrder = 150
+	gui.IgnoreGuiInset = true
+	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	local root = Instance.new("Frame")
+	root.BackgroundTransparency = 1
+	root.AnchorPoint = Vector2.new(0.5, 0.5)
+	root.Position = UDim2.fromScale(0.5, 0.5)
+	root.Size = UDim2.fromOffset(960, 540)
+	root.Parent = gui
+	local scale = Instance.new("UIScale")
+	local vp = workspace.CurrentCamera.ViewportSize
+	scale.Scale = math.min(vp.X / 960, vp.Y / 540)
+	root.Size = UDim2.fromOffset(vp.X / scale.Scale, vp.Y / scale.Scale)
+	scale.Parent = root
+	gui.Parent = p.PlayerGui
+	local cards = {}
+	for i, r in rarities do
+		table.insert(cards, { uid = `qa-{i}`, characterId = Gallery.pick(r), golden = golden == true, level = 1 })
+	end
+	local ctx = {
+		reducedMotion = function()
+			return skip == true
+		end,
+		overlay = function(build: (Frame) -> any)
+			local f = Instance.new("Frame")
+			f.BackgroundTransparency = 1
+			f.Size = UDim2.fromScale(1, 1)
+			f.Parent = root
+			local screen = build(f)
+			return {
+				destroy = function()
+					screen.destroy()
+					gui:Destroy()
+				end,
+			}
+		end,
+		request = function()
+			return { ok = false, err = "QA" }
+		end,
+		toast = function() end,
+		state = { view = nil },
+	}
+	Hatch.show(ctx, cards, Eggs.ById[eggId], golden == true, { known = {} })
+end
+
 return Gallery
