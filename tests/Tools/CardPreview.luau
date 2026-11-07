@@ -1,10 +1,11 @@
 --!strict
--- Studio-only (dev.project.json): a gallery of the layered cards for screenshots and visual QA.
+-- Studio-only (dev.project.json): galleries of the cards for screenshots and visual QA.
 --   local G = require(game.ServerScriptService.Tests.Tools.CardPreview)
---   G.show()            -- one character per rarity: level 1, level 15 and Golden, side by side
+--   G.show()                                   -- every rarity: level 1, level 15 and Golden
 --   G.show({ big = true, rarity = "Mythical" })  -- one rarity, large (inspect size)
+--   G.grid({ size = Vector2.new(140, 196), rarities = {...}, variants = { { level = 5 } }, columns = 5 })
 --   G.clear()
--- Cards are built with App/Card exactly as the screens build them.
+-- Cards are built with App/Card exactly as the screens build them, on the boards' background.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local StarterPlayer = game:GetService("StarterPlayer")
@@ -18,12 +19,35 @@ local CardPreview = {}
 
 local RARITIES: { string } = { "Common", "Rare", "Epic", "Legendary", "Mythical" }
 
--- The first enabled character of each rarity, in catalog order (stable between runs).
-local function pick(rarity: string): string
+export type Variant = {
+	level: number?,
+	golden: boolean?,
+	sticker: string?,
+	favorite: boolean?,
+	characterId: string?,
+	tag: string?,
+}
+
+export type GridOptions = {
+	size: Vector2?,
+	rarities: { string }?,
+	variants: { Variant }?,
+	columns: number?,
+	labels: boolean?,
+	byVariant: boolean?, -- rows are variants (columns rarities) instead of rows of rarities
+	interactive: boolean?,
+}
+
+-- The first enabled character of each rarity, in catalog order (stable between runs), or the first
+-- one with card art when `withArt`.
+function CardPreview.pick(rarity: string, withArt: boolean?): string
 	for _, c in Characters.List do
-		if c.rarity == rarity and c.enabled then
+		if c.rarity == rarity and c.enabled and (not withArt or c.assets.cardArt ~= nil) then
 			return c.id
 		end
+	end
+	if withArt then
+		return CardPreview.pick(rarity, false)
 	end
 	error(`no {rarity} character`)
 end
@@ -35,78 +59,89 @@ function CardPreview.clear()
 	end
 end
 
-function CardPreview.show(opts: { big: boolean?, rarity: string? }?): string
+function CardPreview.grid(o: GridOptions): string
 	CardPreview.clear()
-	local o: { big: boolean?, rarity: string? } = opts or {}
 	local gui = Instance.new("ScreenGui")
 	gui.Name = "CardPreview"
 	gui.IgnoreGuiInset = true
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling -- as the game's own ScreenGui (App.start)
 	local bg = Instance.new("Frame")
 	bg.Size = UDim2.fromScale(1, 1)
-	bg.BackgroundColor3 = Theme.Color.Background
+	bg.BackgroundColor3 = Color3.fromHex("#08071E")
 	bg.BorderSizePixel = 0
 	bg.Parent = gui
+	local size = o.size or Vector2.new(140, 196)
+	local labels = o.labels ~= false
 	local grid = Instance.new("UIGridLayout")
-	local size = if o.big then Vector2.new(220, 308) else Vector2.new(120, 168)
-	grid.CellSize = UDim2.fromOffset(size.X + 10, size.Y + 26)
-	grid.CellPadding = UDim2.fromOffset(6, 6)
+	grid.CellSize = UDim2.fromOffset(size.X + 34, size.Y + (if labels then 40 else 26))
+	grid.CellPadding = UDim2.fromOffset(4, 4)
 	grid.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	grid.VerticalAlignment = Enum.VerticalAlignment.Center
 	grid.SortOrder = Enum.SortOrder.LayoutOrder
-	grid.FillDirectionMaxCells = if o.big then 3 else 5
+	grid.FillDirectionMaxCells = o.columns or 5
 	grid.FillDirection = Enum.FillDirection.Horizontal
 	grid.Parent = bg
-	local rows: { string } = if o.rarity then { o.rarity :: string } else RARITIES
+	local rarities = o.rarities or RARITIES
+	local variants: { Variant } = o.variants or { { level = 1 } }
 	local made = {}
 	local order = 0
-	-- Columns are rarities in the compact gallery (rows: level 1, level 15, Golden level 1).
-	local variants = {
-		{ level = 1, golden = false, tag = "Lv 1" },
-		{ level = 15, golden = false, tag = "Lv 15" },
-		{
-			level = 1,
-			golden = true,
-			tag = "Golden",
-		},
-	}
-	local function cell(rarity: string, v: { level: number, golden: boolean, tag: string })
+	local function cell(rarity: string, v: Variant)
 		order += 1
 		local holder = Instance.new("Frame")
 		holder.BackgroundTransparency = 1
 		holder.LayoutOrder = order
 		holder.Parent = bg
-		local id = pick(rarity)
-		Card.build(
-			holder,
-			{ characterId = id, level = v.level, golden = v.golden, size = size, interactive = true }
-		)
-		local label = Instance.new("TextLabel")
-		label.BackgroundTransparency = 1
-		label.Text = `{rarity} · {v.tag}`
-		label.TextColor3 = Theme.Color.Muted
-		label.FontFace = Theme.Face.Bold
-		label.TextSize = 13
-		label.Position = UDim2.new(0, 0, 1, -20)
-		label.Size = UDim2.new(1, 0, 0, 18)
-		label.Parent = holder
-		table.insert(made, `{id}:{v.tag}`)
+		local id = v.characterId or CardPreview.pick(rarity, true)
+		local card = Card.build(holder, {
+			characterId = id,
+			level = v.level or 1,
+			golden = v.golden == true,
+			sticker = v.sticker,
+			favorite = v.favorite,
+			size = size,
+			interactive = o.interactive ~= false,
+		})
+		card.AnchorPoint = Vector2.new(0.5, 0)
+		card.Position = UDim2.new(0.5, 0, 0, 14)
+		if labels then
+			local label = Instance.new("TextLabel")
+			label.BackgroundTransparency = 1
+			label.Text = v.tag or `{rarity} · Lv {v.level or 1}{if v.golden then " · Golden" else ""}`
+			label.TextColor3 = Theme.Color.Muted
+			label.FontFace = Theme.Face.Bold
+			label.TextSize = 12
+			label.Position = UDim2.new(0, 0, 1, -16)
+			label.Size = UDim2.new(1, 0, 0, 16)
+			label.Parent = holder
+		end
+		table.insert(made, `{id}:{v.level or 1}`)
 	end
-	if o.big then
-		for _, rarity in rows do
-			for _, v in variants do
+	if o.byVariant then
+		for _, v in variants do
+			for _, rarity in rarities do
 				cell(rarity, v)
 			end
 		end
 	else
-		for _, v in variants do
-			for _, rarity in rows do
+		for _, rarity in rarities do
+			for _, v in variants do
 				cell(rarity, v)
 			end
 		end
 	end
 	gui.Parent = StarterGui
 	return table.concat(made, ", ")
+end
+
+function CardPreview.show(opts: { big: boolean?, rarity: string? }?): string
+	local o: { big: boolean?, rarity: string? } = opts or {}
+	return CardPreview.grid({
+		size = if o.big then Vector2.new(220, 308) else Vector2.new(120, 168),
+		rarities = if o.rarity then { o.rarity :: string } else nil,
+		variants = { { level = 1 }, { level = 15 }, { level = 1, golden = true } },
+		columns = if o.big then 3 else 5,
+		byVariant = not o.big,
+	})
 end
 
 return CardPreview

@@ -110,6 +110,9 @@ function ProfileSchema.validate(profile: { [string]: any }): Types.Result<nil>
 		if typeof(card.provenance) ~= "table" or typeof(card.provenance.paidLineage) ~= "boolean" then
 			return Result.fail(`BadProvenance:{uid}`)
 		end
+		if card.favorite ~= nil and card.favorite ~= true then
+			return Result.fail(`BadCard:{uid}`)
+		end
 		if card.origin == "Robux" and not card.provenance.paidLineage then
 			return Result.fail(`LostPaidLineage:{uid}`)
 		end

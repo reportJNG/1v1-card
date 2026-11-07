@@ -8,6 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Characters = require(Shared.Config.Characters)
+local Rarities = require(Shared.Config.Rarities)
 local Rules = require(Shared.Config.Battle)
 local App = script.Parent.Parent
 local Theme = require(App.Theme)
@@ -323,7 +324,7 @@ function Battle.open(ctx: any, start: any): Handle
 		Ui.text({
 			Text = `{names[side]}{if trophies[side]
 				then ` · {Format.number(trophies[side])} trophies`
-				else ""} · {def.rarity} {def.family}`,
+				else ""} · {Rarities.Defs[def.rarity].displayName} {def.family}`,
 			TextSize = 11,
 			TextColor3 = if mine then C.Blue else C.Red,
 			TextWrapped = false,

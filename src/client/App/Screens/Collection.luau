@@ -18,6 +18,9 @@ local Theme = require(App.Theme)
 local Ui = require(App.Ui)
 local Format = require(App.Format)
 local Visuals = require(App.Visuals)
+local CardActions = require(App.CardActions)
+local Card = require(App.Card)
+local CardStats = require(script.Parent.CardStats)
 local Hatch = require(script.Parent.Hatch)
 
 local C = Theme.Color
@@ -57,28 +60,8 @@ local function sortedCards(view: any, filter: string?, query: string): { any }
 	return out
 end
 
-local function inDeck(view: any, uid: string): boolean
-	return table.find(view.deck, uid) ~= nil
-end
-
--- Level-1, never-merged spares of the same character, not in the deck or locked.
-local function spares(view: any, target: any): { string }
-	local out = {}
-	for _, c in view.cards do
-		if
-			c.uid ~= target.uid
-			and c.characterId == target.characterId
-			and c.level == 1
-			and c.mergePoints == 0
-			and not c.locked
-			and not inDeck(view, c.uid)
-		then
-			table.insert(out, c.uid)
-		end
-	end
-	table.sort(out)
-	return out
-end
+local inDeck = CardActions.inDeck
+local spares = CardActions.spares
 
 local function count(t: { [any]: any }): number
 	local n = 0
@@ -105,55 +88,6 @@ local function bagged(view: any, query: string): { Bagged }
 		end
 	end
 	return out
-end
-
--- The deck after equipping `card`: it replaces a copy of the same character, else takes an empty
--- slot, else the weakest card's place. A deck is always 3 different characters, so an incomplete
--- deck is filled with the strongest other characters owned. Nil when there aren't 3 different
--- characters yet. The server validates the result (Deck.Set).
-local function equipped(view: any, card: any): { string }?
-	local deck: { string } = {}
-	local used: { [string]: boolean } = { [card.characterId] = true }
-	for _, uid in view.deck do
-		local other = view.cards[uid]
-		if other and not used[other.characterId] then
-			used[other.characterId] = true
-			table.insert(deck, uid)
-		end
-	end
-	if #deck >= 3 then
-		local weakest, weakestPower = 1, math.huge
-		for i, uid in deck do
-			local other = view.cards[uid]
-			local pw = Power.card(other.characterId, other.level)
-			if pw < weakestPower then
-				weakest, weakestPower = i, pw
-			end
-		end
-		table.remove(deck, weakest)
-	end
-	table.insert(deck, 1, card.uid)
-	if #deck < 3 then
-		local pool = {}
-		for _, c in view.cards do
-			if not used[c.characterId] and not c.locked then
-				table.insert(pool, c)
-			end
-		end
-		table.sort(pool, function(a, b)
-			return Power.card(a.characterId, a.level) > Power.card(b.characterId, b.level)
-		end)
-		for _, c in pool do
-			if #deck >= 3 then
-				break
-			end
-			if not used[c.characterId] then
-				used[c.characterId] = true
-				table.insert(deck, c.uid)
-			end
-		end
-	end
-	return if #deck == 3 then deck else nil
 end
 
 return function(ctx: any, layer: Frame, arg: any?): any
@@ -214,6 +148,19 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			Visuals.portrait(inspect, card.characterId, card.golden, Vector2.new(150, 210), true, card.level)
 		portrait.Name = "InspectCard"
 		portrait.Position = UDim2.fromOffset(0, 0)
+		-- Tapping the card opens the full stats panel (Screens/CardStats, board 05).
+		local open = Ui.new("TextButton", {
+			Name = "OpenStats",
+			Text = "",
+			BackgroundTransparency = 1,
+			Size = UDim2.fromScale(1, 1),
+			ZIndex = 50,
+			Parent = portrait,
+		})
+		open.Activated:Connect(function()
+			Ui.sound("click")
+			CardStats.show(ctx, card.uid)
+		end)
 		local info = Ui.frame({
 			BackgroundTransparency = 1,
 			Position = UDim2.fromOffset(158, 0),
@@ -230,7 +177,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		})
 		Ui.fit(name, 18, 11)
 		Ui.text({
-			Text = `{def.rarity} · {def.family} · {def.role}`,
+			Text = `{Rarities.Defs[def.rarity].displayName} · {def.family} · {def.role}`,
 			TextSize = Theme.Size.small,
 			TextColor3 = Theme.Rarity[def.rarity],
 			LayoutOrder = 2,
@@ -324,32 +271,14 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			end
 			local fee = Economy.Progression.coinFeeToNext[card.level]
 			local merge = Ui.button(`Merge {#use} · {Format.number(fee)} Coins`, "primary", function()
-				local reply = ctx.request(
-					"Cards.Merge",
-					{ targetUid = card.uid, spareUids = use, requestId = ctx.guid() }
-				)
-				if reply.ok then
-					Ui.sound("merge")
-					if reply.value.toLevel > card.level then
-						task.delay(0.4, Ui.sound, "level_up")
-					end
-					ctx.toast(`{def.displayName} is now level {reply.value.toLevel}!`, "good")
-				end
+				CardActions.merge(ctx, card)
 			end, { LayoutOrder = 1, Size = UDim2.fromOffset(170, 36), Name = "Merge", TextSize = 14 })
 			merge.setEnabled(#use > 0 and view.coins >= fee)
 			merge.instance.Parent = row
 		end
 		local here = inDeck(view, card.uid)
 		local equip = Ui.button(if here then "Equipped" else "Equip", "secondary", function()
-			local deck = equipped(view, card)
-			if deck == nil then
-				ctx.toast("A deck needs 3 different characters: hatch more eggs first.", "error")
-				return
-			end
-			local reply = ctx.request("Deck.Set", { uids = deck })
-			if reply.ok then
-				ctx.toast(`{def.displayName} is in your deck.`, "good")
-			end
+			CardActions.equip(ctx, card)
 		end, { LayoutOrder = 2, Size = UDim2.fromOffset(150, 36), Name = "Equip", TextSize = 14 })
 		equip.setEnabled(not here and not card.locked)
 		equip.instance.Parent = row
@@ -378,6 +307,10 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			)
 			sell.instance.Parent = actions
 		end
+		local details = Ui.button("Card Stats", "purple", function()
+			CardStats.show(ctx, card.uid)
+		end, { LayoutOrder = 2, Size = UDim2.new(1, 0, 0, 30), Name = "Details", TextSize = 14 })
+		details.instance.Parent = actions
 		Ui.text({
 			Text = if here
 				then "In your deck"
@@ -397,8 +330,14 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			Name = card.uid,
 			Parent = parent,
 		})
-		local portrait =
-			Visuals.portrait(tile, card.characterId, card.golden, Vector2.new(88, 104), false, card.level)
+		local portrait = Card.build(tile, {
+			characterId = card.characterId,
+			golden = card.golden,
+			level = card.level,
+			favorite = card.favorite,
+			size = Vector2.new(88, 104),
+			hover = true,
+		})
 		if selected == card.uid then
 			Ui.stroke(C.Text, 3).Parent = portrait
 		end

@@ -148,6 +148,15 @@ return function()
 			expect(Check.idList({ "a", "b", "c", "d" }, 3)).to.equal(nil)
 		end)
 
+		it("parses Cards.SetFavorite only with a card id and a boolean", function()
+			local parse = Remotes.Requests["Cards.SetFavorite"].parse
+			expect(parse({ uid = "1-1", on = true })).to.be.ok()
+			expect(parse({ uid = "1-1", on = false })).to.be.ok()
+			expect(parse({ uid = "1-1", on = "yes" })).to.equal(nil)
+			expect(parse({ uid = 5, on = true })).to.equal(nil)
+			expect(parse({ uid = "1-1", on = true, extra = 1 })).to.equal(nil)
+		end)
+
 		it("parses every battle action and nothing else", function()
 			local parse = Remotes.Requests["Battle.Pick"].parse
 			for _, action in { "Attack", "Defend", "Special" } do

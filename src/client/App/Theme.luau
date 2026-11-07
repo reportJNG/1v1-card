@@ -1,6 +1,9 @@
 --!strict
 -- Design tokens from docs/ART_STYLE.md (which extends docs/brief/05-ui-design-system.md). UI code
 -- uses these, never raw colours or fonts.
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Rarities = require(ReplicatedStorage:WaitForChild("Shared").Config.Rarities)
+
 local Theme = {}
 
 Theme.Color = table.freeze({
@@ -27,14 +30,13 @@ Theme.Color = table.freeze({
 	White = Color3.new(1, 1, 1),
 })
 
--- Rarity colours; the UI always shows the rarity name too (never colour alone).
-Theme.Rarity = table.freeze({
-	Common = Color3.fromHex("#B9C7DC"),
-	Rare = Color3.fromHex("#45BEFF"),
-	Epic = Color3.fromHex("#A469FF"),
-	Legendary = Color3.fromHex("#FFC54B"),
-	Mythical = Color3.fromHex("#FF668F"),
-}) :: { [string]: Color3 }
+-- Rarity colours, read from Config/Rarities (the one source); the UI always shows the rarity name
+-- too (never colour alone).
+local rarityColors: { [string]: Color3 } = {}
+for name, def in Rarities.Defs do
+	rarityColors[name] = def.color
+end
+Theme.Rarity = table.freeze(rarityColors)
 
 local BUILDER = "rbxasset://fonts/families/BuilderSans.json"
 

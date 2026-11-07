@@ -1,0 +1,642 @@
+{
+ "aura_n": {
+  "id": "rbxassetid://110806461576257",
+  "sha": "4a5945179ad411ce"
+ },
+ "aura_r": {
+  "id": "rbxassetid://74956979236193",
+  "sha": "5dd1f539bea589a8"
+ },
+ "aura_sr": {
+  "id": "rbxassetid://76786360225676",
+  "sha": "5d8709a1670e6828"
+ },
+ "aura_ssr": {
+  "id": "rbxassetid://93434986389116",
+  "sha": "aa44fa8c39b55af1"
+ },
+ "aura_ur": {
+  "id": "rbxassetid://72635980517473",
+  "sha": "82163b3f6b870b9b"
+ },
+ "badge_n_large": {
+  "id": "rbxassetid://94069607885999",
+  "sha": "c4ea320a54e0a227"
+ },
+ "badge_n_small": {
+  "id": "rbxassetid://133992162053386",
+  "sha": "7f33a7a9813a2425"
+ },
+ "badge_r_large": {
+  "id": "rbxassetid://70409267945396",
+  "sha": "5954fc29efc01fd8"
+ },
+ "badge_r_small": {
+  "id": "rbxassetid://126054653489066",
+  "sha": "8f5763c80d7a6b1e"
+ },
+ "badge_sr_large": {
+  "id": "rbxassetid://91865674750970",
+  "sha": "846c802814a82677"
+ },
+ "badge_sr_small": {
+  "id": "rbxassetid://110971233540756",
+  "sha": "96aef92072389335"
+ },
+ "badge_ssr_large": {
+  "id": "rbxassetid://107773525055774",
+  "sha": "dfa46cb73ab01d55"
+ },
+ "badge_ssr_small": {
+  "id": "rbxassetid://104253763525196",
+  "sha": "c23f9387992a1b92"
+ },
+ "badge_ur_large": {
+  "id": "rbxassetid://116178883061391",
+  "sha": "23e31a70cf2c349d"
+ },
+ "badge_ur_small": {
+  "id": "rbxassetid://104644948395375",
+  "sha": "7091da08d9d850dd"
+ },
+ "bar_level_bg": {
+  "id": "rbxassetid://131484481440911",
+  "sha": "5d9998c7d9e0b220"
+ },
+ "bar_level_fill": {
+  "id": "rbxassetid://106278622034678",
+  "sha": "8235300a9f85e633"
+ },
+ "bar_level_glow": {
+  "id": "rbxassetid://128366846680294",
+  "sha": "136585a225b5777e"
+ },
+ "card_back_n": {
+  "id": "rbxassetid://129828943687022",
+  "sha": "c1477925c0f75ee1"
+ },
+ "card_back_r": {
+  "id": "rbxassetid://133326265122413",
+  "sha": "f5da1dc1c4254694"
+ },
+ "card_back_sr": {
+  "id": "rbxassetid://110569786421303",
+  "sha": "0bc5343541fee4f6"
+ },
+ "card_back_ssr": {
+  "id": "rbxassetid://94238788621746",
+  "sha": "e2823a111c2a90f9"
+ },
+ "card_back_ur": {
+  "id": "rbxassetid://73024141511062",
+  "sha": "ac9dfb82a29d15f8"
+ },
+ "confetti_set": {
+  "id": "rbxassetid://101696314583117",
+  "sha": "48e8ffb475d826d0"
+ },
+ "corner_gem_n": {
+  "id": "rbxassetid://95459420634053",
+  "sha": "1a9c3f25a89b2146"
+ },
+ "corner_gem_r": {
+  "id": "rbxassetid://77991765518703",
+  "sha": "93ca1c81697d9a3e"
+ },
+ "corner_gem_sr": {
+  "id": "rbxassetid://138456232719794",
+  "sha": "bd03949093c37c21"
+ },
+ "corner_gem_ssr": {
+  "id": "rbxassetid://71836193089845",
+  "sha": "f85cc036772fe164"
+ },
+ "corner_gem_ur": {
+  "id": "rbxassetid://91526354849704",
+  "sha": "fda3c6eb8928d1e0"
+ },
+ "crack_overlay_1": {
+  "id": "rbxassetid://109792108212260",
+  "sha": "ff10eac39aa0b64c"
+ },
+ "crack_overlay_2": {
+  "id": "rbxassetid://90105614793326",
+  "sha": "f79482b7f3db14b7"
+ },
+ "crack_overlay_3": {
+  "id": "rbxassetid://99418189872738",
+  "sha": "ceeb7ed7b5dc2947"
+ },
+ "emblem_crown_gold": {
+  "id": "rbxassetid://80040896217542",
+  "sha": "b4ee90eb1ec588a4"
+ },
+ "emblem_star_blue": {
+  "id": "rbxassetid://116402820556726",
+  "sha": "1112d8fb562f7e04"
+ },
+ "emblem_star_gold": {
+  "id": "rbxassetid://133606546661104",
+  "sha": "8653f5fff027b7eb"
+ },
+ "emblem_star_silver": {
+  "id": "rbxassetid://79617320196055",
+  "sha": "3775f408a47ac6a3"
+ },
+ "empty_slot": {
+  "id": "rbxassetid://119593916757162",
+  "sha": "0218b48935a910d8"
+ },
+ "energy_n_large": {
+  "id": "rbxassetid://71225851320358",
+  "sha": "0a5939213168858a"
+ },
+ "energy_n_medium": {
+  "id": "rbxassetid://129177184343421",
+  "sha": "6bb8926f53c5971e"
+ },
+ "energy_n_small": {
+  "id": "rbxassetid://80619098888220",
+  "sha": "5bdcd4889a51eac0"
+ },
+ "energy_r_large": {
+  "id": "rbxassetid://139857355284210",
+  "sha": "0e48483704e8369c"
+ },
+ "energy_r_medium": {
+  "id": "rbxassetid://132023471663435",
+  "sha": "73cd4358ad124ee1"
+ },
+ "energy_r_small": {
+  "id": "rbxassetid://131885341852412",
+  "sha": "3393a29e2a8066c1"
+ },
+ "energy_sr_large": {
+  "id": "rbxassetid://119194493030135",
+  "sha": "b273b3e0365c4e2f"
+ },
+ "energy_sr_medium": {
+  "id": "rbxassetid://75998035554345",
+  "sha": "c6bb16d4fd861fb2"
+ },
+ "energy_sr_small": {
+  "id": "rbxassetid://127350934964067",
+  "sha": "3acdb1c06f64d3dd"
+ },
+ "energy_ssr_large": {
+  "id": "rbxassetid://111449193442119",
+  "sha": "ee44c991943f8130"
+ },
+ "energy_ssr_medium": {
+  "id": "rbxassetid://124605666142565",
+  "sha": "bf5e65198d3fa905"
+ },
+ "energy_ssr_small": {
+  "id": "rbxassetid://109368394216713",
+  "sha": "39cfac26aa4edcb0"
+ },
+ "energy_ur_large": {
+  "id": "rbxassetid://99043060393332",
+  "sha": "75f4c842604cdb06"
+ },
+ "energy_ur_medium": {
+  "id": "rbxassetid://94450045159204",
+  "sha": "20c3921fd2d1cb60"
+ },
+ "energy_ur_small": {
+  "id": "rbxassetid://91826624113573",
+  "sha": "045a68f93c8ebdfc"
+ },
+ "filter_chip_n": {
+  "id": "rbxassetid://134849927233223",
+  "sha": "5421357ad171d34b"
+ },
+ "filter_chip_r": {
+  "id": "rbxassetid://110879354127460",
+  "sha": "31950f6039cd715d"
+ },
+ "filter_chip_sr": {
+  "id": "rbxassetid://115581935934034",
+  "sha": "14ef150ed72053e1"
+ },
+ "filter_chip_ssr": {
+  "id": "rbxassetid://119241688283926",
+  "sha": "32a9e76f115fcd38"
+ },
+ "filter_chip_ur": {
+  "id": "rbxassetid://79825550309394",
+  "sha": "be5b65e74a76f2dd"
+ },
+ "frame_n_large": {
+  "id": "rbxassetid://95100546226577",
+  "sha": "de80406928c5d04d"
+ },
+ "frame_n_medium": {
+  "id": "rbxassetid://132780696464444",
+  "sha": "73900d10e29ceac3"
+ },
+ "frame_n_small": {
+  "id": "rbxassetid://91687630694179",
+  "sha": "b32c0807babe9d72"
+ },
+ "frame_r_large": {
+  "id": "rbxassetid://128402132070178",
+  "sha": "92929246d441a5f9"
+ },
+ "frame_r_medium": {
+  "id": "rbxassetid://109209081284263",
+  "sha": "bc1fb4a0409f4d31"
+ },
+ "frame_r_small": {
+  "id": "rbxassetid://83122728533537",
+  "sha": "583e5f7ca4dda908"
+ },
+ "frame_sr_large": {
+  "id": "rbxassetid://72839872213741",
+  "sha": "f679e2b8b872e3c8"
+ },
+ "frame_sr_medium": {
+  "id": "rbxassetid://125055083483647",
+  "sha": "e2f4c2a67cc2eb52"
+ },
+ "frame_sr_small": {
+  "id": "rbxassetid://103729092836391",
+  "sha": "60de3706cd4beb68"
+ },
+ "frame_ssr_large": {
+  "id": "rbxassetid://100409122349222",
+  "sha": "5bc041cf2741a503"
+ },
+ "frame_ssr_medium": {
+  "id": "rbxassetid://90444548522213",
+  "sha": "c3436906cc6a5dde"
+ },
+ "frame_ssr_small": {
+  "id": "rbxassetid://95102350207109",
+  "sha": "a6833a8369451cef"
+ },
+ "frame_ur_large": {
+  "id": "rbxassetid://124193488746510",
+  "sha": "fb92aad65cc8c199"
+ },
+ "frame_ur_medium": {
+  "id": "rbxassetid://90210704625504",
+  "sha": "4dda2df05657f51f"
+ },
+ "frame_ur_small": {
+  "id": "rbxassetid://85408853701706",
+  "sha": "d34e4cdd5504059b"
+ },
+ "fx_ember": {
+  "id": "rbxassetid://110624641697963",
+  "sha": "a9d5097f523800bc"
+ },
+ "fx_mote": {
+  "id": "rbxassetid://98981983430947",
+  "sha": "5d0003c76cc15cd1"
+ },
+ "fx_sparkle": {
+  "id": "rbxassetid://72637037273544",
+  "sha": "ab9030dfd34f7787"
+ },
+ "gem_family_ancient": {
+  "id": "rbxassetid://71119606210266",
+  "sha": "cbec6196ad22df0e"
+ },
+ "gem_family_beast": {
+  "id": "rbxassetid://84588041214504",
+  "sha": "cfd5414d89598367"
+ },
+ "gem_family_cosmic": {
+  "id": "rbxassetid://85901129552037",
+  "sha": "1a11befd67981fe1"
+ },
+ "gem_family_demon": {
+  "id": "rbxassetid://108488794201918",
+  "sha": "33c19b4247c65693"
+ },
+ "gem_family_divine": {
+  "id": "rbxassetid://102134916765861",
+  "sha": "e3d0ae96af069e59"
+ },
+ "gem_family_dragon": {
+  "id": "rbxassetid://97431054554018",
+  "sha": "2c17bc77a784fdb8"
+ },
+ "gem_family_flame": {
+  "id": "rbxassetid://114245232036768",
+  "sha": "31af4710b05ea57d"
+ },
+ "gem_family_ice": {
+  "id": "rbxassetid://102231913621348",
+  "sha": "6bbf1b0489bf528c"
+ },
+ "gem_family_lightning": {
+  "id": "rbxassetid://98406675796026",
+  "sha": "96cf689c6be00198"
+ },
+ "gem_family_mystic": {
+  "id": "rbxassetid://124769328523513",
+  "sha": "fb7aeeee849e1cc5"
+ },
+ "gem_family_ninja": {
+  "id": "rbxassetid://123569109270096",
+  "sha": "4ea97b6b3dbf7367"
+ },
+ "gem_family_royal": {
+  "id": "rbxassetid://117393002976936",
+  "sha": "631862ac27191f10"
+ },
+ "gem_family_shadow": {
+  "id": "rbxassetid://138287777615919",
+  "sha": "49478cf34b0647f8"
+ },
+ "gem_family_spirit": {
+  "id": "rbxassetid://134738406119196",
+  "sha": "7a59372362a8727f"
+ },
+ "gem_family_warrior": {
+  "id": "rbxassetid://113701065589050",
+  "sha": "81df5af790e75d55"
+ },
+ "glow_n_large": {
+  "id": "rbxassetid://115880145808259",
+  "sha": "0ed437e54f1d43eb"
+ },
+ "glow_n_medium": {
+  "id": "rbxassetid://105467032165699",
+  "sha": "6e1a4b3f047d6588"
+ },
+ "glow_n_small": {
+  "id": "rbxassetid://122870220223371",
+  "sha": "8aa6f90028b3fc85"
+ },
+ "glow_r_large": {
+  "id": "rbxassetid://88731296476686",
+  "sha": "8de826a413bb0021"
+ },
+ "glow_r_medium": {
+  "id": "rbxassetid://85375470737791",
+  "sha": "52b45b082de413aa"
+ },
+ "glow_r_small": {
+  "id": "rbxassetid://82036443620589",
+  "sha": "6e0559598b26b70a"
+ },
+ "glow_sr_large": {
+  "id": "rbxassetid://121687114218850",
+  "sha": "730da9972722edd9"
+ },
+ "glow_sr_medium": {
+  "id": "rbxassetid://89330754015545",
+  "sha": "967b05e34d4a0143"
+ },
+ "glow_sr_small": {
+  "id": "rbxassetid://133099182251123",
+  "sha": "28add0e8b9d3a555"
+ },
+ "glow_ssr_large": {
+  "id": "rbxassetid://108707937669332",
+  "sha": "52a652509da67806"
+ },
+ "glow_ssr_medium": {
+  "id": "rbxassetid://114785392133065",
+  "sha": "f6b5ff970c9b65b3"
+ },
+ "glow_ssr_small": {
+  "id": "rbxassetid://81354288347689",
+  "sha": "d8d0411bae25f5cc"
+ },
+ "glow_ur_large": {
+  "id": "rbxassetid://88858819842969",
+  "sha": "64c5ce97c9723833"
+ },
+ "glow_ur_medium": {
+  "id": "rbxassetid://103615123442077",
+  "sha": "f54180ad633b3ced"
+ },
+ "glow_ur_small": {
+  "id": "rbxassetid://111479952297432",
+  "sha": "efa3db3931a0be87"
+ },
+ "golden_large": {
+  "id": "rbxassetid://78537002447571",
+  "sha": "70d8ded47737f521"
+ },
+ "golden_medium": {
+  "id": "rbxassetid://88655131446916",
+  "sha": "44b64bae653f20a0"
+ },
+ "golden_small": {
+  "id": "rbxassetid://124460814009444",
+  "sha": "14d1600bac6a9615"
+ },
+ "icon_atk": {
+  "id": "rbxassetid://110312404311904",
+  "sha": "a5b4d1982923d269"
+ },
+ "icon_def": {
+  "id": "rbxassetid://127350471768813",
+  "sha": "ffb1a95f8005735c"
+ },
+ "icon_energy": {
+  "id": "rbxassetid://72666899978592",
+  "sha": "4171f99303e79cde"
+ },
+ "icon_equip": {
+  "id": "rbxassetid://91252265222447",
+  "sha": "08bdf2acfc03a4bf"
+ },
+ "icon_evolve": {
+  "id": "rbxassetid://106568651943315",
+  "sha": "c1d570387daace79"
+ },
+ "icon_favorite_off": {
+  "id": "rbxassetid://114715576668063",
+  "sha": "06d7191c58dafb81"
+ },
+ "icon_favorite_on": {
+  "id": "rbxassetid://135347913997220",
+  "sha": "b65a0ce97b1017a9"
+ },
+ "icon_hp": {
+  "id": "rbxassetid://72244495464456",
+  "sha": "284de5a01a27c562"
+ },
+ "icon_passive": {
+  "id": "rbxassetid://108089904672148",
+  "sha": "d7effff6a53217b5"
+ },
+ "icon_preview": {
+  "id": "rbxassetid://107360049474675",
+  "sha": "2b5c4b7fca7831a5"
+ },
+ "icon_spd": {
+  "id": "rbxassetid://125740879439060",
+  "sha": "24c0c390ee34f303"
+ },
+ "icon_upgrade": {
+  "id": "rbxassetid://80136869025847",
+  "sha": "c16cb19228effa0b"
+ },
+ "inner_gold_large": {
+  "id": "rbxassetid://74273778516301",
+  "sha": "1ab5e5be7ed16fe4"
+ },
+ "inner_gold_medium": {
+  "id": "rbxassetid://73902717059779",
+  "sha": "76d1d63c1de2b5a8"
+ },
+ "inner_gold_small": {
+  "id": "rbxassetid://137251839166978",
+  "sha": "ffc020ff8a24e3bb"
+ },
+ "light_pillar": {
+  "id": "rbxassetid://133696950991333",
+  "sha": "13fbd024f68e3d11"
+ },
+ "light_rays": {
+  "id": "rbxassetid://90629415129721",
+  "sha": "277947acde637a93"
+ },
+ "lock_overlay": {
+  "id": "rbxassetid://129181494466706",
+  "sha": "4da1f833126fabb1"
+ },
+ "odds_row_n": {
+  "id": "rbxassetid://117719384670576",
+  "sha": "f053984e903e301b"
+ },
+ "odds_row_r": {
+  "id": "rbxassetid://117057623015696",
+  "sha": "4922a9419079fd23"
+ },
+ "odds_row_sr": {
+  "id": "rbxassetid://116267058397942",
+  "sha": "bbae273cc5447fb6"
+ },
+ "odds_row_ssr": {
+  "id": "rbxassetid://129507945801588",
+  "sha": "666ce899c1ce6939"
+ },
+ "odds_row_ur": {
+  "id": "rbxassetid://116397767758999",
+  "sha": "d5f96fd7f0335071"
+ },
+ "panel_n_large": {
+  "id": "rbxassetid://129601275290259",
+  "sha": "5422e6769dbb1be5"
+ },
+ "panel_n_medium": {
+  "id": "rbxassetid://115447021607155",
+  "sha": "e8110abe77b404e0"
+ },
+ "panel_n_small": {
+  "id": "rbxassetid://98041325790913",
+  "sha": "f49318a7ed2478a1"
+ },
+ "panel_r_large": {
+  "id": "rbxassetid://106934427684279",
+  "sha": "8d8b794fa1a6bfa0"
+ },
+ "panel_r_medium": {
+  "id": "rbxassetid://129045533127865",
+  "sha": "10cbd52ad8fa8520"
+ },
+ "panel_r_small": {
+  "id": "rbxassetid://134773431490484",
+  "sha": "009cbb0441bfb33a"
+ },
+ "panel_sr_large": {
+  "id": "rbxassetid://74986497159953",
+  "sha": "05893d9c9d947a69"
+ },
+ "panel_sr_medium": {
+  "id": "rbxassetid://84179668483481",
+  "sha": "23cb4790ee8bc1e2"
+ },
+ "panel_sr_small": {
+  "id": "rbxassetid://92853144709622",
+  "sha": "5d10b3c8f42e0f22"
+ },
+ "panel_ssr_large": {
+  "id": "rbxassetid://79254306641892",
+  "sha": "45104cab4a37d0f6"
+ },
+ "panel_ssr_medium": {
+  "id": "rbxassetid://92384179579699",
+  "sha": "1f6212e33ccebf13"
+ },
+ "panel_ssr_small": {
+  "id": "rbxassetid://84254064562602",
+  "sha": "09f258567ea575b5"
+ },
+ "panel_ur_large": {
+  "id": "rbxassetid://99021718148105",
+  "sha": "bb238f83729f6224"
+ },
+ "panel_ur_medium": {
+  "id": "rbxassetid://125460199006831",
+  "sha": "e8d328876e0cfad8"
+ },
+ "panel_ur_small": {
+  "id": "rbxassetid://97701797290000",
+  "sha": "8c13fe47b087093e"
+ },
+ "ribbon_max": {
+  "id": "rbxassetid://109949381015713",
+  "sha": "579540bf26b72801"
+ },
+ "ribbon_orbit": {
+  "id": "rbxassetid://131097745150586",
+  "sha": "ae6120127e97ecf5"
+ },
+ "shockwave_ring": {
+  "id": "rbxassetid://114685639063983",
+  "sha": "39c2661cf5e85480"
+ },
+ "sticker_dup": {
+  "id": "rbxassetid://91810532003958",
+  "sha": "414b1cb7ca3cd37e"
+ },
+ "sticker_max": {
+  "id": "rbxassetid://95149279938303",
+  "sha": "eb304aa24b94dbf2"
+ },
+ "sticker_new": {
+  "id": "rbxassetid://73676578164467",
+  "sha": "5047664754766008"
+ },
+ "summon_circle": {
+  "id": "rbxassetid://82908047703742",
+  "sha": "597fc1be391edb4d"
+ },
+ "summon_runes": {
+  "id": "rbxassetid://123383467034178",
+  "sha": "d152387482f3813c"
+ },
+ "toast_rarity_n": {
+  "id": "rbxassetid://82399644962323",
+  "sha": "972f56aa2ca34b30"
+ },
+ "toast_rarity_r": {
+  "id": "rbxassetid://137429002273481",
+  "sha": "3e1885db814b0a30"
+ },
+ "toast_rarity_sr": {
+  "id": "rbxassetid://74421697942476",
+  "sha": "dde1427d4db4a348"
+ },
+ "toast_rarity_ssr": {
+  "id": "rbxassetid://71330203921445",
+  "sha": "8e4deaaf67204172"
+ },
+ "toast_rarity_ur": {
+  "id": "rbxassetid://102721107174105",
+  "sha": "f032f9c60c7581cb"
+ },
+ "world_badge": {
+  "id": "rbxassetid://129853710029512",
+  "sha": "bff251f0701569cc"
+ }
+}

@@ -78,6 +78,10 @@ function EconomyService.init()
 		return Cards.sellSpares(profile :: any, args.uids, `sell:{args.requestId}`, os.time())
 	end)
 
+	Router.handle("Cards.SetFavorite", function(_player, args, profile)
+		return Cards.setFavorite(profile :: any, args.uid, args.on)
+	end)
+
 	Router.handle("Cards.ExpandStorage", function(player, args, profile)
 		local r = Cards.expandStorage(profile :: any, `storage:{args.requestId}`, os.time())
 		if r.ok then

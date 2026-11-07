@@ -5,6 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Types = require(Shared.Types)
 local Characters = require(Shared.Config.Characters)
+local Rarities = require(Shared.Config.Rarities)
 local Odds = require(Shared.Domain.Odds)
 local App = script.Parent.Parent
 local Theme = require(App.Theme)
@@ -43,7 +44,7 @@ function OddsPopup.show(ctx: any, egg: Types.EggDef, golden: boolean)
 				Parent = r,
 			})
 			Ui.text({
-				Text = row.rarity,
+				Text = Rarities.label(row.rarity),
 				TextColor3 = Theme.Rarity[row.rarity],
 				Position = UDim2.fromScale(0.5, 0),
 				Size = UDim2.fromScale(0.25, 1),

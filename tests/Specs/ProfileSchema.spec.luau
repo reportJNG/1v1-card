@@ -7,6 +7,16 @@ local Economy = require(Shared.Config.Economy)
 
 return function()
 	describe("ProfileSchema", function()
+		it("accepts the optional favourite flag only as true", function()
+			local p = Helpers.profile({})
+			local uid = Helpers.giveCards(p, "rai_stormvolt", 1)[1]
+			p.cards[uid].favorite = true
+			expect(ProfileSchema.validate(p :: any).ok).to.equal(true)
+			local loose: any = p.cards[uid]
+			loose.favorite = "yes"
+			expect(ProfileSchema.validate(p :: any).ok).to.equal(false)
+		end)
+
 		it("creates a valid new profile for a first-time player", function()
 			local r = ProfileSchema.load(nil, 77)
 			expect(r.ok).to.equal(true)

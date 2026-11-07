@@ -144,6 +144,9 @@ function Cards.planMerge(
 		if Cards.isInDeck(profile, uid) then
 			return Result.fail("SpareInDeck")
 		end
+		if spare.favorite then
+			return Result.fail("SpareFavorite")
+		end
 		if not Cards.isBaseCopy(spare) then
 			return Result.fail("SpareNotBaseCopy")
 		end
@@ -252,6 +255,17 @@ function Cards.hasMaxedCopy(profile: Types.PlayerProfile, characterId: string, e
 	return false
 end
 
+-- Marks or unmarks a copy as a favourite (CARDS_EGGS_MISSION 4.4). Favourites can't be sold or used
+-- as merge spares; they can still be merge targets and deck cards. Returns the new state.
+function Cards.setFavorite(profile: Types.PlayerProfile, uid: string, on: boolean): Types.Result<boolean>
+	local copy = profile.cards[uid]
+	if copy == nil then
+		return Result.fail("NotOwned")
+	end
+	copy.favorite = if on then true else nil
+	return Result.ok(on)
+end
+
 -- Sells spare copies to the NPC merchant. Only spares of characters the player already has at
 -- max level qualify, so selling never removes the last way to level a card. All checks first.
 function Cards.sellSpares(
@@ -279,6 +293,9 @@ function Cards.sellSpares(
 		end
 		if Cards.isInDeck(profile, uid) then
 			return Result.fail("CardInDeck")
+		end
+		if copy.favorite then
+			return Result.fail("CardFavorite")
 		end
 		if not Cards.isBaseCopy(copy) then
 			return Result.fail("NotASpare")

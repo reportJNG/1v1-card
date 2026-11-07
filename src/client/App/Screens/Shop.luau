@@ -8,6 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Types = require(Shared.Types)
 local Eggs = require(Shared.Config.Eggs)
+local Rarities = require(Shared.Config.Rarities)
 local Worlds = require(Shared.Config.Worlds)
 local Monetization = require(Shared.Config.Monetization)
 local Progress = require(Shared.Domain.Progress)
@@ -310,7 +311,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		local world = Worlds.ById[egg.world or 0]
 		local best = bestRarity(egg)
 		Ui.text({
-			Text = `Drops {lowestRarity(egg)} up to {best} (see Odds) · {if world
+			Text = `Drops {Rarities.Defs[lowestRarity(egg)].displayName} up to {Rarities.Defs[best].displayName} (see Odds) · {if world
 				then `World {world.id}`
 				else "Event"}`,
 			FontFace = Theme.Face.Bold,

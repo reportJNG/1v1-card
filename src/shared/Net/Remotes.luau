@@ -87,6 +87,14 @@ local Requests: { [string]: RequestDef } = {
 			return if uids and requestId then { uids = uids, requestId = requestId } else nil
 		end),
 	},
+	["Cards.SetFavorite"] = {
+		rate = 4,
+		burst = 6,
+		parse = shape({ "uid", "on" }, function(t)
+			local uid, on = Check.id(t.uid), Check.bool(t.on)
+			return if uid and on ~= nil then { uid = uid, on = on } else nil
+		end),
+	},
 	["Cards.ExpandStorage"] = {
 		rate = 1,
 		burst = 2,

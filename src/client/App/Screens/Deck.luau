@@ -12,10 +12,71 @@ local App = script.Parent.Parent
 local Theme = require(App.Theme)
 local Ui = require(App.Ui)
 local Visuals = require(App.Visuals)
+local Card = require(App.Card)
+local Kit = require(App.Kit)
+local TweenService = game:GetService("TweenService")
 
 local C = Theme.Color
 
 local STAT_NAME = { hp = "HP", atk = "ATK", def = "DEF", spd = "SPD", crit = "crit" }
+
+-- Equip (CARDS_EGGS_MISSION 4.5): a copy of the card flies from the picker into its slot, leaving
+-- a fading trail of light in its rarity colour. Screen-space, on the ScreenGui itself.
+local function flyIn(gui: Instance, card: any, from: GuiObject, to: GuiObject, reduced: boolean)
+	if reduced then
+		return
+	end
+	local screen = gui:FindFirstAncestorWhichIsA("ScreenGui")
+	if not screen then
+		return
+	end
+	local a0, s0 = from.AbsolutePosition, from.AbsoluteSize
+	local a1, s1 = to.AbsolutePosition, to.AbsoluteSize
+	local ghost = Ui.frame({
+		Name = "EquipFly",
+		BackgroundTransparency = 1,
+		Position = UDim2.fromOffset(a0.X, a0.Y),
+		Size = UDim2.fromOffset(s0.X, s0.Y),
+		ZIndex = 200,
+		Parent = screen,
+	})
+	local built = Card.build(ghost, {
+		characterId = card.characterId,
+		golden = card.golden,
+		level = card.level,
+		size = s0,
+		stats = false,
+	})
+	built.Size = UDim2.fromScale(1, 1)
+	local color = Rarities.Defs[Characters.ById[card.characterId].rarity].colors[4]
+	local info = TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	TweenService:Create(ghost, info, {
+		Position = UDim2.fromOffset(a1.X, a1.Y),
+		Size = UDim2.fromOffset(s1.X, s1.Y),
+	}):Play()
+	for k = 1, 6 do
+		task.delay(k * 0.05, function()
+			local t = k * 0.05 / 0.35
+			local p = a0:Lerp(a1, t * t) + s0:Lerp(s1, t) / 2
+			local dot = Kit.image("fx_mote", {
+				ImageColor3 = color,
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromOffset(p.X, p.Y),
+				Size = UDim2.fromOffset(46, 46),
+				ZIndex = 199,
+				Parent = screen,
+			})
+			TweenService
+				:Create(dot, TweenInfo.new(0.4), { ImageTransparency = 1, Size = UDim2.fromOffset(10, 10) })
+				:Play()
+			task.delay(0.45, dot.Destroy, dot)
+		end)
+	end
+	task.delay(0.36, function()
+		ghost:Destroy()
+		Ui.sound("card_flip")
+	end)
+end
 
 return function(ctx: any, layer: Frame, _arg: any?): any
 	local view = ctx.state.view
@@ -84,11 +145,20 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				-- The card shows its own power on its bottom plate.
 				portrait.Position = UDim2.fromOffset(6, 6)
 			else
+				-- An empty slot: the dashed glowing outline with a "+" (kit `empty_slot`).
+				Kit.image("empty_slot", {
+					Name = "Empty",
+					Position = UDim2.fromOffset(6, 6),
+					Size = UDim2.new(1, -12, 1, -12),
+					Parent = slot,
+				})
 				Ui.text({
-					Text = `Slot {i}\nPick a card`,
+					Text = `Slot {i}`,
 					TextColor3 = C.Muted,
 					TextXAlignment = Enum.TextXAlignment.Center,
-					Size = UDim2.fromScale(1, 1),
+					AnchorPoint = Vector2.new(0, 1),
+					Position = UDim2.new(0, 0, 1, -18),
+					Size = UDim2.new(1, 0, 0, 16),
 					Parent = slot,
 				})
 			end
@@ -209,9 +279,14 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 						slots[j] = nil
 					end
 				end
-				slots[active] = card.uid
+				local target = active
+				slots[target] = card.uid
 				active = active % 3 + 1
 				render()
+				local slotObj = slotRow:FindFirstChild(`Slot{target}`)
+				if slotObj then
+					flyIn(layer, card, portrait, slotObj :: GuiObject, ctx.reducedMotion())
+				end
 			end)
 		end
 		if #cards == 0 then

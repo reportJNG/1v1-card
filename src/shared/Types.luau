@@ -112,8 +112,13 @@ export type CharacterDef = {
 export type RarityDef = {
 	order: number,
 	color: Color3,
+	colors: { Color3 }, -- { light, main, deep, glow } (display only)
 	statBudget: number, -- fraction added to role base stats
 	mergePoints: number, -- points a spare copy gives when merged
+	badge: string, -- N / R / SR / SSR / UR (display only)
+	displayName: string, -- what players read; "God-tier" for Mythical (display only)
+	emblem: string, -- "star" | "crown"
+	tag: string, -- kit image suffix
 }
 
 export type RoleDef = {
@@ -206,6 +211,7 @@ export type CardCopy = {
 	obtainedAt: number,
 	provenance: Provenance,
 	lockedBy: string?, -- reserved for V2 marketplace listings; locked copies can't be merged, sold or decked
+	favorite: boolean?, -- set by the player; favourites can't be sold or used as merge spares (nil = false)
 }
 
 export type ItemStack = { itemId: string, count: number }

@@ -11,6 +11,7 @@ export type CardView = {
 	golden: boolean,
 	paid: boolean, -- came from (or absorbed) a Robux egg; the UI shows it, the server enforces it
 	locked: boolean,
+	favorite: boolean,
 	obtainedAt: number,
 }
 
@@ -78,6 +79,7 @@ function ClientView.card(copy: Types.CardCopy): CardView
 		golden = copy.golden,
 		paid = copy.provenance.paidLineage,
 		locked = copy.lockedBy ~= nil,
+		favorite = copy.favorite == true,
 		obtainedAt = copy.obtainedAt,
 	}
 end

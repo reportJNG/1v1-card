@@ -1,0 +1,61 @@
+{
+  "name": "1v1card-qa",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Shared": {
+        "$path": "src/shared"
+      },
+      "DevPackages": {
+        "$className": "Folder",
+        "TestEZ": {
+          "$path": "DevPackages/TestEZ"
+        }
+      },
+      "QA": {
+        "$className": "Folder",
+        "QAGallery": {
+          "$path": "scripts/studio/QAGallery.luau"
+        }
+      }
+    },
+    "ServerScriptService": {
+      "Server": {
+        "$path": "src/server"
+      },
+      "Tests": {
+        "$path": "tests"
+      },
+      "QAGrantCards": {
+        "$path": "scripts/studio/grant-cards.server.luau"
+      }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Client": {
+          "$path": "src/client"
+        }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "StreamingEnabled": true
+      }
+    },
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Technology": "Future",
+        "GlobalShadows": true,
+        "ClockTime": 20.5
+      }
+    },
+    "StarterGui": {
+      "$className": "StarterGui",
+      "$properties": {
+        "ScreenOrientation": "LandscapeSensor"
+      }
+    }
+  }
+}

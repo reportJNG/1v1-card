@@ -7,6 +7,7 @@ local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local UiAssets = require(Shared.Config.UiAssets)
+local CardKit = require(Shared.Config.CardKit)
 local Sounds = require(Shared.Config.Sounds)
 local Theme = require(script.Parent.Theme)
 
@@ -52,10 +53,15 @@ end
 
 -- ------------------------------------------------------------------ images
 
--- The image for a slot: final art when it exists, else the TEMP stand-in.
+-- The image for a slot: final art when it exists, else the TEMP stand-in. Slots of the step-5
+-- card and egg kit (Config/CardKit) resolve there.
 function Ui.asset(slot: string): string
 	local def = UiAssets[slot]
-	assert(def, `unknown UI image slot {slot}`)
+	if not def then
+		local kit = CardKit.Slots[slot]
+		assert(kit, `unknown UI image slot {slot}`)
+		return kit.id
+	end
 	return if def.final and def.final ~= "" then def.final else def.temp
 end
 

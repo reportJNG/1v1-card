@@ -18,6 +18,7 @@ local UiFlow = require(Shared.Ui.UiFlow)
 local MainMenu = require(script.Parent.MainMenu)
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
+local CardFx = require(script.Parent.CardFx)
 local Format = require(script.Parent.Format)
 local State = require(script.Parent.State)
 
@@ -608,6 +609,9 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 end
 
 function App.start(deps: Deps): Ctx
+	CardFx.setHoverSound(function()
+		Ui.sound("hover")
+	end)
 	local gui = deps.gui
 	gui.ResetOnSpawn = false
 	gui.IgnoreGuiInset = false

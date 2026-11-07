@@ -18,6 +18,7 @@ local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Types = require(Shared.Types)
 local Characters = require(Shared.Config.Characters)
+local Rarities = require(Shared.Config.Rarities)
 local HatchRules = require(Shared.Domain.Hatch)
 local App = script.Parent.Parent
 local Theme = require(App.Theme)
@@ -438,7 +439,9 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 				local label = Ui.text({
 					Text = if small
 						then def.displayName
-						else `{def.displayName} · {def.rarity}{if card.golden then " · Golden" else ""}`,
+						else `{def.displayName} · {Rarities.Defs[def.rarity].displayName}{if card.golden
+							then " · Golden"
+							else ""}`,
 					FontFace = Theme.Face.Bold,
 					TextSize = Theme.Size.small + 1,
 					TextColor3 = if card.golden then C.Gold else Theme.Rarity[def.rarity],
