@@ -16,6 +16,7 @@ local function item(
 		world = world,
 		maxStack = if rare then 25 else 50,
 		sellPrice = sellPrice,
+		rare = rare == true,
 	}
 end
 

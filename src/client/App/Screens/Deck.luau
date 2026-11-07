@@ -12,7 +12,6 @@ local App = script.Parent.Parent
 local Theme = require(App.Theme)
 local Ui = require(App.Ui)
 local Visuals = require(App.Visuals)
-local Format = require(App.Format)
 
 local C = Theme.Color
 
@@ -68,7 +67,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			local card = uid and view.cards[uid]
 			local def = card and Characters.ById[card.characterId]
 			local slot = Ui.glowTile("TextButton", {
-				Size = UDim2.fromOffset(130, 210),
+				Size = UDim2.fromOffset(130, 178),
 				LayoutOrder = i,
 				Name = `Slot{i}`,
 				Parent = slotRow,
@@ -82,12 +81,8 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 					true,
 					card.level
 				)
+				-- The card shows its own power on its bottom plate.
 				portrait.Position = UDim2.fromOffset(6, 6)
-				Ui.pricePill(Format.number(Power.card(card.characterId, card.level)), "icon_power", 26, {
-					Position = UDim2.new(0.5, 0, 0, 172),
-					ZIndex = 3,
-					Parent = slot,
-				})
 			else
 				Ui.text({
 					Text = `Slot {i}\nPick a card`,

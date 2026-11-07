@@ -70,7 +70,7 @@ local function tile(item: any, size: number, onClick: () -> ()): TextButton
 	}, { Ui.new("UICorner", { CornerRadius = UDim.new(0, 10) }) })
 	Ui.icon(item.icon, math.floor(size * 0.62), {
 		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.new(0.5, 0, 0.42, 0),
+		Position = UDim2.fromScale(0.5, 0.42),
 		ZIndex = 3,
 		Parent = b,
 	})

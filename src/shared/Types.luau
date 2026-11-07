@@ -179,6 +179,7 @@ export type ItemDef = {
 	world: number,
 	maxStack: number,
 	sellPrice: number, -- Coins per unit at the NPC merchant
+	rare: boolean, -- the world's rare resource (shown in gold at the merchant)
 }
 
 -- ---------------------------------------------------------------- persisted

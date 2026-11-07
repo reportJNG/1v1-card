@@ -15,7 +15,7 @@ return table.freeze({
 		worldArt = "Worlds are a first art pass (generated terrain, generate_mesh props, code-drawn skies, picker thumbnails captured in Studio) awaiting the owner's review and a hero pass.",
 		questRewards = "Quest targets and rewards are starting values.",
 		characterArt = "Characters are TEMP role-silhouette cut-outs tinted with each character's colours, on cards and as 3D standees (Shared/Art/Cutout, Standee), until the owner's transparent card art (art/characters/<id>/card.png) and approved models exist.",
-		cardFrames = "The layered card (App/Card) uses TEMP layers: one code-drawn frame tinted per rarity (card_border), 15 family backgrounds, glow, holo foil and badges, until final card art exists (art/ui/PROMPTS.md, Card layers).",
+		cardFrames = "The layered card (App/Card) draws its frame, rarity pill, sockets and plates in code; its image layers (15 family backgrounds, glow, holo foil, crown) are TEMP until final card art exists (art/ui/PROMPTS.md, Card layers).",
 		hubArt = "The hub plaza uses generated meshes (Config/HubLayout) and a code-drawn sky; awaiting the owner's vertical-slice approval.",
 		uiArt = "Every UI image is a TEMP stand-in drawn by scripts/art/make_temp_ui.py until the owner's final art (art/ui/PROMPTS.md) is uploaded.",
 		guardianDecks = "Guardian decks come from each world's own eggs; the difficulty curve needs playtesting.",

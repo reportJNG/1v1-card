@@ -182,8 +182,8 @@ return function(ctx: any, layer: Frame, arg: any?): any
 	-- The glow frame stays; renderInspect clears only the content inside it.
 	local inspectBox = Ui.glowTile("Frame", {
 		Name = "InspectBox",
-		Position = UDim2.new(0.56, 0, 0, 0),
-		Size = UDim2.new(0.44, 0, 1, 0),
+		Position = UDim2.fromScale(0.56, 0),
+		Size = UDim2.fromScale(0.44, 1),
 		Parent = p.body,
 	}, C.Purple, false)
 	local inspect = Ui.frame(
@@ -666,7 +666,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		})
 		Ui.icon(icon, 34, {
 			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(0.5, 0, 0.4, 0),
+			Position = UDim2.fromScale(0.5, 0.4),
 			ZIndex = 2,
 			Parent = b,
 		})

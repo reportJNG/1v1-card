@@ -2,21 +2,22 @@
 -- The layered trading card (docs/ART_STYLE.md section 4, owner brief "card visual upgrade"). One
 -- 5:7 silhouette for every rarity, built from layers, back to front:
 --   shadow, glow      a soft drop shadow, and an outer glow in the rarity colour
---   background        the family background (card_bg_<family>)
+--   frame             a rounded border drawn in code, in the rarity's colours and animated:
+--                       Common     clean silver, soft shadow
+--                       Rare       bright blue, periodic shine sweep
+--                       Epic       purple, turning gradient border and glow
+--                       Legendary  gold, sparkles, pulsing glow
+--                       Mythical   prismatic turning border, holo foil, floating particles
+--                     A Golden copy's border is gold with a white glint sweeping across it.
+--   background        the family background (card_bg_<family>), full bleed
 --   rim               the family accent glowing behind the character
 --   character         the character's transparent cutout (assets.cardArt) or, until it exists, a
 --                     clearly marked TEMP cutout: the role silhouette in 4 layers tinted with the
 --                     character's look colours, with a rim light in the family accent
 --   fx                shine sweep, sparkles, rising particles, holo foil (by rarity)
---   frame             card_border, tinted and animated per rarity:
---                       Common     clean silver, soft shadow
---                       Rare       bright blue, periodic shine sweep
---                       Epic       purple, animated gradient border and glow
---                       Legendary  gold, sparkles, pulsing glow
---                       Mythical   prismatic animated frame, holo foil, floating particles
---   golden            the gold foil over any rarity and a GOLDEN tag
---   plates            rarity banner (word, in its colour), level badge (crown at level 15 with a
---                     stronger glow), family icon, name, and the stats at the card's level
+--   plates            top: level socket (crown at level 15), rarity pill (the word, in its colour;
+--                     "GOLDEN ..." in gold), family socket. Bottom: the art fades to night under
+--                     the name and the card's power (the same Power number as the deck builder)
 -- Background, character and fx shift with the pointer, press or device tilt (2.5D parallax) on
 -- interactive cards. Animation runs in App/CardFx, only while the card is on screen.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -24,7 +25,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Characters = require(Shared.Config.Characters)
 local Art = require(Shared.Config.Art)
 local Economy = require(Shared.Config.Economy)
-local BattleRules = require(Shared.Battle.BattleRules)
+local Power = require(Shared.Domain.Power)
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
 local CardFx = require(script.Parent.CardFx)
@@ -107,30 +108,24 @@ local STYLE: {
 		},
 	}
 
--- Where the frame's plates sit (fractions of the card, matching card_border).
+-- A Golden copy's border: gold with a white highlight that sweeps across it (CardFx foil).
+local GOLDEN_FRAME = { "#E08A00", "#FFC54B", "#FFFFFF", "#FFC54B", "#E08A00" }
+
+-- The card face (owner step 3, the concept board's cards): a bright rarity border drawn in code,
+-- full-bleed art, a rarity pill and level / family sockets on top, and a dark plate at the bottom
+-- with the name and the card's power. Fractions of the card.
 local P = {
-	inset = 0.047, -- art window inset (x)
-	banner = { x0 = 0.19, x1 = 0.81, y0 = 0.012, y1 = 0.088 },
-	level = Vector2.new(0.113, 0.115),
-	family = Vector2.new(0.887, 0.115),
-	socket = 0.13, -- socket diameter / card width
-	name = { y0 = 0.778, y1 = 0.868 },
-	stats = { y0 = 0.878, y1 = 0.958 },
+	border = 0.045, -- border thickness / card width
+	corner = 0.08, -- corner radius / card width
+	socket = 0.16, -- level and family socket diameter / card width
+	top = 0.035, -- socket and pill margin from the top / card height
+	plate = 0.66, -- where the bottom plate's fade starts / card height
+	name = { y0 = 0.735, y1 = 0.815 },
+	power = { y0 = 0.82, y1 = 0.94 },
 }
 
 local function img(slot: string, props: { [string]: any }): ImageLabel
 	return Ui.image(slot, props)
-end
-
--- The stats the card would fight with at `level` (the same numbers as a battle, BattleRules).
-function Card.stats(characterId: string, level: number): { hp: number, atk: number, def: number, spd: number }
-	local u = BattleRules.preview({ { characterId = characterId, level = level } })[1]
-	return {
-		hp = u.maxHp,
-		atk = math.floor(u.atk + 0.5),
-		def = math.floor(u.def + 0.5),
-		spd = math.floor(u.spd + 0.5),
-	}
 end
 
 -- The character's cut-out (Shared/Art/Cutout: its card art, or the TEMP role silhouette tinted
@@ -209,17 +204,31 @@ function Card.build(parent: Instance, o: Options): Frame
 	})
 	local glowGrad = Ui.new("UIGradient", { Color = seq(style.glow), Parent = glow })
 
+	-- The border: a rounded plate in the rarity colours (gold for Golden) behind the art window.
+	local radius = math.max(4, math.floor(w * P.corner))
+	local inset = math.max(2, math.floor(w * P.border))
+	local frame = Ui.frame({
+		Name = "Frame",
+		BackgroundColor3 = C.White,
+		Size = UDim2.fromScale(1, 1),
+		ZIndex = 1,
+		Parent = face,
+	}, { Ui.corner(radius), Ui.stroke(C.Night, math.max(1, math.floor(w * 0.012)), 0.2) })
+	local frameGrad = Ui.new(
+		"UIGradient",
+		{ Color = seq(if golden then GOLDEN_FRAME else style.frame), Rotation = 90, Parent = frame }
+	)
+
 	-- Art window: background, rim glow, character, fx.
-	local inset = math.max(2, math.floor(w * P.inset))
 	local art = Ui.frame({
 		Name = "Art",
 		BackgroundColor3 = Color3.fromHex(fam.body),
 		Position = UDim2.fromOffset(inset, inset),
 		Size = UDim2.new(1, -2 * inset, 1, -2 * inset),
 		ClipsDescendants = true,
-		ZIndex = 1,
+		ZIndex = 2,
 		Parent = face,
-	}, { Ui.corner(math.floor(w * 0.06)) })
+	}, { Ui.corner(math.max(2, radius - inset)), Ui.stroke(C.Night, 1, 0.3) })
 	local bg = img(`card_bg_{string.lower(def.family)}`, {
 		Name = "Background",
 		ScaleType = Enum.ScaleType.Crop,
@@ -242,8 +251,8 @@ function Card.build(parent: Instance, o: Options): Frame
 		Name = "Character",
 		BackgroundTransparency = 1,
 		AnchorPoint = Vector2.new(0.5, 1),
-		Position = UDim2.fromScale(0.5, 0.84),
-		Size = UDim2.fromScale(1.02, 0.78),
+		Position = UDim2.fromScale(0.5, 0.86),
+		Size = UDim2.fromScale(1.06, 0.8),
 		Parent = art,
 	})
 	local placeholder = Cutout.isTemp(def.id)
@@ -324,89 +333,128 @@ function Card.build(parent: Instance, o: Options): Frame
 		})
 	end
 
-	-- The frame, tinted per rarity.
-	local frame = img("card_border", {
-		Name = "Frame",
-		ScaleType = Enum.ScaleType.Stretch,
-		Size = UDim2.fromScale(1, 1),
-		ZIndex = 7,
-		Parent = face,
-	})
-	local frameGrad = Ui.new("UIGradient", { Color = seq(style.frame), Rotation = 90, Parent = frame })
-	local foilGrad: UIGradient? = nil
-	if golden then
-		local foil = img("card_golden_foil", {
-			Name = "Foil",
-			ScaleType = Enum.ScaleType.Stretch,
-			Size = UDim2.fromScale(1, 1),
-			ZIndex = 8,
-			Parent = face,
-		})
-		foilGrad = Ui.new("UIGradient", {
-			Color = seq({ "#FFE08A", "#FFFFFF", "#FFC54B", "#FFE08A" }),
+	-- The bottom plate: the art fades to night so the name and power read on any background.
+	Ui.frame({
+		Name = "Plate",
+		BackgroundColor3 = C.Night,
+		Position = UDim2.fromScale(0, P.plate),
+		Size = UDim2.fromScale(1, 1 - P.plate),
+		ZIndex = 6,
+		Parent = art,
+	}, {
+		Ui.new("UIGradient", {
+			Rotation = 90,
 			Transparency = NumberSequence.new({
-				NumberSequenceKeypoint.new(0, 0.1),
-				NumberSequenceKeypoint.new(0.5, 0),
-				NumberSequenceKeypoint.new(1, 0.1),
+				NumberSequenceKeypoint.new(0, 1),
+				NumberSequenceKeypoint.new(0.35, 0.25),
+				NumberSequenceKeypoint.new(1, 0.05),
 			}),
-			Parent = foil,
-		})
-	end
-
-	-- Plates: rarity banner, level badge, family icon, name, stats.
-	local textBase = math.max(8, math.floor(h * 0.062))
-	local banner = Ui.display({
-		Name = "Rarity",
-		Text = if golden then `GOLDEN {string.upper(def.rarity)}` else string.upper(def.rarity),
-		TextSize = textBase,
-		TextColor3 = if golden then C.GoldHi else rarityColor:Lerp(C.White, 0.25),
-		Position = UDim2.fromScale(P.banner.x0, P.banner.y0),
-		Size = UDim2.fromScale(P.banner.x1 - P.banner.x0, P.banner.y1 - P.banner.y0),
-		ZIndex = 9,
-		Parent = face,
+		}),
 	})
-	Ui.fit(banner, textBase, 6)
-	local socket = math.floor(w * P.socket)
-	local badge = img("badge_level", {
+
+	-- Top row: level socket (left), rarity pill, family socket (right).
+	local socket = math.max(12, math.floor(w * P.socket))
+	local top = math.floor(h * P.top) + inset
+	local ring = math.max(1, math.floor(socket * 0.09))
+	local badge = Ui.frame({
 		Name = "Level",
-		ImageColor3 = if maxed then C.Gold else rarityColor,
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromScale(P.level.X, P.level.Y),
+		BackgroundColor3 = C.White,
+		Position = UDim2.fromOffset(inset + math.floor(w * 0.025), top),
 		Size = UDim2.fromOffset(socket, socket),
 		ZIndex = 9,
 		Parent = face,
+	}, {
+		Ui.new("UICorner", { CornerRadius = UDim.new(0.5, 0) }),
+		Ui.stroke(C.Night, ring),
+		Ui.gradient(
+			(if maxed then C.GoldHi else rarityColor:Lerp(C.White, 0.3)),
+			(if maxed then C.GoldLo else rarityColor:Lerp(C.Night, 0.35))
+		),
 	})
 	local lvl = Ui.text({
 		Name = "Value",
 		Text = tostring(level),
 		FontFace = Theme.Face.Number,
-		TextSize = math.max(8, math.floor(socket * 0.5)),
+		TextSize = math.max(8, math.floor(socket * 0.58)),
 		TextColor3 = C.White,
 		TextXAlignment = Enum.TextXAlignment.Center,
+		TextWrapped = false,
 		Size = UDim2.fromScale(1, 1),
 		ZIndex = 10,
 		Parent = badge,
 	})
-	Ui.outline(C.Night, 1.5).Parent = lvl
+	Ui.outline(C.Night, math.max(1, ring)).Parent = lvl
 	if maxed then
 		img("badge_crown", {
 			Name = "Crown",
 			AnchorPoint = Vector2.new(0.5, 1),
-			Position = UDim2.fromScale(0.5, 0.18),
+			Position = UDim2.fromScale(0.5, 0.12),
 			Size = UDim2.fromOffset(math.floor(socket * 0.95), math.floor(socket * 0.7)),
 			ZIndex = 11,
 			Parent = badge,
 		})
 	end
+	local famSocket = Ui.frame({
+		Name = "FamilySocket",
+		BackgroundColor3 = C.Night,
+		BackgroundTransparency = 0.25,
+		AnchorPoint = Vector2.new(1, 0),
+		Position = UDim2.new(1, -inset - math.floor(w * 0.025), 0, top),
+		Size = UDim2.fromOffset(socket, socket),
+		ZIndex = 9,
+		Parent = face,
+	}, { Ui.new("UICorner", { CornerRadius = UDim.new(0.5, 0) }), Ui.stroke(accent, ring, 0.1) })
 	img(`family_{string.lower(def.family)}`, {
 		Name = "Family",
 		ImageColor3 = accent,
 		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromScale(P.family.X, P.family.Y),
-		Size = UDim2.fromOffset(math.floor(socket * 0.72), math.floor(socket * 0.72)),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(0.68, 0.68),
+		ZIndex = 10,
+		Parent = famSocket,
+	})
+
+	-- The rarity pill, in its colour (gold for Golden), always with the word (never colour alone).
+	local word = if golden then `GOLDEN {string.upper(def.rarity)}` else string.upper(def.rarity)
+	local room = w - 2 * (inset + math.floor(w * 0.025) + socket + math.floor(w * 0.035))
+	local pillH = math.max(10, math.floor(socket * 0.72))
+	local pill = Ui.frame({
+		Name = "RarityPill",
+		BackgroundColor3 = C.White,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.new(0.5, 0, 0, top + math.floor(socket / 2)),
+		Size = UDim2.fromOffset(math.min(room, math.floor(w * 0.1) + #word * math.floor(pillH * 0.5)), pillH),
 		ZIndex = 9,
 		Parent = face,
+	}, {
+		Ui.new("UICorner", { CornerRadius = UDim.new(0.5, 0) }),
+		Ui.stroke(C.Night, ring),
+		Ui.gradient(
+			if golden then C.GoldHi else rarityColor:Lerp(C.White, 0.35),
+			if golden then C.GoldLo else rarityColor:Lerp(C.Night, 0.3)
+		),
 	})
+	local banner = Ui.display({
+		Name = "Rarity",
+		Text = word,
+		TextSize = math.floor(pillH * 0.7),
+		TextColor3 = C.White,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.52),
+		Size = UDim2.new(1, -pillH, 0.74, 0),
+		ZIndex = 10,
+		Parent = pill,
+	})
+	local bannerStroke = banner:FindFirstChildOfClass("UIStroke")
+	if bannerStroke then
+		bannerStroke.Thickness = math.max(1, ring)
+	end
+	-- Sized from the word's length rather than TextScaled, which would wrap "LEGENDARY" on small
+	-- cards. The display face's capitals are about 0.68 em wide (with the outline).
+	banner.TextSize =
+		math.max(5, math.min(banner.TextSize, math.floor((pill.Size.X.Offset - pillH) / (#word * 0.68))))
+
+	-- Name and power on the bottom plate.
 	local name = Ui.text({
 		Name = "Name",
 		Text = def.displayName,
@@ -423,49 +471,43 @@ function Card.build(parent: Instance, o: Options): Frame
 	Ui.fit(name, math.max(8, math.floor(h * 0.07)), 6)
 	local showStats = if o.stats ~= nil then o.stats else not small
 	if showStats then
-		local st = Card.stats(def.id, level)
 		local row = Ui.frame({
 			Name = "Stats",
 			BackgroundTransparency = 1,
-			Position = UDim2.fromScale(0.07, P.stats.y0),
-			Size = UDim2.fromScale(0.86, P.stats.y1 - P.stats.y0),
+			Position = UDim2.fromScale(0.08, P.power.y0),
+			Size = UDim2.fromScale(0.84, P.power.y1 - P.power.y0),
 			ZIndex = 9,
 			Parent = face,
-		}, { Ui.list(true, math.floor(w * 0.04), Enum.HorizontalAlignment.Center) })
-		local iconSize = math.floor(h * 0.06)
-		local cells: { { icon: string, value: number, color: Color3 } } = {
-			{ icon = "icon_power", value = st.atk, color = C.Gold },
-			{ icon = "icon_hp", value = st.hp, color = C.Green },
-		}
-		for i, pair in cells do
-			local cell = Ui.frame({
-				BackgroundTransparency = 1,
-				Size = UDim2.fromScale(0.47, 1),
-				LayoutOrder = i,
-				Parent = row,
-			})
-			Ui.icon(pair.icon, iconSize, { Position = UDim2.fromScale(0, 0.5), ZIndex = 10, Parent = cell })
-			local v = Ui.text({
-				Text = tostring(pair.value),
-				FontFace = Theme.Face.Number,
-				TextSize = math.max(8, math.floor(h * 0.068)),
-				TextColor3 = pair.color,
-				TextWrapped = false,
-				Position = UDim2.fromOffset(iconSize + 2, 0),
-				Size = UDim2.new(1, -iconSize - 2, 1, 0),
-				ZIndex = 10,
-				Parent = cell,
-			})
-			Ui.outline(C.Night, 1.5).Parent = v
-			Ui.fit(v, math.max(8, math.floor(h * 0.068)), 6)
-		end
+		}, { Ui.list(true, math.max(2, math.floor(w * 0.025)), Enum.HorizontalAlignment.Center) })
+		local rowH = math.floor(h * (P.power.y1 - P.power.y0))
+		Ui.icon("icon_play", math.floor(rowH * 0.95), {
+			AnchorPoint = Vector2.zero,
+			LayoutOrder = 1,
+			ZIndex = 10,
+			Parent = row,
+		})
+		local v = Ui.text({
+			Name = "Power",
+			Text = tostring(Power.card(def.id, level)),
+			FontFace = Theme.Face.Number,
+			TextSize = math.max(9, math.floor(rowH * 0.92)),
+			TextColor3 = C.White,
+			TextWrapped = false,
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, rowH),
+			LayoutOrder = 2,
+			ZIndex = 10,
+			Parent = row,
+		})
+		Ui.goldText().Parent = v
+		Ui.outline(C.Night, math.max(1.5, ring)).Parent = v
 	end
 
 	-- Animation and parallax (App/CardFx; nothing runs while the card is off screen).
 	local depth = math.max(2, math.floor(w * 0.06))
 	CardFx.add({
 		root = holder,
-		frameGrad = frameGrad,
+		frameGrad = if golden then nil else frameGrad,
 		glowGrad = if style.spin ~= 0 then glowGrad else nil,
 		frameSpin = style.spin,
 		glow = if glow.Visible then glow else nil,
@@ -474,7 +516,7 @@ function Card.build(parent: Instance, o: Options): Frame
 		shine = shine,
 		shineEvery = style.shine or 3,
 		holoGrad = holoGrad,
-		foilGrad = foilGrad,
+		foilGrad = if golden then frameGrad else nil,
 		sparks = sparks,
 		sparkMode = sparkMode,
 		layers = {

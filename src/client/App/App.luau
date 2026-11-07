@@ -253,7 +253,7 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 		}, { Ui.new("UICorner", { CornerRadius = UDim.new(0, 9) }) })
 		Ui.icon(item.icon, 32, {
 			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(0.5, 0, 0.4, 0),
+			Position = UDim2.fromScale(0.5, 0.4),
 			ZIndex = 3,
 			Parent = row,
 		})

@@ -540,3 +540,15 @@ wagers).
   - The portrait pack in Downloads has no license file and isn't our characters, so it isn't used.
   - The doc explains how a folder gets in (license, mapping to character ids, the pickup script).
 
+- **Cards and merchant (finished after the owner's "finish wht not finished").**
+  - The card face is drawn in code now, like the reference cards:
+    - a bright rounded border in the rarity's colours, animated as before;
+    - full-bleed art;
+    - a level socket, a rarity pill with the word written out, and a family socket on top;
+    - a dark bottom plate with the name and the card's power (sword icon + number, the same
+      `Power.card` the deck builder uses).
+  - Golden copies get a gold border with a sweeping glint and a "GOLDEN …" pill.
+  - The deck slots dropped their separate power pill, since the card shows its power.
+  - The merchant is a gold "Sell your harvest" bar with the total and a **Sell all** button, then
+    one glow tile per item (rare resources in gold with a RARE tag): count, price each, and a
+    sell button. Items gained a `rare` flag in `Config/Items` for this.

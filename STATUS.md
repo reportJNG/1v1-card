@@ -24,7 +24,7 @@
 | Area lighting + sky + music per area (hub, arena, world1..10) | `Config/Lighting`, `Config/Sounds`, `App/AreaFx` | Play mode in Studio, world captures |
 | Layered 2.5D card (shadow, glow, family background, cutout + rim light, effects, rarity-tinted frame, Golden foil, rarity banner, level badge with level-15 crown, family icon, stats), animated only while on screen, parallax on hover / press / tilt; used in collection, inspect, deck builder, hatch reveal, battle, KO picker and results | `App/Card`, `App/CardFx`, `App/Visuals`, `scripts/art/card_layers.py` | Play mode (hatch, collection + inspect, battle, result), `tests/Tools/CardPreview` gallery, CardFx visibility counts in Studio, `docs/screens/cards` |
 | Hatch sequence, 3D battle stage, battle UI, results | `Screens/Hatch`, `App/BattleStage`, `Screens/Battle` | Play mode: a real Guardian Trial round and forfeit |
-| Step 3 GUI: standalone main menu (PLAY always to the lobby), icon-first HUD dock (icon pack, unedited), glow tiles and price pills, Shop / Inventory / Deck restyle, staggered tile pop-in, starter deck for new players | `App/MainMenu`, `App/App`, `App/Ui` (glowTile, pricePill, stagger), `Screens/*`, `ProfileSchema.grantStarter` | Play mode (`docs/screens/step3`, `docs/screens/final`), UiFlow and ProfileSchema specs |
+| Step 3 GUI: standalone main menu (PLAY always to the lobby), icon-first HUD dock (icon pack, unedited), glow tiles and price pills, Shop / Inventory / Deck / Merchant restyle, code-drawn card face (rarity pill, sockets, power plate), staggered tile pop-in, starter deck for new players | `App/MainMenu`, `App/App`, `App/Card`, `App/Ui` (glowTile, pricePill, stagger), `Screens/*`, `ProfileSchema.grantStarter` | Play mode (`docs/screens/step3`, `docs/screens/final`), UiFlow and ProfileSchema specs |
 | 100 character art briefs | `Config/Characters` (`look`), `sim/roster_looks.py` | ConfigValidator spec |
 
 ## Placeholder (marked in `Config/ContentStatus` / `status = "Placeholder"`; release builds refuse them)
@@ -51,6 +51,7 @@
 | Check | Result |
 | --- | --- |
 | StyLua, Selene, luau-lsp strict, Rojo build (default, dev, e2e) | clean |
+| TestEZ headless (step 3) | 263 passed, 0 failed |
 | TestEZ headless (session 3) | 246 passed, 0 failed |
 | TestEZ in real Studio (session 3, run-in-roblox) | 246 passed, 0 failed |
 | TestEZ headless (session 2) | 242 passed, 0 failed |
