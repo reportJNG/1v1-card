@@ -259,3 +259,27 @@ x3 and x8, and the sound slots. Net.spec also rejects counts 9, 2.5 and "3". 262
 **Scores:** board 8 · readability 8 · polish 8 · clarity 9 · consistency 9.
 
 **Screens:** `docs/screens/hatch/01-15`.
+
+## G. Eggs — done within the locked rules (2026-11-07)
+**Already true, now checked in Play:**
+- **The 24 icon-pack eggs only.** Their icons are uploaded unedited and referenced in
+  `Config/Eggs`. Golden eggs use the pack's own golden files, never a recolour.
+- **Data-driven.** Every egg is in `Config/Eggs`, with its own themed pool (`Config/EggPools`,
+  8-10 characters).
+- **Odds.** The labelled Odds button opens exact per-character % from `Shared/Domain/Odds`, the
+  same table the server rolls from, with the rounding note.
+- **Robux and Golden rules:**
+  - The Robux buttons exist only for unlocked-world eggs while `PaidRandomItemsAllowed` is true.
+  - The receipt is re-checked at delivery.
+  - There are no Golden Developer Products, so Golden eggs are earned only.
+- **Tests.** All policy and odds specs pass (PolicyRules, PolicyMatrix, Odds, ReceiptProcessor;
+  262 total). H's multi-open keeps one charge per batch and never changes odds.
+
+**Not built:** new original egg types. They are blocked by the locked 24-egg rule (WAITING_ON_YOU 00).
+
+**Tested in Play:** the Egg Shop (prices, owned counts, x1/x3/x8, the Odds button, Robux buttons
+shown as "not on sale yet" until product ids exist) and the Odds popup for the Basic Egg.
+
+**Scores:** board 8 · readability 9 · polish 8 · clarity 9 · consistency 9.
+
+**Screens:** `docs/screens/eggs/01-02` (and the hatch shots in `docs/screens/hatch/`).

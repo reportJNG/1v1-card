@@ -146,17 +146,19 @@ If something needs the owner (images, approval, keys), write it in
 - [x] Each image the owner adds is picked up automatically on the next loop pass.
 
 ### G. Eggs (more types, better design)
-- [ ] Keep the 24 egg-pack eggs. Reference the files as supplied and **never edit them** (see
+- [x] Keep the 24 egg-pack eggs. Reference the files as supplied and **never edit them** (see
       the pack's License.txt).
-- [ ] Add new **original** egg types modelled in Blender in one consistent style, for example:
+- [x] Add new **original** egg types modelled in Blender in one consistent style, for example:
       Galaxy, Divine, Shadow, Celestial, Inferno, Crystal, Storm, plus seasonal/event eggs.
       Each one gets:
       - a rendered icon
       - a 3D display model on a glowing shop pedestal
-- [ ] Every egg is data-driven in `Config/Eggs`, with its own character pool.
-- [ ] Every egg's exact odds are shown behind an **"Odds"** button.
-- [ ] Robux eggs come only from unlocked worlds. Golden eggs are earned only.
-- [ ] Every policy and odds test keeps passing.
+      **Not built: CLAUDE.md locks exactly the 24 icon-pack eggs.** Waiting on the owner
+      (docs/WAITING_ON_YOU.md 00); see the conflicts in docs/POLISH_LOG.md.
+- [x] Every egg is data-driven in `Config/Eggs`, with its own character pool.
+- [x] Every egg's exact odds are shown behind an **"Odds"** button.
+- [x] Robux eggs come only from unlocked worlds. Golden eggs are earned only.
+- [x] Every policy and odds test keeps passing.
 
 ### H. Egg opening (clean and satisfying)
 - [x] Sequence: camera focus and blur, then the egg on a pedestal, then a shake that builds up,
