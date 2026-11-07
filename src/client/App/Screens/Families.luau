@@ -10,6 +10,7 @@ local Art = require(Shared.Config.Art)
 local App = script.Parent.Parent
 local Theme = require(App.Theme)
 local Ui = require(App.Ui)
+local Kit = require(App.Kit)
 
 local C = Theme.Color
 
@@ -34,7 +35,7 @@ local ORDER = {
 }
 
 return function(ctx: any, layer: Frame, _arg: any?): any
-	local p = Ui.panel(layer, "Families", ctx.close, UDim2.fromOffset(780, 470), "icon_deck")
+	local p = Ui.panel(layer, "Families", ctx.close, UDim2.fromOffset(560, 470), "icon_deck")
 	local back = Ui.button("Deck Builder", "secondary", function()
 		ctx.open("Deck")
 	end, {
@@ -56,12 +57,14 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		Name = "Grid",
 		BackgroundTransparency = 1,
 		Position = UDim2.fromOffset(0, 24),
-		Size = UDim2.new(1, 0, 1, -24),
+		Size = UDim2.new(1, 0, 1, -70),
 		Parent = p.body,
 	}, {
 		Ui.new("UIGridLayout", {
-			CellSize = UDim2.fromOffset(142, 72),
-			CellPadding = UDim2.fromOffset(8, 8),
+			CellSize = UDim2.fromOffset(255, 33),
+			CellPadding = UDim2.fromOffset(8, 4),
+			FillDirection = Enum.FillDirection.Vertical,
+			FillDirectionMaxCells = 8,
 			HorizontalAlignment = Enum.HorizontalAlignment.Center,
 			SortOrder = Enum.SortOrder.LayoutOrder,
 		}),
@@ -102,60 +105,86 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			local bonus = Families.SynergyBonus[math.min(count, 3)] or 0
 			local active = bonus > 0
 			local accent = Color3.fromHex(colors.accent)
+			-- A list row (`hd-04`): the glowing family gem and name; active families glow gold,
+			-- inactive ones are dimmed.
 			local cell = Ui.frame({
 				Name = fam,
-				BackgroundColor3 = Color3.fromHex(colors.body):Lerp(C.Panel, 0.55),
+				BackgroundColor3 = if active then Color3.fromHex("#3A2A10") else Color3.fromHex("#140F30"),
+				BackgroundTransparency = if active then 0.1 else 0.35,
 				LayoutOrder = i,
 				Parent = grid,
 			}, {
-				Ui.corner(10),
-				Ui.stroke(if active then C.Gold else accent:Lerp(C.Stroke, 0.5), if active then 2.5 else 1.2),
-				Ui.gradient(Color3.new(1, 1, 1), Color3.new(0.6, 0.6, 0.7), 90),
+				Ui.corner(8),
+				Ui.stroke(
+					if active then C.Gold else accent:Lerp(C.Stroke, 0.6),
+					if active then 2 else 1,
+					if active then 0 else 0.4
+				),
 			})
 			cell:SetAttribute("Active", active)
-			Ui.image(`family_{string.lower(fam)}`, {
-				ImageColor3 = accent,
+			local gem = Kit.image(`gem_family_{string.lower(fam)}`, {
 				AnchorPoint = Vector2.new(0, 0.5),
-				Position = UDim2.new(0, 8, 0.5, 0),
-				Size = UDim2.fromOffset(36, 36),
+				Position = UDim2.new(0, 4, 0.5, 0),
+				Size = UDim2.fromOffset(32, 32),
+				ImageTransparency = if active then 0 else 0.45,
 				Parent = cell,
+			})
+			Ui.image(`family_{string.lower(fam)}`, {
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromScale(0.5, 0.5),
+				Size = UDim2.fromScale(0.5, 0.5),
+				ImageTransparency = if active then 0 else 0.4,
+				ZIndex = 2,
+				Parent = gem,
 			})
 			local name = Ui.text({
 				Text = fam,
 				FontFace = Theme.Face.Title,
 				TextSize = 15,
+				TextColor3 = if active then C.White else C.Muted,
 				TextWrapped = false,
-				Position = UDim2.fromOffset(50, 6),
-				Size = UDim2.new(1, -56, 0, 20),
+				Position = UDim2.fromOffset(42, 1),
+				Size = UDim2.new(1, -48, 0, 18),
 				Parent = cell,
 			})
 			Ui.outline(C.Night, 1, 0.3).Parent = name
-			Ui.text({
-				Text = `+2/3% {STAT_NAME[def.bonusStat] or def.bonusStat}`,
-				TextSize = 12,
-				TextColor3 = C.Text,
-				TextWrapped = false,
-				Position = UDim2.fromOffset(50, 26),
-				Size = UDim2.new(1, -56, 0, 16),
-				Parent = cell,
-			})
-			local status = if active
-				then `ACTIVE ×{count} · +{math.floor(bonus * 100 + 0.5)}%`
-				else `Owned {owned[fam] or 0}/{total[fam] or 0}`
+			local stat = STAT_NAME[def.bonusStat] or def.bonusStat
 			Ui.text({
 				Name = "Status",
-				Text = status,
+				Text = if active
+					then `ACTIVE x{count} · +{math.floor(bonus * 100 + 0.5)}% {stat}`
+					else `+2/3% {stat} · owned {owned[fam] or 0}/{total[fam] or 0}`,
 				FontFace = Theme.Face.Bold,
-				TextSize = 12,
-				TextColor3 = if active then C.Gold else C.Muted,
+				TextSize = 11,
+				TextColor3 = if active then C.GoldHi else C.Muted,
 				TextWrapped = false,
-				Position = UDim2.fromOffset(50, 44),
-				Size = UDim2.new(1, -56, 0, 16),
+				Position = UDim2.fromOffset(42, 18),
+				Size = UDim2.new(1, -48, 0, 13),
 				Parent = cell,
 			})
 		end
 	end
 
+	-- Footer: a crown and the hint.
+	local footer = Ui.frame({
+		Name = "Footer",
+		BackgroundColor3 = Color3.fromHex("#140F30"),
+		BackgroundTransparency = 0.2,
+		AnchorPoint = Vector2.new(0.5, 1),
+		Position = UDim2.fromScale(0.5, 1),
+		Size = UDim2.new(1, 0, 0, 40),
+		Parent = p.body,
+	}, { Ui.corner(10), Ui.list(true, 8, Enum.HorizontalAlignment.Center) })
+	Kit.image("emblem_crown_gold", { Size = UDim2.fromOffset(32, 32), LayoutOrder = 1, Parent = footer })
+	Ui.text({
+		Text = "Collect more cards to activate bonuses!",
+		FontFace = Theme.Face.Bold,
+		TextSize = 14,
+		AutomaticSize = Enum.AutomaticSize.X,
+		Size = UDim2.fromOffset(0, 40),
+		LayoutOrder = 2,
+		Parent = footer,
+	})
 	render()
 	return { destroy = function() end, refresh = render }
 end

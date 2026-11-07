@@ -14,6 +14,7 @@ local Ui = require(App.Ui)
 local Visuals = require(App.Visuals)
 local Card = require(App.Card)
 local Kit = require(App.Kit)
+local Format = require(App.Format)
 local TweenService = game:GetService("TweenService")
 
 local C = Theme.Color
@@ -83,6 +84,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 	local p = Ui.panel(layer, "Deck Builder", ctx.close, UDim2.fromOffset(770, 470), "icon_deck")
 	local slots: { string? } = { view.deck[1], view.deck[2], view.deck[3] }
 	local active = 1
+	local lastPower: number? = nil
 
 	local slotRow = Ui.frame(
 		{ BackgroundTransparency = 1, Size = UDim2.new(0.55, 0, 0, 220), Parent = p.body },
@@ -172,34 +174,114 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		if s then
 			local preview = Power.deck(s)
 			local league = Progress.leagueFor(view.trophies)
-			Ui.text({
-				Text = `Deck Power: {preview.total}`,
-				FontFace = Theme.Face.Title,
-				TextSize = 20,
-				TextColor3 = C.Green,
-				TextXAlignment = Enum.TextXAlignment.Center,
+			-- "Deck Power: 2,770" with a count-up and a green arrow when it improves (`hd-04`).
+			local powerRow = Ui.frame({
+				Name = "DeckPower",
+				BackgroundTransparency = 1,
+				Size = UDim2.new(1, 0, 0, 30),
 				LayoutOrder = 1,
 				Parent = summary,
-			})
-			local bonusText = "Family bonus: none (2+ cards of one family give a bonus)"
-			if #preview.families > 0 then
-				local parts = {}
-				for _, f in preview.families do
-					table.insert(
-						parts,
-						`{f.family} ×{f.count}: +{math.floor(f.value * 100 + 0.5)}% {STAT_NAME[f.stat] or f.stat}`
-					)
-				end
-				bonusText = "Family bonus: " .. table.concat(parts, ", ")
-			end
+			}, { Ui.list(true, 8, Enum.HorizontalAlignment.Center) })
 			Ui.text({
-				Text = bonusText,
-				TextSize = Theme.Size.small,
-				TextColor3 = C.Purple,
-				TextXAlignment = Enum.TextXAlignment.Center,
+				Text = "Deck Power:",
+				FontFace = Theme.Face.Title,
+				TextSize = 18,
+				TextWrapped = false,
+				AutomaticSize = Enum.AutomaticSize.X,
+				Size = UDim2.fromOffset(0, 30),
+				LayoutOrder = 1,
+				Parent = powerRow,
+			})
+			local value = Ui.text({
+				Name = "Value",
+				Text = Format.number(preview.total),
+				FontFace = Theme.Face.Number,
+				TextSize = 24,
+				TextColor3 = C.Green,
+				TextWrapped = false,
+				AutomaticSize = Enum.AutomaticSize.X,
+				Size = UDim2.fromOffset(0, 30),
+				LayoutOrder = 2,
+				Parent = powerRow,
+			})
+			Ui.outline(C.Night, 1.5).Parent = value
+			if lastPower and preview.total ~= lastPower and not ctx.reducedMotion() then
+				Ui.countUp(value, lastPower, preview.total, Format.number)
+			end
+			if lastPower and preview.total > lastPower then
+				local arrow = Kit.image("icon_upgrade", {
+					Name = "Up",
+					ImageColor3 = C.Green,
+					Size = UDim2.fromOffset(22, 22),
+					LayoutOrder = 3,
+					Parent = powerRow,
+				})
+				Ui.pulse(arrow, 0.3)
+			end
+			lastPower = preview.total
+			-- The family bonus chip: the family gem, its name and "+2%".
+			local chipRow = Ui.frame({
+				Name = "FamilyBonus",
+				BackgroundTransparency = 1,
+				Size = UDim2.new(1, 0, 0, 26),
 				LayoutOrder = 2,
 				Parent = summary,
+			}, { Ui.list(true, 6, Enum.HorizontalAlignment.Center) })
+			Ui.text({
+				Text = "Family Bonus:",
+				FontFace = Theme.Face.Bold,
+				TextSize = 13,
+				TextColor3 = C.Muted,
+				TextWrapped = false,
+				AutomaticSize = Enum.AutomaticSize.X,
+				Size = UDim2.fromOffset(0, 26),
+				LayoutOrder = 0,
+				Parent = chipRow,
 			})
+			if #preview.families == 0 then
+				Ui.text({
+					Text = "none yet (2 of one family)",
+					TextSize = 12,
+					TextColor3 = C.Muted,
+					AutomaticSize = Enum.AutomaticSize.X,
+					Size = UDim2.fromOffset(0, 26),
+					LayoutOrder = 1,
+					Parent = chipRow,
+				})
+			end
+			for i, f in preview.families do
+				local chip = Ui.frame({
+					BackgroundColor3 = Color3.fromHex("#2A1F5E"),
+					AutomaticSize = Enum.AutomaticSize.X,
+					Size = UDim2.fromOffset(0, 24),
+					LayoutOrder = i,
+					Parent = chipRow,
+				}, { Ui.corner(12), Ui.stroke(C.Purple, 1.5, 0.2), Ui.list(true, 4) })
+				Ui.pad(6).Parent = chip
+				Kit.image(
+					`gem_family_{string.lower(f.family)}`,
+					{ Size = UDim2.fromOffset(20, 20), LayoutOrder = 1, Parent = chip }
+				)
+				Ui.text({
+					Text = f.family,
+					FontFace = Theme.Face.Bold,
+					TextSize = 12,
+					AutomaticSize = Enum.AutomaticSize.X,
+					Size = UDim2.fromOffset(0, 24),
+					LayoutOrder = 2,
+					Parent = chip,
+				})
+				Ui.text({
+					Text = `+{math.floor(f.value * 100 + 0.5)}% {STAT_NAME[f.stat] or f.stat}`,
+					FontFace = Theme.Face.Number,
+					TextSize = 12,
+					TextColor3 = C.Green,
+					AutomaticSize = Enum.AutomaticSize.X,
+					Size = UDim2.fromOffset(0, 24),
+					LayoutOrder = 3,
+					Parent = chip,
+				})
+			end
 			Ui.text({
 				Text = `Ranked in {league.id}: cards above level {league.rankedLevelCap} fight at level {league.rankedLevelCap}.`,
 				TextSize = Theme.Size.small,

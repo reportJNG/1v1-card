@@ -667,6 +667,50 @@ function Battle.open(ctx: any, start: any): Handle
 				ZIndex = 21,
 				Parent = resultBox,
 			})
+			-- The lead card behind the banner (`hd-06`): the strongest card of the player's team, in
+			-- light rays, tilted in from the side.
+			local leadUnit: any = nil
+			for _, u in view.sides[you].units do
+				if leadUnit == nil or (u.level or 1) > (leadUnit.level or 1) then
+					leadUnit = u
+				end
+			end
+			if leadUnit then
+				local behind = Visuals.portrait(
+					centre,
+					leadUnit.characterId,
+					false,
+					Vector2.new(170, 238),
+					false,
+					leadUnit.level
+				)
+				behind.AnchorPoint = Vector2.new(0.5, 0.5)
+				behind.Position = UDim2.fromOffset(-20, 220)
+				behind.Rotation = -8
+				for _, d in behind:GetDescendants() do
+					if d:IsA("GuiObject") then
+						d.ZIndex += 20
+					end
+				end
+				if not won then
+					local dim = Ui.frame({
+						BackgroundColor3 = Color3.fromHex("#0A1020"),
+						BackgroundTransparency = 0.45,
+						Size = UDim2.fromScale(1, 1),
+						ZIndex = 60,
+						Parent = behind,
+					})
+					dim.Name = "Steel"
+				end
+				if not reduced then
+					behind.Position = UDim2.fromOffset(-220, 220)
+					TweenService:Create(
+						behind,
+						TweenInfo.new(0.5, Enum.EasingStyle.Back),
+						{ Position = UDim2.fromOffset(-20, 220) }
+					):Play()
+				end
+			end
 			if won then
 				local rays = Ui.image("light_rays", {
 					AnchorPoint = Vector2.new(0.5, 0.5),
@@ -697,12 +741,20 @@ function Battle.open(ctx: any, start: any): Handle
 				TextSize = 54,
 				TextColor3 = if won then C.White else Color3.fromHex("#C9D2E8"),
 				AnchorPoint = Vector2.new(0.5, 0.5),
-				Position = UDim2.fromScale(0.5, 0.6),
+				Position = UDim2.fromScale(0.5, 0.56),
 				Size = UDim2.fromOffset(440, 70),
 				ZIndex = 23,
 				Parent = banner,
 			}, won)
-			Ui.popIn(banner, reduced)
+			-- The banner drops in with a bounce (MISSION 10).
+			if not reduced then
+				banner.Position = UDim2.fromOffset(320, -200)
+				TweenService:Create(
+					banner,
+					TweenInfo.new(0.55, Enum.EasingStyle.Bounce),
+					{ Position = UDim2.fromOffset(320, 0) }
+				):Play()
+			end
 			local reasons = {
 				KO = "All cards knocked out",
 				MaxRounds = "Round limit: most HP left wins",
@@ -710,9 +762,7 @@ function Battle.open(ctx: any, start: any): Handle
 				Timeouts = "Too many missed picks",
 			}
 			local sub = Ui.text({
-				Text = if won
-					then `You won the match! {reasons[data.result.reason] or data.result.reason} · {data.result.rounds} rounds`
-					else `{reasons[data.result.reason] or data.result.reason} · {data.result.rounds} rounds`,
+				Text = if won then "You won the match!" else "So close! Tune your deck and try again.",
 				FontFace = F.Title,
 				TextSize = 18,
 				TextXAlignment = Enum.TextXAlignment.Center,
@@ -835,6 +885,11 @@ function Battle.open(ctx: any, start: any): Handle
 			elseif won then
 				table.insert(notes, "Guardian defeated again (first-clear rewards are paid once).")
 			end
+			table.insert(
+				notes,
+				1,
+				`{reasons[data.result.reason] or data.result.reason} · {data.result.rounds} rounds`
+			)
 			Ui.text({
 				Text = table.concat(notes, "  ·  "),
 				FontFace = F.Bold,

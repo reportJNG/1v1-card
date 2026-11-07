@@ -647,7 +647,7 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 - [x] Egg Shop
 - [x] Egg opening, all 5 stages, every rarity, x1 / x3 / x8, Skip, Golden
 - [ ] Silhouettes
-- [ ] Inventory, Deck + Families, Arena (no bet), Victory/Defeat, Worlds, and the remaining
+- [x] Inventory, Deck + Families, Arena (no bet), Victory/Defeat, Worlds, and the remaining
   screens restyled
 - [ ] Sound on every interaction
 - [ ] Motion everywhere

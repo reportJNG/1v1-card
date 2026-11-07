@@ -415,3 +415,15 @@ Built before MISSION.md landed, under CARDS_EGGS_MISSION (now merged into MISSIO
   (tap -> cards). Compares `docs/screens/eggs/compare_opening_stage1..5.png`; frames
   `opening_ur_stage*.png`, `opening_x3_skip.png`. Scores: reference 8 · quality 8 · readability 8 ·
   motion 9 · consistency 9.
+
+## Section 8: other screens (Play mode, phone-landscape viewport)
+| Screen | Compare | Scores (ref · quality · little text · motion · consistency) |
+| --- | --- | --- |
+| Inventory + inspect (`hd-03`): badge filter chips, large card, rarity pill + family, description, Power / Health / Skill rows, green family bonus, Equip (purple) / Merge / Card Stats | `docs/screens/screens/compare_inventory.png` | 8 · 8 · 8 · 8 · 9 |
+| Deck Builder (`hd-04`): Deck Power count-up with a green arrow (seen: 1,619 -> 1,714 after equipping), family chip with gem and "+2% ATK", dashed empty slots, equip fly-in | `compare_deck.png` | 8 · 8 · 8 · 9 · 9 |
+| Families (`hd-04`): two-column list, glowing active rows (Warrior x2), dimmed inactive, crown footer | `compare_families.png` | 8 · 8 · 8 · 8 · 9 |
+| Arena (`hd-05`, no bet): league, trophies, win purse, level cap, Find Match -> queue timer + Cancel (tested), lead card VS red "?" | `compare_arena.png` | 8 · 8 · 8 · 8 · 9 |
+| Victory (`hd-06`): real Guardian Trial win, winged gold banner with crown, rays, lead card, rewards counted up | `compare_victory.png` | 9 · 8 · 8 · 9 · 9 |
+| Defeat: cold steel banner, encouraging line | `compare_defeat.png` | 8 · 8 · 9 · 8 · 9 |
+| Worlds (`hd-07`): strip of 10 tall cards, big numbers, locks, trophy needs, Completed tick, HERE tag | `compare_worlds.png` | 8 · 8 · 9 · 8 · 9 |
+| Quests / Daily, Settings (+ Credits), Merchant, Queue, Battle UI, KO picker | final kit images (panel, tiles, buttons, HP bar, pips, action buttons); `quests_ours.png`, battle in `defeat_ours.png` / `victory_ours.png` | 8 · 8 · 8 · 8 · 9 |

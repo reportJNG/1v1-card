@@ -20,6 +20,7 @@ local Format = require(App.Format)
 local Visuals = require(App.Visuals)
 local CardActions = require(App.CardActions)
 local Card = require(App.Card)
+local Kit = require(App.Kit)
 local CardStats = require(script.Parent.CardStats)
 local Hatch = require(script.Parent.Hatch)
 
@@ -110,25 +111,27 @@ return function(ctx: any, layer: Frame, arg: any?): any
 	local left = Ui.frame({
 		BackgroundTransparency = 1,
 		Position = UDim2.fromOffset(64, 0),
-		Size = UDim2.new(0.56, -72, 1, 0),
+		Size = UDim2.new(0.52, -72, 1, 0),
 		Parent = p.body,
 	})
 	-- The glow frame stays; renderInspect clears only the content inside it.
 	local inspectBox = Ui.glowTile("Frame", {
 		Name = "InspectBox",
-		Position = UDim2.fromScale(0.56, 0),
-		Size = UDim2.fromScale(0.44, 1),
+		Position = UDim2.fromScale(0.52, 0),
+		Size = UDim2.fromScale(0.48, 1),
 		Parent = p.body,
 	}, C.Purple, false)
-	local inspect = Ui.frame(
-		{ Name = "Inspect", BackgroundTransparency = 1, ZIndex = 2, Parent = inspectBox },
-		{ Ui.pad(10) }
-	)
+	local inspect =
+		Ui.frame({ Name = "Inspect", BackgroundTransparency = 1, ZIndex = 2, Parent = inspectBox })
 
 	local render: () -> ()
 
+	-- The inspect pane (`hd-03`): the large card on the left; name, rarity pill and family, a
+	-- one-line description, Power / Health / Skill rows with icons, the family bonus in green, and
+	-- Equip / Merge / Card Stats. The full stats panel (board 05) opens from the card or the button.
 	local function renderInspect()
 		Ui.clear(inspect)
+		Ui.pad(10).Parent = inspect
 		local card = selected and view.cards[selected]
 		if card == nil then
 			Ui.text({
@@ -144,11 +147,17 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			return
 		end
 		local def = Characters.ById[card.characterId]
-		local portrait =
-			Visuals.portrait(inspect, card.characterId, card.golden, Vector2.new(150, 210), true, card.level)
+		local rdef = Rarities.Defs[def.rarity]
+		local portrait = Card.build(inspect, {
+			characterId = card.characterId,
+			golden = card.golden,
+			level = card.level,
+			favorite = card.favorite,
+			size = Vector2.new(150, 210),
+			interactive = true,
+		})
 		portrait.Name = "InspectCard"
-		portrait.Position = UDim2.fromOffset(0, 0)
-		-- Tapping the card opens the full stats panel (Screens/CardStats, board 05).
+		portrait.Position = UDim2.fromOffset(4, 14)
 		local open = Ui.new("TextButton", {
 			Name = "OpenStats",
 			Text = "",
@@ -162,126 +171,147 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			CardStats.show(ctx, card.uid)
 		end)
 		local info = Ui.frame({
+			Name = "Info",
 			BackgroundTransparency = 1,
-			Position = UDim2.fromOffset(158, 0),
-			Size = UDim2.new(1, -158, 0, 210),
+			Position = UDim2.fromOffset(164, 0),
+			Size = UDim2.new(1, -164, 1, -40),
 			Parent = inspect,
-		}, { Ui.list(false, 3) })
+		}, { Ui.list(false, 5) })
 		local name = Ui.text({
+			Name = "Name",
 			Text = def.displayName,
 			FontFace = Theme.Face.Title,
-			TextSize = 18,
+			TextSize = 20,
 			TextWrapped = false,
+			Size = UDim2.new(1, 0, 0, 22),
 			LayoutOrder = 1,
 			Parent = info,
 		})
-		Ui.fit(name, 18, 11)
-		Ui.text({
-			Text = `{Rarities.Defs[def.rarity].displayName} · {def.family} · {def.role}`,
-			TextSize = Theme.Size.small,
-			TextColor3 = Theme.Rarity[def.rarity],
+		Ui.fit(name, 20, 12)
+		Ui.outline(C.Night, 1.5).Parent = name
+		local tags = Ui.frame({
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, 0, 0, 20),
 			LayoutOrder = 2,
 			Parent = info,
+		}, { Ui.list(true, 6) })
+		local pill = Ui.text({
+			Name = "RarityPill",
+			Text = rdef.badge,
+			FontFace = Theme.Face.Title,
+			TextSize = 12,
+			TextColor3 = C.White,
+			TextXAlignment = Enum.TextXAlignment.Center,
+			BackgroundColor3 = rdef.colors[2],
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, 20),
+			Parent = tags,
 		})
-		local stats = Power.deck({ { characterId = card.characterId, level = card.level } }).units[1]
+		Ui.pad(7).Parent = pill
+		Ui.corner(6).Parent = pill
+		Ui.outline(C.Night, 1).Parent = pill
 		Ui.text({
-			Text = `Level {card.level}/{Economy.Progression.maxLevel} · Power {stats.power}`,
+			Text = `{rdef.displayName} · {def.family} Family`,
 			FontFace = Theme.Face.Bold,
+			TextSize = 12,
+			TextColor3 = rdef.color,
+			TextWrapped = false,
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, 20),
+			Parent = tags,
+		})
+		Ui.text({
+			Name = "Description",
+			Text = def.passive.description,
+			TextSize = 12,
+			TextColor3 = C.Text,
+			TextYAlignment = Enum.TextYAlignment.Top,
+			Size = UDim2.new(1, 0, 0, 30),
 			LayoutOrder = 3,
 			Parent = info,
 		})
-		local grid = Ui.frame({
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1, 0, 0, 40),
-			LayoutOrder = 4,
-			Parent = info,
-		}, { Ui.grid(Vector2.new(68, 18), 2) })
-		local statCells: { { label: string, value: number } } = {
-			{ label = "HP", value = stats.hp },
-			{ label = "ATK", value = math.floor(stats.atk + 0.5) },
-			{ label = "DEF", value = math.floor(stats.def + 0.5) },
-			{ label = "SPD", value = math.floor(stats.spd + 0.5) },
-		}
-		for _, pair in statCells do
-			Ui.text({
-				Text = `{pair.label} {pair.value}`,
-				FontFace = Theme.Face.Number,
-				TextSize = 13,
-				TextColor3 = C.Text,
-				Parent = grid,
-			})
-		end
-		local famDef = Families.Defs[def.family]
-		Ui.text({
-			Name = "FamilyBonus",
-			Text = `{def.family} family: with 2 / 3 in your deck, +2% / +3% {STAT_NAME[famDef.bonusStat] or famDef.bonusStat}`,
-			TextSize = 12,
-			TextColor3 = C.Purple,
-			Size = UDim2.new(1, 0, 0, 30),
-			LayoutOrder = 5,
-			Parent = info,
-		})
-		local need = Economy.Progression.mergePointsToNext[card.level]
-		if need then
-			Ui.text({
-				Text = `Merge points {card.mergePoints}/{need}`,
-				TextSize = Theme.Size.small,
-				LayoutOrder = 6,
+		local stats = Power.deck({ { characterId = card.characterId, level = card.level } }).units[1]
+		local function statRow(icon: string, label: string, value: string, order: number)
+			local row = Ui.frame({
+				BackgroundTransparency = 1,
+				Size = UDim2.new(1, 0, 0, 22),
+				LayoutOrder = order,
 				Parent = info,
 			})
-			local setBar = Ui.bar(info, C.Purple, { LayoutOrder = 7, Size = UDim2.new(1, 0, 0, 8) })
-			setBar(card.mergePoints / need)
+			Kit.image(
+				icon,
+				{ Size = UDim2.fromOffset(20, 20), Position = UDim2.fromOffset(0, 1), Parent = row }
+			)
+			local t = Ui.text({
+				Text = `<font color="#9EAED3">{label}:</font> {value}`,
+				RichText = true,
+				FontFace = Theme.Face.Bold,
+				TextSize = 14,
+				TextWrapped = false,
+				Position = UDim2.fromOffset(26, 0),
+				Size = UDim2.new(1, -26, 1, 0),
+				Parent = row,
+			})
+			Ui.fit(t, 14, 9)
 		end
+		statRow("icon_atk", "Power", Format.number(stats.power), 4)
+		statRow("icon_hp", "Health", Format.number(stats.hp), 5)
+		statRow("icon_energy", "Skill", def.special.displayName, 6)
+		local famDef = Families.Defs[def.family]
+		local statName = STAT_NAME[famDef.bonusStat] or famDef.bonusStat
+		local bonus = Ui.text({
+			Name = "FamilyBonus",
+			Text = `<b>Family Bonus:</b>\n+2% {statName} ({def.family} x2)\n+3% {statName} ({def.family} x3)`,
+			RichText = true,
+			TextSize = 12,
+			TextColor3 = C.Green,
+			TextYAlignment = Enum.TextYAlignment.Top,
+			Size = UDim2.new(1, 0, 0, 46),
+			LayoutOrder = 7,
+			Parent = info,
+		})
+		bonus.TextWrapped = true
 		if card.paid then
 			Ui.text({
 				Text = "From a Robux egg",
-				TextSize = Theme.Size.small,
+				TextSize = 11,
 				TextColor3 = C.Purple,
+				Size = UDim2.new(1, 0, 0, 14),
 				LayoutOrder = 8,
 				Parent = info,
 			})
 		end
-		Ui.text({
-			Text = `Special: {def.special.displayName} ({def.special.cost} energy)\nPassive: {def.passive.displayName}: {def.passive.description}`,
-			TextSize = Theme.Size.small,
-			TextYAlignment = Enum.TextYAlignment.Top,
-			Position = UDim2.fromOffset(0, 216),
-			Size = UDim2.new(1, 0, 0, 44),
-			Parent = inspect,
-		})
+
+		-- Actions under the card and info: Equip / Equipped (purple), Merge, Card Stats.
 		local actions = Ui.frame({
+			Name = "Actions",
 			BackgroundTransparency = 1,
-			Position = UDim2.fromOffset(0, 264),
-			Size = UDim2.new(1, 0, 1, -264),
+			AnchorPoint = Vector2.new(0, 1),
+			Position = UDim2.fromScale(0, 1),
+			Size = UDim2.new(1, 0, 0, 34),
 			Parent = inspect,
-		}, { Ui.list(false, 6) })
-		local row = Ui.frame({
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1, 0, 0, 36),
-			LayoutOrder = 1,
-			Parent = actions,
 		}, { Ui.list(true, 6) })
-		local spareList = spares(view, card)
-		if need then
-			local per = Rarities.Defs[def.rarity].mergePoints
-			local wanted = math.max(1, math.ceil((need - card.mergePoints) / per))
-			local use = {}
-			for i = 1, math.min(wanted, #spareList) do
-				use[i] = spareList[i]
-			end
-			local fee = Economy.Progression.coinFeeToNext[card.level]
-			local merge = Ui.button(`Merge {#use} · {Format.number(fee)} Coins`, "primary", function()
-				CardActions.merge(ctx, card)
-			end, { LayoutOrder = 1, Size = UDim2.fromOffset(170, 36), Name = "Merge", TextSize = 14 })
-			merge.setEnabled(#use > 0 and view.coins >= fee)
-			merge.instance.Parent = row
-		end
 		local here = inDeck(view, card.uid)
-		local equip = Ui.button(if here then "Equipped" else "Equip", "secondary", function()
-			CardActions.equip(ctx, card)
-		end, { LayoutOrder = 2, Size = UDim2.fromOffset(150, 36), Name = "Equip", TextSize = 14 })
-		equip.setEnabled(not here and not card.locked)
-		equip.instance.Parent = row
+		local equip = Ui.button(if here then "Equipped" else "Equip", "purple", function()
+			if not here then
+				CardActions.equip(ctx, card)
+			end
+		end, { LayoutOrder = 1, Size = UDim2.fromOffset(110, 34), Name = "Equip", TextSize = 14 })
+		equip.setEnabled(not card.locked)
+		equip.instance.Parent = actions
+		local plan = CardActions.mergePlan(view, card)
+		if plan then
+			local merge = Ui.button(`Merge {#plan.use}`, "primary", function()
+				CardActions.merge(ctx, card)
+			end, { LayoutOrder = 2, Size = UDim2.fromOffset(100, 34), Name = "Merge", TextSize = 14 })
+			merge.setEnabled(#plan.use > 0 and view.coins >= plan.fee)
+			merge.instance.Parent = actions
+		end
+		local details = Ui.button("Card Stats", "secondary", function()
+			CardStats.show(ctx, card.uid)
+		end, { LayoutOrder = 3, Size = UDim2.fromOffset(110, 34), Name = "Details", TextSize = 14 })
+		details.instance.Parent = actions
+		local spareList = spares(view, card)
 		local hasMax = false
 		for _, c in view.cards do
 			if c.characterId == card.characterId and c.level >= Economy.Progression.maxLevel then
@@ -290,36 +320,18 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		end
 		if hasMax and #spareList > 0 then
 			local price = Economy.CardSale[def.rarity] or 0
-			local sell = Ui.button(
-				`Sell {#spareList} spare(s) · {Format.number(price * #spareList)} Coins`,
-				"ghost",
-				function()
-					ctx.confirm(
-						"Sell spares",
-						`Sell {#spareList} spare {def.displayName} copies?`,
-						"Sell",
-						function()
-							ctx.request("Cards.Sell", { uids = spareList, requestId = ctx.guid() })
-						end
-					)
-				end,
-				{ LayoutOrder = 2, Size = UDim2.new(1, 0, 0, 30) }
-			)
+			local sell = Ui.button(`Sell {#spareList}`, "ghost", function()
+				ctx.confirm(
+					"Sell spares",
+					`Sell {#spareList} spare {def.displayName} copies for {Format.number(price * #spareList)} Coins?`,
+					"Sell",
+					function()
+						ctx.request("Cards.Sell", { uids = spareList, requestId = ctx.guid() })
+					end
+				)
+			end, { LayoutOrder = 4, Size = UDim2.fromOffset(80, 34), Name = "Sell", TextSize = 13 })
 			sell.instance.Parent = actions
 		end
-		local details = Ui.button("Card Stats", "purple", function()
-			CardStats.show(ctx, card.uid)
-		end, { LayoutOrder = 2, Size = UDim2.new(1, 0, 0, 30), Name = "Details", TextSize = 14 })
-		details.instance.Parent = actions
-		Ui.text({
-			Text = if here
-				then "In your deck"
-				else `{#spareList} spare cop{if #spareList == 1 then "y" else "ies"} · max level copies sell spares`,
-			TextSize = Theme.Size.small,
-			TextColor3 = C.Muted,
-			LayoutOrder = 3,
-			Parent = actions,
-		})
 	end
 
 	local function cardTile(parent: Instance, card: any, order: number)
@@ -457,24 +469,47 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			{ Ui.list(true, 4) }
 		)
 		if tab == "Cards" or tab == "All" then
-			local all = { "All" }
-			for _, r in RARITY_ORDER do
-				table.insert(all, string.sub(r, 1, 4))
-			end
-			for i, short in all do
-				local full = if short == "All" then nil else RARITY_ORDER[i - 1]
-				local active = filter == full
-				local b = Ui.button(short, if active then "purple" else "ghost", function()
-					filter = full
+			local allButton = Ui.button("All", if filter == nil then "purple" else "ghost", function()
+				filter = nil
+				page = 1
+				render()
+			end, { Size = UDim2.fromOffset(40, 28), LayoutOrder = 1, TextSize = 12, Name = "FilterAll" })
+			allButton.instance.Parent = filters
+			-- Rarity chips (kit filter_chip_<rarity>) with the badge letters in the rarity colour.
+			for i, r in RARITY_ORDER do
+				local rdef = Rarities.Defs[r]
+				local active = filter == r
+				local chip: ImageButton = Ui.new("ImageButton", {
+					Name = `Filter{string.sub(r, 1, 4)}`,
+					Image = Kit.id(`filter_chip_{rdef.tag}`),
+					BackgroundTransparency = 1,
+					ScaleType = Enum.ScaleType.Slice,
+					SliceCenter = Rect.new(40, 24, 152, 40),
+					SliceScale = 0.45,
+					ImageTransparency = if active then 0 else 0.35,
+					Size = UDim2.fromOffset(if #rdef.badge > 2 then 40 else 34, 28),
+					LayoutOrder = i + 1,
+					Parent = filters,
+				})
+				local label = Ui.display({
+					Text = rdef.badge,
+					TextSize = 15,
+					TextColor3 = if active then C.White else rdef.colors[1],
+					Size = UDim2.fromScale(1, 1),
+					ZIndex = 2,
+					Parent = chip,
+				})
+				label.TextXAlignment = Enum.TextXAlignment.Center
+				if active then
+					Ui.stroke(C.GoldHi, 2, 0).Parent = chip
+				end
+				Ui.juice(chip)
+				chip.Activated:Connect(function()
+					Ui.sound("tick")
+					filter = if active then nil else r
 					page = 1
 					render()
-				end, {
-					Size = UDim2.fromOffset(40, 28),
-					LayoutOrder = i,
-					TextSize = 11,
-					Name = `Filter{short}`,
-				})
-				b.instance.Parent = filters
+				end)
 			end
 		end
 		local search: TextBox = Ui.new("TextBox", {
