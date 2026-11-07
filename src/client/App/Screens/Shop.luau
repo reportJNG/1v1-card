@@ -88,11 +88,14 @@ return function(ctx: any, layer: Frame, arg: any?): any
 	})
 	Ui.grid(Vector2.new(140, 176), 10).Parent = grid
 	Ui.pad(4).Parent = grid
-	local detailBox = Ui.inset({
+	-- The featured pane (gold-edged, like the board's "Legendary Egg" panel).
+	local detailBox = Ui.glowTile("Frame", {
+		Name = "DetailBox",
 		Position = UDim2.new(0.62, 0, 0, 40),
 		Size = UDim2.new(0.38, 0, 1, -40),
 		Parent = p.body,
-	}, { Ui.pad(10) })
+	}, C.Gold, true)
+	Ui.pad(10).Parent = detailBox
 	local detail = Ui.scroll({ Parent = detailBox })
 
 	local function owned(eggId: string): (number, number)
@@ -178,17 +181,18 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			end
 			local available = view ~= nil and Progress.isEggAvailable(view :: any, egg)
 			local hidden = egg.hiddenUntilQuest ~= nil and not available
-			local tile = Ui.tile("TextButton", {
+			local accent = BAND_GLOW[egg.oddsBand] or C.Purple
+			local tile = Ui.glowTile("TextButton", {
 				LayoutOrder = i,
 				Name = egg.id,
 				Parent = grid,
-			}, selectedEgg == egg)
+			}, accent, selectedEgg == egg)
 			local glow = Ui.image("egg_glow", {
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = UDim2.new(0.5, 0, 0, 78),
 				Size = UDim2.fromOffset(120, 120),
 				ImageColor3 = BAND_GLOW[egg.oddsBand] or C.Purple,
-				ImageTransparency = 0.55,
+				ImageTransparency = 0.3,
 				Parent = tile,
 			})
 			glow.ZIndex = 1
@@ -211,8 +215,8 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			Ui.fit(nameLabel, 15, 9)
 			local n, g = owned(egg.id)
 			if egg.coinPrice then
-				Ui.price(Format.number(egg.coinPrice), "icon_coin", 20, {
-					Position = UDim2.new(0, 0, 1, -46),
+				Ui.pricePill(Format.number(egg.coinPrice), "icon_coin", 24, {
+					Position = UDim2.new(0.5, 0, 1, -50),
 					ZIndex = 2,
 					Parent = tile,
 				})
@@ -272,6 +276,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		}, { Ui.list(false, 6) })
 		local title = Ui.display({
 			Text = egg.displayName,
+			TextColor3 = (BAND_GLOW[egg.oddsBand] or C.Gold):Lerp(C.White, 0.35),
 			TextSize = 26,
 			TextWrapped = false,
 			Size = UDim2.new(1, 0, 0, 30),

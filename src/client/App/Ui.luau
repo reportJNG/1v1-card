@@ -401,6 +401,85 @@ function Ui.tile(className: string, props: { [string]: any }, selected: boolean?
 	return t
 end
 
+-- A bright grid slot in an accent colour (owner step 3, the concept board's egg and card tiles):
+-- a deep fill that lights up toward the accent, a glowing accent border (gold when selected).
+-- Drawn in code from a white base, so Ui.skinify leaves it alone.
+function Ui.glowTile(className: string, props: { [string]: any }, accent: Color3, selected: boolean?): any
+	local t = Ui.new(
+		className,
+		merge({
+			BackgroundColor3 = C.White,
+			BorderSizePixel = 0,
+			Text = if className == "TextButton" then "" else nil,
+			AutoButtonColor = if className == "TextButton" then false else nil,
+		}, props),
+		{
+			Ui.new("UICorner", { CornerRadius = UDim.new(0, 12) }),
+			Ui.new("UIGradient", {
+				Rotation = 90,
+				Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromHex("#2A2160"):Lerp(accent, 0.28)),
+					ColorSequenceKeypoint.new(0.6, Color3.fromHex("#141A3C"):Lerp(accent, 0.08)),
+					ColorSequenceKeypoint.new(1, Color3.fromHex("#1B1446"):Lerp(accent, 0.22)),
+				}),
+			}),
+			Ui.new("UIStroke", {
+				Name = "Edge",
+				Color = if selected then C.Gold else accent:Lerp(C.White, 0.15),
+				Thickness = if selected then 3 else 2.5,
+				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+			}),
+		}
+	)
+	if t:IsA("GuiButton") then
+		Ui.juice(t)
+		t.Activated:Connect(function()
+			Ui.sound("click")
+		end)
+	end
+	return t
+end
+
+-- A dark rounded pill with a currency icon and an amount (prices on tiles and buy panes).
+function Ui.pricePill(amount: string, icon: string, height: number, props: { [string]: any }?): Frame
+	local pill = Ui.frame(
+		merge({
+			Name = "PricePill",
+			BackgroundColor3 = C.Night,
+			BackgroundTransparency = 0.25,
+			AnchorPoint = Vector2.new(0.5, 0),
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, height),
+		}, props),
+		{
+			Ui.new("UICorner", { CornerRadius = UDim.new(0.5, 0) }),
+			Ui.new("UIStroke", { Color = C.Gold, Thickness = 1.5, Transparency = 0.35 }),
+			Ui.new("UIPadding", {
+				PaddingLeft = UDim.new(0, 4),
+				PaddingRight = UDim.new(0, math.floor(height * 0.45)),
+			}),
+			Ui.list(true, 4, Enum.HorizontalAlignment.Center),
+		}
+	);
+	(pill:FindFirstChildOfClass("UIListLayout") :: UIListLayout).VerticalAlignment =
+		Enum.VerticalAlignment.Center
+	Ui.icon(icon, height - 4, { AnchorPoint = Vector2.zero, LayoutOrder = 1, Parent = pill })
+	local label = Ui.text({
+		Name = "Amount",
+		Text = amount,
+		FontFace = F.Number,
+		TextSize = math.floor(height * 0.66),
+		TextColor3 = C.Gold,
+		TextWrapped = false,
+		AutomaticSize = Enum.AutomaticSize.X,
+		Size = UDim2.fromOffset(0, height),
+		LayoutOrder = 2,
+		Parent = pill,
+	})
+	Ui.outline(C.Night, 1.5).Parent = label
+	return pill
+end
+
 -- ------------------------------------------------------------------ buttons
 
 local STYLE: { [string]: { slot: string, fg: Color3, face: Font } } = {

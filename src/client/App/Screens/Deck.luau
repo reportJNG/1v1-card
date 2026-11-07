@@ -12,6 +12,7 @@ local App = script.Parent.Parent
 local Theme = require(App.Theme)
 local Ui = require(App.Ui)
 local Visuals = require(App.Visuals)
+local Format = require(App.Format)
 
 local C = Theme.Color
 
@@ -65,17 +66,13 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		for i = 1, 3 do
 			local uid = slots[i]
 			local card = uid and view.cards[uid]
-			local slot = Ui.new("TextButton", {
-				Text = "",
-				BackgroundColor3 = C.Raised,
+			local def = card and Characters.ById[card.characterId]
+			local slot = Ui.glowTile("TextButton", {
 				Size = UDim2.fromOffset(130, 210),
 				LayoutOrder = i,
 				Name = `Slot{i}`,
 				Parent = slotRow,
-			}, {
-				Ui.corner(10),
-				Ui.stroke(if active == i then C.Gold else C.Stroke, if active == i then 2.5 else 1),
-			})
+			}, if def then Theme.Rarity[def.rarity] else C.Purple, active == i)
 			if card then
 				local portrait = Visuals.portrait(
 					slot,
@@ -86,12 +83,9 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 					card.level
 				)
 				portrait.Position = UDim2.fromOffset(6, 6)
-				Ui.text({
-					Text = `Lv {card.level} · Power {Power.card(card.characterId, card.level)}`,
-					FontFace = Theme.Face.Bold,
-					TextXAlignment = Enum.TextXAlignment.Center,
-					Position = UDim2.fromOffset(0, 172),
-					Size = UDim2.new(1, 0, 0, 20),
+				Ui.pricePill(Format.number(Power.card(card.characterId, card.level)), "icon_power", 26, {
+					Position = UDim2.new(0.5, 0, 0, 172),
+					ZIndex = 3,
 					Parent = slot,
 				})
 			else

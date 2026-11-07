@@ -460,7 +460,9 @@ local function buildHud(ctx: Ctx, root: Frame): Hud
 				TweenService:Create(piece.obj, info, { Position = if show then piece.home else piece.away })
 			tween.Completed:Connect(function()
 				if mode == m then
-					piece.obj.Visible = show and content
+					-- Read `wanted` now, not at the start: the area can change mid-slide (PLAY sends
+					-- the player to the lobby while the HUD slides in).
+					piece.obj.Visible = show and wanted[piece.obj] ~= false
 				end
 			end)
 			tween:Play()

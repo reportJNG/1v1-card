@@ -166,22 +166,30 @@ return function(ctx: any, layer: Frame, arg: any?): any
 	local selected: string? = nil
 	local query = ""
 
-	local header = Ui.frame(
-		{ BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 32), Parent = p.body },
-		{ Ui.list(true, 6) }
-	)
+	-- Left: the icon sidebar (All / Cards / Items / Eggs, then "+" for more storage).
+	local header = Ui.frame({
+		Name = "Sidebar",
+		BackgroundTransparency = 1,
+		Size = UDim2.new(0, 56, 1, 0),
+		Parent = p.body,
+	}, { Ui.list(false, 6) })
 	local left = Ui.frame({
 		BackgroundTransparency = 1,
-		Position = UDim2.fromOffset(0, 40),
-		Size = UDim2.new(0.56, -8, 1, -40),
+		Position = UDim2.fromOffset(64, 0),
+		Size = UDim2.new(0.56, -72, 1, 0),
 		Parent = p.body,
 	})
-	local inspect = Ui.frame({
-		BackgroundColor3 = C.Raised,
-		Position = UDim2.new(0.56, 0, 0, 40),
-		Size = UDim2.new(0.44, 0, 1, -40),
+	-- The glow frame stays; renderInspect clears only the content inside it.
+	local inspectBox = Ui.glowTile("Frame", {
+		Name = "InspectBox",
+		Position = UDim2.new(0.56, 0, 0, 0),
+		Size = UDim2.new(0.44, 0, 1, 0),
 		Parent = p.body,
-	}, { Ui.corner(12), Ui.stroke(C.Purple, 1.5, 0.3), Ui.pad(10) })
+	}, C.Purple, false)
+	local inspect = Ui.frame(
+		{ Name = "Inspect", BackgroundTransparency = 1, ZIndex = 2, Parent = inspectBox },
+		{ Ui.pad(10) }
+	)
 
 	local render: () -> ()
 
@@ -522,7 +530,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 					page = 1
 					render()
 				end, {
-					Size = UDim2.fromOffset(44, 28),
+					Size = UDim2.fromOffset(40, 28),
 					LayoutOrder = i,
 					TextSize = 11,
 					Name = `Filter{short}`,
@@ -540,7 +548,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			TextColor3 = C.Text,
 			PlaceholderColor3 = C.Muted,
 			BackgroundColor3 = C.PanelDeep,
-			Size = UDim2.fromOffset(if tab == "Cards" or tab == "All" then 150 else 300, 28),
+			Size = UDim2.fromOffset(if tab == "Cards" or tab == "All" then 100 else 280, 28),
 			LayoutOrder = 10,
 			Parent = filters,
 		}, { Ui.corner(8), Ui.stroke(C.Stroke, 1), Ui.pad(6) })
@@ -625,6 +633,61 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		end
 	end
 
+	-- One sidebar tile: an icon on a bright tile, a short label (a count), gold edge when active.
+	local function sideTile(
+		name: string,
+		icon: string,
+		label: string,
+		accent: Color3,
+		active: boolean,
+		onClick: () -> ()
+	)
+		local b: TextButton = Ui.new("TextButton", {
+			Name = name,
+			Text = "",
+			AutoButtonColor = false,
+			BackgroundColor3 = C.White,
+			Size = UDim2.fromOffset(56, 56),
+			Parent = header,
+		}, {
+			Ui.new("UICorner", { CornerRadius = UDim.new(0, 12) }),
+			Ui.new("UIGradient", {
+				Rotation = 90,
+				Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, accent:Lerp(C.White, 0.2)),
+					ColorSequenceKeypoint.new(1, accent:Lerp(C.Night, if active then 0.25 else 0.6)),
+				}),
+			}),
+			Ui.new("UIStroke", {
+				Color = if active then C.Gold else C.Night,
+				Thickness = if active then 3 else 2,
+				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+			}),
+		})
+		Ui.icon(icon, 34, {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 0, 0.4, 0),
+			ZIndex = 2,
+			Parent = b,
+		})
+		Ui.display({
+			Text = label,
+			TextSize = 11,
+			TextWrapped = false,
+			AnchorPoint = Vector2.new(0.5, 1),
+			Position = UDim2.new(0.5, 0, 1, 1),
+			Size = UDim2.new(1, 4, 0, 13),
+			ZIndex = 3,
+			Parent = b,
+		})
+		Ui.juice(b)
+		b.Activated:Connect(function()
+			Ui.sound("click")
+			onClick()
+		end)
+		return b
+	end
+
 	local function renderHeader()
 		Ui.clear(header)
 		local eggs = 0
@@ -632,23 +695,28 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			eggs += (b.normal or 0) + (b.golden or 0)
 		end
 		local tabs = {
-			{ id = "All", label = "All" },
-			{ id = "Cards", label = `Cards {count(view.cards)}/{view.cardSlots}` },
-			{ id = "Items", label = `Items {#view.items.stacks}/{view.items.slots}` },
-			{ id = "Eggs", label = `Eggs {eggs}` },
+			{ id = "All", icon = "icon_check", label = "All", accent = Color3.fromHex("#8D9BC4") },
+			{
+				id = "Cards",
+				icon = "icon_cards",
+				label = `{count(view.cards)}`,
+				accent = Color3.fromHex("#A469FF"),
+			},
+			{
+				id = "Items",
+				icon = "icon_energy",
+				label = `{#view.items.stacks}/{view.items.slots}`,
+				accent = Color3.fromHex("#2FD6E0"),
+			},
+			{ id = "Eggs", icon = "icon_shop", label = `{eggs}`, accent = Color3.fromHex("#FF6FC8") },
 		}
 		for i, t in tabs do
-			local b = Ui.button(t.label, if tab == t.id then "purple" else "ghost", function()
+			local b = sideTile(`Tab{t.id}`, t.icon, t.label, t.accent, tab == t.id, function()
 				tab = t.id
 				page = 1
 				render()
-			end, {
-				Size = UDim2.fromOffset(if t.id == "All" then 60 else 118, 30),
-				LayoutOrder = i,
-				TextSize = 13,
-				Name = `Tab{t.id}`,
-			})
-			b.instance.Parent = header
+			end)
+			b.LayoutOrder = i
 		end
 		if tab == "All" or tab == "Cards" then
 			local idx = (view.cardSlots - Economy.CardStorage.startSlots)
@@ -656,9 +724,12 @@ return function(ctx: any, layer: Frame, arg: any?): any
 				+ 1
 			local price = Economy.CardStorage.expansionPrices[idx]
 			if price then
-				local b = Ui.button(
-					`+{Economy.CardStorage.slotsPerExpansion} card slots · {Format.number(price)} Coins`,
-					"ghost",
+				local b = sideTile(
+					"Expand",
+					"button_plus",
+					`+{Economy.CardStorage.slotsPerExpansion}`,
+					C.Gold,
+					false,
 					function()
 						ctx.confirm(
 							"Expand card storage",
@@ -670,10 +741,9 @@ return function(ctx: any, layer: Frame, arg: any?): any
 								end
 							end
 						)
-					end,
-					{ Size = UDim2.fromOffset(240, 30), LayoutOrder = 9, TextSize = 12, Name = "Expand" }
+					end
 				)
-				b.instance.Parent = header
+				b.LayoutOrder = 9
 			end
 		elseif tab == "Items" then
 			local idx = (view.items.slots - Economy.ItemInventory.startSlots)
@@ -681,7 +751,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 				+ 1
 			local price = Economy.ItemInventory.expansionPrices[idx]
 			if price then
-				local b = Ui.button(`+1 item slot · {Format.number(price)} Coins`, "ghost", function()
+				local b = sideTile("Expand", "button_plus", "+1", C.Gold, false, function()
 					ctx.confirm(
 						"Expand inventory",
 						`Add an item slot for {Format.number(price)} Coins?`,
@@ -692,8 +762,8 @@ return function(ctx: any, layer: Frame, arg: any?): any
 							end
 						end
 					)
-				end, { Size = UDim2.fromOffset(200, 30), LayoutOrder = 9, TextSize = 12, Name = "Expand" })
-				b.instance.Parent = header
+				end)
+				b.LayoutOrder = 9
 			end
 		end
 	end
