@@ -28,6 +28,16 @@ return function()
 	end)
 
 	describe("Settings.Set payload", function()
+		it("accepts the volumes as whole percentages from 0 to 100", function()
+			local parse = Remotes.Requests["Settings.Set"].parse
+			expect(parse({ key = "musicVolume", value = 40 })).to.be.ok()
+			expect(parse({ key = "sfxVolume", value = 0 })).to.be.ok()
+			expect(parse({ key = "musicVolume", value = 101 })).to.equal(nil)
+			expect(parse({ key = "sfxVolume", value = 0.5 })).to.equal(nil)
+			expect(parse({ key = "musicVolume", value = true })).to.equal(nil)
+			expect(parse({ key = "music", value = 50 })).to.equal(nil)
+		end)
+
 		it("accepts only the known boolean settings", function()
 			local parse = Remotes.Requests["Settings.Set"].parse
 			expect(parse({ key = "music", value = false })).to.be.ok()

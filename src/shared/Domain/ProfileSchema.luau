@@ -10,7 +10,7 @@ export type Migration = (data: { [string]: any }) -> { [string]: any }
 
 local ProfileSchema = {}
 
-ProfileSchema.CURRENT_VERSION = 3
+ProfileSchema.CURRENT_VERSION = 4
 
 -- Migrations[n] upgrades a profile from version n to n + 1. Append only; never edit a shipped one.
 ProfileSchema.Migrations = table.freeze({
@@ -27,6 +27,13 @@ ProfileSchema.Migrations = table.freeze({
 	-- 2 -> 3: per-node harvest times on the profile, so a server hop can't reset node respawns.
 	[2] = function(data: { [string]: any }): { [string]: any }
 		data.harvests = data.harvests or {}
+		return data
+	end,
+	-- 3 -> 4: music and sound-effect volumes (whole percentages) in the settings.
+	[3] = function(data: { [string]: any }): { [string]: any }
+		data.settings = data.settings or { music = true, sfx = true, reducedMotion = false }
+		data.settings.musicVolume = data.settings.musicVolume or 80
+		data.settings.sfxVolume = data.settings.sfxVolume or 100
 		return data
 	end,
 }) :: { [number]: Migration }
@@ -58,7 +65,7 @@ function ProfileSchema.new(userId: number): Types.PlayerProfile
 		questDay = -1,
 		trials = {},
 		stats = { wins = 0, losses = 0, matches = 0, trialsCleared = 0 },
-		settings = { music = true, sfx = true, reducedMotion = false },
+		settings = { music = true, sfx = true, reducedMotion = false, musicVolume = 80, sfxVolume = 100 },
 		harvests = {},
 	}
 end

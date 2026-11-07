@@ -176,11 +176,15 @@ local Requests: { [string]: RequestDef } = {
 		rate = 2,
 		burst = 4,
 		parse = shape({ "key", "value" }, function(t)
-			local value = Check.bool(t.value)
-			if t.key ~= "music" and t.key ~= "sfx" and t.key ~= "reducedMotion" then
-				return nil
+			-- On/off switches, or a volume as a whole percentage (0-100).
+			if t.key == "music" or t.key == "sfx" or t.key == "reducedMotion" then
+				local value = Check.bool(t.value)
+				return if value ~= nil then { key = t.key, value = value } else nil
+			elseif t.key == "musicVolume" or t.key == "sfxVolume" then
+				local value = Check.int(t.value, 0, 100)
+				return if value ~= nil then { key = t.key, value = value } else nil
 			end
-			return if value ~= nil then { key = t.key, value = value } else nil
+			return nil
 		end),
 	},
 }

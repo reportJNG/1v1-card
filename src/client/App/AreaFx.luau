@@ -100,6 +100,7 @@ end
 
 local battleOpen = false
 local musicOn = true
+local musicVolume = 0.8 -- the player's music volume (Settings, 0-1)
 local track: Sound? = nil
 local trackName: string? = nil
 
@@ -130,8 +131,17 @@ local function playMusic(name: string?)
 	snd.Volume = 0
 	snd.Parent = SoundService
 	snd:Play()
-	TweenService:Create(snd, FADE, { Volume = def.volume }):Play()
+	TweenService:Create(snd, FADE, { Volume = def.volume * musicVolume }):Play()
 	track = snd
+end
+
+function AreaFx.setMusicVolume(v: number)
+	musicVolume = math.clamp(v, 0, 1)
+	local name = trackName
+	local def = if name then Sounds[name] else nil
+	if track and def then
+		track.Volume = def.volume * musicVolume
+	end
 end
 
 function AreaFx.setMusic(on: boolean)
@@ -212,7 +222,8 @@ function AreaFx.start(ctx: any)
 				if (settings.music ~= false) ~= musicOn then
 					AreaFx.setMusic(settings.music ~= false)
 				end
-				Ui.setSfxVolume(if settings.sfx == false then 0 else 1)
+				Ui.setSfxVolume(if settings.sfx == false then 0 else (settings.sfxVolume or 100) / 100)
+				AreaFx.setMusicVolume((settings.musicVolume or 80) / 100)
 			end
 		end
 	end)

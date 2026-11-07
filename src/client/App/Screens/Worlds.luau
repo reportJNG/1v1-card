@@ -137,6 +137,16 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				Parent = content,
 			})
 			art(artHolder, world.id, unlocked)
+			if cleared then
+				-- Completed: the world's Guardian Trial is cleared.
+				Ui.icon("icon_check", 30, {
+					Name = "Completed",
+					AnchorPoint = Vector2.new(1, 0),
+					Position = UDim2.new(1, -4, 0, 4),
+					ZIndex = 4,
+					Parent = artHolder,
+				})
+			end
 			local name = Ui.text({
 				Name = "WorldName",
 				Text = world.displayName,

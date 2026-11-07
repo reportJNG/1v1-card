@@ -158,6 +158,10 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		end, { Size = UDim2.fromOffset(220, 40), LayoutOrder = 4, Name = "SaveDeck" })
 		save.setEnabled(s ~= nil)
 		save.instance.Parent = summary
+		local fams = Ui.button("Families", "secondary", function()
+			ctx.open("Families")
+		end, { Size = UDim2.fromOffset(160, 34), LayoutOrder = 5, Name = "Families" })
+		fams.instance.Parent = summary
 
 		-- The best copy of each character only (a deck takes one copy per character): at most 100
 		-- tiles however many copies the player owns.

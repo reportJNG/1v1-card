@@ -293,7 +293,7 @@ local function buildMerchant(worldId: number, model: Model, name: string): () ->
 	local at = v3(WorldLayout.merchant(worldId))
 	local npc = anchor("Merchant", at + Vector3.new(0, 3.5, 0), Vector3.new(4, 7, 4), folder)
 	npc:SetAttribute("Npc", "Merchant")
-	label(npc, name, Color3.fromHex("#F2C14E"), 9)
+	label(npc, name, Color3.fromHex("#F2C14E"), 13) -- above the cart
 	prompt(npc, "Sell items", name, WorldLayouts.MERCHANT_RANGE - 2, "Sell")
 	light(npc, "#FFB45A", 18, 1.5)
 	return function()

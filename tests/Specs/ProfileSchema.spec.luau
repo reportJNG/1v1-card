@@ -38,16 +38,30 @@ return function()
 			expect(p.settings.sfx).to.equal(true)
 		end)
 
-		it("upgrades a version 2 save to version 3 with empty harvest timers", function()
+		it("upgrades a version 2 save with empty harvest timers", function()
 			local v2: any = ProfileSchema.new(78)
 			v2.harvests = nil
 			v2.schemaVersion = 2
 			v2.gems = 42
 			local loaded = ProfileSchema.load(v2, 78)
 			assert(loaded.ok, "load")
-			expect(loaded.value.schemaVersion).to.equal(3)
+			expect(loaded.value.schemaVersion).to.equal(ProfileSchema.CURRENT_VERSION)
 			expect(loaded.value.gems).to.equal(42)
 			expect((next(loaded.value.harvests))).to.equal(nil)
+		end)
+
+		it("upgrades a version 3 save to version 4 with default volumes, keeping the switches", function()
+			local v3: any = ProfileSchema.new(79)
+			v3.settings = { music = false, sfx = true, reducedMotion = true }
+			v3.schemaVersion = 3
+			local loaded = ProfileSchema.load(v3, 79)
+			assert(loaded.ok, "load")
+			local settings = loaded.value.settings
+			expect(loaded.value.schemaVersion).to.equal(4)
+			expect(settings.music).to.equal(false)
+			expect(settings.reducedMotion).to.equal(true)
+			expect(settings.musicVolume).to.equal(80)
+			expect(settings.sfxVolume).to.equal(100)
 		end)
 
 		it("runs migrations in order", function()
@@ -63,11 +77,15 @@ return function()
 					d.coins += 1
 					return d
 				end,
+				[3] = function(d: any): any
+					d.coins *= 10
+					return d
+				end,
 			}
 			local r = ProfileSchema.load(raw, 1, migrations)
 			expect(r.ok).to.equal(true)
-			expect(if r.ok then r.value.coins else 0).to.equal(21)
-			expect(if r.ok then r.value.schemaVersion else 0).to.equal(3)
+			expect(if r.ok then r.value.coins else 0).to.equal(210)
+			expect(if r.ok then r.value.schemaVersion else 0).to.equal(4)
 		end)
 
 		it("refuses data saved by a newer game version", function()

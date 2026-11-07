@@ -90,7 +90,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				or (d.lastClaimDay == today - 1 and day <= d.streakDay)
 			local f = Ui.frame({
 				BackgroundColor3 = if done then C.Green else C.Raised,
-				Size = UDim2.fromOffset(78, 84),
+				Size = UDim2.fromOffset(74, 84),
 				LayoutOrder = day,
 				Parent = streakRow,
 			}, {
@@ -118,7 +118,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 					ctx.toast(`Day {reply.value.day} reward claimed!`, "good")
 				end
 			end,
-			{ Size = UDim2.fromOffset(200, 44), LayoutOrder = 8, Name = "ClaimStreak" }
+			{ Size = UDim2.fromOffset(150, 44), LayoutOrder = 8, Name = "ClaimStreak", TextSize = 15 }
 		)
 		claim.setEnabled(d.lastClaimDay ~= today)
 		claim.instance.Parent = streakRow

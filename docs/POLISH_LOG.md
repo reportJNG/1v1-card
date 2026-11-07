@@ -129,3 +129,46 @@ Screenshots are in `docs/screens/12-15` and `docs/screens/worlds/`. Everything w
 **Scores:** board 8 · readability 8 · polish 8 · clarity 9 · consistency 9.
 
 **Screens:** `docs/screens/hud/01-04`. The four sizes for the HUD are in `docs/screens/ui/04-07`.
+
+## D. Every screen — done (2026-11-07)
+**Changed**
+- **Inventory** (was Collection):
+  - tabs All / Cards n/300 / Items n/5 / Eggs n, rarity filters and a search box (name or family)
+  - the storage expand button for the current tab
+  - egg tiles with Open (Golden copies get their own tile) and item tiles
+- **Card Inspect:** a big 150×210 layered card, the four stats, the family bonus the card brings,
+  merge progress, Merge, **Equip** and Sell spares.
+  - Equip replaces a copy of the same character, else the weakest card. An incomplete deck is
+    filled with the strongest other characters, since a deck is always 3 different characters.
+- **Families panel (new):** all 15 families with glyph, bonus stat, owned characters (n/total), and
+  ACTIVE ×2/×3 for the saved deck. Opened from the Deck Builder's new Families button.
+- **Arena:** shows the trophy count with the league. Find Match, the queue timer and range, and
+  Cancel were already there.
+- **Worlds map:** a completed tick on worlds whose Guardian Trial is cleared.
+- **Settings:** music and effects volume sliders (0-100%, steps of 5) saved on the profile, plus a
+  graphics hint.
+  - Profile schema v4: append-only migration 3→4 adds `musicVolume = 80` and `sfxVolume = 100`.
+  - `Settings.Set` accepts the volumes only as whole numbers 0-100 (specs for the payload and the
+    migration).
+  - Music and effects volume apply live.
+- Fixes found in Play:
+  - Equip on an empty deck returned BadRequest (now fills the deck).
+  - The streak Claim button overflowed the Quests panel.
+  - The reduced-motion label was cut off.
+  - The merchant's name was hidden by the cart.
+  - The merchant had three gold buttons (now the green style; this restyle was checked by the
+    static checks only).
+
+**Tested in Play (PC, granted test profile)**
+- Inventory All and Eggs tabs, and inspecting the level-15 Mythical.
+- Equip → "Aurelia Dawn is in your deck" and a full deck.
+- Deck Builder and Families, with Flame ACTIVE ×3 after an all-Flame deck.
+- Arena: Find Match → "Searching… 0:05 · trophy range ±100" → Cancel search.
+- Settings slider to 50%: saved on the server, and lobby music 0.25 → 0.125.
+- A real Guardian Trial win: the Victory screen with KO marks, the count-up and +40 trophies.
+- The Worlds map then showed the tick on World 1 and World 2 unlocked.
+- Quests and the 7-day streak; the merchant opened from its prompt in World 1.
+
+**Scores:** board 8 · readability 8 · polish 8 · clarity 9 · consistency 9.
+
+**Screens:** `docs/screens/screens/01-14`.

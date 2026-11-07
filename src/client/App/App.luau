@@ -631,8 +631,11 @@ function App.start(deps: Deps): Ctx
 	local toastCount = 0
 	local ctx: Ctx
 	local flow = UiFlow.new()
-	if deps.screens.Tip == nil then
-		deps.screens.Tip = require(script.Parent.Screens.Tip) :: any -- the "+" buttons' explainer
+	-- Screens only the shell opens (previews and checks get them too).
+	for _, name in { "Tip", "Families" } do
+		if deps.screens[name] == nil then
+			deps.screens[name] = require(script.Parent.Screens:FindFirstChild(name) :: ModuleScript) :: any
+		end
 	end
 	local effects = deps.effects
 	local menu: MainMenu.Menu

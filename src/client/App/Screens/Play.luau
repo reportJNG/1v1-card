@@ -75,7 +75,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		local league = Progress.leagueFor(view.trophies)
 		local purse = Economy.Matches.purseByLeague[league.id]
 		local leagueLine = Ui.text({
-			Text = `{string.upper(league.id)} LEAGUE · cards fight at up to level {league.rankedLevelCap}`,
+			Text = `{string.upper(league.id)} LEAGUE · {Format.number(view.trophies)} trophies · cards fight at up to level {league.rankedLevelCap}`,
 			FontFace = Theme.Face.Title,
 			TextSize = 16,
 			TextXAlignment = Enum.TextXAlignment.Center,

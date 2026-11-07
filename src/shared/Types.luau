@@ -255,7 +255,7 @@ export type PlayerProfile = {
 	questDay: number, -- day the daily quests were rolled
 	trials: { [string]: number }, -- worldId -> first Guardian Trial clear time
 	stats: { wins: number, losses: number, matches: number, trialsCleared: number },
-	settings: { music: boolean, sfx: boolean, reducedMotion: boolean },
+	settings: { music: boolean, sfx: boolean, reducedMotion: boolean, musicVolume: number, sfxVolume: number },
 	-- schema v3
 	harvests: { [string]: number }, -- nodeId -> os.time of this player's last harvest (respawn timers)
 }

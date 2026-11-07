@@ -15,8 +15,13 @@ local C = Theme.Color
 return function(ctx: any, layer: Frame, _arg: any?): any
 	local view = ctx.state.view
 	local layout = WorldLayouts.ByWorld[view.currentWorld]
-	local p =
-		Ui.panel(layer, layout and layout.merchantName or "Merchant", ctx.close, UDim2.fromOffset(560, 420))
+	local p = Ui.panel(
+		layer,
+		layout and layout.merchantName or "Merchant",
+		ctx.close,
+		UDim2.fromOffset(560, 420),
+		"icon_shop"
+	)
 	local list = Ui.scroll({ Parent = p.body })
 	Ui.list(false, 6).Parent = list
 
@@ -46,7 +51,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			})
 			local all = Ui.button(
 				`Sell all · {Format.number(item.sellPrice * n)} Coins`,
-				"primary",
+				"success",
 				function()
 					local reply = ctx.request(
 						"Merchant.SellItem",

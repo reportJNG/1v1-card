@@ -99,18 +99,18 @@ If something needs the owner (images, approval, keys), write it in
 - [x] One consistent icon set (rendered or generated per `art/ui/PROMPTS.md`). **No emoji.**
 
 ### D. Every screen, matching the board's panels
-- [ ] Egg Shop
-- [ ] Inventory: tabs All / Cards / Items / Eggs, search, storage count with an expand button
-- [ ] Card Inspect: big 2.5D card, stats, family bonus, merge, equip
-- [ ] Deck Builder: 3 slots, deck power, family bonus, Save Deck
-- [ ] Families panel: every family, its bonus, which ones are active
-- [ ] Arena: league, trophies, purse reward, Find Match, queue timer, Cancel
-- [ ] Victory / Defeat: rewards count-up, trophy change, Continue
-- [ ] Worlds map: 10 world cards with art, locked/unlocked, trophies needed, completed tick
-- [ ] Quests, Daily Rewards (7-day streak), Merchant
-- [ ] Settings: music and SFX volume sliders, reduced motion, graphics hint. Saved to the
+- [x] Egg Shop
+- [x] Inventory: tabs All / Cards / Items / Eggs, search, storage count with an expand button
+- [x] Card Inspect: big 2.5D card, stats, family bonus, merge, equip
+- [x] Deck Builder: 3 slots, deck power, family bonus, Save Deck
+- [x] Families panel: every family, its bonus, which ones are active
+- [x] Arena: league, trophies, purse reward, Find Match, queue timer, Cancel
+- [x] Victory / Defeat: rewards count-up, trophy change, Continue
+- [x] Worlds map: 10 world cards with art, locked/unlocked, trophies needed, completed tick
+- [x] Quests, Daily Rewards (7-day streak), Merchant
+- [x] Settings: music and SFX volume sliders, reduced motion, graphics hint. Saved to the
       profile.
-- [ ] The same panel frame, title bar, close button, tabs and buttons everywhere, from
+- [x] The same panel frame, title bar, close button, tabs and buttons everywhere, from
       `art/ui/`.
 
 ### E. Cards (brighter and fancier as value goes up)
