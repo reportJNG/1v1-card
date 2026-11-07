@@ -170,20 +170,20 @@ If something needs the owner (images, approval, keys), write it in
       - **Golden** eggs get a gold version of the whole sequence.
 - [x] Open x1 / x3 / x8 (multi-open shows a grid reveal), a **Skip** button (tap to fast-forward),
       an auto-open toggle, and **"New!"** tags on first copies.
-- [ ] A sound for every beat: shake, crack, burst, and a reveal sound per rarity.
-      (Slots wired in `Config/Sounds` and played on every beat; the ids are filled in I.)
+- [x] A sound for every beat: shake, crack, burst, and a reveal sound per rarity.
+      (Ids filled in I; every beat heard firing in Play.)
 
 ### I. Music and sound
-- [ ] Use **only audio uploaded by the official Roblox account** in the Creator Store
+- [x] Use **only audio uploaded by the official Roblox account** in the Creator Store
       (licensed). Log every id in `docs/ASSETS.md`.
-- [ ] Music for the main menu, the lobby, each world and battles, plus victory and defeat
+- [x] Music for the main menu, the lobby, each world and battles, plus victory and defeat
       stingers. Crossfade between areas.
-- [ ] SFX for:
+- [x] SFX for:
       - UI: button hover and click, panel open and close, purchase, error
       - rewards: coin pickup, merge, level up
       - hatching: every beat, plus the card flip
       - battle: every action, KO, victory, defeat
-- [ ] Volume sliders in Settings, saved to the profile.
+- [x] Volume sliders in Settings, saved to the profile.
 
 ### J. Lobby and worlds
 - [x] Every player spawns in the lobby after the main menu and after battles.

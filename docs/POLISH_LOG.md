@@ -283,3 +283,38 @@ shown as "not on sale yet" until product ids exist) and the Odds popup for the B
 **Scores:** board 8 · readability 9 · polish 8 · clarity 9 · consistency 9.
 
 **Screens:** `docs/screens/eggs/01-02` (and the hatch shots in `docs/screens/hatch/`).
+
+## I. Music and sound — done (2026-11-07)
+**Changed**
+- **Every SFX slot has an id** (`Config/Sounds`, listed in `docs/ASSETS.md`):
+  - 20 from ProSoundEffects and 5 stings from APMOfficial.
+  - These are the two licensed libraries Roblox provides in the Creator Store. "The official Roblox
+    account" itself has no SFX library, so these partner accounts are the licensed source.
+  - Rips from commercial games (Valve, Garry's Mod, Undertale, Minecraft, JJS) came up in search
+    and were rejected.
+- **New slots:** `purchase` (Coin egg buys, storage and item-slot expands), `merge`, and `level_up`
+  (the Inventory Merge button: merge, then level-up when the level rises). `hover` plays on every
+  juiced button, at most once every 0.08 s.
+- **Battle:** hit (Attack), hit_special (Special), parry (Defend vs Special), KO, the 12 s pick
+  tick, victory and the new defeat sting.
+- **Music:** main menu, lobby, battles and each of the 10 worlds, crossfaded by `App/AreaFx`.
+- **Bug found in Play:**
+  - The main-menu track never loaded. The Sound was made in the first moments of the session and
+    stayed unloaded while "playing"; the same id loads fine on a fresh Sound.
+  - Fix: AreaFx rebuilds a track that hasn't loaded after 4 s, up to 3 times. After the fix it loads
+    (157.8 s).
+- The volume sliders were already done in D (saved to the profile, schema v4).
+
+**Tested in Play:**
+- Every id loads in Studio (ContentProvider plus a parented Sound).
+- In Play, the UI created and played:
+  - shop and hatch: hover, click, open, close, purchase, shake, crack, burst, card_flip, reveal
+  - battle (a full 24-round Guardian Trial): tick, hit, hit_special, KO, coin and the defeat sting
+  - music: the menu → lobby crossfade (menu fading out while the lobby fades in)
+- Not heard in that run, but wired and loading:
+  - parry: no Defend met a Special
+  - victory: the battle was lost
+  - merge and level_up: the merge was sent through the remote, not the Inventory button
+- Claude can't hear audio, so the owner should listen and swap any id (WAITING_ON_YOU 5).
+
+**Scores:** board 8 · readability 9 · polish 8 · clarity 9 · consistency 9.

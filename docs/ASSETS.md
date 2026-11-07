@@ -66,9 +66,33 @@ scripts. The worlds reuse the hub's `portal` mesh for the Back to Lobby portal.
 | `music_world8` | 1838829561 | Mysterious Gate | APMOfficial | Ancient Kingdom |
 | `music_world9` | 9044407121 | Back to the Shadows Underscore | APMOfficial | Shadow Dimension |
 | `music_world10` | 1840939025 | Ideal World (a) | APMOfficial | Divine World |
+| `click` | 9119717523 | Switch Click On Or Off Toggle Button 2 | ProSoundEffects | SFX |
+| `hover` | 9119717529 | Switch Click On Or Off Toggle Button 1 | ProSoundEffects | SFX |
+| `close` | 9120972321 | Wood Whoosh Slicing Air Quick Swings 4 | ProSoundEffects | SFX |
+| `coin` | 9113849492 | Coins Or Keys Jingle 6 | ProSoundEffects | SFX |
+| `error` | 9113085764 | Alarm Buzzer 5 | ProSoundEffects | SFX |
+| `purchase` | 9113704038 | Candy Machine Coin Drops Insert Vending 4 | ProSoundEffects | SFX |
+| `merge` | 9116406610 | Magic Poofs Thumpy Wheezy Exhale 1 | ProSoundEffects | SFX |
+| `level_up` | 94590027038118 | Victorious Journey Sting | APMOfficial | SFX |
+| `hatch_shake` | 9116797024 | Metal Rattle Thick Shake 2 | ProSoundEffects | SFX |
+| `hatch_crack` | 9113959343 | Crack Egg Crunchy 11 | ProSoundEffects | SFX |
+| `hatch_burst` | 9125648149 | Magic Zoom Up Sharp Tubular Whoosh Fast Hiss 8 | ProSoundEffects | SFX |
+| `card_flip` | 9120972444 | Wood Whoosh Slicing Air Quick Swings 1 | ProSoundEffects | SFX |
+| `reveal_common` | 9116394545 | Magic Glows Soft Clusters Of Chiming Hits 1 | ProSoundEffects | SFX |
+| `reveal_rare` | 9116395089 | Magic Glows Soft Clusters Of Chiming Hits 4 | ProSoundEffects | SFX |
+| `reveal_epic` | 9116395085 | Magic Glows Soft Clusters Of Chiming Hits 5 | ProSoundEffects | SFX |
+| `reveal_legendary` | 9042730928 | Homeland (sting) | APMOfficial | SFX |
+| `reveal_mythical` | 9045742086 | To the Fray (sting b) | APMOfficial | SFX |
+| `tick` | 9125434359 | Cell Phone Volume Button Pressing Double Clicks 36 | ProSoundEffects | SFX |
+| `hit` | 9120728815 | Whoosh Heavy Punches 1 | ProSoundEffects | SFX |
+| `hit_special` | 9125404320 | Boom Impact Deep Distant Thumping Hits Booming 36 | ProSoundEffects | SFX |
+| `parry` | 9119072660 | Shield Clang As Hit Metal Sword Hubcap 1 | ProSoundEffects | SFX |
+| `ko` | 9113225986 | Axe Impact Giant Thuddy Hits On Wood Floor 5 | ProSoundEffects | SFX |
+| `defeat` | 125909120236588 | Mounting Consequences StingA | APMOfficial | SFX |
 
 The world tracks were picked by title and description (Claude can't hear audio); the owner reviews
-them (`docs/WAITING_ON_YOU.md`). Other SFX slots stay empty and silent until ids are chosen.
+them (`docs/WAITING_ON_YOU.md`). The SFX were picked the same way (title, description, length);
+every id was checked to load in Studio (ContentProvider and a parented Sound) on 2026-11-07.
 
 Audio policy: use APMOfficial (music) and ProSoundEffects (SFX). Both are Roblox's licensed partner
 libraries, free for use in Roblox experiences. Never use uploads ripped from commercial games

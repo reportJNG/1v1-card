@@ -59,17 +59,11 @@ Screenshots are in `docs/screens/` (01 hub HUD, 02 hub in Play mode, 03 egg shop
 to change. Scaling to every screen and all 100 characters continues in the meantime, but nothing
 from the slice is called final until you approve it.
 
-## 5. Sound effects (pick or approve)
-Music is in: APMOfficial tracks, which are licensed for Roblox ("Yachiyo-Jishi" in the hub,
-"Battleground" in battles, "Sports Fanfare" on victory, an APM swipe on panel open). Most SFX slots
-in `src/shared/Config/Sounds.luau` are still **empty and silent**: click, hover, close, coin, error,
-hatch shake/crack/reveal, tick, hit, special hit, parry, KO, defeat. Creator Store search can't
-filter by creator, most "click/hit" results are rips from commercial games, and Claude can't hear
-audio to judge it. Either:
-- paste asset ids you like into `Config/Sounds.luau` (ProSoundEffects or APMOfficial uploads are
-  safe), or
-- say "make synthetic SFX", and Claude will synthesize original WAVs in code. That needs an audio
-  upload (Open Cloud Assets API with your API key), because the Studio MCP only uploads images.
+## 5. Listen to the sounds (approve or swap)
+Every sound slot now has a licensed id: music from APMOfficial, and effects from ProSoundEffects
+plus a few APM stings. They are all listed in `docs/ASSETS.md`. Claude picked them by title,
+description and length because it can't hear audio. Play through the game (menu, shop, a hatch, a
+battle) and replace any id you don't like in `src/shared/Config/Sounds.luau`.
 
 ## 6. Still open from before
 - Player Emulator: the remaining 3 of the 4 policy combinations (README, "Testing PolicyService

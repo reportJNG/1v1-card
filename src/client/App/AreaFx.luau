@@ -124,15 +124,26 @@ local function playMusic(name: string?)
 	if def == nil or def.id == nil or not musicOn then
 		return
 	end
-	local snd = Instance.new("Sound")
-	snd.Name = `Music_{name}`
-	snd.SoundId = def.id
-	snd.Looped = def.looped == true
-	snd.Volume = 0
-	snd.Parent = SoundService
-	snd:Play()
-	TweenService:Create(snd, FADE, { Volume = def.volume * musicVolume }):Play()
-	track = snd
+	-- A Sound made in the first moments of a session can stay unloaded for good (seen in Play: the
+	-- menu track never loaded while every other id did), so an unloaded track is rebuilt, up to 3 times.
+	local function start(attempt: number)
+		local snd = Instance.new("Sound")
+		snd.Name = `Music_{name}`
+		snd.SoundId = def.id :: string
+		snd.Looped = def.looped == true
+		snd.Volume = 0
+		snd.Parent = SoundService
+		snd:Play()
+		TweenService:Create(snd, FADE, { Volume = def.volume * musicVolume }):Play()
+		track = snd
+		task.delay(4, function()
+			if track == snd and not snd.IsLoaded and attempt < 3 then
+				snd:Destroy()
+				start(attempt + 1)
+			end
+		end)
+	end
+	start(1)
 end
 
 function AreaFx.setMusicVolume(v: number)
