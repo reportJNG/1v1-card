@@ -583,17 +583,14 @@ function Ui.button(text: string, style: string, onClick: () -> (), props: { [str
 			ZIndex = 3,
 			Parent = b,
 		})
-		local clip = Ui.frame(
-			{
-				Name = "ShineClip",
-				BackgroundTransparency = 1,
-				ClipsDescendants = true,
-				Size = UDim2.fromScale(1, 1),
-				ZIndex = 3,
-				Parent = b,
-			},
-			{ Ui.corner(math.floor(height / 2)) }
-		)
+		local clip = Ui.frame({
+			Name = "ShineClip",
+			BackgroundTransparency = 1,
+			ClipsDescendants = true,
+			Size = UDim2.fromScale(1, 1),
+			ZIndex = 3,
+			Parent = b,
+		}, { Ui.corner(math.floor(height / 2)) })
 		shine.Parent = clip
 		task.spawn(function()
 			task.wait(math.random() * M.goldShineEvery)

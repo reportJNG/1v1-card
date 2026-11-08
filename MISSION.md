@@ -579,10 +579,10 @@ has 40 sheets of 10 characters, in head and shoulders.
 - It stays `TEMP_UNLICENSED` until the owner adds `LICENSE.txt`.
 
 ### 12.4 Phase 2 checklist
-- [ ] Pipeline works end to end
+- [x] Pipeline works end to end
 - [ ] 10 characters shown everywhere
-- [ ] Contact sheet and galleries
-- [ ] Status report in `WAITING_ON_YOU.md`
+- [x] Contact sheet and galleries
+- [x] Status report in `WAITING_ON_YOU.md`
 
 ---
 
@@ -646,12 +646,12 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 - [x] Egg pack wired in fully (unedited, 256/64, Golden), tier pedestals, Credits
 - [x] Egg Shop
 - [x] Egg opening, all 5 stages, every rarity, x1 / x3 / x8, Skip, Golden
-- [ ] Silhouettes
+- [x] Silhouettes
 - [x] Inventory, Deck + Families, Arena (no bet), Victory/Defeat, Worlds, and the remaining
   screens restyled
 - [x] Sound on every interaction
 - [x] Motion everywhere
-- [ ] Extra assets
+- [x] Extra assets
 - [ ] Phase 2: character PNG pipeline and the portrait pack (12.4)
 - [ ] **Final pass**, as a fresh player at phone and PC sizes:
   - launch → loading → menu → PLAY → lobby

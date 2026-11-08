@@ -18,6 +18,7 @@ return table.freeze({
 		cardFrames = "The layered card (App/Card) draws its frame, rarity pill, sockets and plates in code; its image layers (15 family backgrounds, glow, holo foil, crown) are TEMP until final card art exists (art/ui/PROMPTS.md, Card layers).",
 		hubArt = "The hub plaza uses generated meshes (Config/HubLayout) and a code-drawn sky; awaiting the owner's vertical-slice approval.",
 		uiArt = "Every UI image is a TEMP stand-in drawn by scripts/art/make_temp_ui.py until the owner's final art (art/ui/PROMPTS.md) is uploaded.",
+		portraitPack = "TEMP_UNLICENSED: the portrait pack (art/characters/processed, 10 characters) has no license file yet; development only until the owner adds art/characters/incoming/portrait-pack/LICENSE.txt allowing commercial use.",
 		guardianDecks = "Guardian decks come from each world's own eggs; the difficulty curve needs playtesting.",
 	}) :: { [string]: string },
 })

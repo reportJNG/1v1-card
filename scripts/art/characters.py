@@ -128,7 +128,7 @@ def apply(path):
     src = open(CHARS, encoding="utf-8").read()
     n = 0
     for url, asset in ids.items():
-        m = re.search(r"/art/characters/([a-z0-9_]+)/card\.png$", url)
+        m = re.search(r"/art/characters/(?:processed/)?([a-z0-9_]+)/card\.png$", url)
         if not m or not str(asset).startswith("rbxassetid://"):
             continue
         cid = m.group(1)

@@ -446,3 +446,22 @@ Built before MISSION.md landed, under CARDS_EGGS_MISSION (now merged into MISSIO
 - Added: shine sweep on gold buttons, selected-tile glow pulse. Existing: staggered grids, count-
   ups and "+N" on currencies and Deck Power, notification dot bounce, toasts, HUD drop-in, VS slam,
   Victory banner bounce with rotating rays, the launch card shuffle. Reduced motion skips them.
+
+## Section 11: extra assets
+All listed assets exist in the kit (`art/ui/MANIFEST_V2.json`, 183 images uploaded): stickers,
+MAX ribbon, 15 family gems, stat and button icons, level bar, summon circle and runes, cracks 1-3,
+shard sets per tier, shockwave, rays, pillar, confetti, auras per rarity, orbit ribbon, sparkle /
+ember / mote (`fx_*`), tier pedestals, lock overlay, world badge, card backs per rarity, empty slot,
+filter chips, rarity toasts, odds rows, six HUD button colours (+ `hud_btn_night`, used as the
+`menu_button`), quest card, logo.
+
+## Section 12: phase 2, character PNG pipeline (portrait pack)
+- `scripts/art/portraits.py`: ingest (originals copied unchanged to the git-ignored
+  `art/characters/incoming/portrait-pack`, flagged TEMP_UNLICENSED), split (seeded distance
+  watershed, heads touch on these sheets), clean (fringe, holes, 1 px feather), upscale (Lanczos +
+  unsharp, at most 4x), style (one grade, dark outline, family rim light, tint for sketchy art),
+  safe (head and shoulders, review list), derive (card, portrait, silhouette, expressions), check
+  (sizes, transparency, duplicates, contact sheet), urls, status. `characters.py apply` writes the ids.
+- 10 characters processed, 0 problems: contact sheet `docs/screens/characters/contact_portrait-pack.png`.
+- **Not done: upload and in-game check.** The local image server was stopped by Claude Code for
+  low memory and is not restarted without the owner (WAITING_ON_YOU 0000).

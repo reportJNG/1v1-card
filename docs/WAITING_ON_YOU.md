@@ -2,6 +2,28 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
+## 0000. MISSION.md (step 5): what Claude needs from you
+- **Upload the 10 portrait-pack card arts (5 minutes).** They are processed and checked
+  (`art/characters/processed/<id>/`, contact sheet `docs/screens/characters/contact_portrait-pack.png`),
+  but Claude Code stopped the local image server for low memory, and Claude doesn't restart it on
+  its own. Either say "restart the image server" or run `python -m http.server 8765` in the repo
+  root yourself; Claude then uploads (`python scripts/art/portraits.py urls`), saves the answer as
+  `art/characters/portrait_ids.json`, runs `python scripts/art/characters.py apply art/characters/portrait_ids.json`,
+  and checks the 10 cards in Play.
+- **The portrait pack's license.** It has none, so it is `TEMP_UNLICENSED` (development only; release
+  builds refuse it). Put the license, or a link to its download page showing commercial use is allowed,
+  in `art/characters/incoming/portrait-pack/LICENSE.txt`. Also check `art/characters/processed/portrait-pack_review.json`
+  (every crop is head and shoulders; please confirm they look all-ages).
+- **100 levels instead of 15?** The boards show "Lv. 1/100" and evolution at 1 / 50 / 100. The locked
+  max level is 15, so the evolution stages map onto 1-15 (`Config/Progression.evolutionStages`).
+  Say "switch to 100 levels" to start it: it needs a rebalance of levels, merge costs and stats
+  (`sim/balance.py`).
+- **Listen to the unreviewed sounds.** Section 9's new slots (confirm, tab, toast, equip, leave,
+  matchmaking, battle picks, summon, sparkle) reuse ids from the licensed APM / PSE set because the
+  Creator Store search can't filter by creator (`docs/ASSETS.md`). Swap any for a dedicated sound.
+- **Optional painted art.** Every kit image now has a finished version; `art/ui/PROMPTS_V2.md` has
+  prompts if you want painted upgrades.
+
 ## 000. Step 3 (the new GUI): look and tell Claude what to change
 - **Screenshots:** `docs/screens/step3/` (main menu, lobby icon HUD, Egg Shop, Inventory, Deck,
   Arena).

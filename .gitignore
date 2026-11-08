@@ -12,3 +12,4 @@ wally.lock
 Thumbs.db
 build/
 __pycache__/
+art/characters/incoming/
