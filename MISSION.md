@@ -649,8 +649,8 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 - [ ] Silhouettes
 - [x] Inventory, Deck + Families, Arena (no bet), Victory/Defeat, Worlds, and the remaining
   screens restyled
-- [ ] Sound on every interaction
-- [ ] Motion everywhere
+- [x] Sound on every interaction
+- [x] Motion everywhere
 - [ ] Extra assets
 - [ ] Phase 2: character PNG pipeline and the portrait pack (12.4)
 - [ ] **Final pass**, as a fresh player at phone and PC sizes:

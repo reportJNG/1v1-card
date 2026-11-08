@@ -3,13 +3,12 @@
 -- images from Config/UiAssets), type, motion and sound stay consistent with docs/ART_STYLE.md.
 -- Images come from UiAssets: the owner's final art when uploaded, otherwise the TEMP stand-in.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local UiAssets = require(Shared.Config.UiAssets)
 local CardKit = require(Shared.Config.CardKit)
-local Sounds = require(Shared.Config.Sounds)
 local Theme = require(script.Parent.Theme)
+local Sfx = require(script.Parent.Sfx)
 
 local C = Theme.Color
 local S = Theme.Size
@@ -173,27 +172,13 @@ end
 
 -- ------------------------------------------------------------------ sound
 
-local cache: { [string]: Sound } = {}
-local sfxVolume = 1
-
+-- Sounds play through App/Sfx (volume from Settings, debounce, pitch variation).
 function Ui.setSfxVolume(v: number)
-	sfxVolume = v
+	Sfx.setVolume(v)
 end
 
 function Ui.sound(name: string)
-	local def = Sounds[name]
-	if def == nil or def.id == nil or sfxVolume <= 0 then
-		return
-	end
-	local snd: Sound? = cache[name]
-	if snd == nil then
-		local made: Sound = Ui.new("Sound", { Name = `Ui_{name}`, SoundId = def.id, Parent = SoundService })
-		cache[name] = made
-		snd = made
-	end
-	assert(snd, "sound cache")
-	snd.Volume = def.volume * sfxVolume
-	SoundService:PlayLocalSound(snd)
+	Sfx.play(name)
 end
 
 -- ------------------------------------------------------------------ motion
@@ -205,7 +190,7 @@ function Ui.popIn(obj: GuiObject, reduced: boolean?)
 		scale.Scale = 1
 		return
 	end
-	scale.Scale = 0.85
+	scale.Scale = M.openFrom
 	TweenService:Create(scale, M.open, { Scale = 1 }):Play()
 end
 
@@ -230,7 +215,7 @@ function Ui.stagger(container: Instance, reduced: boolean?)
 		end
 		local scale = obj:FindFirstChildOfClass("UIScale") or Ui.new("UIScale", { Parent = obj })
 		scale.Scale = 0.55
-		task.delay((i - 1) * 0.03, function()
+		task.delay((i - 1) * M.stagger, function()
 			if scale.Parent then
 				TweenService:Create(scale, M.open, { Scale = 1 }):Play()
 			end
@@ -271,7 +256,7 @@ function Ui.juice(button: GuiButton, skin: ImageLabel?)
 			lastHover = os.clock()
 			Ui.sound("hover")
 		end
-		TweenService:Create(scale, M.hover, { Scale = 1.04 }):Play()
+		TweenService:Create(scale, M.hover, { Scale = M.hoverScale }):Play()
 		if skin then
 			TweenService:Create(skin, M.hover, { ImageColor3 = base:Lerp(C.White, 0.6) }):Play()
 		end
@@ -283,7 +268,7 @@ function Ui.juice(button: GuiButton, skin: ImageLabel?)
 		end
 	end)
 	button.MouseButton1Down:Connect(function()
-		TweenService:Create(scale, M.press, { Scale = 0.94 }):Play()
+		TweenService:Create(scale, M.press, { Scale = M.pressScale }):Play()
 	end)
 	button.MouseButton1Up:Connect(function()
 		TweenService:Create(scale, M.spring, { Scale = 1 }):Play()
@@ -472,6 +457,15 @@ function Ui.glowTile(className: string, props: { [string]: any }, accent: Color3
 			Ui.sound("click")
 		end)
 	end
+	-- The selected tile's glow pulses (MISSION 10).
+	if selected then
+		local edge = t:FindFirstChild("Edge") :: UIStroke
+		TweenService:Create(
+			edge,
+			TweenInfo.new(M.selectedPulse / 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+			{ Transparency = 0.45 }
+		):Play()
+	end
 	return t
 end
 
@@ -576,6 +570,46 @@ function Ui.button(text: string, style: string, onClick: () -> (), props: { [str
 		Ui.outline(C.Night, 1, 0.5).Parent = label
 	end
 	Ui.juice(b, skin)
+	-- Gold buttons: a slow shine sweep every few seconds (MISSION 10).
+	if style == "primary" then
+		local shine = Ui.image("card_shine", {
+			Name = "Shine",
+			ScaleType = Enum.ScaleType.Stretch,
+			ImageTransparency = 0.55,
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(-0.3, 0.5),
+			Size = UDim2.new(0, math.max(14, math.floor(height * 0.5)), 1, -6),
+			Rotation = 18,
+			ZIndex = 3,
+			Parent = b,
+		})
+		local clip = Ui.frame(
+			{
+				Name = "ShineClip",
+				BackgroundTransparency = 1,
+				ClipsDescendants = true,
+				Size = UDim2.fromScale(1, 1),
+				ZIndex = 3,
+				Parent = b,
+			},
+			{ Ui.corner(math.floor(height / 2)) }
+		)
+		shine.Parent = clip
+		task.spawn(function()
+			task.wait(math.random() * M.goldShineEvery)
+			while b.Parent do
+				if b.Visible then
+					shine.Position = UDim2.fromScale(-0.3, 0.5)
+					TweenService:Create(
+						shine,
+						TweenInfo.new(0.7, Enum.EasingStyle.Quad),
+						{ Position = UDim2.fromScale(1.3, 0.5) }
+					):Play()
+				end
+				task.wait(M.goldShineEvery)
+			end
+		end)
+	end
 	local handler = onClick
 	local enabled = true
 	local lastClick = -math.huge
@@ -590,7 +624,7 @@ function Ui.button(text: string, style: string, onClick: () -> (), props: { [str
 			return
 		end
 		lastClick = now
-		Ui.sound("click")
+		Ui.sound(if style == "primary" then "confirm" elseif style == "tab" then "tab" else "click")
 		handler()
 	end)
 	return {

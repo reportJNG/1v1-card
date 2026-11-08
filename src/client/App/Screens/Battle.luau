@@ -438,6 +438,7 @@ function Battle.open(ctx: any, start: any): Handle
 		picked = true
 		setButtons()
 		status.Text = "Waiting for your opponent..."
+		Ui.sound(`pick_{string.lower(action)}`)
 		local reply = ctx.request("Battle.Pick", { round = view.round, action = action }, true)
 		if not reply.ok then
 			picked = false

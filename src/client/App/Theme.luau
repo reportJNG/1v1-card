@@ -63,14 +63,7 @@ Theme.Size = table.freeze({
 	tap = 44, -- minimum tap target
 })
 
--- Motion (ART_STYLE section 4).
-Theme.Motion = table.freeze({
-	open = TweenInfo.new(0.22, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-	close = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-	hover = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-	press = TweenInfo.new(0.06, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-	spring = TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-	count = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-})
+-- Motion: every timing lives in App/Motion (MISSION 10).
+Theme.Motion = require(script.Parent.Motion)
 
 return table.freeze(Theme)

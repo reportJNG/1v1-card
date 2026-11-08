@@ -249,9 +249,19 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			render()
 		end
 	end)
+	local lastState = ctx.state.queue.state
+	local lastTick = 0
 	task.spawn(function()
 		while running do
 			local q = ctx.state.queue
+			-- Matchmaking sounds: a soft tick each second while searching, a chime when found.
+			if q.state == "Found" and lastState ~= "Found" then
+				Ui.sound("queue_found")
+			elseif q.state == "Searching" and os.clock() - lastTick >= 1 then
+				lastTick = os.clock()
+				Ui.sound("queue_search")
+			end
+			lastState = q.state
 			if queueText and queueText.Parent then
 				if q.state == "Searching" and q.since then
 					local waited = ctx.now() - q.since

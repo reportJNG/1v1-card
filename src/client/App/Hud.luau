@@ -23,6 +23,7 @@ local Ui = require(script.Parent.Ui)
 local Kit = require(script.Parent.Kit)
 local Card = require(script.Parent.Card)
 local Format = require(script.Parent.Format)
+local Sfx = require(script.Parent.Sfx)
 
 local C = Theme.Color
 local F = Theme.Face
@@ -492,7 +493,7 @@ function Hud.build(ctx: any, root: Frame): Hud
 		Ui.countUp(label, before, value, Format.short)
 		Ui.pulse(label.Parent :: GuiObject, 0.08)
 		if value > before then
-			Ui.sound("coin")
+			Sfx.coins(value - before)
 			local pop = Ui.text({
 				Text = `+{Format.short(value - before)}`,
 				FontFace = F.Number,

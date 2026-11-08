@@ -325,6 +325,7 @@ function App.start(deps: Deps): Ctx
 	local leavingNow = false
 	local function leave()
 		leavingNow = true
+		Ui.sound("leave")
 		local done = leavingScreen()
 		local t0 = os.clock()
 		ctx.request("Session.Leave", nil, true)
@@ -387,6 +388,7 @@ function App.start(deps: Deps): Ctx
 		end,
 		toast = function(text: string, kind: string?)
 			toastCount += 1
+			Ui.sound(if kind == "error" then "error" else "toast")
 			local color = if kind == "error" then C.Red elseif kind == "good" then C.Green else C.Blue
 			local t = Ui.frame({
 				BackgroundTransparency = 1,

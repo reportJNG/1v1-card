@@ -427,3 +427,22 @@ Built before MISSION.md landed, under CARDS_EGGS_MISSION (now merged into MISSIO
 | Defeat: cold steel banner, encouraging line | `compare_defeat.png` | 8 · 8 · 9 · 8 · 9 |
 | Worlds (`hd-07`): strip of 10 tall cards, big numbers, locks, trophy needs, Completed tick, HERE tag | `compare_worlds.png` | 8 · 8 · 9 · 8 · 9 |
 | Quests / Daily, Settings (+ Credits), Merchant, Queue, Battle UI, KO picker | final kit images (panel, tiles, buttons, HP bar, pips, action buttons); `quests_ours.png`, battle in `defeat_ours.png` / `victory_ours.png` | 8 · 8 · 8 · 8 · 9 |
+
+## Section 9: sound
+- `App/Sfx`: one module for every sound (Settings volume, 50 ms debounce, ±5 % pitch on
+  click / tick / tab / hover / card flip, coin chime pitch rising with the amount). `Ui.sound`
+  delegates to it.
+- Wired: hover, press, primary "confirm", tabs, panel open / close, error, coins, purchase, egg
+  summon / shake / crack / burst / reveal per rarity / card flip / sparkle, card hover / flip /
+  equip / merge / level up, matchmaking searching tick and match found, battle picks (attack,
+  defend, special), hit, parry, KO, victory / defeat stingers, flow (menu music, lobby crossfade,
+  leaving whoosh), toasts. New slots reuse licensed ids (ASSETS.md), "unreviewed".
+- Play mode: no errors in the console through menu -> PLAY -> panels.
+
+## Section 10: motion
+- `App/Motion` holds every timing (panel 0.92 -> 1 in 0.25 s back-out, close 0.15 s, hover 1.04,
+  press 0.94, 25 ms stagger, gold shine every 5 s, selected-tile pulse 1.2 s, card lift 1.05,
+  glow breath 1.5 s); `Theme.Motion` points at it.
+- Added: shine sweep on gold buttons, selected-tile glow pulse. Existing: staggered grids, count-
+  ups and "+N" on currencies and Deck Power, notification dot bounce, toasts, HUD drop-in, VS slam,
+  Victory banner bounce with rotating rays, the launch card shuffle. Reduced motion skips them.

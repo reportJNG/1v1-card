@@ -15,10 +15,24 @@ local Sounds: { [string]: Sound } = {
 	coin = { id = "rbxassetid://9113849492", volume = 0.45, kind = "sfx" }, -- PSE "Coins Or Keys Jingle 6"
 	error = { id = "rbxassetid://9113085764", volume = 0.25, kind = "sfx" }, -- PSE "Alarm Buzzer 5"
 	purchase = { id = "rbxassetid://9113704038", volume = 0.45, kind = "sfx" }, -- PSE "Candy Machine Coin Drops Insert Vending 4"
+	-- MISSION 9 slots. Each reuses an id from the licensed APM / PSE set above (already checked to
+	-- load), so no unvetted audio enters the game; all are "unreviewed" for the owner (ASSETS.md).
+	confirm = { id = "rbxassetid://9116395089", volume = 0.3, kind = "sfx" }, -- PSE "Magic Glows ... Chiming Hits 4"
+	tab = { id = "rbxassetid://9125434359", volume = 0.15, kind = "sfx" }, -- PSE (as tick)
+	toast = { id = "rbxassetid://9116394545", volume = 0.22, kind = "sfx" }, -- PSE "Magic Glows ... Chiming Hits 1"
+	equip = { id = "rbxassetid://9119072660", volume = 0.3, kind = "sfx" }, -- PSE "Shield Clang ..." (as parry, softer)
+	leave = { id = "rbxassetid://9120972321", volume = 0.35, kind = "sfx" }, -- PSE "Wood Whoosh ... 4" (as close)
+	queue_search = { id = "rbxassetid://9125434359", volume = 0.12, kind = "sfx" }, -- PSE (as tick), each second while searching
+	queue_found = { id = "rbxassetid://9116395085", volume = 0.5, kind = "sfx" }, -- PSE "Magic Glows ... Chiming Hits 5"
+	pick_attack = { id = "rbxassetid://9120972444", volume = 0.35, kind = "sfx" }, -- PSE "Wood Whoosh ... 1"
+	pick_defend = { id = "rbxassetid://9119072660", volume = 0.25, kind = "sfx" }, -- PSE "Shield Clang ..."
+	pick_special = { id = "rbxassetid://9125648149", volume = 0.35, kind = "sfx" }, -- PSE "Magic Zoom Up ... Whoosh 8"
 	-- Rewards
 	merge = { id = "rbxassetid://9116406610", volume = 0.55, kind = "sfx" }, -- PSE "Magic Poofs Thumpy Wheezy Exhale 1"
 	level_up = { id = "rbxassetid://94590027038118", volume = 0.5, kind = "sfx" }, -- APM "Victorious Journey Sting"
 	-- Hatching (Screens/Hatch): every beat, then one reveal per best rarity
+	hatch_summon = { id = "rbxassetid://9116395085", volume = 0.35, kind = "sfx" }, -- PSE "Magic Glows ... 5" (summon)
+	sparkle = { id = "rbxassetid://9116394545", volume = 0.25, kind = "sfx" }, -- PSE "Magic Glows ... 1"
 	hatch_shake = { id = "rbxassetid://9116797024", volume = 0.3, kind = "sfx" }, -- PSE "Metal Rattle Thick Shake 2"
 	hatch_crack = { id = "rbxassetid://9113959343", volume = 0.7, kind = "sfx" }, -- PSE "Crack Egg Crunchy 11"
 	hatch_burst = { id = "rbxassetid://9125648149", volume = 0.6, kind = "sfx" }, -- PSE "Magic Zoom Up Sharp Tubular Whoosh Fast Hiss 8"

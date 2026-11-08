@@ -120,3 +120,12 @@ libraries, free for use in Roblox experiences. Never use uploads ripped from com
 - Card and UI kit: `art/ui/MANIFEST_V2.json` (every image, route, status, id).
 - Fonts used to draw the kit: Luckiest Guy (Apache 2.0) and Titan One (OFL), in `art/fonts/` with
   their licenses.
+
+## Sound slots added by MISSION.md section 9 (all "unreviewed": Claude can't listen)
+Each new slot reuses an id from the licensed APM / ProSoundEffects set already in
+`Config/Sounds` (every id there was checked to load), so no unvetted audio entered the game:
+`confirm`, `tab`, `toast`, `equip`, `leave`, `queue_search`, `queue_found`, `pick_attack`,
+`pick_defend`, `pick_special`, `hatch_summon`, `sparkle`. The owner should listen and swap any of
+them for a dedicated sound (search the Creator Store for creator ProSoundEffects or APMOfficial).
+All sounds play through `App/Sfx` (Settings volume, 50 ms debounce, ±5 % pitch on presses, coin
+chime rising with the amount).
