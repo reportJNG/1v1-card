@@ -70,5 +70,31 @@ return function()
 			expect((only :: any).text).to.equal("Goal: Hatch 50 eggs")
 			expect(HudBadges.tracker(view())).to.equal(nil)
 		end)
+
+		it(
+			"builds the compact quest card: dailies done / total, unfinished rows first, at most two",
+			function()
+				local card = HudBadges.questCard(view({
+					quests = {
+						d_hatch3 = { progress = 1, claimed = false },
+						d_play3 = { progress = 3, claimed = false },
+						a_hatch_50 = { progress = 4, claimed = false },
+					},
+				}))
+				expect(card).to.be.ok()
+				local c = card :: any
+				expect(c.title).to.equal("Daily")
+				expect(c.done).to.equal(1)
+				expect(c.total).to.equal(2)
+				expect(#c.rows).to.equal(2)
+				expect(c.rows[1].text).to.equal("Hatch 3 eggs")
+				expect(c.rows[1].done).to.equal(false)
+				expect(c.rows[2].done).to.equal(true)
+				local goals =
+					HudBadges.questCard(view({ quests = { a_hatch_50 = { progress = 4, claimed = false } } }))
+				expect((goals :: any).title).to.equal("Goals")
+				expect(HudBadges.questCard(view())).to.equal(nil)
+			end
+		)
 	end)
 end
