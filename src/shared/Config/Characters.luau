@@ -156,7 +156,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "the floating sun-ring halo behind the head and the tall staff",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://86655307080418",
+		},
 	},
 	{
 		id = "brannok_ironhide",
@@ -640,7 +642,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "a tall shaved topknot and the staff held behind the shoulders",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://74939243679017",
+		},
 	},
 	{
 		id = "volta_skyrend",
@@ -791,7 +795,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "a crow-feather hood that ends in a beak-like point",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://93379065970880",
+		},
 	},
 	{
 		id = "kagen_hollowmere",
@@ -1182,7 +1188,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "a wolf-ear pelt hood and a long bushy tail",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://70960382819383",
+		},
 	},
 	{
 		id = "tusk_boulderhide",
@@ -1665,7 +1673,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "a tall banner flowing above her head",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://92854127828979",
+		},
 	},
 	{
 		id = "rook_hammerfall",
@@ -2024,7 +2034,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "a wide feathered cap",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://116010905514177",
+		},
 	},
 	{
 		id = "isadora_gildwing",
@@ -2174,7 +2186,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "floating shards orbiting the shoulders",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://97076501453960",
+		},
 	},
 	{
 		id = "celeste_moonrift",
@@ -2507,7 +2521,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "a tall crooked pointed hat",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://124769498928235",
+		},
 	},
 	{
 		id = "zarek_spellbind",
@@ -2836,7 +2852,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "a floating mist harp and a long veil",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://100556568220747",
+		},
 	},
 	{
 		id = "malric_hellbrand",
@@ -2958,7 +2976,9 @@ local List: { Types.CharacterDef } = {
 			silhouette = "a bat-wing collar and thorn vines",
 		},
 		enabled = true,
-		assets = {},
+		assets = {
+			cardArt = "rbxassetid://108315633733334",
+		},
 	},
 	{
 		id = "corran_ashenhorn",
