@@ -661,7 +661,7 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
   - Menu → leaving screen → menu → PLAY → lobby
 
   Fix anything that feels off.
-- [ ] Report: `docs/MISSION_REPORT.md`, with every comparison image, the scores, what's `TEMP`,
+- [x] Report: `docs/MISSION_REPORT.md`, with every comparison image, the scores, what's `TEMP`,
   and what needs the owner
 
 ## 16. Don't

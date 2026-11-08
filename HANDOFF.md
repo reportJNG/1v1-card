@@ -1,4 +1,18 @@
-# Handoff (2026-11-07)
+# Handoff (2026-11-08)
+
+## MISSION.md (step 5) status
+The master mission is `MISSION.md`; `docs/MISSION_REPORT.md` has every item, its evidence and what
+is left. Open items: the 10 portrait-pack card arts are processed but not uploaded (the local image
+server, `python -m http.server 8765`, was stopped for low memory; restart it, then
+`python scripts/art/portraits.py urls` -> Studio MCP `upload_image` -> `python scripts/art/characters.py apply <ids.json>`),
+and one continuous final pass at phone and PC sizes. Studio loop used: `qa.project.json` (adds the
+Studio-only `grant-cards` script and `ReplicatedStorage.QA.QAGallery`, with `hatch()` for injected
+openings) built to `build/step5.rbxlx`. Art tools: `scripts/art/card_kit.py`, `ui_kit.py`,
+`ui_extras.py`, `ui_slots.py`, `manifest.py`, `compare.py`, `portraits.py`, and the Blender studio
+`scripts/art/blender/ui_studio.py` (emblems, pedestals). Python: Blender's bundled Python with
+numpy, Pillow and scipy installed to a scratch folder.
+
+
 
 Every stage listed in the previous handoff is built, tested and committed (Settlement, MatchRunner +
 BattleService + Guardian Trials, M4 matchmaking, M6 worlds, M5 client UI, the 100-character roster
