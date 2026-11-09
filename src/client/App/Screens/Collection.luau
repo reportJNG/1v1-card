@@ -537,6 +537,8 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		local grid =
 			Ui.scroll({ Position = UDim2.fromOffset(0, 36), Size = UDim2.new(1, 0, 1, -72), Parent = left })
 		Ui.grid(Vector2.new(88, 120), 8).Parent = grid
+		-- Room for the rarity badge, which overhangs the top of each card.
+		Ui.new("UIPadding", { PaddingTop = UDim.new(0, 12), PaddingLeft = UDim.new(0, 4), Parent = grid })
 		local order = 0
 		local total = 0
 		if tab == "All" or tab == "Eggs" then

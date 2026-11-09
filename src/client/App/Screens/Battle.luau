@@ -204,11 +204,12 @@ function Battle.open(ctx: any, start: any): Handle
 	local plates: { [number]: Frame } = {}
 	for _, side in { you, them } do
 		local mine = side == you
+		-- Below Roblox's own top-left buttons (they covered the card of the left plate).
 		local plate = Ui.frame({
 			Name = if mine then "You" else "Opponent",
 			BackgroundTransparency = 1,
 			AnchorPoint = Vector2.new(if mine then 0 else 1, 0),
-			Position = if mine then UDim2.fromOffset(14, 10) else UDim2.new(1, -14, 0, 10),
+			Position = if mine then UDim2.fromOffset(14, 46) else UDim2.new(1, -14, 0, 46),
 			Size = UDim2.fromOffset(330, 126),
 			Parent = layer,
 		})

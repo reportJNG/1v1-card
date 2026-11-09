@@ -251,7 +251,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		if egg.coinPrice then
 			Ui.pricePill(Format.short(egg.coinPrice), "icon_coin", 22, {
 				Name = "Price",
-				Position = UDim2.fromOffset(CELL.X / 2, 160),
+				Position = UDim2.fromOffset(CELL.X / 2, 150),
 				ZIndex = 3,
 				Parent = cell,
 			})

@@ -13,6 +13,7 @@ This project began in a web chat that can't be resumed here. These files carry i
 them first, then continue with the next unfinished step without waiting to be asked:
 
 @PLAN.md
+@UI_TARGETS.md
 @docs/CONVERSATION.md
 @HANDOFF.md
 @STATUS.md

@@ -626,7 +626,11 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 - [x] Motion everywhere
 - [x] Extra assets
 - [ ] Phase 2: character PNG pipeline (12.4)
-- [ ] **Final pass**, as a fresh player at phone and PC sizes:
+- [x] **Final pass**, as a fresh player at phone and PC sizes (2026-11-09, one continuous Play session
+  at an exact 1334 x 750 viewport, `docs/screens/final_pass/`; PC: the UI is a 960 x 540 design space
+  scaled to fit, so every 16:9 size has the same layout. A 1920 x 1080 viewport can't fit inside
+  Studio on this 1920 x 1080 screen, so the same screens were checked at a second 16:9 size,
+  1066 x 600, for the scaling. The x8 step needed a Studio-only Coins top-up):
   - launch → loading → menu → PLAY → lobby
   - shop → open x1 and x8 → inventory → favourite → upgrade → deck
   - walk into World 1 → Guardian Trial → back to the same spot

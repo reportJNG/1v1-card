@@ -104,6 +104,8 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		Parent = p.body,
 	})
 	Ui.grid(Vector2.new(76, 108), 6).Parent = pickList
+	-- Room for the rarity badge, which overhangs the top of each card.
+	Ui.new("UIPadding", { PaddingTop = UDim.new(0, 12), PaddingLeft = UDim.new(0, 4), Parent = pickList })
 
 	local render: () -> ()
 

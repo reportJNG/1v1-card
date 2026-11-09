@@ -43,6 +43,8 @@ export type Stage = typeof(setmetatable(
 		camBase: CFrame,
 		reduced: boolean,
 		saved: { cameraType: Enum.CameraType, cframe: CFrame, fov: number },
+		playing: number, -- rounds still animating
+		queued: { [number]: string }, -- fighters that enter once those rounds have played
 	},
 	BattleStage
 ))
@@ -152,6 +154,8 @@ function BattleStage.new(you: number, ids: { [number]: string }, reduced: boolea
 		camBase = HOME_CAM,
 		reduced = reduced,
 		saved = { cameraType = camera.CameraType, cframe = camera.CFrame, fov = camera.FieldOfView },
+		playing = 0,
+		queued = {},
 	}, BattleStage)
 	buildFloor(model)
 	for side = 1, 2 do
@@ -194,8 +198,14 @@ function BattleStage.new(you: number, ids: { [number]: string }, reduced: boolea
 	return self
 end
 
--- Puts a fighter on its mark (on start and when a card enters after a KO).
+-- Puts a fighter on its mark (on start and when a card enters after a KO). While a round is still
+-- animating, the new fighter waits until it has played, so the KO falls on the card that was
+-- knocked out, not on its replacement.
 function BattleStage.enter(self: Stage, side: number, characterId: string)
+	if self.playing > 0 then
+		self.queued[side] = characterId
+		return
+	end
 	local old = self.fighters[side]
 	if old then
 		old:Destroy()
@@ -484,7 +494,21 @@ end
 -- Plays one resolved round's events in order, with hit-stop, numbers, shake and VFX.
 -- `special[side]` is true when that side picked a Special this round.
 function BattleStage.play(self: Stage, events: { { any } }, special: { [number]: boolean })
+	self.playing += 1
 	task.spawn(function()
+		self:playEvents(events, special)
+		self.playing -= 1
+		if self.playing == 0 and self.model.Parent then
+			for side, id in self.queued do
+				self.queued[side] = nil
+				self:enter(side, id)
+			end
+		end
+	end)
+end
+
+function BattleStage.playEvents(self: Stage, events: { { any } }, special: { [number]: boolean })
+	do
 		for _, e in events do
 			if self.model.Parent == nil then
 				return
@@ -560,7 +584,7 @@ function BattleStage.play(self: Stage, events: { { any } }, special: { [number]:
 				task.wait(0.6)
 			end
 		end
-	end)
+	end
 end
 
 return BattleStage
