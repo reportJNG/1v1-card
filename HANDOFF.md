@@ -1,18 +1,19 @@
-# Handoff (2026-11-08)
+# Handoff (2026-11-09)
 
-## MISSION.md (step 5) status
-The master mission is `MISSION.md`; `docs/MISSION_REPORT.md` has every item, its evidence and what
-is left. Open items: the 10 portrait-pack card arts are processed but not uploaded (the local image
-server, `python -m http.server 8765`, was stopped for low memory; restart it, then
-`python scripts/art/portraits.py urls` -> Studio MCP `upload_image` -> `python scripts/art/characters.py apply <ids.json>`),
-and one continuous final pass at phone and PC sizes. Studio loop used: `qa.project.json` (adds the
-Studio-only `grant-cards` script and `ReplicatedStorage.QA.QAGallery`, with `hatch()` for injected
-openings) built to `build/step5.rbxlx`. Art tools: `scripts/art/card_kit.py`, `ui_kit.py`,
-`ui_extras.py`, `ui_slots.py`, `manifest.py`, `compare.py`, `portraits.py`, and the Blender studio
-`scripts/art/blender/ui_studio.py` (emblems, pedestals). Python: Blender's bundled Python with
-numpy, Pillow and scipy installed to a scratch folder.
-
-
+## Where things stand (read `PLAN.md` first: sections 2, 6 and 7)
+- `PLAN.md` is the running plan; its section 6 is what to do next. `CLAUDE.md` "Asset safety" overrides
+  everything: no image is used or uploaded without the owner's written approval.
+- `MISSION.md`: every box is ticked except "Card with character" and Phase 2's first approved batch,
+  which wait for the owner's images. Evidence: `docs/MISSION_REPORT.md`, `docs/screens/final_pass`.
+- 5-card mode: `Config/Roster.active`; odds go through `Shared/Domain/Odds` (per-rarity fallback to
+  active characters); sims use the active roster (`--all` for every character).
+- Character art: `scripts/art/characters.py` (`ANIME_FOLDER.md`, "Adding character art").
+- GitHub: `origin` = `https://github.com/reportJNG/1v1-card`; commit and push after every step.
+  Stage named paths only (never `git add -A`).
+- **Studio loop:** build `dev.project.json` to `build/final.rbxlx` for a fresh player (the
+  `qa.project.json` build to `build/step5.rbxlx` grants a test collection). `execute_luau` has its own
+  module cache, so to touch the running game's services insert a Studio-only Script during Play.
+  Studio's game view can get stuck at 1 x 1; restart every Studio window then.
 
 Every stage listed in the previous handoff is built, tested and committed (Settlement, MatchRunner +
 BattleService + Guardian Trials, M4 matchmaking, M6 worlds, M5 client UI, the 100-character roster

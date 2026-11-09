@@ -1,4 +1,4 @@
-# 1v1 CARD: status (2026-11-07, lobby + 10 world maps + layered cards)
+# 1v1 CARD: status (2026-11-09, 5-card mode, portrait pack removed, final pass)
 
 ## Implemented (real logic, tested)
 
@@ -25,6 +25,9 @@
 | Layered 2.5D card (shadow, glow, family background, cutout + rim light, effects, rarity-tinted frame, Golden foil, rarity banner, level badge with level-15 crown, family icon, stats), animated only while on screen, parallax on hover / press / tilt; used in collection, inspect, deck builder, hatch reveal, battle, KO picker and results | `App/Card`, `App/CardFx`, `App/Visuals`, `scripts/art/card_layers.py` | Play mode (hatch, collection + inspect, battle, result), `tests/Tools/CardPreview` gallery, CardFx visibility counts in Studio, `docs/screens/cards` |
 | Hatch sequence, 3D battle stage, battle UI, results | `Screens/Hatch`, `App/BattleStage`, `Screens/Battle` | Play mode: a real Guardian Trial round and forfeit |
 | Step 3 GUI: standalone main menu (PLAY always to the lobby), icon-first HUD dock (icon pack, unedited), glow tiles and price pills, Shop / Inventory / Deck / Merchant restyle, code-drawn card face (rarity pill, sockets, power plate), staggered tile pop-in, starter deck for new players | `App/MainMenu`, `App/App`, `App/Card`, `App/Ui` (glowTile, pricePill, stagger), `Screens/*`, `ProfileSchema.grantStarter` | Play mode (`docs/screens/step3`, `docs/screens/final`), UiFlow and ProfileSchema specs |
+| 5-card mode: only `Config/Roster.active` characters drop from eggs (odds panel = roll), start the deck and fight as Guardians | `Config/Roster`, `Shared/Domain/Odds`, `Config/Economy.StarterCards`, `Config/Guardians` | Roster.spec, Odds.spec, ConfigValidator, `sim/balance.py`, `sim/trials.py`, Play mode (odds, x1, x8) |
+| Character art pipeline under the asset safety rules (review gate, owner approval, no expressions, upload groups of 5) | `scripts/art/characters.py`, `ANIME_FOLDER.md` | `characters.py selftest` |
+| Battle reactions as effects only (sword, shield, KO ring) | `App/BattleStage` | Play mode (recorded during a 15-round Trial) |
 | 100 character art briefs | `Config/Characters` (`look`), `sim/roster_looks.py` | ConfigValidator spec |
 
 ## Placeholder (marked in `Config/ContentStatus` / `status = "Placeholder"`; release builds refuse them)
@@ -50,6 +53,9 @@
 
 | Check | Result |
 | --- | --- |
+| TestEZ headless (2026-11-09) | 291 passed, 0 failed |
+| Final pass in Studio Play (2026-11-09) | one continuous fresh-player run at 1334 x 750 + the same screens at 1066 x 600 (`docs/screens/final_pass`); 4 issues found and fixed |
+| `sim/balance.py` on the 5-card roster (2026-11-09) | every target met (characters 46.6-53.0%, length 16.0, attack-only 48%, adaptive 60%); Trials 42-53% |
 | StyLua, Selene, luau-lsp strict, Rojo build (default, dev, e2e) | clean |
 | TestEZ headless (step 3) | 263 passed, 0 failed |
 | TestEZ headless (session 3) | 246 passed, 0 failed |

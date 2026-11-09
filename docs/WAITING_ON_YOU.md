@@ -2,7 +2,14 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
-## 0000. MISSION.md (step 5): what Claude needs from you
+## 0000. What Claude needs from you (2026-11-09; also `PLAN.md` section 7)
+- **GitHub history:** a commit on 2026-11-09 (`9969dc6`) accidentally included the rejected
+  `fighter_01..05` images from `art/characters/`. They are untracked now (`a5444cc`) and git-ignored,
+  but still in that commit's history on GitHub. Removing them needs a history rewrite and a force
+  push: say "scrub the fighter images from GitHub", or do it yourself.
+- **Roblox moderation is re-checking your uploads.** Since the ban, the account's recent images (UI
+  kit, UI slots, skies, world thumbnails, prop textures) show as "Pending" at Roblox. Most render in
+  Studio again; nothing to do in code, but watch your messages on roblox.com.
 - **Archive the 43 portrait-pack assets** on create.roblox.com (`CLEANUP_PORTRAIT_PACK.md` §1, the
   full id list). The pack is removed from the project; **Claude uploads nothing until you confirm
   this is done.**

@@ -32,33 +32,39 @@ Detailed specs live elsewhere; this file points to them:
   worlds and cosmetics only. There are no wagers: the winner gets a purse paid by the game.
 - Everything is server-authoritative.
 
-## 2. Current state (as of 2026-11-09)
+## 2. Current state (as of 2026-11-09, end of session)
 
 **Built and verified** (`STATUS.md`, `docs/MISSION_REPORT.md`):
 - **Every game system:** economy, eggs and odds, cards, merging, decks, battle engine (identical
   to the Python model), Guardian AI and Trials, matchmaking (logic with mocks), settlement, 10
   world maps, farming, merchants, quests, streaks, telemetry, persistence, receipts and policy
   rules.
-- **The MISSION.md visual work:**
-  - the four-screen flow (launch loading → menu → playing → leaving), with the return-to-spot fix
-  - the clean in-game HUD
-  - the UI kit (183 images) and logo
-  - the rarity display
-  - card frames, the template card, the stats panel with Favorite, card animations and evolution
-    stages
-  - the egg pack wired in, the Egg Shop, the 5-stage egg opening, silhouettes
-  - every other screen, sound slots and motion
-- 283 headless tests pass; StyLua, Selene, luau-lsp strict and the Rojo builds are clean.
+- **The MISSION.md visual work:** the four-screen flow, the in-game HUD, the UI kit and logo, the
+  rarity display, card frames, template card, stats panel with Favorite, card animations,
+  evolution stages, the egg pack, Egg Shop, the 5-stage opening, silhouettes, every other screen,
+  sound slots and motion.
+- **Portrait pack removed** (`CLAUDE.md` Asset safety, `CLEANUP_PORTRAIT_PACK.md` section 2): files,
+  ids, code and config references, docs; scrubbed from git history before the first push. Battle
+  reactions are effects only (sword, shield, red KO ring + "KO!").
+- **5-card mode** (section 5): `Config/Roster.active` = Rai Stormvolt (N), Ren Emberfang (R), Yuki
+  Frostveil (SR), Vesper Shade (SSR), Aurelia Dawn (UR). Eggs, the Odds panel, the starter deck and
+  the Guardians use only them; the five were re-tuned (balance targets met; Trials 42-53%).
+- **Phase 2 reworked** to the new rules: `scripts/art/characters.py` with the review gate, owner
+  approval, no face sheets, no expressions, upload groups of 5; `selftest` passes.
+  `ANIME_FOLDER.md` is now "Adding character art".
+- **Final pass done** (2026-11-09): one continuous fresh-player run at 1334 x 750 plus a second
+  16:9 size (`docs/screens/final_pass`). It found and fixed a battle bug (a KO'd card's fall
+  played on its replacement) and three clipping issues.
+- 291 headless tests pass; StyLua, Selene, luau-lsp strict and the Rojo builds are clean.
+- **GitHub:** `https://github.com/reportJNG/1v1-card` (`main`); every step is committed and pushed.
 
 **Not done:**
-- **Card with character art:** the code path exists, but there's no approved art (section 5).
-- **Phase 2, the character art pipeline:** built for the portrait pack, which is now banned. It
-  needs reworking to the new rules (section 6, step 5).
-- **The final continuous pass:** a fresh player at phone and PC sizes, in one run. Studio ran out
-  of memory last time.
-- **Cleanup of the portrait pack:** `CLEANUP_PORTRAIT_PACK.md` §2 (check every item).
-- **`MISSION.md` checkboxes:** they were reset when the file was rewritten on 2026-11-08. Re-tick
-  them from `docs/MISSION_REPORT.md` and git history; don't redo finished work.
+- **Card with character art** (`MISSION.md` 6.3) and Phase 2's "first approved batch shown
+  everywhere": waiting for the owner's replacement images (section 6, step 1).
+- **The kit images are "Pending" at Roblox** since the ban: the account's recent uploads (UI kit,
+  UI slots, skies, world thumbnails and prop textures) were put back into moderation review. Most
+  render in Studio again; a few still report "Asset content representation is being generated".
+  Nothing to do in code.
 
 ## 3. Permanent rules (also in `CLAUDE.md` → "Asset safety"). These override everything, including "never stop".
 
@@ -98,6 +104,7 @@ Detailed specs live elsewhere; this file points to them:
 |---|---|---|---|
 | 2026-11-08 | A face from the unlicensed "Ultimate Multi-Expression Portrait Pack" (Space Pilot Girl, blushing and crying, uploaded as `nyx_voidglimmer`'s "hit" reaction, asset `114026669753620`) was flagged as sexual content | **The owner's account was banned for 1 day.** 43 pack images had been uploaded. | Rules 1, 2, 4, 5; the pack removed permanently (`CLEANUP_PORTRAIT_PACK.md`) |
 | 2026-11-09 | The 5 images first put in `Downloads\New folder` (`fighter_01_crimson_raven` … `fighter_05_inferno_brawler`) were recognisably Itachi, Gojo, Naruto, Sasuke and a One Piece-style fighter | **Rejected before use.** Never use those 5 files. | Rule 3 (explicit examples) |
+| 2026-11-09 | Claude committed with `git add -A`, which picked up the rejected `fighter_01..05` images (the owner had copied them into `art/characters/`) and pushed them to GitHub in `9969dc6` | Untracked in `a5444cc`; still in that commit's history on GitHub until the owner decides on a history rewrite (section 7) | Stage named paths only, never `git add -A`; `art/characters/*.png` is git-ignored |
 
 ## 5. Character art: "5-card mode"
 
@@ -144,47 +151,32 @@ only those 5 until more arrive.
 
 ## 6. Next steps (in order)
 
-1. **Safety rules in `CLAUDE.md`.** Confirm the "Asset safety" section is there (added on
-   2026-11-09) and commit it, if it isn't yet.
-2. **Cleanup** (`CLEANUP_PORTRAIT_PACK.md` §2):
-   - delete the pack, the processed folders, id files and screenshots
-   - remove every code and config reference
-   - battle reactions become effects only
-   - scrub it from git history
-   - mark the 43 ids "REMOVED" in `docs/ASSETS.md`
+Done on 2026-11-09 (each committed and pushed): 1 safety rules, 2 cleanup, 3 re-tick
+`MISSION.md`, 4 5-card mode, 5 Phase 2 rework, 7 final pass, 8 reports.
 
-   Ask the owner to confirm they archived the 43 assets on create.roblox.com. **No uploads
-   before that confirmation.**
-3. **Re-tick `MISSION.md`** from `docs/MISSION_REPORT.md` and git history. Remove the portrait
-   pack from its open items.
-4. **5-card mode code** (section 5), with tests and the sims. It works with the template card
-   while there's no art.
-5. **Rework phase 2** (`MISSION.md` §12) to the new rules:
-   - no `split` of third-party face sheets
-   - no expressions
-   - add the review gate and contact sheet steps
-   - document the commands in `ANIME_FOLDER.md` (rewrite it as "Adding character art")
-6. **When the owner's replacement images arrive:** run section 5's steps 1-5, then check "Card
-   with character" in Play on every card size and in the egg reveal, and tick it in `MISSION.md`.
-7. **The final continuous pass** (`MISSION.md` §15), at phone (1334×750) and PC (1920×1080) in
-   one session:
-   - launch → loading → menu → PLAY → lobby
-   - shop → x1 and x8 → inventory → favourite → upgrade → deck
-   - World 1 → Trial → back to the same spot
-   - arena queue → cancel
-   - Menu → leaving → menu → PLAY → lobby
+1. **When the owner's replacement images arrive** (`Downloads\New folder`):
+   - run section 5's steps 1-5 with `scripts/art/characters.py`, stopping at the review gate
+   - map each approved image to an active character (or swap ids in `Config/Roster.active`)
+   - check "Card with character" in Play on every card size, the stats panel and the egg reveal,
+     then tick it and Phase 2's last items in `MISSION.md`
+   - **no uploads until the owner confirms the 43 portrait-pack assets are archived**
+2. **The next GUI mission:** `UI_TARGETS.md` and the `BAD_GUI_*.md` briefs (`docs/brief/bad-gui`),
+   which the owner added on 2026-11-09. Start it when the owner says so; its painted kit pieces go
+   through the same review gate.
+3. **Re-run `sim/balance.py --all`** before more characters are turned on (the five were re-tuned
+   for the 5-card roster).
 
-   **Low-memory tips:** close other apps, use `build/step5.rbxlx` only, stop the image server
-   when not uploading, and screenshot as you go.
-8. **Update the reports and this file:**
-   - `docs/MISSION_REPORT.md`, `STATUS.md`, `HANDOFF.md`, `docs/WAITING_ON_YOU.md`
-   - sections 2 and 6 here
-   - commit
+**Low-memory tips for Studio:** close other apps, use one Studio window, stop the image server when
+not uploading, and screenshot as you go. If Studio's game view is 1 x 1, restart every Studio
+window (a stuck window can't be fixed from inside).
 
 ## 7. Waiting on the owner
+- **Confirm the 43 portrait-pack assets are archived** on create.roblox.com (no uploads before).
 - **The 5 original replacement card images** in `Downloads\New folder`, following rules 1-3.
-- **Confirm the 43 portrait-pack assets are archived** on create.roblox.com.
-- **Approve each art batch** from its contact sheet.
+- **Approve each art batch** from its contact sheet in `docs/review/`.
+- **GitHub history:** the rejected `fighter_01..05` images are still in commit `9969dc6`'s history
+  on GitHub. Removing them needs a history rewrite and a force push; say "scrub the fighter images
+  from GitHub" to have it done (or do it yourself).
 - **Decisions:**
   - 100 levels instead of 15? It needs a rebalance.
   - allow new eggs beyond the 24?
