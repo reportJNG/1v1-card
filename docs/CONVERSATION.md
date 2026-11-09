@@ -552,3 +552,21 @@ wagers).
   - The merchant is a gold "Sell your harvest" bar with the total and a **Sell all** button, then
     one glow tile per item (rare resources in gold with a RARE tag): count, price each, and a
     sell button. Items gained a `rare` flag in `Config/Items` for this.
+
+### 5-card mode (PLAN.md section 5, 2026-11-09)
+- **Active roster** (`Config/Roster.active`): the launch five, one per rarity: Rai Stormvolt (N), Ren
+  Emberfang (R), Yuki Frostveil (SR), Vesper Shade (SSR) and Aurelia Dawn (UR). They are swapped for
+  the characters the owner's approved art maps to once it arrives (a config edit).
+- **Eggs** (`Shared/Domain/Odds`, the one source for the roll and the Odds panel): inside each
+  rarity an egg's own active characters come first; if it has none of a rarity its pool lists, every
+  active character of that rarity stands in. So every egg keeps its band odds and its rarity range
+  (it never gains a rarity its pool doesn't list). An egg left with nothing would fall back to all
+  active characters (no egg needs it today). The Shop's "Drops X up to Y" line reads the same odds.
+- **Starter deck:** Rai, Ren and Yuki (three different active characters).
+- **Guardians:** trios of the five at the same levels, picked from `sim/trials.py` measurements so a
+  random same-level deck wins 42-53% (World 1 ~51% easing to ~44% in World 10).
+- **Balance:** on the five, match length was 17.1 (target 12-16). Re-tuned the five characters' one
+  number each (Ren 1.392 -> 1.8, Rai 1.749 -> 1.95, Vesper 1.15 -> 1.5 Special multipliers; Yuki
+  shield 0.288 -> 0.25; Aurelia heal 0.387 -> 0.33). Result: length 16.0, characters 46.6-53.0%,
+  attack-only 48%, adaptive 60%, random 4-11%. Parity fixtures regenerated. `balance.py --all` still
+  runs the 100-character roster; it must be re-checked before more characters are turned on.

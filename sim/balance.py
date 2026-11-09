@@ -1,11 +1,17 @@
-"""Balance suite on the reference engine. Run: python3 sim/balance.py [--quick]
+"""Balance suite on the reference engine. Run: python3 sim/balance.py [--quick] [--all]
 Prints the design-doc targets and writes sim/balance_report.json. Every new character must keep
-these within target before it ships (the Python model is the balance gate)."""
-import itertools, json, os, statistics, sys
+these within target before it ships (the Python model is the balance gate).
+Random decks come from the active roster (src/shared/Config/Roster.luau, "5-card mode"); --all uses
+every character instead."""
+import itertools, json, os, re, statistics, sys
 from multiprocessing import Pool
 import engine as E
 
-IDS = [c["id"] for c in E.C["characters"]]
+ALL_IDS = [c["id"] for c in E.C["characters"]]
+_ROSTER = open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "shared", "Config",
+                            "Roster.luau"), encoding="utf-8").read()
+ACTIVE = re.findall(r'^		"([a-z0-9_]+)",', _ROSTER, re.M)
+IDS = ALL_IDS if "--all" in sys.argv else [c for c in ALL_IDS if c in ACTIVE]
 QUICK = "--quick" in sys.argv
 
 
@@ -157,6 +163,7 @@ if __name__ == "__main__":
         lv = pool.map(duel, [("balanced", "balanced", N, 500 + d, 15, 15 - d, None, None) for d in (1, 2, 4, 7)])
         out["level_gap"] = {f"15v{15 - d}": r[0] for d, r in zip((1, 2, 4, 7), lv)}
 
+    print(f"roster: {len(IDS)} characters ({'all' if len(IDS) == len(ALL_IDS) else 'active'})")
     print(f"random vs sensible styles: {min(out['random_vs_sensible']):.0%}-{max(out['random_vs_sensible']):.0%} (target < 15%)")
     print(f"attack-only average: {out['attack_only_avg']:.0%} (target <= 60%)")
     print(f"adaptive vs fixed: {min(out['adaptive_vs_fixed']):.0%}-{max(out['adaptive_vs_fixed']):.0%}, avg {statistics.mean(out['adaptive_vs_fixed']):.0%} (target > 55%)")

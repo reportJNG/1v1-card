@@ -24,14 +24,17 @@ return function()
 			end
 		end)
 
-		it("uses the band odds and splits a rarity equally inside the pool", function()
+		it("uses the band odds and splits a rarity equally among its droppable characters", function()
 			local egg = Eggs.ById.egg_dragon -- band C: every rarity has characters in its pool
 			local odds = Odds.forEgg(egg, false)
 			expect(odds.rarities.Common).to.be.near(45, 1e-9)
 			expect(odds.rarities.Mythical).to.be.near(0.5, 1e-9)
+			local perRarity: { [string]: number } = {}
 			for _, entry in odds.characters do
-				local share = odds.rarities[entry.rarity] / #egg.pool[entry.rarity]
-				expect(entry.percent).to.be.near(share, 1e-9)
+				perRarity[entry.rarity] = (perRarity[entry.rarity] or 0) + 1
+			end
+			for _, entry in odds.characters do
+				expect(entry.percent).to.be.near(odds.rarities[entry.rarity] / perRarity[entry.rarity], 1e-9)
 			end
 		end)
 
@@ -107,11 +110,11 @@ return function()
 		it("lists every possible character before purchase", function()
 			local egg = Eggs.ById.egg_mythical
 			local rows = Odds.display(egg, false)
-			local n = 0
-			for _, ids in egg.pool do
-				n += #ids
+			local odds = Odds.forEgg(egg, false)
+			expect(#rows).to.equal(#odds.characters)
+			for i, row in rows do
+				expect(row.characterId).to.equal(odds.characters[i].characterId)
 			end
-			expect(#rows).to.equal(n)
 		end)
 	end)
 end

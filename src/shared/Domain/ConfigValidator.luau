@@ -22,6 +22,7 @@ local Guardians = require(Config.Guardians)
 local UiAssets = require(Config.UiAssets)
 local WorldProps = require(Config.WorldProps)
 local Lighting = require(Config.Lighting)
+local Roster = require(Config.Roster)
 local Odds = require(script.Parent.Odds)
 
 export type Report = { errors: { string }, warnings: { string } }
@@ -384,6 +385,50 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 	for _, c in Characters.List do
 		if c.enabled and not inPool[c.id] then
 			table.insert(warnings, `Characters: {c.id} is in no egg pool`)
+		end
+	end
+
+	-- Active roster ("5-card mode"): known, enabled, unique; the starter deck and every Guardian use
+	-- only active characters, and every egg still drops something.
+	local active: { [string]: boolean } = {}
+	if #Roster.active == 0 then
+		err("Roster: no active characters")
+	end
+	for _, id in Roster.active do
+		local def = Characters.ById[id]
+		if def == nil then
+			err(`Roster: unknown character {id}`)
+		elseif not def.enabled then
+			err(`Roster: {id} is active but not enabled`)
+		end
+		if active[id] then
+			err(`Roster: {id} is listed twice`)
+		end
+		active[id] = true
+	end
+	local starterSeen: { [string]: boolean } = {}
+	for _, id in Economy.StarterCards do
+		if not active[id] then
+			err(`Economy: starter card {id} is not an active character`)
+		end
+		if starterSeen[id] then
+			err(`Economy: starter card {id} is listed twice`)
+		end
+		starterSeen[id] = true
+	end
+	for _, guardian in Guardians.List do
+		for _, spec in guardian.deck do
+			if not active[spec.characterId] then
+				err(`Guardians: world {guardian.world} uses inactive character {spec.characterId}`)
+			end
+		end
+	end
+	for _, egg in Eggs.List do
+		for _, golden in (if egg.goldenAllowed then { false, true } else { false }) :: { boolean } do
+			local ok = pcall(Odds.forEgg, egg, golden)
+			if not ok then
+				err(`Eggs: {egg.id}{if golden then " (Golden)" else ""} has no active character to drop`)
+			end
 		end
 	end
 

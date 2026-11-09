@@ -7,11 +7,21 @@
 --   * A rarity with no enabled character in the pool is removed and its share redistributed
 --     proportionally across the remaining rarities.
 --   * Golden: Common is removed and redistributed proportionally. Same pool, same egg.
+--   * Only active characters drop (Config/Roster, "5-card mode"). Inside each rarity an egg's own
+--     pool comes first; if it has no active character of a rarity it lists, every active character
+--     of that rarity takes its place, so each egg keeps its rarity odds where it can. An egg left
+--     with nothing falls back to every active character.
 local Types = require(script.Parent.Parent.Types)
 local Config = script.Parent.Parent.Config
 local OddsBands = require(Config.OddsBands)
 local Rarities = require(Config.Rarities)
 local Characters = require(Config.Characters)
+local Roster = require(Config.Roster)
+
+local ACTIVE: { [string]: boolean } = {}
+for _, id in Roster.active do
+	ACTIVE[id] = true
+end
 
 export type CharacterOdds = { characterId: string, rarity: string, percent: number } -- rarity: Types.Rarity
 
@@ -26,16 +36,35 @@ export type DisplayRow = { characterId: string, rarity: string, text: string }
 
 local Odds = {}
 
-local function enabledPool(egg: Types.EggDef, rarity: string): { string }
+local function droppable(id: string): boolean
+	local def = Characters.ById[id]
+	return def ~= nil and def.enabled and ACTIVE[id] == true
+end
+
+-- Every active character of a rarity, in roster order.
+local function activeOfRarity(rarity: string): { string }
 	local out = {}
-	local ids = egg.pool[rarity]
-	if ids then
-		for _, id in ids do
-			local def = Characters.ById[id]
-			if def and def.enabled then
-				table.insert(out, id)
-			end
+	for _, id in Roster.active do
+		if droppable(id) and Characters.ById[id].rarity == rarity then
+			table.insert(out, id)
 		end
+	end
+	return out
+end
+
+local function activePool(egg: Types.EggDef, rarity: string): { string }
+	local ids = egg.pool[rarity]
+	if ids == nil or #ids == 0 then
+		return {}
+	end
+	local out = {}
+	for _, id in ids do
+		if droppable(id) then
+			table.insert(out, id)
+		end
+	end
+	if #out == 0 then
+		return activeOfRarity(rarity)
 	end
 	return out
 end
@@ -49,7 +78,7 @@ function Odds.forEgg(egg: Types.EggDef, golden: boolean): EggOdds
 	local pools: { [string]: { string } } = {}
 	local total = 0
 	for _, rarity in Rarities.Order do
-		local pool = enabledPool(egg, rarity)
+		local pool = activePool(egg, rarity)
 		pools[rarity] = pool
 		local w = band[rarity] or 0
 		if (golden and rarity == "Common") or #pool == 0 then
@@ -57,6 +86,23 @@ function Odds.forEgg(egg: Types.EggDef, golden: boolean): EggOdds
 		end
 		weights[rarity] = w
 		total += w
+	end
+	if total == 0 then
+		-- Nothing of this egg is active: every active character, with the band's weights where the
+		-- band has them and an equal share otherwise.
+		local anyBand = false
+		for _, rarity in Rarities.Order do
+			pools[rarity] = activeOfRarity(rarity)
+			anyBand = anyBand or ((band[rarity] or 0) > 0 and #pools[rarity] > 0)
+		end
+		for _, rarity in Rarities.Order do
+			local w = if anyBand then band[rarity] or 0 else 1
+			if (golden and rarity == "Common") or #pools[rarity] == 0 then
+				w = 0
+			end
+			weights[rarity] = w
+			total += w
+		end
 	end
 	assert(total > 0, `{egg.id}: no character can drop`)
 

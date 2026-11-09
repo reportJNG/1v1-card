@@ -16,6 +16,7 @@ local Worlds = require(Shared.Config.Worlds)
 local Monetization = require(Shared.Config.Monetization)
 local Progress = require(Shared.Domain.Progress)
 local HatchRules = require(Shared.Domain.Hatch)
+local Odds = require(Shared.Domain.Odds)
 local EggTiers = require(Shared.Config.EggTiers)
 local RunService = game:GetService("RunService")
 local App = script.Parent.Parent
@@ -31,22 +32,22 @@ local C = Theme.Color
 
 local RARITY_ORDER = { "Mythical", "Legendary", "Epic", "Rare", "Common" }
 
--- The most common rarity this egg can drop (its pool keys).
+-- The most common rarity this egg can drop (from Shared/Domain/Odds, like the roll).
 local function lowestRarity(egg: Types.EggDef): string
+	local odds = Odds.forEgg(egg, false)
 	for i = #RARITY_ORDER, 1, -1 do
-		local ids = (egg.pool :: any)[RARITY_ORDER[i]]
-		if ids and #ids > 0 then
+		if (odds.rarities[RARITY_ORDER[i]] or 0) > 0 then
 			return RARITY_ORDER[i]
 		end
 	end
 	return "Common"
 end
 
--- The rarest rarity this egg can drop (its pool keys).
+-- The rarest rarity this egg can drop.
 local function bestRarity(egg: Types.EggDef): string
+	local odds = Odds.forEgg(egg, false)
 	for _, r in RARITY_ORDER do
-		local ids = (egg.pool :: any)[r]
-		if ids and #ids > 0 then
+		if (odds.rarities[r] or 0) > 0 then
 			return r
 		end
 	end

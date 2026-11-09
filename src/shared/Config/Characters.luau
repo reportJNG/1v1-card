@@ -16,7 +16,7 @@ local List: { Types.CharacterDef } = {
 			displayName = "Ember Rush",
 			cost = 3,
 			kind = "Damage",
-			multiplier = 1.392, -- tuned for the 100-character roster (sim/roster.py)
+			multiplier = 1.8, -- tuned for the 5-card roster (PLAN.md section 5, sim/balance.py)
 			applies = { { status = "Burn", target = "Opponent", rounds = 2, value = 0.06 } },
 		},
 		passive = {
@@ -46,7 +46,7 @@ local List: { Types.CharacterDef } = {
 			displayName = "Glacier Ward",
 			cost = 3,
 			kind = "Shield",
-			shieldFraction = 0.288, -- tuned for the 100-character roster (sim/roster.py)
+			shieldFraction = 0.25, -- tuned for the 5-card roster (PLAN.md section 5, sim/balance.py)
 			applies = {
 				{ status = "Chill", target = "Opponent", rounds = 2, value = 0.25 },
 			},
@@ -78,7 +78,7 @@ local List: { Types.CharacterDef } = {
 			displayName = "Static Step",
 			cost = 2,
 			kind = "Damage",
-			multiplier = 1.749, -- tuned for the 100-character roster (sim/roster.py)
+			multiplier = 1.95, -- tuned for the 5-card roster (PLAN.md section 5, sim/balance.py)
 			priority = true,
 		},
 		passive = {
@@ -108,7 +108,7 @@ local List: { Types.CharacterDef } = {
 			displayName = "Umbral Mark",
 			cost = 3,
 			kind = "Damage",
-			multiplier = 1.15, -- tuned for the 100-character roster (sim/roster.py)
+			multiplier = 1.5, -- tuned for the 5-card roster (PLAN.md section 5, sim/balance.py)
 			pierceGuard = 0.25,
 			applies = { { status = "Weaken", target = "Opponent", rounds = 2, value = 0.20 } },
 		},
@@ -139,7 +139,7 @@ local List: { Types.CharacterDef } = {
 			displayName = "Radiant Mend",
 			cost = 3,
 			kind = "Heal",
-			healFraction = 0.387, -- tuned for the 100-character roster (sim/roster.py)
+			healFraction = 0.33, -- tuned for the 5-card roster (PLAN.md section 5, sim/balance.py)
 			cleanse = true,
 		},
 		passive = {
