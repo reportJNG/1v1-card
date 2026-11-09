@@ -138,13 +138,13 @@ Rules on this screen:
   - add tests
 
 ### 2.6 Flow checklist
-- [ ] Launch loading with the card animation and real preload
-- [ ] Main menu as the only path to playing
-- [ ] PLAY → lobby, fresh
-- [ ] Battle → back to the saved spot (1v1, Trial, cross-server fallback)
-- [ ] Menu → leaving screen → main menu, with a full reset
-- [ ] No path back to screen 1
-- [ ] Specs plus Play-mode screenshots `docs/screens/flow/01..06`
+- [x] Launch loading with the card animation and real preload
+- [x] Main menu as the only path to playing
+- [x] PLAY → lobby, fresh
+- [x] Battle → back to the saved spot (1v1, Trial, cross-server fallback)
+- [x] Menu → leaving screen → main menu, with a full reset
+- [x] No path back to screen 1
+- [x] Specs plus Play-mode screenshots `docs/screens/flow/01..06`
 
 ---
 
@@ -194,14 +194,14 @@ playing, the screen must stay mostly game world, like top Roblox games.
 - **Battle hides this HUD completely** and shows only the battle UI.
 
 ### 3.3 HUD checklist
-- [ ] Square icon grid
-- [ ] Currency bars
-- [ ] Deck bar
-- [ ] Compact quest tracker
-- [ ] Menu button
-- [ ] Lighter panel style
-- [ ] Less text everywhere
-- [ ] Side-by-side `docs/screens/hud/compare_ingame.png` (reference vs ours), scoring 8+
+- [x] Square icon grid
+- [x] Currency bars
+- [x] Deck bar
+- [x] Compact quest tracker
+- [x] Menu button
+- [x] Lighter panel style
+- [x] Less text everywhere
+- [x] Side-by-side `docs/screens/hud/compare_ingame.png` (reference vs ours), scoring 8+
 
 ---
 
@@ -561,7 +561,7 @@ art/characters/
 
 ### 12.4 Phase 2 checklist
 - [ ] Pipeline works end to end
-- [ ] 10 characters shown everywhere
+- [ ] The first approved batch shown everywhere (card window, stats panel, egg reveal silhouette)
 - [ ] Contact sheet and galleries
 - [ ] Status report in `WAITING_ON_YOU.md`
 
@@ -611,27 +611,27 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 ---
 
 ## 15. Master checklist
-- [ ] Old mission files archived
-- [ ] **Flow:** launch loading, main menu, playing, leaving screen, reset, return-to-spot fix (2.6)
-- [ ] **In-game HUD**, clean and light (3.3)
-- [ ] `docs/GUI_AUDIT.md`, plus the UI kit replacing all TEMP images, plus the logo
-- [ ] Rarity display config
-- [ ] Card frames (5 × 3 sizes, layers, badges, Golden)
-- [ ] Template card
+- [x] Old mission files archived
+- [x] **Flow:** launch loading, main menu, playing, leaving screen, reset, return-to-spot fix (2.6)
+- [x] **In-game HUD**, clean and light (3.3)
+- [x] `docs/GUI_AUDIT.md`, plus the UI kit replacing all TEMP images, plus the logo
+- [x] Rarity display config
+- [x] Card frames (5 × 3 sizes, layers, badges, Golden)
+- [x] Template card
 - [ ] Card with character
-- [ ] Card stats panel + Favorite (server and tests)
-- [ ] Card animations
-- [ ] Evolution stages
-- [ ] Cards used everywhere, including the deck bar
-- [ ] Egg pack wired in fully (unedited, 256/64, Golden), tier pedestals, Credits
-- [ ] Egg Shop
-- [ ] Egg opening, all 5 stages, every rarity, x1 / x3 / x8, Skip, Golden
-- [ ] Silhouettes
-- [ ] Inventory, Deck + Families, Arena (no bet), Victory/Defeat, Worlds, and the remaining
+- [x] Card stats panel + Favorite (server and tests)
+- [x] Card animations
+- [x] Evolution stages
+- [x] Cards used everywhere, including the deck bar
+- [x] Egg pack wired in fully (unedited, 256/64, Golden), tier pedestals, Credits
+- [x] Egg Shop
+- [x] Egg opening, all 5 stages, every rarity, x1 / x3 / x8, Skip, Golden
+- [x] Silhouettes
+- [x] Inventory, Deck + Families, Arena (no bet), Victory/Defeat, Worlds, and the remaining
   screens restyled
-- [ ] Sound on every interaction
-- [ ] Motion everywhere
-- [ ] Extra assets
+- [x] Sound on every interaction
+- [x] Motion everywhere
+- [x] Extra assets
 - [ ] Phase 2: character PNG pipeline (12.4)
 - [ ] **Final pass**, as a fresh player at phone and PC sizes:
   - launch → loading → menu → PLAY → lobby
@@ -641,7 +641,7 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
   - Menu → leaving screen → menu → PLAY → lobby
 
   Fix anything that feels off.
-- [ ] Report: `docs/MISSION_REPORT.md`, with every comparison image, the scores, what's `TEMP`,
+- [x] Report: `docs/MISSION_REPORT.md`, with every comparison image, the scores, what's `TEMP`,
   and what needs the owner
 
 ## 16. Don't
