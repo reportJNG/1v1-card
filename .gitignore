@@ -13,3 +13,5 @@ Thumbs.db
 build/
 __pycache__/
 art/characters/incoming/
+# Raw character images never go in git: they are reviewed first (CLAUDE.md "Asset safety").
+art/characters/*.png
