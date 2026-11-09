@@ -523,32 +523,24 @@ Start this after sections 2-11 are done, or blocked only by owner items.
 
 ### 12.1 Folders
 ```
+C:\Users\Administrator\Downloads\New folder   the owner's images (the only source; fighter_01..05 rejected)
 art/characters/
-  incoming/<batch>/              raw PNGs as supplied (never edited) + LICENSE.txt
-  processed/<character_id>/      card.png (768 px tall, transparent), portrait.png, silhouette.png, expr_<name>.png
-  map.json                       { "incoming/<batch>/<file>": "<character_id>" }
+  incoming/<batch>/              copies as supplied (never edited; git-ignored)
+  processed/<character_id>/      card.png (576 x 768, transparent), portrait.png, silhouette.png
+  map.json                       { "<batch>/<file>": "<character_id>" }
+docs/review/<batch>.png + .md    contact sheet and the rule 1-3 check, with the owner's approval line
 ```
 
 ### 12.2 `scripts/art/characters.py` commands
-- `ingest`: copy in; no license means `TEMP_UNLICENSED` (development only; the release validator
-  refuses it) plus a line in `WAITING_ON_YOU.md`.
-- `split`: cut sheets into faces with alpha connected components; merge parts, drop fragments.
-- `clean`: remove fringe and halo, fill holes, 1 px feather, trim, normalise head size and
-  position.
-- `upscale`: Real-ESRGAN anime if available, otherwise Lanczos plus sharpening. Never more than 4x.
-- `style`: one colour grade for all, a thin dark outline, a rim light in the family colour; tint
-  black-and-white or sketchy art.
-- `safe`: all-ages crops (head and shoulders where needed), plus a manual-review list.
-- `map`: suggest matches by look, family and role. Change only a character's `look` text (and
-  its display name if needed), never its stats or ids.
-- `derive`: card, portrait, silhouette and expressions.
-- `check`: sizes, transparency, no duplicates, and a contact sheet at
-  `docs/screens/characters/contact_<batch>.png`.
-- `upload` and `status`.
+`ingest`, `sheet`, `approve`, `map`, `process`, `check`, `urls`, `apply`, `status`, `selftest`
+(full table in `ANIME_FOLDER.md`, "Adding character art").
 
-**Rules:**
-- Reject anything that looks like an existing character.
-- Keep the originals untouched.
+**Rules (CLAUDE.md "Asset safety"):**
+- The review gate comes first: contact sheet, rule 1-3 check, then **stop for the owner's
+  written approval**. `process` and `urls` refuse an unapproved batch.
+- No splitting of face sheets and no expressions: one card image per character.
+- Keep the originals untouched; process copies. Never upscale more than 4x.
+- Uploads in groups of at most 5; stop everything at the first "moderated", "rejected" or 403.
 - Each batch is styled to match the others.
 
 ### 12.3 Source: `Downloads\New folder` only
@@ -560,10 +552,11 @@ art/characters/
   are effects only (a sword, a shield, a red shock ring with "KO!"), never faces.
 
 ### 12.4 Phase 2 checklist
-- [ ] Pipeline works end to end
+- [x] Pipeline works end to end (`characters.py selftest`: ingest, review sheet, refusal before
+  approval, process, check, upload groups; the upload itself waits for the first approved batch)
 - [ ] The first approved batch shown everywhere (card window, stats panel, egg reveal silhouette)
 - [ ] Contact sheet and galleries
-- [ ] Status report in `WAITING_ON_YOU.md`
+- [x] Status report in `WAITING_ON_YOU.md`
 
 ---
 
