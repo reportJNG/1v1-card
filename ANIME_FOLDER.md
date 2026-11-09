@@ -35,7 +35,6 @@ the game (layers, masks, frames), and only when the license allows it.
 | Art you have | Where it goes in the game | Requirements |
 | --- | --- | --- |
 | **One full character per image**, transparent background, upper body to knees | **Card art** for one of our 100 characters (`CharacterDef.assets.cardArt`). It replaces the TEMP silhouette on every card and on the 3D standee in battles | PNG, transparent corners, at most 1024 px, 3:4 (768 × 1024 is ideal). It must fit that character's brief in `art/characters/PROMPTS.md` (role, family colours, weapon) |
-| **Expression sheets** (several faces of one character) | Battle portraits and reactions (hit, KO, victory), cut from the sheet in the game | The same character must already have card art, so faces match bodies |
 | **Backgrounds / scenes** | Family card backgrounds (`card_bg_<family>`), main-menu key art, world picker art | 384 × 216 (picker), 1024 × 576 (menu), 512 × 704 (card backgrounds) |
 | **Icons** | HUD and menu shortcuts | 256 px PNG, transparent |
 
@@ -61,25 +60,9 @@ one). It needs a name check, a balance pass (`python sim/roster.py tune`) and yo
 Nothing else in the game changes. Odds, stats and rarities stay as they are; only the pictures
 change.
 
-## 5. The pack already in your Downloads
-
-`Downloads\Ultimate Multi-Expression Portrait Pack — 320+ Free Anime Expressions` was checked on
-2026-11-07:
-- **Content:** 40 images, 1024 × 1024, transparent. They show 10 generic characters (Gothic School
-  Girl, Cyberpunk Boy, Fantasy Elf Girl, Chaotic Jester, Cute Catgirl, Demon Queen, Space Pilot
-  Girl, Vampire Boy, Post-Apocalyptic Girl, Angelic Idol), each as expression sheets of about 6
-  faces. They don't look like existing franchise characters.
-- **License:** **none** (no license or readme in the folder or the zip), and the author is unknown.
-- **Fit:** they are expression sheets, not full-body card art, and they aren't our characters
-  (the designs don't match `art/characters/PROMPTS.md`).
-
-**So it isn't in the game.** To use it:
-- send the pack's license, or a link to its official page showing commercial use is allowed, and
-- say which of our characters each of the 10 should become (or approve 10 new characters built
-  from them).
-
-Then Claude cuts the faces into battle portraits as above. Even then the card art (full body)
-would still be needed for those characters.
+## 5. Removed: the portrait pack
+The "Ultimate Multi-Expression Portrait Pack" was removed permanently on 2026-11-08 after one of its
+faces got the owner's account banned (`CLEANUP_PORTRAIT_PACK.md`). Expression sheets are never used.
 
 ## 6. The fastest way to real card art
 Generate the card art from `art/characters/PROMPTS.md` (one transparent PNG per character, upper

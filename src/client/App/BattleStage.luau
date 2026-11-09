@@ -5,6 +5,9 @@
 -- comes from the server. Fighters are standees (Shared/Art/Standee: the character's cut-out art
 -- on a panel, turned to the camera) until a character's approved model exists
 -- (CharacterDef.assets.model).
+-- Battle reactions are effects only (CLAUDE.md "Asset safety": hits and KOs never show faces): a
+-- sword pops over the attacker, a shield over a defender, and a red shock ring with "KO!" over a
+-- knocked-out fighter, on top of the flash, shake, flinch and fall.
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
@@ -16,6 +19,7 @@ local Art = require(Shared.Config.Art)
 local Standee = require(Shared.Art.Standee)
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
+local Kit = require(script.Parent.Kit)
 
 local C = Theme.Color
 
@@ -308,6 +312,45 @@ function BattleStage.float(self: Stage, side: number, text: string, color: Color
 	end)
 end
 
+-- A reaction icon over a fighter (`icon_atk`, `icon_def`, `shockwave_ring`): it bounces in, holds
+-- and fades, about 0.6 s in all.
+function BattleStage.icon(self: Stage, side: number, slot: string, color: Color3?)
+	local rig = self.fighters[side]
+	if rig == nil then
+		return
+	end
+	local cf, size = rig:GetBoundingBox()
+	local anchor = part({
+		Name = "Reaction",
+		Size = Vector3.new(0.2, 0.2, 0.2),
+		Position = cf.Position + Vector3.new(0, size.Y / 2 + 2.5, 0),
+		Transparency = 1,
+	}, self.model)
+	local gui = Instance.new("BillboardGui")
+	gui.Size = UDim2.fromOffset(84, 84)
+	gui.AlwaysOnTop = true
+	gui.LightInfluence = 0
+	gui.Parent = anchor
+	local image = Kit.image(slot, {
+		Name = slot,
+		ImageColor3 = color or C.White,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(1, 1),
+		Parent = gui,
+	})
+	if not self.reduced then
+		local scale = Ui.new("UIScale", { Scale = 0.2, Parent = image })
+		TweenService:Create(scale, TweenInfo.new(0.25, Enum.EasingStyle.Back), { Scale = 1 }):Play()
+	end
+	task.delay(0.4, function()
+		TweenService:Create(image, TweenInfo.new(0.2), { ImageTransparency = 1 }):Play()
+	end)
+	task.delay(0.65, function()
+		anchor:Destroy()
+	end)
+end
+
 -- Moves a fighter toward its opponent and back (attack lunge).
 function BattleStage.lunge(self: Stage, side: number, distance: number)
 	local rig = self.fighters[side]
@@ -458,6 +501,7 @@ function BattleStage.play(self: Stage, events: { { any } }, special: { [number]:
 					task.wait(0.3)
 				end
 				self:lunge(attacker, MARK * 0.9)
+				self:icon(attacker, "icon_atk", if isSpecial then color else nil)
 				task.wait(0.16)
 				Ui.sound(if isSpecial then "hit_special" else "hit")
 				local rig = self.fighters[target]
@@ -486,11 +530,13 @@ function BattleStage.play(self: Stage, events: { { any } }, special: { [number]:
 			elseif kind == "Parry" then
 				local side = e[2] :: number
 				self:bubble(side, C.Blue)
+				self:icon(side, "icon_def", C.Blue)
 				self:float(side, "PARRY!", C.Blue, true)
 				Ui.sound("parry")
 				task.wait(0.4)
 			elseif kind == "Shield" or kind == "Stance" then
 				self:bubble(e[2] :: number, C.Blue)
+				self:icon(e[2] :: number, "icon_def")
 				task.wait(0.3)
 			elseif kind == "Heal" then
 				self:float(e[2] :: number, "+HP", C.Green)
@@ -507,6 +553,8 @@ function BattleStage.play(self: Stage, events: { { any } }, special: { [number]:
 				task.wait(0.25)
 			elseif kind == "KO" then
 				Ui.sound("ko")
+				self:icon(e[2] :: number, "shockwave_ring", C.Red)
+				self:float(e[2] :: number, "KO!", C.Red, true)
 				self:knockOut(e[2] :: number)
 				self:addShake(1.4)
 				task.wait(0.6)

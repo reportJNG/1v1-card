@@ -17,6 +17,56 @@ Rules (docs/ART_STYLE.md section 8):
 | 10 world skyboxes (60 faces) | `Config/Lighting` (`world1..10`), list in `art/sky/ids.json` | `scripts/art/make_sky.py world` → `art/sky/w<n>_*.png` | Project-owned (code-drawn) |
 | 10 world picker thumbnails | `Config/WorldArt` | Studio captures of the built worlds, cropped by a PowerShell script → `art/worlds/TEMP_world_thumb_<n>.png` | Project-owned. **Placeholder** until key art exists |
 
+## REMOVED: portrait pack (moderation, 2026-11-08)
+43 images from the unlicensed portrait pack, uploaded from the owner's account. No longer used anywhere in
+the project; the owner archives them on create.roblox.com (`CLEANUP_PORTRAIT_PACK.md`).
+
+| Asset id | What | Status |
+|---|---|---|
+| 92854127828979 | asha_warbanner card | REMOVED: moderation |
+| 70678548602464 | asha_warbanner reaction attack | REMOVED: moderation |
+| 86655307080418 | aurelia_dawn card | REMOVED: moderation |
+| 93379065970880 | corvin_duskweaver card | REMOVED: moderation |
+| 72277603985086 | corvin_duskweaver reaction attack | REMOVED: moderation |
+| 96292095396913 | corvin_duskweaver reaction hit | REMOVED: moderation |
+| 97678042801843 | corvin_duskweaver reaction ko | REMOVED: moderation |
+| 115723977420855 | corvin_duskweaver reaction victory | REMOVED: moderation |
+| 108315633733334 | draxa_bloodthorn card | REMOVED: moderation |
+| 86289455675672 | draxa_bloodthorn reaction attack | REMOVED: moderation |
+| 128201419508210 | draxa_bloodthorn reaction hit | REMOVED: moderation |
+| 76799067138001 | draxa_bloodthorn reaction ko | REMOVED: moderation |
+| 92173426689531 | draxa_bloodthorn reaction victory | REMOVED: moderation |
+| 116010905514177 | edric_velvetshield card | REMOVED: moderation |
+| 85147945664162 | edric_velvetshield reaction attack | REMOVED: moderation |
+| 113271597475374 | edric_velvetshield reaction hit | REMOVED: moderation |
+| 136159346972611 | edric_velvetshield reaction ko | REMOVED: moderation |
+| 98240224800692 | edric_velvetshield reaction victory | REMOVED: moderation |
+| 100556568220747 | eira_mistsong card | REMOVED: moderation |
+| 118940198861137 | eira_mistsong reaction attack | REMOVED: moderation |
+| 109941892325317 | eira_mistsong reaction hit | REMOVED: moderation |
+| 102114377071095 | eira_mistsong reaction ko | REMOVED: moderation |
+| 80315939884012 | eira_mistsong reaction victory | REMOVED: moderation |
+| 74939243679017 | kenji_thunderpeak card | REMOVED: moderation |
+| 121822875601499 | kenji_thunderpeak reaction attack | REMOVED: moderation |
+| 139019441252908 | kenji_thunderpeak reaction hit | REMOVED: moderation |
+| 83134501296661 | kenji_thunderpeak reaction ko | REMOVED: moderation |
+| 81754839088633 | kenji_thunderpeak reaction victory | REMOVED: moderation |
+| 70960382819383 | lyra_wildpelt card | REMOVED: moderation |
+| 94309107741899 | lyra_wildpelt reaction attack | REMOVED: moderation |
+| 103195630974841 | lyra_wildpelt reaction hit | REMOVED: moderation |
+| 136428776190691 | lyra_wildpelt reaction ko | REMOVED: moderation |
+| 95358517588719 | lyra_wildpelt reaction victory | REMOVED: moderation |
+| 124769498928235 | mirelle_hexwhisper card | REMOVED: moderation |
+| 77615127031410 | mirelle_hexwhisper reaction attack | REMOVED: moderation |
+| 94633362073500 | mirelle_hexwhisper reaction hit | REMOVED: moderation |
+| 72894536201655 | mirelle_hexwhisper reaction ko | REMOVED: moderation |
+| 101761936663554 | mirelle_hexwhisper reaction victory | REMOVED: moderation |
+| 97076501453960 | nyx_voidglimmer card | REMOVED: moderation |
+| 94197504938250 | nyx_voidglimmer reaction attack | REMOVED: moderation |
+| 114026669753620 | nyx_voidglimmer reaction hit (the flagged image) | REMOVED: moderation |
+| 113999011413246 | nyx_voidglimmer reaction ko | REMOVED: moderation |
+| 109471600220282 | nyx_voidglimmer reaction victory | REMOVED: moderation |
+
 ## Generated with Roblox's `generate_mesh` (owner's account, original)
 
 All original meshes made from text prompts in Studio. Each is one textured MeshPart, built at runtime

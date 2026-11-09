@@ -51,7 +51,8 @@ buttons, font weight, density and motion. **Never copy:**
      it. Never recolour, redraw or merge it into another image. Credit @gvesster on a Credits
      screen in Settings.
    - **Free Icon Pack** (HUD icons): unedited, as now.
-   - **Portrait pack:** `TEMP_UNLICENSED` until the owner adds `LICENSE.txt` (section 12).
+   - **Character art:** only owner-approved images from `Downloads\New folder` (`CLAUDE.md`,
+     "Asset safety"). The portrait pack is removed permanently (`CLEANUP_PORTRAIT_PACK.md`).
 3. No wagers, no stakes. The 1v1 purse is paid by the game.
 4. Odds are shown exactly. The result is decided on the server before any animation, and no
    animation pretends a different result.
@@ -550,33 +551,13 @@ art/characters/
 - Keep the originals untouched.
 - Each batch is styled to match the others.
 
-### 12.3 First batch: the portrait pack
-`C:\Users\Administrator\Desktop\Ultimate Multi-Expression Portrait Pack — 320+ Free Anime Expressions`
-has 40 sheets of 10 characters, in head and shoulders.
-
-- **Family mapping:**
-
-  | Pack character | Family |
-  | --- | --- |
-  | Demon Queen | Demon (tightest crop) |
-  | Vampire Boy | Shadow |
-  | Gothic School Girl | Mystic |
-  | Chaotic Jester | Royal |
-  | Cute Catgirl | Beast |
-  | Cyberpunk Boy | Lightning |
-  | Fantasy Elf Girl | Spirit |
-  | Space Pilot Girl | Cosmic |
-  | Post-Apocalyptic Girl | Warrior |
-  | Angelic Idol | Divine |
-
-- Spread them over all 5 rarities.
-- **Uses:**
-  - the card art window
-  - the stats panel
-  - battle reaction pop-ups (attack, hit, KO, victory; about 0.6 s with a bounce)
-  - the egg reveal silhouette
-- Remove any other test or leftover character images from cards.
-- It stays `TEMP_UNLICENSED` until the owner adds `LICENSE.txt`.
+### 12.3 Source: `Downloads\New folder` only
+- Character art comes only from `C:\Users\Administrator\Downloads\New folder`, after the review
+  gate (`CLAUDE.md` "Asset safety", `PLAN.md` §5). Its first 5 files (`fighter_01..05`) are
+  rejected and never used.
+- The portrait pack is removed permanently (`CLEANUP_PORTRAIT_PACK.md`).
+- **Uses:** the card art window, the stats panel and the egg reveal silhouette. Battle reactions
+  are effects only (a sword, a shield, a red shock ring with "KO!"), never faces.
 
 ### 12.4 Phase 2 checklist
 - [ ] Pipeline works end to end
@@ -598,7 +579,6 @@ has 40 sheets of 10 characters, in head and shoulders.
 
 **Add to `WAITING_ON_YOU.md`:**
 - "100 levels instead of 15? Say 'switch to 100 levels'. It needs a rebalance."
-- "The portrait pack license."
 - "Listen to the unreviewed sounds."
 
 ---
@@ -652,7 +632,7 @@ Never stop to wait for the owner: write what you need in `docs/WAITING_ON_YOU.md
 - [ ] Sound on every interaction
 - [ ] Motion everywhere
 - [ ] Extra assets
-- [ ] Phase 2: character PNG pipeline and the portrait pack (12.4)
+- [ ] Phase 2: character PNG pipeline (12.4)
 - [ ] **Final pass**, as a fresh player at phone and PC sizes:
   - launch → loading → menu → PLAY → lobby
   - shop → open x1 and x8 → inventory → favourite → upgrade → deck
