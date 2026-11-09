@@ -12,6 +12,7 @@ disagree, stop and ask.
 This project began in a web chat that can't be resumed here. These files carry it over, so read
 them first, then continue with the next unfinished step without waiting to be asked:
 
+@PLAN.md
 @docs/CONVERSATION.md
 @HANDOFF.md
 @STATUS.md
@@ -97,6 +98,33 @@ scripts/headless                           runs the same TestEZ suite with the L
 - New services go in `Server/Services` and are added to `ORDER` in `init.server.luau`
   (`init()`, then `start()`).
 - Card uids are `<ownerUserId>-<serial>`, unique across all players and never reused.
+
+## Asset safety (after the 2026-11-08 ban). This overrides everything, including "never stop"
+
+On 2026-11-08 the owner's Roblox account was **banned for 1 day** for an uploaded image (a
+blushing, crying anime-girl face from an unlicensed portrait pack). On 2026-11-09 five fighter
+images were rejected because they were recognisably Itachi, Gojo, Naruto, Sasuke and a One
+Piece-style fighter. Full log: `PLAN.md` §4.
+
+1. **No anime girl characters.** Characters are Roblox-style characters drawn in an anime style:
+   fully clothed, with neutral, determined, confident or heroic expressions.
+2. **Nothing suggestive:**
+   - no blushing, tears, open-mouth or pained faces, drool, tongue out, panting or rolled-back
+     eyes
+   - no cleavage, bare midriffs, swimsuits, lingerie or suggestive poses
+   - hits and KOs are shown with effects, never faces
+3. **No existing anime, game or franchise characters or their signature looks,** even in Roblox
+   style or renamed (Naruto, Sasuke, Itachi/Akatsuki, Gojo, Luffy, Goku…). No datasets or packs
+   of them.
+4. **Review gate:** before ANY image is used in code or uploaded, make a contact sheet in
+   `docs/review/`, check it against rules 1-3, and **stop for the owner's written approval**.
+5. **Uploads:**
+   - batches of 5 or fewer
+   - stop everything at the first "moderated", "rejected" or 403
+   - never upload expression or reaction sheets
+6. **Character art comes only from `C:\Users\Administrator\Downloads\New folder`, after
+   review.** Its first 5 files (`fighter_01..05`) are rejected and must never be used. The
+   portrait pack is removed permanently (`CLEANUP_PORTRAIT_PACK.md`).
 
 ## Content rules
 
