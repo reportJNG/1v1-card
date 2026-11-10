@@ -311,6 +311,13 @@ local List: { Layout } = {
 			direction = "drift",
 			size = 0.45,
 		},
+		gate = {
+			landmark = "w7_crystal",
+			scale = 1.1,
+			stone = "#C8A24A",
+			material = "Marble",
+			ring = "#E08A00",
+		},
 	}, { { "item_cloud_cotton", "w7_cloud_cotton" }, { "item_skyglass", "w7_skyglass" } }, {
 		"item_star_feather",
 		"w7_star_feather",
