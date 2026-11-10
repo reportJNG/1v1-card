@@ -7,6 +7,7 @@ local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local UiAssets = require(Shared.Config.UiAssets)
 local CardKit = require(Shared.Config.CardKit)
+local UiKit = require(Shared.Config.UiKit)
 local Theme = require(script.Parent.Theme)
 local Sfx = require(script.Parent.Sfx)
 
@@ -16,6 +17,26 @@ local F = Theme.Face
 local M = Theme.Motion
 
 local Ui = {}
+
+-- LIVE painted pieces (Config/UiKit, scripts/art/cut_sheet.py) that replace a UiAssets slot: wherever
+-- that slot is drawn, the piece is drawn instead, with its own size and 9-slice margins.
+local replaced: { [string]: any } = {}
+for _, piece in UiKit.Pieces do
+	if piece.id and piece.replaces and piece.size then
+		local m = piece.slice
+		replaced[piece.replaces] = {
+			size = piece.size,
+			slice = if m then { m[1], m[2], piece.size[1] - m[3], piece.size[2] - m[4] } else nil,
+			bleed = 0,
+			final = piece.id,
+			temp = piece.id,
+		}
+	end
+end
+
+local function slotDef(slot: string): any
+	return replaced[slot] or UiAssets[slot]
+end
 
 -- Creates an instance, applies props (Parent last) and parents the children.
 function Ui.new(className: string, props: { [string]: any }?, children: { any }?): any
@@ -55,7 +76,7 @@ end
 -- The image for a slot: final art when it exists, else the TEMP stand-in. Slots of the step-5
 -- card and egg kit (Config/CardKit) resolve there.
 function Ui.asset(slot: string): string
-	local def = UiAssets[slot]
+	local def = slotDef(slot)
 	if not def then
 		local kit = CardKit.Slots[slot]
 		assert(kit, `unknown UI image slot {slot}`)
@@ -68,7 +89,7 @@ end
 -- slots keep their corners at `scale` design px per image px, shrunk when the target is too
 -- small for the corners. Returns the ImageLabel (named "Skin").
 function Ui.skin(target: GuiObject, slot: string, scale: number?, props: { [string]: any }?): ImageLabel
-	local def = UiAssets[slot]
+	local def = slotDef(slot)
 	assert(def, `unknown UI image slot {slot}`)
 	local s = scale or 1
 	local slice = def.slice
@@ -108,7 +129,7 @@ end
 
 -- Swaps a skin made by Ui.skin to another slot (selection states), keeping its scale.
 function Ui.reskin(img: ImageLabel, slot: string)
-	local def = UiAssets[slot]
+	local def = slotDef(slot)
 	assert(def, `unknown UI image slot {slot}`)
 	img.Image = Ui.asset(slot)
 	local slice = def.slice

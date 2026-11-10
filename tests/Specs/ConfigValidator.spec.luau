@@ -238,6 +238,19 @@ return function()
 		end)
 	end)
 
+	describe("UI kit", function()
+		it("draws every kit piece: LIVE with its image, TEMP with a real fallback slot", function()
+			local UiKit = require(Shared.Config.UiKit)
+			local UiAssets = require(Shared.Config.UiAssets)
+			local n = 0
+			for _, piece in UiKit.Pieces do
+				n += 1
+				expect(piece.id ~= nil or UiAssets[piece.fallback :: string] ~= nil).to.equal(true)
+			end
+			expect(n > 0).to.equal(true)
+		end)
+	end)
+
 	describe("Economy config", function()
 		it("prices every card storage expansion between start and max", function()
 			local cfg = Economy.CardStorage

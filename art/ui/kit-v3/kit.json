@@ -1,0 +1,326 @@
+{
+ "note": "Piece -> file, size, 9-slice margins (left, top, right, bottom in px), asset id, tint, status (TEMP | REVIEW | APPROVED | LIVE), the UiAssets slot it replaces once LIVE, the TEMP fallback slot, and its source. Cut pieces are added by scripts/art/cut_sheet.py; names are edited by hand.",
+ "pieces": {
+  "banner_defeat": {
+   "assetId": "",
+   "fallback": "banner_defeat",
+   "file": null,
+   "replaces": "banner_defeat",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "DEFEAT banner"
+  },
+  "banner_victory": {
+   "assetId": "",
+   "fallback": "banner_victory",
+   "file": null,
+   "replaces": "banner_victory",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "VICTORY banner"
+  },
+  "button_gold": {
+   "assetId": "",
+   "fallback": "button_primary",
+   "file": null,
+   "replaces": "button_primary",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "the one primary action per panel (Buy, Sell all, PLAY)"
+  },
+  "button_green": {
+   "assetId": "",
+   "fallback": "button_robux",
+   "file": null,
+   "replaces": "button_robux",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "sell / claim"
+  },
+  "button_purple": {
+   "assetId": "",
+   "fallback": "button_secondary",
+   "file": null,
+   "replaces": "button_secondary",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "secondary actions, Odds"
+  },
+  "button_red": {
+   "assetId": "",
+   "fallback": "button_danger",
+   "file": null,
+   "replaces": "button_danger",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "forfeit, destructive"
+  },
+  "card_back": {
+   "assetId": "",
+   "fallback": "card_back",
+   "file": null,
+   "replaces": "card_back",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "card back"
+  },
+  "close_button": {
+   "assetId": "",
+   "fallback": "close_button",
+   "file": null,
+   "replaces": "close_button",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "round close button"
+  },
+  "hp_fill": {
+   "assetId": "",
+   "fallback": "hp_fill",
+   "file": null,
+   "replaces": "hp_fill",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "battle HP bar fill"
+  },
+  "hp_frame": {
+   "assetId": "",
+   "fallback": "hp_frame",
+   "file": null,
+   "replaces": "hp_frame",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "battle HP bar frame"
+  },
+  "m_close_button": {
+   "assetId": "",
+   "file": "art/ui/kit-v3/m_close_button.png",
+   "replaces": "close_button",
+   "sheet": "docs/brief/bad-gui/04-merchant-target.png",
+   "size": [
+    107,
+    107
+   ],
+   "slice": null,
+   "status": "REVIEW",
+   "tint": null,
+   "use": "round close button"
+  },
+  "m_coinbag_empty": {
+   "assetId": "",
+   "file": "art/ui/kit-v3/m_coinbag_empty.png",
+   "replaces": null,
+   "sheet": "docs/brief/bad-gui/04-merchant-target.png",
+   "size": [
+    490,
+    330
+   ],
+   "slice": null,
+   "status": "REVIEW",
+   "tint": null,
+   "use": "empty-state illustration"
+  },
+  "m_crown": {
+   "assetId": "",
+   "file": "art/ui/kit-v3/m_crown.png",
+   "replaces": null,
+   "sheet": "docs/brief/bad-gui/04-merchant-target.png",
+   "size": [
+    54,
+    44
+   ],
+   "slice": null,
+   "status": "REVIEW",
+   "tint": null,
+   "use": "bottom crown ornament"
+  },
+  "m_divider": {
+   "assetId": "",
+   "file": "art/ui/kit-v3/m_divider.png",
+   "replaces": null,
+   "sheet": "docs/brief/bad-gui/04-merchant-target.png",
+   "size": [
+    404,
+    30
+   ],
+   "slice": null,
+   "status": "REVIEW",
+   "tint": null,
+   "use": "divider line with a sparkle"
+  },
+  "m_panel_frame": {
+   "assetId": "",
+   "file": "art/ui/kit-v3/m_panel_frame.png",
+   "replaces": "panel",
+   "sheet": "docs/brief/bad-gui/04-merchant-target.png",
+   "size": [
+    404,
+    220
+   ],
+   "slice": [
+    180,
+    70,
+    180,
+    70
+   ],
+   "status": "REVIEW",
+   "tint": null,
+   "use": "panel frame, 9-slice (rebuilt from the clean bottom corners)"
+  },
+  "m_sparkle_gold": {
+   "assetId": "",
+   "file": "art/ui/kit-v3/m_sparkle_gold.png",
+   "replaces": null,
+   "sheet": "docs/brief/bad-gui/04-merchant-target.png",
+   "size": [
+    54,
+    59
+   ],
+   "slice": null,
+   "status": "REVIEW",
+   "tint": null,
+   "use": "gold sparkle"
+  },
+  "m_sparkle_violet": {
+   "assetId": "",
+   "file": "art/ui/kit-v3/m_sparkle_violet.png",
+   "replaces": null,
+   "sheet": "docs/brief/bad-gui/04-merchant-target.png",
+   "size": [
+    37,
+    47
+   ],
+   "slice": null,
+   "status": "REVIEW",
+   "tint": null,
+   "use": "violet sparkle"
+  },
+  "m_sparkle_white": {
+   "assetId": "",
+   "file": "art/ui/kit-v3/m_sparkle_white.png",
+   "replaces": null,
+   "sheet": "docs/brief/bad-gui/04-merchant-target.png",
+   "size": [
+    49,
+    48
+   ],
+   "slice": null,
+   "status": "REVIEW",
+   "tint": null,
+   "use": "white sparkle"
+  },
+  "panel_frame": {
+   "assetId": "",
+   "fallback": "panel",
+   "file": null,
+   "replaces": "panel",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "every panel's 9-slice frame (Sheet A main panel / merchant kit)"
+  },
+  "panel_header": {
+   "assetId": "",
+   "fallback": "panel_header",
+   "file": null,
+   "replaces": "panel_header",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "the panel header bar with the icon socket"
+  },
+  "reward_chip": {
+   "assetId": "",
+   "fallback": "reward_chip",
+   "file": null,
+   "replaces": "reward_chip",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "result reward chip"
+  },
+  "tab_off": {
+   "assetId": "",
+   "fallback": "tab_off",
+   "file": null,
+   "replaces": "tab_off",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "tab"
+  },
+  "tab_on": {
+   "assetId": "",
+   "fallback": "tab_on",
+   "file": null,
+   "replaces": "tab_on",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "tab, selected"
+  },
+  "tile": {
+   "assetId": "",
+   "fallback": "tile",
+   "file": null,
+   "replaces": "tile",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "grid tile"
+  },
+  "tile_selected": {
+   "assetId": "",
+   "fallback": "tile_selected",
+   "file": null,
+   "replaces": "tile_selected",
+   "sheet": null,
+   "size": null,
+   "slice": null,
+   "status": "TEMP",
+   "tint": null,
+   "use": "grid tile, selected"
+  }
+ }
+}

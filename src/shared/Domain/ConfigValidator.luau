@@ -20,6 +20,7 @@ local WorldLayouts = require(Config.WorldLayouts)
 local QuestsCfg = require(Config.Quests)
 local Guardians = require(Config.Guardians)
 local UiAssets = require(Config.UiAssets)
+local UiKit = require(Config.UiKit)
 local WorldProps = require(Config.WorldProps)
 local Lighting = require(Config.Lighting)
 local Roster = require(Config.Roster)
@@ -393,6 +394,26 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 	end
 	if tempIcons > 0 then
 		launchGap(`Items: {tempIcons} item icons are TEMP (node models until GOAL_ALL Phase 3b)`)
+	end
+
+	-- The painted UI kit (Config/UiKit, scripts/art/cut_sheet.py): a LIVE piece has its image, size and
+	-- margins that fit; a TEMP piece names a real UiAssets slot to draw meanwhile.
+	for name, piece in UiKit.Pieces do
+		if piece.id then
+			if not string.match(piece.id, "^rbxassetid://%d+$") or piece.size == nil then
+				err(`UiKit: {name} is LIVE but has no valid asset id and size`)
+			elseif piece.slice then
+				local m, sz = piece.slice, piece.size :: { number }
+				if m[1] + m[3] >= sz[1] or m[2] + m[4] >= sz[2] then
+					err(`UiKit: {name} 9-slice margins don't fit its {sz[1]}x{sz[2]} image`)
+				end
+			end
+		elseif piece.fallback == nil or UiAssets[piece.fallback] == nil then
+			err(`UiKit: {name} has no image and no valid fallback slot`)
+		end
+		if piece.replaces and UiAssets[piece.replaces] == nil then
+			err(`UiKit: {name} replaces unknown slot {piece.replaces}`)
+		end
 	end
 
 	-- Egg pools: 6-10 characters each, every character dropping from at least one egg.

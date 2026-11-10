@@ -14,7 +14,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 0 | Prepare: README, report, before shots, PROMPTS_V3, links, character rename | done | see git log `ui(0)` | n/a |
 | 1 | Bugs from the reports (Sell all, item icons, return-to-spot) | done | `ui(1)` | n/a (bug fixes; screenshots in `docs/screens/phase1`) |
 | 2 | Stop web thinking: WorldText, no toast bars, sweep | done | `ui(2)` | big text 8 · icons 8 · on-object 9 · no web boxes 9 (`compare_notifications.png`) |
-| 3 | Image-kit pipeline (cut_sheet, kit.json, slice test, App/Ui/Kit) | todo | | |
+| 3 | Image-kit pipeline (cut_sheet, kit.json, slice test, App/Ui/Kit) | done, waiting for owner (OK on `docs/review/ui-kit-v3.png`) | `ui(3)` | n/a (pipeline; pieces scored when used) |
 | 3b | Combined icon set (three packs, licences, icon_map.json) | todo | | |
 | 4 | In-game HUD | todo | | |
 | 5 | Main menu | todo | | |
@@ -110,6 +110,27 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   merge and a trophy gain; the logic is covered by the Moments specs).
 - Checks: StyLua, Selene, luau-lsp clean; **303 passed, 0 failed**.
 
+### Phase 3 (2026-11-10)
+- **`scripts/art/cut_sheet.py`:** `cut` (magenta / near-white / alpha backgrounds made transparent with a
+  soft edge and magenta de-fringe; one piece per connected region, small fragments merged into
+  their nearest piece; trimmed; capped at 1024 px; reading order; numbered contact sheet
+  `docs/review/<sheet>_cut.png`; registered in `kit.json` as REVIEW), `slicetest` (9-slice at 3
+  sizes, corners copied pixel-exact), `luau` (writes `Config/UiKit`), `selftest` (a synthetic sheet:
+  5 pieces, the sparkle merged into its button, no magenta left, corners identical after stretching).
+- **`art/ui/kit-v3/kit.json`:** piece → file, size, 9-slice margins, asset id, tint, status
+  (TEMP / REVIEW / APPROVED / LIVE), the UiAssets slot it `replaces` and its TEMP `fallback`.
+  17 logical pieces (panel frame, header, close, gold/purple/green/red buttons, tabs, tiles, card
+  back, HP bar, reward chip, result banners) start as TEMP on today's images.
+- **`App/Kit.piece(name)`** (the plan's "App/Ui/Kit"; it lives in the existing `App/Kit` module) is how
+  screens get a painted piece by name; a TEMP piece draws its fallback slot. A LIVE piece that
+  `replaces` a UiAssets slot is drawn wherever that slot is (`Ui.asset`/`Ui.skin`/`Ui.reskin`), with its
+  own size and margins, so swapping art is a data change. The validator checks the kit (spec added).
+- **Pieces from the owner's target** (`scripts/art/slice_target.py`): 8 clean pieces (panel frame rebuilt
+  as a seamless 9-slice from the clean corner, close button, crown, empty-state coin bag, divider,
+  3 sparkles), all REVIEW. Not cut: everything with baked-in text. **Review gate:**
+  `docs/review/ui-kit-v3.png` + `ui-kit-v3.md`; nothing is used or uploaded before the owner's OK.
+- Checks: StyLua, Selene, luau-lsp clean; **304 passed, 0 failed**.
+
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each
 phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
@@ -134,6 +155,7 @@ phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
 | Egg art: Option 1 (pack eggs in tier tiles) or Option 2 (Sheet C crystal eggs) | 2026-11-10 | pending; Option 1 ships meanwhile |
 | GitHub history scrub of `fighter_01..05` (commit `9969dc6`) | 2026-11-10 | pending: waits for the owner's "go" |
 | Approval of every new image (sliced pieces, icons, sheets) | per review sheet | pending per sheet |
+| OK for the 8 pieces cut from `04-merchant-target.png` (`docs/review/ui-kit-v3.png`) | 2026-11-10 | pending |
 
 ## Incidents
 | Date | What | Action |
