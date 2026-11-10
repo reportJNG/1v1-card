@@ -65,7 +65,10 @@ RARITY_GLOW = {"Common": "#E8E6FF", "Rare": "#1EA8FF", "Epic": "#B45CFF", "Legen
 
 def roster():
     s = open(CHARS, encoding="utf-8").read()
-    rows = re.findall(r'id = "([a-z0-9_]+)",\n\t\tdisplayName = "([^"]+)",\n\t\tfamily = "(\w+)",\n\t\trarity = "(\w+)"', s)
+    # a trailing comment after displayName is allowed (the 2026-11-10 renames carry one)
+    rows = re.findall(
+        r'id = "([a-z0-9_]+)",\n\t\tdisplayName = "([^"]+)",[^\n]*\n\t\tfamily = "(\w+)",\n\t\trarity = "(\w+)"', s
+    )
     return {r[0]: {"name": r[1], "family": r[2], "rarity": r[3]} for r in rows}
 
 
@@ -174,7 +177,7 @@ def approve(batch, words):
     if not words.strip():
         raise SystemExit("quote the owner's written approval")
     line = f"Owner approval: APPROVED {datetime.date.today().isoformat()}: \"{words.strip()}\""
-    s = re.sub(r"^Owner approval: .*$", line, s, count=1, flags=re.M)
+    s = re.sub(r"^Owner approval: .*$", lambda _m: line, s, count=1, flags=re.M)  # the quote may hold "\"
     open(p, "w", encoding="utf-8").write(s)
     print(line)
 

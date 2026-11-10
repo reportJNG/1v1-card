@@ -26,6 +26,10 @@ local function face(panel: BasePart, side: Enum.NormalId, characterId: string)
 	gui.Brightness = 1.4
 	gui.ClipsDescendants = false
 	gui.Parent = panel
+	-- Approved art is a 3:4 canvas with the figure fitted to its width and standing on the bottom
+	-- edge (scripts/art/characters.py), so a wide figure leaves empty space on top; scaled up from
+	-- the feet it stands about R15 height (the same treatment as the card's art window).
+	local grow = if Cutout.isTemp(characterId) then 1 else 1.32
 	for i, layer in Cutout.layers(characterId) do
 		local img = Instance.new("ImageLabel")
 		img.Name = layer.name
@@ -34,8 +38,9 @@ local function face(panel: BasePart, side: Enum.NormalId, characterId: string)
 		img.ImageTransparency = layer.transparency
 		img.BackgroundTransparency = 1
 		img.ScaleType = Enum.ScaleType.Fit
-		img.Position = UDim2.fromScale(layer.offset.X, layer.offset.Y)
-		img.Size = UDim2.fromScale(1, 1)
+		img.AnchorPoint = Vector2.new(0.5, 1)
+		img.Position = UDim2.fromScale(0.5 + layer.offset.X, 1 + layer.offset.Y)
+		img.Size = UDim2.fromScale(grow, grow)
 		img.ZIndex = i
 		img.Parent = gui
 	end

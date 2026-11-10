@@ -26,7 +26,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 11 | Lobby full upgrade | done, waiting for owner (hero props and a night sky through the review gate) | `map(lobby)` | landmarks 9 · clarity 9 · mood 8 · life 8 · performance 9 · detail 7 until the hero props (`docs/screens/lobby/compare_lobby.png`, `docs/LOBBY_AUDIT.md`) |
 | 12 | Worlds 1-10 upgrade | done, waiting for owner (hero props, MaterialVariants and skies through the review gate) | `map(world1)` … `map(world10)` | each world: landmark 8 · nodes 8 · clarity 8 · mood 8 (`docs/screens/worlds/compare_world*.png`) |
 | 13 | Final pass | done | `fix(13)`, `docs(13)` | fresh-player run at desktop and phone landscape; 2 bugs fixed (`docs/screens/final_master`) |
-| 14 | Characters: rename done in Phase 0; art waits for "new images are in" | done, waiting for owner (art) | | |
+| 14 | Characters: renamed; 4 of 5 with approved art live (Rook, Halvard, Nox, Solaris) | done, waiting for owner (a Zephyr Volt image) | `art(14)` | cards 9 · hatch 9 · battle 8 · deck 8 · art-first 9 (`compare_card_art.png`, `docs/screens/cards_art`) |
 
 ## Phase notes
 
@@ -418,6 +418,27 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 - `PLAN.md` §2/§6 and `STATUS.md` updated. Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds;
   **323 passed, 0 failed**.
 
+### Phase 14: character art (2026-11-10)
+- **Owner OK, written:** "rook_emberforge, halvard_frostwarden, nox_veilstrider, solaris_dawnbringer
+  from Downloads\New folder are approved; HOLD_nature_fighter_N and fighter_01..05 are NOT." Recorded in
+  `docs/review/new5-2026-11-10.md` with the rule checks (the scarves and Solaris's look were the owner's
+  call, accepted). Only those four were ingested (staged copies, so the held file never entered the batch).
+- **Processed** with `scripts/art/characters.py` (transparent card art 576 × 768, portrait, silhouette;
+  no expressions) and **uploaded in one batch of 4: no moderation, rejection or 403.** Ids are in
+  `Config/Characters` (`assets.cardArt`) and `art/characters/ids.json`; the processed PNGs stay local
+  (git-ignored, the repo is public).
+- **Names** were changed in Phase 0; the four `look` texts now describe the approved images (ids and
+  stats unchanged).
+- **Art everywhere** through `Shared/Art/Cutout`: inventory and inspect, deck builder and HUD deck bar,
+  hatch reveal, the main menu's card fan, the battle standees and the result. Found on first look: the
+  art sat small and dark (a wide figure in a 3:4 canvas, under a vignette that covered half the window),
+  so the card art window and the standee now scale the figure up from its feet, and the vignette only
+  shades the bottom for the name and stats.
+- **Script fixes:** `characters.py` couldn't read the renamed roster (the trailing rename comment) and
+  `approve` broke on a backslash in the owner's quote; both fixed, the selftest passes.
+- **Zephyr Volt** (N) keeps TEMP art, logged in `docs/WAITING_ON_YOU.md`.
+- Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds; **323 passed, 0 failed**.
+
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each
 phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
@@ -436,7 +457,7 @@ phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
 | Lobby concept | 11 | optional |
 | Lobby hero props (Blender) + night skybox | 11 | to be made and reviewed (new textures need the gate) |
 | World hero props, MaterialVariants, skies | 12 | to be made and reviewed (new textures need the gate) |
-| 5 character images | 14 | not received (`NEW_5_CHARACTERS.md`) |
+| Zephyr Volt image | 14 | not received (4 of 5 characters are live) |
 
 ## Owner decisions
 | Decision | Asked | Answer |

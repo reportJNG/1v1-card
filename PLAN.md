@@ -65,9 +65,12 @@ Detailed specs live elsewhere; this file points to them:
   worlds, and a final fresh-player pass at desktop and phone sizes. Painted pieces stay TEMP until
   the owner's sheets pass the review gate (`docs/MASTER_FIX_REPORT.md`). 323 headless tests pass.
 
+- **Character art live (2026-11-10):** Rook Emberforge, Halvard Frostwarden, Nox Veilstrider and
+  Solaris Dawnbringer, approved in writing and uploaded in one batch of 4 (no rejections), show on
+  cards, the deck, hatch reveals, the menu and in battle.
+
 **Not done:**
-- **Card with character art** (`MISSION.md` 6.3) and Phase 2's "first approved batch shown
-  everywhere": waiting for the owner's replacement images (section 6, step 1).
+- **Zephyr Volt (N) art:** the held nature image isn't approved; waiting for a new storm image.
 - **The kit images are "Pending" at Roblox** since the ban: the account's recent uploads (UI kit,
   UI slots, skies, world thumbnails and prop textures) were put back into moderation review. Most
   render in Studio again; a few still report "Asset content representation is being generated".

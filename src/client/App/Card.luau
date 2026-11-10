@@ -155,12 +155,16 @@ local function artWindow(win: Frame, def: any, rdef: any, z: number): { GuiObjec
 		ZIndex = z,
 		Parent = win,
 	})
+	-- The processed art (scripts/art/characters.py) is a 3:4 canvas with the figure fitted to its
+	-- width and standing on the bottom edge, so a wide figure leaves empty space on top. Scaled up
+	-- from the bottom, the figure fills the window (art-first, UI_TARGETS rule 4); the clipped
+	-- part is that empty top.
 	local character = Ui.frame({
 		Name = "Character",
 		BackgroundTransparency = 1,
 		AnchorPoint = Vector2.new(0.5, 1),
-		Position = UDim2.fromScale(0.5, 1.02),
-		Size = UDim2.fromScale(1.04, 1.0),
+		Position = UDim2.fromScale(0.5, 1.04),
+		Size = UDim2.fromScale(1.32, 1.32),
 		ZIndex = z + 1,
 		Parent = win,
 	})
@@ -178,12 +182,13 @@ local function artWindow(win: Frame, def: any, rdef: any, z: number): { GuiObjec
 			Parent = character,
 		})
 	end
-	-- The vignette: the lower part fades to night so the name and stats read on any art.
+	-- The vignette: only the bottom fades to night, just enough for the name and stats to read
+	-- (it used to cover the lower half almost opaque, which hid the art).
 	Ui.frame({
 		Name = "Vignette",
 		BackgroundColor3 = C.Night,
-		Position = UDim2.fromScale(0, 0.45),
-		Size = UDim2.fromScale(1, 0.55),
+		Position = UDim2.fromScale(0, 0.62),
+		Size = UDim2.fromScale(1, 0.38),
 		ZIndex = z + 8,
 		Parent = win,
 	}, {
@@ -191,8 +196,8 @@ local function artWindow(win: Frame, def: any, rdef: any, z: number): { GuiObjec
 			Rotation = 90,
 			Transparency = NumberSequence.new({
 				NumberSequenceKeypoint.new(0, 1),
-				NumberSequenceKeypoint.new(0.45, 0.35),
-				NumberSequenceKeypoint.new(1, 0.08),
+				NumberSequenceKeypoint.new(0.5, 0.55),
+				NumberSequenceKeypoint.new(1, 0.25),
 			}),
 		}),
 	})

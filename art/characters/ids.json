@@ -1,1 +1,6 @@
-{}
+{
+ "http://127.0.0.1:8765/art/characters/processed/aurelia_dawn/card.png": "rbxassetid://95044429524790",
+ "http://127.0.0.1:8765/art/characters/processed/ren_emberfang/card.png": "rbxassetid://129428398496638",
+ "http://127.0.0.1:8765/art/characters/processed/vesper_shade/card.png": "rbxassetid://83344242005955",
+ "http://127.0.0.1:8765/art/characters/processed/yuki_frostveil/card.png": "rbxassetid://80284331656701"
+}

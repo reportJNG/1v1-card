@@ -2,6 +2,15 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
+## 000000. Zephyr Volt (N) still has TEMP art (2026-11-10)
+Your four approved fighters are live on the cards, deck, hatch reveal and battle: Rook Emberforge,
+Halvard Frostwarden, Nox Veilstrider and Solaris Dawnbringer (`docs/review/new5-2026-11-10.md`,
+uploaded in one batch of 4, no rejections). **Zephyr Volt** (`rai_stormvolt`, the N card) keeps
+the TEMP silhouette art: `HOLD_nature_fighter_N.png` is not approved (it reads as a well-known
+hero-academy lead, `NEW_ASSETS_LEVEL1.md` note 3). Put a new Zephyr Volt image (the storm prompt in
+`NEW_5_CHARACTERS.md` section 1: teal hoodie, cloud shoulder pads, goggles, two lightning batons) in
+`Downloads\New folder` as `zephyr_volt.png` and say which file you approve.
+
 ## 00000. The master fix plan (2026-11-10; `MASTER_FIX_PLAN.md`, progress in `docs/MASTER_FIX_REPORT.md`)
 Claude builds every screen's new layout and behaviour now with TEMP images, so nothing waits on
 you. The painted look comes from these sheets. **Exact prompts: `art/ui/PROMPTS_V3.md`.** Flat
@@ -19,7 +28,7 @@ magenta background, no text (unless stated), no characters, saved to `art/ui/she
 | 8 | F1: inventory/deck extras | `inv_extras.png` | deck, families, inventory |
 | 9 | C: crystal eggs (only if Option 2 below) | `eggs_crystal_*.png` | Egg Shop eggs |
 | 10 | Lobby concept (optional) | `lobby_concept.png` | the lobby layout |
-| any | 5 original character images | `Downloads\New folder` | cards (`NEW_5_CHARACTERS.md`) |
+| any | 1 Zephyr Volt image (4 of 5 are live) | `Downloads\New folder` | the N card (`NEW_5_CHARACTERS.md` §1) |
 
 ⚠️ `08`/`09` (main menu) contain a copyrighted character and `11`, `14`, `15`, `hd-03`, `hd-04`
 contain copyrighted card art. Use them only as style references in your image tool; they are never
