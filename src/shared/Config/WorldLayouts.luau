@@ -166,6 +166,7 @@ local List: { Layout } = {
 			direction = "drift",
 			size = 0.5,
 		},
+		gate = { landmark = "w2_mushroom", scale = 0.7, stone = "#5A4A7A", material = "Slate" },
 	}, { { "item_moonpetal", "w2_moonpetal" }, { "item_elderwood", "w2_elderwood" } }, {
 		"item_sprite_dust",
 		"w2_sprite_dust",
