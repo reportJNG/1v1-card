@@ -12,7 +12,7 @@ local C = Theme.Color
 local SWITCHES = {
 	{ key = "music", label = "Music" },
 	{ key = "sfx", label = "Sound effects" },
-	{ key = "reducedMotion", label = "Reduced motion (fewer shakes and bounces)" },
+	{ key = "reducedMotion", label = "Reduced motion" },
 }
 
 local SLIDERS = {
@@ -27,7 +27,7 @@ local function slider(parent: Instance, value: number, order: number, onRelease:
 		BackgroundTransparency = 1,
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.fromScale(1, 0.5),
-		Size = UDim2.fromOffset(260, 30),
+		Size = UDim2.fromOffset(300, 40),
 		LayoutOrder = order,
 		Parent = parent,
 	})
@@ -38,33 +38,35 @@ local function slider(parent: Instance, value: number, order: number, onRelease:
 		BackgroundColor3 = C.PanelDeep,
 		AnchorPoint = Vector2.new(0, 0.5),
 		Position = UDim2.fromScale(0, 0.5),
-		Size = UDim2.new(1, -54, 0, 10),
+		Size = UDim2.new(1, -90, 0, 16),
 		Parent = holder,
-	}, { Ui.corner(5), Ui.stroke(C.Stroke, 1) })
+	}, { Ui.corner(8), Ui.stroke(C.Night, 2) })
 	local fill = Ui.frame({
 		Name = "Fill",
 		BackgroundColor3 = C.Gold,
 		Size = UDim2.fromScale(value / 100, 1),
 		Parent = track,
-	}, { Ui.corner(5), Ui.gradient(C.GoldHi, C.GoldLo, 90) })
+	}, { Ui.corner(8), Ui.gradient(C.GoldHi, C.GoldLo, 90) })
 	local knob = Ui.frame({
 		Name = "Knob",
 		BackgroundColor3 = C.White,
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(value / 100, 0.5),
-		Size = UDim2.fromOffset(22, 22),
+		Size = UDim2.fromOffset(32, 32),
 		ZIndex = 2,
 		Parent = track,
-	}, { Ui.corner(11), Ui.stroke(C.Gold, 3) })
-	local readout = Ui.text({
+	}, { Ui.corner(16), Ui.stroke(C.Gold, 4) })
+	local readout = Ui.display({
 		Text = `{value}%`,
-		FontFace = Theme.Face.Number,
+		TextSize = 22,
 		TextXAlignment = Enum.TextXAlignment.Right,
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.fromScale(1, 0.5),
-		Size = UDim2.fromOffset(46, 24),
+		Size = UDim2.fromOffset(62, 28),
 		Parent = holder,
 	})
+	readout.TextColor3 = C.White
+	Ui.outline(C.Night, 2).Parent = readout
 	local current = value
 	local dragging = false
 	local function setFrom(x: number)
@@ -101,99 +103,175 @@ local function slider(parent: Instance, value: number, order: number, onRelease:
 	return holder
 end
 
-return function(ctx: any, layer: Frame, _arg: any?): any
-	local p = Ui.panel(layer, "Settings", ctx.close, UDim2.fromOffset(640, 460), "icon_settings")
-	local list = Ui.frame({ BackgroundTransparency = 1, Parent = p.body }, { Ui.list(false, 8) })
+local function bigLabel(b: any, max: number)
+	local cap = b.label:FindFirstChildOfClass("UITextSizeConstraint")
+	if cap then
+		cap.MaxTextSize = max
+	end
+	b.label.FontFace = Theme.Face.Display
+end
 
-	local function row(order: number, label: string, control: number): Frame
-		local r = Ui.frame(
-			{ Size = UDim2.new(1, 0, 0, 44), LayoutOrder = order, Parent = list },
-			{ Ui.corner(8), Ui.pad(8) }
-		)
-		Ui.text({
+local ICONS: { [string]: string } =
+	{ music = "icon_energy", sfx = "icon_energy", reducedMotion = "icon_settings" }
+
+local VERSION = "v0.5 · ten worlds · original characters"
+
+return function(ctx: any, layer: Frame, _arg: any?): any
+	local p = Ui.panel(layer, "SETTINGS", ctx.close, UDim2.fromOffset(680, 470), "icon_settings")
+	local tab = "Sound"
+	local tabs = Ui.frame({ BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 40), Parent = p.body })
+	local list = Ui.frame({
+		BackgroundTransparency = 1,
+		Position = UDim2.fromOffset(0, 50),
+		Size = UDim2.new(1, 0, 1, -50),
+		Parent = p.body,
+	}, { Ui.list(false, 10) })
+
+	local render: () -> ()
+
+	local function row(order: number, icon: string, label: string, control: number): Frame
+		local r = Ui.glowTile("Frame", {
+			Size = UDim2.new(1, 0, 0, 58),
+			LayoutOrder = order,
+			Parent = list,
+		}, C.Purple, false)
+		Ui.icon(icon, 40, { Position = UDim2.new(0, 34, 0.5, 0), ZIndex = 2, Parent = r })
+		local t = Ui.text({
 			Text = label,
-			FontFace = Theme.Face.Bold,
-			Size = UDim2.new(1, -control - 12, 1, 0),
+			FontFace = Theme.Face.Title,
+			TextSize = 22,
+			TextWrapped = false,
+			Position = UDim2.fromOffset(72, 0),
+			Size = UDim2.new(1, -control - 90, 1, 0),
+			ZIndex = 2,
 			Parent = r,
 		})
+		Ui.outline(C.Night, 2).Parent = t
+		Ui.fit(t, 22, 14)
+		Ui.new("UIPadding", { PaddingRight = UDim.new(0, 12), Parent = r })
 		return r
 	end
 
-	local function render()
-		local view = ctx.state.view
-		Ui.clear(list)
+	-- A block of explanation (only the INFO tab has sentences, as settings may).
+	local function info(order: number, icon: string, title: string, body: string, height: number)
+		local box = Ui.glowTile("Frame", {
+			Size = UDim2.new(1, 0, 0, height),
+			LayoutOrder = order,
+			Parent = list,
+		}, C.Blue, false)
+		Ui.icon(icon, 34, { Position = UDim2.fromOffset(28, 24), ZIndex = 2, Parent = box })
+		local h = Ui.display({
+			Text = title,
+			TextSize = 22,
+			TextXAlignment = Enum.TextXAlignment.Left,
+			Position = UDim2.fromOffset(52, 8),
+			Size = UDim2.new(1, -60, 0, 30),
+			ZIndex = 2,
+			Parent = box,
+		})
+		h.TextColor3 = C.White
+		Ui.outline(C.Night, 2).Parent = h
+		local t = Ui.text({
+			Text = body,
+			FontFace = Theme.Face.Bold,
+			TextSize = 17,
+			TextYAlignment = Enum.TextYAlignment.Top,
+			Position = UDim2.fromOffset(16, 40),
+			Size = UDim2.new(1, -28, 1, -46),
+			ZIndex = 2,
+			Parent = box,
+		})
+		Ui.fit(t, 17, 11)
+	end
+
+	local function renderSound(view: any)
 		local order = 0
 		for _, opt in SWITCHES do
 			order += 1
 			local on = view.settings[opt.key] == true
-			local r = row(order, opt.label, 100)
-			local b = Ui.button(if on then "On" else "Off", if on then "success" else "ghost", function()
+			local r = row(order, ICONS[opt.key], opt.label, 110)
+			local b = Ui.button(if on then "ON" else "OFF", if on then "success" else "tab", function()
 				ctx.request("Settings.Set", { key = opt.key, value = not on })
 			end, {
 				AnchorPoint = Vector2.new(1, 0.5),
 				Position = UDim2.fromScale(1, 0.5),
-				Size = UDim2.fromOffset(100, 30),
+				Size = UDim2.fromOffset(110, 42),
 				Name = opt.key,
+				ZIndex = 2,
 			})
+			bigLabel(b, 24)
 			b.instance.Parent = r
 			if opt.key == "music" or opt.key == "sfx" then
-				-- the matching volume slider sits right under its switch
-				local s = SLIDERS[if opt.key == "music" then 1 else 2]
+				local sdef = SLIDERS[if opt.key == "music" then 1 else 2]
 				order += 1
-				local sr = row(order, s.label, 260)
-				local value = view.settings[s.key]
-				local sl = slider(sr, if typeof(value) == "number" then value else s.default, 1, function(v)
-					ctx.request("Settings.Set", { key = s.key, value = v })
-				end)
-				sl.Name = s.key
+				local sr = row(order, ICONS[opt.key], sdef.label, 300)
+				local value = view.settings[sdef.key]
+				local sl = slider(
+					sr,
+					if typeof(value) == "number" then value else sdef.default,
+					1,
+					function(v)
+						ctx.request("Settings.Set", { key = sdef.key, value = v })
+					end
+				)
+				sl.Name = sdef.key
+				sl.ZIndex = 2
 			end
 		end
-		order += 1
-		Ui.text({
-			Text = "Graphics: open the Roblox menu (Esc) > Settings > Graphics Quality. "
-				.. "On older phones, a lower setting keeps the game smooth.",
-			TextSize = Theme.Size.small,
-			TextColor3 = C.Blue,
-			Size = UDim2.new(1, 0, 0, 32),
-			LayoutOrder = order,
-			Parent = list,
-		})
-		Ui.text({
-			Text = "How purchases work\n"
-				.. "• Coins are earned by playing and are never sold.\n"
-				.. "• Robux can buy eggs from worlds you have unlocked and cosmetics. Every egg shows its exact odds before you buy.\n"
+	end
+
+	local function renderInfo()
+		info(
+			1,
+			"icon_coin",
+			"HOW PURCHASES WORK",
+			"• Coins are earned by playing and are never sold.\n"
+				.. "• Robux buys eggs from worlds you have unlocked, and cosmetics. Every egg shows its exact odds first.\n"
 				.. "• Golden eggs are earned only. Gems are earned and buy cosmetics only.\n"
-				.. "• Matches have no entry fee and nobody can lose Coins in a match.",
-			TextSize = Theme.Size.small,
-			TextColor3 = C.Muted,
-			TextYAlignment = Enum.TextYAlignment.Top,
-			Size = UDim2.new(1, 0, 0, 96),
-			LayoutOrder = order + 1,
-			Parent = list,
-		})
-		-- Credits (MISSION 7.2; the Egg Icon Pack's author, and the other licensed sources).
-		local credits = Ui.display({
-			Name = "CreditsTitle",
-			Text = "Credits",
-			TextSize = 18,
-			Size = UDim2.new(1, 0, 0, 24),
-			LayoutOrder = order + 2,
-			Parent = list,
-		})
-		credits.TextXAlignment = Enum.TextXAlignment.Left
-		Ui.text({
-			Name = "Credits",
-			Text = "Egg icons: Eggs Icon Pack v2 by @gvesster (linktr.ee/gvesster), used unedited.\n"
-				.. "HUD icons: Free Icon Pack (used unedited).\n"
-				.. "Fonts: Luckiest Guy (Astigmatic, Apache 2.0), Titan One (OFL), Builder Sans (Roblox).\n"
-				.. "Music and sounds: APM Music and ProSoundEffects through the Roblox Creator Store.",
-			TextSize = Theme.Size.small,
-			TextColor3 = C.Muted,
-			TextYAlignment = Enum.TextYAlignment.Top,
-			Size = UDim2.new(1, 0, 0, 70),
-			LayoutOrder = order + 3,
-			Parent = list,
-		})
+				.. "• Matches have no entry fee; nobody can lose Coins in a match.",
+			150
+		)
+		info(
+			2,
+			"icon_settings",
+			"GRAPHICS",
+			"Roblox menu (Esc) > Settings > Graphics Quality. A lower setting keeps older phones smooth.",
+			80
+		)
+		info(
+			3,
+			"icon_trophy",
+			"CREDITS",
+			"Eggs and HUD icons: Eggs Icon Pack v2 and Free Icon Pack by @gvesster, used unedited. "
+				.. "Fonts: Luckiest Guy (Apache 2.0), Titan One (OFL), Builder Sans (Roblox). "
+				.. `Music and sounds: APM Music and ProSoundEffects (Roblox Creator Store). {VERSION}`,
+			110
+		)
+	end
+
+	render = function()
+		local view = ctx.state.view
+		Ui.clear(tabs)
+		for i, t in { { "Sound", "SOUND" }, { "Info", "INFO" } } do
+			local b = Ui.button(t[2], if tab == t[1] then "purple" else "tab", function()
+				tab = t[1]
+				Ui.sound("tick")
+				render()
+			end, {
+				Name = `Tab{t[1]}`,
+				Position = UDim2.fromOffset((i - 1) * 140, 0),
+				Size = UDim2.fromOffset(130, 40),
+			})
+			bigLabel(b, 22)
+			b.instance.Parent = tabs
+		end
+		Ui.clear(list)
+		Ui.list(false, 10).Parent = list
+		if tab == "Sound" then
+			renderSound(view)
+		else
+			renderInfo()
+		end
 	end
 
 	render()

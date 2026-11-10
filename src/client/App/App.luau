@@ -445,22 +445,38 @@ function App.start(deps: Deps): Ctx
 				Ui.frame({ BackgroundColor3 = C.Black, BackgroundTransparency = 0.4, Parent = layer })
 				local p = Ui.panel(layer, title, function()
 					box.destroy()
-				end, UDim2.fromOffset(420, 220))
-				Ui.text({ Text = body, Size = UDim2.new(1, 0, 0, 70), Parent = p.body })
+				end, UDim2.fromOffset(480, 250))
+				local text = Ui.text({
+					Text = body,
+					FontFace = Theme.Face.Title,
+					TextSize = 22,
+					TextXAlignment = Enum.TextXAlignment.Center,
+					Size = UDim2.new(1, 0, 0, 96),
+					Parent = p.body,
+				})
+				Ui.outline(C.Night, 2).Parent = text
+				Ui.fit(text, 22, 14)
 				local row = Ui.frame({
 					BackgroundTransparency = 1,
-					Position = UDim2.new(0, 0, 1, -44),
-					Size = UDim2.new(1, 0, 0, 40),
+					Position = UDim2.new(0, 0, 1, -52),
+					Size = UDim2.new(1, 0, 0, 48),
 					Parent = p.body,
-				}, { Ui.list(true, 10, Enum.HorizontalAlignment.Right) })
-				local cancel = Ui.button("Cancel", "ghost", function()
+				}, { Ui.list(true, 12, Enum.HorizontalAlignment.Center) })
+				local cancel = Ui.button("CANCEL", "tab", function()
 					box.destroy()
-				end, { Size = UDim2.fromOffset(120, 40) })
-				cancel.instance.Parent = row
-				local ok = Ui.button(yes, "primary", function()
+				end, { Size = UDim2.fromOffset(150, 48) })
+				local ok = Ui.button(string.upper(yes), "primary", function()
 					box.destroy()
 					onYes()
-				end, { Size = UDim2.fromOffset(160, 40) })
+				end, { Size = UDim2.fromOffset(190, 48) })
+				for _, b in { cancel, ok } do
+					b.label.FontFace = Theme.Face.Display
+					local cap = b.label:FindFirstChildOfClass("UITextSizeConstraint")
+					if cap then
+						cap.MaxTextSize = 26
+					end
+				end
+				cancel.instance.Parent = row
 				ok.instance.Parent = row
 				return { destroy = function() end }
 			end)

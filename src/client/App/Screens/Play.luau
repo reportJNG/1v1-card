@@ -25,7 +25,6 @@ end
 
 return function(ctx: any, layer: Frame, _arg: any?): any
 	local p = Ui.panel(layer, "1v1 Arena", ctx.close, UDim2.fromOffset(720, 420), "icon_play")
-	Ui.subtitle(p, "Ranked battles · no entry fee")
 	-- Left: league, trophies, the win purse, the level cap, Find Match / queue timer + Cancel.
 	local left = Ui.frame({
 		Name = "Left",
@@ -172,75 +171,90 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		Ui.text({
 			Text = `{Format.number(view.trophies)} trophies`,
 			FontFace = Theme.Face.Bold,
-			TextSize = 14,
+			TextSize = 20,
 			Position = UDim2.fromOffset(54, 28),
 			Size = UDim2.new(1, -54, 0, 18),
 			Parent = badge,
 		})
+		-- What a win pays, as big chips (no sentences): Coins, trophies, the level cap.
 		local rows = Ui.frame({
 			Name = "Rewards",
-			BackgroundColor3 = Color3.fromHex("#140F30"),
-			BackgroundTransparency = 0.2,
-			Size = UDim2.new(1, 0, 0, 108),
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, 0, 0, 96),
 			LayoutOrder = 2,
 			Parent = left,
-		}, { Ui.corner(10), Ui.pad(10), Ui.list(false, 6) })
-		local function row(icon: string, label: string, value: string, order: number)
-			local r = Ui.frame({
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1, 0, 0, 24),
+		}, { Ui.list(true, 8, Enum.HorizontalAlignment.Center) })
+		local function chip(icon: string, value: string, color: Color3, order: number)
+			local c = Ui.glowTile("Frame", {
 				LayoutOrder = order,
+				Size = UDim2.fromOffset(90, 86),
 				Parent = rows,
+			}, color, false)
+			Ui.icon(icon, 44, {
+				AnchorPoint = Vector2.new(0.5, 0),
+				Position = UDim2.new(0.5, 0, 0, 6),
+				ZIndex = 2,
+				Parent = c,
 			})
-			Ui.icon(icon, 22, { Position = UDim2.fromScale(0, 0.5), Parent = r })
-			Ui.text({
-				Text = `<font color="#9EAED3">{label}</font>  <b>{value}</b>`,
-				RichText = true,
-				FontFace = Theme.Face.Bold,
-				TextSize = 15,
-				Position = UDim2.fromOffset(30, 0),
-				Size = UDim2.new(1, -30, 1, 0),
-				Parent = r,
+			local t = Ui.display({
+				Text = value,
+				TextSize = 24,
+				AnchorPoint = Vector2.new(0.5, 1),
+				Position = UDim2.new(0.5, 0, 1, -6),
+				Size = UDim2.new(1, -8, 0, 30),
+				ZIndex = 2,
+				Parent = c,
 			})
+			t.TextColor3 = C.White
+			Ui.outline(C.Night, 3).Parent = t
+			Ui.fit(t, 24, 14)
 		end
-		row("icon_coin", "Win purse:", `+{Format.number(purse)} coins`, 1)
-		row("icon_trophy", "Win:", `+{Economy.Matches.trophyWin} trophies`, 2)
-		row("icon_power", "Level cap:", `cards fight at up to Lv. {league.rankedLevelCap}`, 3)
+		chip("icon_coin", `+{Format.short(purse)}`, C.Gold, 1)
+		chip("icon_trophy", `+{Economy.Matches.trophyWin}`, C.Purple, 2)
+		chip("icon_power", `LV {league.rankedLevelCap}`, C.Blue, 3)
 		queueText = Ui.text({
 			Text = "",
 			FontFace = Theme.Face.Bold,
+			TextSize = 20,
 			TextColor3 = C.Blue,
 			TextXAlignment = Enum.TextXAlignment.Center,
-			Size = UDim2.new(1, 0, 0, 20),
+			Size = UDim2.new(1, 0, 0, 24),
 			LayoutOrder = 3,
 			Name = "QueueStatus",
 			Parent = left,
 		})
 		if q.state == "Searching" then
-			local cancel = Ui.button("Cancel", "danger", function()
+			local cancel = Ui.button("CANCEL", "danger", function()
 				ctx.request("Queue.Leave")
 			end, { Size = UDim2.new(1, 0, 0, 50), LayoutOrder = 4, Name = "CancelQueue" })
 			cancel.instance.Parent = left
 		elseif #specs < 3 then
-			local build = Ui.button("Build a deck first", "secondary", function()
+			local build = Ui.button("BUILD A DECK", "secondary", function()
 				ctx.open("Deck")
 			end, { Size = UDim2.new(1, 0, 0, 50), LayoutOrder = 4 })
 			build.instance.Parent = left
 		else
-			local find = Ui.button("Find Match", "primary", function()
+			local find = Ui.button("FIND MATCH", "primary", function()
 				ctx.request("Queue.Join")
-			end, { Size = UDim2.new(1, 0, 0, 58), TextSize = 22, LayoutOrder = 4, Name = "FindMatch" })
+			end, { Size = UDim2.new(1, 0, 0, 66), LayoutOrder = 4, Name = "FindMatch" })
+			find.label.FontFace = Theme.Face.Display
+			local cap = find.label:FindFirstChildOfClass("UITextSizeConstraint")
+			if cap then
+				cap.MaxTextSize = 34
+			end
 			find.instance.Parent = left
 		end
-		Ui.text({
-			Text = "Nothing at stake: the purse is paid by the game.",
-			TextSize = 11,
-			TextColor3 = C.Muted,
-			TextXAlignment = Enum.TextXAlignment.Center,
-			Size = UDim2.new(1, 0, 0, 16),
+		-- nothing at stake: the purse is paid by the game
+		local fee = Ui.display({
+			Name = "NoFee",
+			Text = "NO ENTRY FEE",
+			TextSize = 20,
+			Size = UDim2.new(1, 0, 0, 26),
 			LayoutOrder = 5,
 			Parent = left,
 		})
+		fee.TextColor3 = C.Green
+		Ui.outline(C.Night, 2).Parent = fee
 	end
 
 	render()

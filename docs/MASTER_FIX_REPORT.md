@@ -19,7 +19,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 4 | In-game HUD | done, waiting for art (E1-E4) | `ui(4)` | clean 9 · buttons 9 · text 8 · painted 7 until E1-E4 (`compare_hud.png`) |
 | 5 | Main menu | done, waiting for art (D1-D4) | `ui(5)` | layout 8 · hero 8 · buttons 8 · text 9 · motion 8 · background 7 / logo 7 until D1/D2 (`compare_mainmenu.png`) |
 | 6 | Egg Shop | done, waiting for art (Sheets A, B; C if Option 2) | `ui(6)` | grid 9 · featured 8 · text 8 · buttons 8 · painted 7 until A/B (`compare_eggshop.png`) |
-| 7 | Merchant + every other panel | todo | | |
+| 7 | Merchant + every other panel | done, waiting for art (merchant kit, Sheet A) | `ui(7)` | merchant: layout 9 · text 9 · icons 8 · space 8 · buttons 8 · painted 7; panels: text 8 · icons 8 · no web boxes 8 · painted 7 (`compare_merchant.png`, `compare_panels.png`) |
 | 8 | Deck Builder, Families, Inventory | todo | | |
 | 9 | Battle screen + 5 arenas | todo | | |
 | 10 | Battle result | todo | | |
@@ -206,6 +206,31 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   OPEN, paged.
 - Purchase, odds and policy logic are unchanged (same requests; the server decides).
 - **Eggs:** the Egg Icon Pack, unedited (Option 1), until the owner decides on Sheet C.
+- Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
+
+### Phase 7 (2026-11-10)
+- **Merchant = target 04** (`Screens/Merchant`): header with the name and a live Coins pill; a gold banner
+  with a coin pile, "SELL YOUR HARVEST" in heavy italic (SELL gold), an italic subtitle and a big gold
+  SELL ALL with the total; tall item cards in tier colour (rare gold, common blue) with a RARE ribbon,
+  the item's own icon with sparkles, a big italic gold "xN", a dark name plate, an "N each" pill and its
+  SELL button; free space shows the empty state; more than 4 items page with side arrows (one row is
+  all that fits the 540 px design height). Found: clearing the banner deleted its own gradient (it
+  turned white); only GUI children are cleared now.
+- **The template on every panel:**
+  - **Quests:** a gold streak banner of 7 day tiles (check / coin / gem, big amounts) with a big
+    CLAIM DAY N; DAILY / GOALS tabs; quests as big cards (kind icon, 20 px task, thick bar, "1/2",
+    reward pill, CLAIM / DONE); no scrolling (goals page 3 at a time); no idle button on an
+    unfinished quest.
+  - **Settings:** SOUND / INFO tabs; big icon rows, ON / OFF toggles, chunky sliders; the purchase
+    rules, graphics hint and credits (with the version line the menu dropped) on INFO. Found: the
+    credits used to spill out of the panel.
+  - **Arena queue:** reward sentences became chips (+220 coins, +30 trophies, LV 8), a big FIND MATCH,
+    and "NO ENTRY FEE" in green instead of a footnote.
+  - **Worlds picker:** no subtitle, no scrollbar, display type for names and status (TRAVEL, DONE,
+    trophies), one big line "TAP A WORLD TO TRAVEL".
+  - **Odds:** tier-coloured rows with the name, rarity and a big %, sized to its rows, a readable note.
+  - **Confirmations:** a 22 px body and big CANCEL / action buttons.
+- Panel art stays TEMP until the owner's merchant kit (and Sheet A) are approved and live.
 - Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
 
 ## Waiting for art

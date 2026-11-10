@@ -47,6 +47,8 @@ Theme.Face = table.freeze({
 	Number = Font.new(BUILDER, Enum.FontWeight.Heavy),
 	Bold = Font.new(BUILDER, Enum.FontWeight.Bold),
 	Body = Font.new(BUILDER, Enum.FontWeight.Medium),
+	-- Heavy italic for banner headlines and subtitles (BAD_GUI_2: "SELL YOUR HARVEST").
+	Italic = Font.new(BUILDER, Enum.FontWeight.Heavy, Enum.FontStyle.Italic),
 })
 
 -- Sizes in the 960 x 540 design space; a UIScale fits it to the device (mobile first).

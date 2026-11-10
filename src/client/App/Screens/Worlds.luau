@@ -24,7 +24,6 @@ local CARD = Vector2.new(77, 240)
 
 return function(ctx: any, layer: Frame, _arg: any?): any
 	local p = Ui.panel(layer, "Worlds", ctx.close, UDim2.fromOffset(860, 400), "icon_worlds")
-	Ui.subtitle(p, "Earn trophies to unlock new worlds")
 	local home = Ui.button("Back to Lobby", "secondary", function()
 		local reply = ctx.request("World.Hub")
 		if reply.ok then
@@ -43,7 +42,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		ScrollingDirection = Enum.ScrollingDirection.X,
-		ScrollBarThickness = 4,
+		ScrollBarThickness = 0, -- all ten fit; no scrollbar (BAD_GUI rules)
 		AutomaticCanvasSize = Enum.AutomaticSize.X,
 		CanvasSize = UDim2.new(),
 		Size = UDim2.new(1, 0, 0, CARD.Y + 40),
@@ -52,15 +51,16 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 	local detail = Ui.text({
 		Name = "Detail",
 		Text = "",
-		FontFace = Theme.Face.Bold,
-		TextSize = 13,
-		TextColor3 = C.Muted,
+		FontFace = Theme.Face.Display,
+		TextSize = 22,
+		TextColor3 = C.GoldHi,
 		TextXAlignment = Enum.TextXAlignment.Center,
 		AnchorPoint = Vector2.new(0, 1),
 		Position = UDim2.fromScale(0, 1),
-		Size = UDim2.new(1, 0, 0, 20),
+		Size = UDim2.new(1, 0, 0, 28),
 		Parent = p.body,
 	})
+	Ui.outline(C.Night, 2).Parent = detail
 
 	local function render()
 		local view = ctx.state.view
@@ -72,9 +72,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		end
 		local area = ctx.state.area
 		home.instance.Visible = area ~= 0
-		detail.Text = if area == 0
-			then "Tap a world to travel. Guardian Trials start at the trial gate in each world."
-			else `You are in World {area}. Guardian Trials start at its trial gate.`
+		detail.Text = if area == 0 then "TAP A WORLD TO TRAVEL" else `WORLD {area} · TRIAL AT ITS GATE`
 		for _, world in Worlds.List do
 			local unlocked = view.highestTrophies >= world.trophiesToUnlock
 			local here = area == world.id
@@ -153,8 +151,8 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			local name = Ui.text({
 				Name = "WorldName",
 				Text = world.displayName,
-				FontFace = Theme.Face.Title,
-				TextSize = 15,
+				FontFace = Theme.Face.Display,
+				TextSize = 18,
 				TextColor3 = if unlocked then C.White else C.Muted,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				TextYAlignment = Enum.TextYAlignment.Top,
@@ -165,7 +163,8 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				Parent = card,
 			})
 			name.TextWrapped = true
-			Ui.outline(C.Night, 1.5).Parent = name
+			Ui.outline(C.Night, 2).Parent = name
+			Ui.fit(name, 18, 12)
 			if not unlocked then
 				Kit.image("lock_overlay", {
 					AnchorPoint = Vector2.new(0.5, 0.5),
@@ -187,13 +186,13 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			if here then
 				local tag = Ui.text({
 					Text = "HERE",
-					FontFace = Theme.Face.Title,
-					TextSize = 11,
+					FontFace = Theme.Face.Display,
+					TextSize = 16,
 					TextColor3 = C.GoldInk,
 					TextXAlignment = Enum.TextXAlignment.Center,
 					BackgroundColor3 = C.GoldHi,
 					Position = UDim2.fromOffset(4, 4),
-					Size = UDim2.fromOffset(42, 16),
+					Size = UDim2.fromOffset(56, 22),
 					ZIndex = 5,
 					Parent = card,
 				})
@@ -203,31 +202,31 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			local status = Ui.text({
 				Name = "Status",
 				Text = if here
-					then "You are here"
-					elseif cleared then "    Done"
-					elseif unlocked then "Travel"
+					then "HERE"
+					elseif cleared then "    DONE"
+					elseif unlocked then "TRAVEL"
 					else `    {Format.short(world.trophiesToUnlock)}`,
-				FontFace = Theme.Face.Bold,
-				TextSize = 13,
+				FontFace = Theme.Face.Display,
+				TextSize = 18,
 				TextColor3 = if cleared then C.Green elseif unlocked then C.White else C.Muted,
 				TextXAlignment = Enum.TextXAlignment.Center,
 				BackgroundColor3 = if unlocked and not here
 					then Color3.fromHex("#3A2580")
 					else Color3.fromHex("#140F30"),
 				Position = UDim2.fromOffset(0, CARD.Y + 6),
-				Size = UDim2.fromOffset(CARD.X, 24),
+				Size = UDim2.fromOffset(CARD.X, 30),
 				Parent = col,
 			})
 			Ui.corner(8).Parent = status
 			if cleared and not here then
-				Ui.icon("icon_check", 16, {
+				Ui.icon("icon_check", 22, {
 					AnchorPoint = Vector2.new(0, 0.5),
 					Position = UDim2.new(0, 3, 0.5, 0),
 					Parent = status,
 				})
 			end
 			if not unlocked then
-				Ui.icon("icon_trophy", 16, {
+				Ui.icon("icon_trophy", 22, {
 					AnchorPoint = Vector2.new(0, 0.5),
 					Position = UDim2.new(0, 3, 0.5, 0),
 					Parent = status,

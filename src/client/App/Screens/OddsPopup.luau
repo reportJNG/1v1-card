@@ -19,56 +19,77 @@ local OddsPopup = {}
 function OddsPopup.show(ctx: any, egg: Types.EggDef, golden: boolean)
 	local box
 	box = ctx.overlay(function(layer)
-		Ui.frame({ BackgroundColor3 = C.Black, BackgroundTransparency = 0.4, Parent = layer })
-		local p = Ui.panel(layer, `Odds: {egg.displayName}{if golden then " (Golden)" else ""}`, function()
-			box.destroy()
-		end, UDim2.fromOffset(460, 400))
 		local rows, rounded = Odds.display(egg, golden)
-		local list = Ui.scroll({ Size = UDim2.new(1, 0, 1, -40), Parent = p.body })
-		Ui.list(false, 4).Parent = list
+		Ui.frame({ BackgroundColor3 = C.Black, BackgroundTransparency = 0.4, Parent = layer })
+		local p = Ui.panel(
+			layer,
+			`ODDS: {string.upper(egg.displayName)}{if golden then " (GOLDEN)" else ""}`,
+			function()
+				box.destroy()
+			end,
+			UDim2.fromOffset(520, 470),
+			"icon_odds"
+		)
+
+		local list = Ui.scroll({ Size = UDim2.new(1, 0, 1, -44), Parent = p.body })
+		list.ScrollBarThickness = 0
+		Ui.list(false, 6).Parent = list
 		for i, row in rows do
 			local def = Characters.ById[row.characterId]
-			local r = Ui.frame({
-				BackgroundColor3 = C.Raised,
-				Size = UDim2.new(1, -8, 0, 30),
+			local color = Theme.Rarity[row.rarity]
+			local r = Ui.glowTile("Frame", {
+				Size = UDim2.new(1, -4, 0, 44),
 				LayoutOrder = i,
 				Parent = list,
-			}, {
-				Ui.corner(6),
-			})
-			Ui.text({
+			}, color, false)
+			local name = Ui.text({
 				Text = def.displayName,
-				FontFace = Theme.Face.Bold,
-				Position = UDim2.fromOffset(10, 0),
-				Size = UDim2.fromScale(0.5, 1),
+				FontFace = Theme.Face.Title,
+				TextSize = 20,
+				TextWrapped = false,
+				Position = UDim2.fromOffset(12, 0),
+				Size = UDim2.new(0.5, -12, 1, 0),
+				ZIndex = 2,
 				Parent = r,
 			})
-			Ui.text({
-				Text = Rarities.label(row.rarity),
-				TextColor3 = Theme.Rarity[row.rarity],
+			Ui.outline(C.Night, 2).Parent = name
+			Ui.fit(name, 20, 12)
+			local rar = Ui.display({
+				Text = string.upper(Rarities.label(row.rarity)),
+				TextSize = 18,
 				Position = UDim2.fromScale(0.5, 0),
-				Size = UDim2.fromScale(0.25, 1),
+				Size = UDim2.fromScale(0.26, 1),
+				ZIndex = 2,
 				Parent = r,
 			})
-			Ui.text({
+			rar.TextColor3 = color
+			Ui.outline(C.Night, 2).Parent = rar
+			Ui.fit(rar, 18, 10)
+			local pct = Ui.display({
 				Text = row.text,
-				FontFace = Theme.Face.Bold,
+				TextSize = 24,
 				TextXAlignment = Enum.TextXAlignment.Right,
-				Position = UDim2.fromScale(0.75, 0),
-				Size = UDim2.new(0.25, -10, 1, 0),
+				Position = UDim2.fromScale(0.76, 0),
+				Size = UDim2.new(0.24, -12, 1, 0),
+				ZIndex = 2,
 				Parent = r,
 			})
+			pct.TextColor3 = C.White
+			Ui.outline(C.Night, 3).Parent = pct
 		end
-		Ui.text({
+		local note = Ui.text({
 			Text = if rounded
-				then "Exact chance per character. Shown values are rounded, so they may not add up to exactly 100%."
+				then "Exact chance per character. Rounded, so they may not add up to exactly 100%."
 				else "Exact chance per character for every open of this egg.",
-			TextSize = Theme.Size.small,
-			TextColor3 = C.Muted,
-			Position = UDim2.new(0, 0, 1, -34),
-			Size = UDim2.new(1, 0, 0, 34),
+			FontFace = Theme.Face.Bold,
+			TextSize = 16,
+			TextColor3 = C.Text,
+			TextXAlignment = Enum.TextXAlignment.Center,
+			Position = UDim2.new(0, 0, 1, -38),
+			Size = UDim2.new(1, 0, 0, 38),
 			Parent = p.body,
 		})
+		Ui.fit(note, 16, 11)
 		return { destroy = function() end }
 	end)
 end
