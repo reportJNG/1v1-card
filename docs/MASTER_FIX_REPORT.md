@@ -24,7 +24,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 9 | Battle screen + 5 arenas | done, waiting for art (H1, H2) | `ui(9)` | bars 9 · timer 8 · action cards 8 · clean 9 · motion 8 · painted 7 until H1/H2 (`compare_battle.png`, `docs/screens/arenas`) |
 | 10 | Battle result | done, waiting for art (G1, G2) | `ui(10)` | layout 9 · both fighters 8 · text 9 · rewards 9 · buttons 8 · motion 8 · painted 7 until G1/G2 (`compare_result_defeat.png`, `compare_result_victory.png`; `hd-06` left out of the compare: it shows a franchise-like character) |
 | 11 | Lobby full upgrade | done, waiting for owner (hero props and a night sky through the review gate) | `map(lobby)` | landmarks 9 · clarity 9 · mood 8 · life 8 · performance 9 · detail 7 until the hero props (`docs/screens/lobby/compare_lobby.png`, `docs/LOBBY_AUDIT.md`) |
-| 12 | Worlds 1-10 upgrade | todo | | |
+| 12 | Worlds 1-10 upgrade | done, waiting for owner (hero props, MaterialVariants and skies through the review gate) | `map(world1)` … `map(world10)` | each world: landmark 8 · nodes 8 · clarity 8 · mood 8 (`docs/screens/worlds/compare_world*.png`) |
 | 13 | Final pass | todo | | |
 | 14 | Characters: rename done in Phase 0; art waits for "new images are in" | done, waiting for owner (art) | | |
 
@@ -368,6 +368,30 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   open walk from the spawn to the plaza, real eggs on the pedestals, the merchant point at its stall)
   and the lobby merchant in `Worlds.spec`. StyLua, Selene, luau-lsp clean; **321 passed, 0 failed**.
 
+### Phase 12 (2026-11-10)
+- **One method for all ten worlds** (World 1 first, one commit per world), in `Server/World/WorldBuilder`
+  with each world's data in `Config/WorldLayouts` (`theme.gate`):
+  - **A landmark at the spawn:** a paved plaza with a glowing ring, a welcome arch over the path into
+    the field (lit pillars, a glowing trim) carrying the world's name, and two big copies of the
+    world's signature mesh framing the spawn (windmills, giant mushrooms, obelisks, ice spires,
+    basalt spires, demon pillars, sky crystals, winged lions, monoliths, golden wings).
+  - **Readable resource nodes:** the node meshes are 1.6× (rare 1.9×) and stand on a glowing ring,
+    white (gold for rare); on light ground (Frozen Lands, Celestial Islands, Divine World) the
+    rings and the arch trim use the world's deeper colour.
+  - **Paths** from the spawn to the merchant and to the Guardian.
+  - **Found and fixed:** the generated ground sits at y = 2 (terrain snaps to 4-stud voxels), so node
+    meshes were half buried and new rings were invisible; nodes, rings and the gate now stand on it.
+    The first landmark placement hid the merchant and the Guardian; they now frame the spawn plaza.
+  - Range checks are unchanged (node, merchant and Guardian positions are the same); decor keeps clear
+    of the arch and landmarks (`WorldLayout.decor`); a spec checks every gate uses an existing mesh and
+    stays clear of the nodes.
+- **Waiting, by the asset rules:** the Blender hero props, MaterialVariants (`generate_material`
+  creates textures) and new skyboxes create new uploaded images, so they wait for the review gate;
+  the terrain colours, lighting and particles per world are the existing ones.
+- Screens: `docs/screens/worlds/after/` (same arrival camera for every world) and
+  `compare_world01..10` against the earlier overview shots. Checks: StyLua, Selene, luau-lsp clean;
+  **322 passed, 0 failed**.
+
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each
 phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
@@ -385,6 +409,7 @@ phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
 | C (crystal eggs) | 6 | only if Option 2 |
 | Lobby concept | 11 | optional |
 | Lobby hero props (Blender) + night skybox | 11 | to be made and reviewed (new textures need the gate) |
+| World hero props, MaterialVariants, skies | 12 | to be made and reviewed (new textures need the gate) |
 | 5 character images | 14 | not received (`NEW_5_CHARACTERS.md`) |
 
 ## Owner decisions
