@@ -407,6 +407,13 @@ local List: { Layout } = {
 			direction = "rise",
 			size = 0.45,
 		},
+		gate = {
+			landmark = "w10_statue",
+			scale = 1.0,
+			stone = "#C8A24A",
+			material = "Marble",
+			ring = "#E08A00",
+		},
 	}, { { "item_halo_bloom", "w10_halo_bloom" }, { "item_seraph_gold", "w10_seraph_gold" } }, {
 		"item_divine_tear",
 		"w10_divine_tear",
