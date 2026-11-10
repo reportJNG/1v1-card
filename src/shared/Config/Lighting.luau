@@ -61,6 +61,37 @@ local Presets: { [string]: Preset } = {
 		sunRays = { intensity = 0.06, spread = 0.6 },
 		sky = HUB_SKY,
 	},
+	-- The main menu's own scene (Config/MenuStage): a starry purple night, the moon is a 3D disc in
+	-- the scene, warm lantern light on the platform.
+	menu = {
+		clockTime = 0,
+		brightness = 1.6,
+		exposure = 0.45,
+		ambient = "#3A2F6E",
+		outdoorAmbient = "#5A48A8",
+		envDiffuse = 0.5,
+		envSpecular = 0.7,
+		atmosphere = {
+			density = 0.32,
+			offset = 0.05,
+			color = "#5A3C9E",
+			decay = "#1E1046",
+			glare = 0.2,
+			haze = 1.6,
+		},
+		bloom = { intensity = 1.1, size = 30, threshold = 1.15 },
+		color = { brightness = 0.03, contrast = 0.16, saturation = 0.22, tint = "#F4EEFF" },
+		sunRays = { intensity = 0, spread = 0 },
+		sky = {
+			ft = HUB_SKY.ft,
+			bk = HUB_SKY.bk,
+			lf = HUB_SKY.lf,
+			rt = HUB_SKY.rt,
+			up = HUB_SKY.up,
+			dn = HUB_SKY.dn,
+			stars = 3000,
+		},
+	},
 	arena = {
 		clockTime = 20.5,
 		brightness = 2,

@@ -178,7 +178,7 @@ local function refresh()
 	local player = Players.LocalPlayer
 	local world = if player then player:GetAttribute("World") else 0
 	if onMenu and not battleOpen then
-		AreaFx.apply("hub")
+		AreaFx.apply("menu") -- the menu's own scene (App/MenuScene)
 		playMusic("music_menu")
 	elseif battleOpen then
 		local arena = battleArena and Arenas.ById[battleArena]

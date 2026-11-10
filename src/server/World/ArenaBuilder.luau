@@ -1,5 +1,6 @@
 --!strict
--- Builds the 5 arena map templates (Config/Arenas) into ReplicatedStorage.Arenas: each is the
+-- Builds the 5 arena map templates (Config/Arenas) into ReplicatedStorage.Arenas, and the main
+-- menu's stage (Config/MenuStage) into ReplicatedStorage.MenuStage. Each arena is the
 -- shared Shared/Art/ArenaKit model (ArenaCore + Dressing) plus the map's meshes, which only the
 -- server can load (Server/World/MeshLibrary). Clients clone the template for their match's map
 -- around their own battle stage, so every player gets their own copy and nothing in it is
@@ -8,6 +9,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Arenas = require(Shared.Config.Arenas)
+local MenuStage = require(Shared.Config.MenuStage)
 local ArenaLayout = require(Shared.Domain.ArenaLayout)
 local ArenaKit = require(Shared.Art.ArenaKit)
 local MeshLibrary = require(script.Parent.MeshLibrary)
@@ -18,8 +20,8 @@ local function v3(t: { number }): Vector3
 	return Vector3.new(t[1], t[2], t[3])
 end
 
-local function dress(arena: Arenas.Arena, dressing: Instance)
-	for i, piece in arena.dressing do
+local function dress(pieces: { MenuStage.Piece }, dressing: Instance)
+	for i, piece in pieces do
 		local def = ArenaLayout.modelDef(piece.model)
 		local m = def and MeshLibrary.place(piece.model, def :: any, v3(piece.at), piece.rotY, piece.scale)
 		if m then
@@ -62,11 +64,27 @@ function ArenaBuilder.buildAll(): Folder
 	folder.Parent = ReplicatedStorage
 	task.spawn(function()
 		for _, arena in Arenas.List do
-			dress(arena, models[arena.id]:FindFirstChild("Dressing") :: Instance)
+			dress(arena.dressing, models[arena.id]:FindFirstChild("Dressing") :: Instance)
 			models[arena.id]:SetAttribute("Dressed", true)
 		end
 	end)
 	return folder
+end
+
+-- The main menu's stage (FIX_LOBBY_2 section A): shapes and particles at once, meshes after. Each
+-- client clones it far from the lobby while the menu is open (App/MenuScene).
+function ArenaBuilder.buildMenuStage(): Model
+	local old = ReplicatedStorage:FindFirstChild("MenuStage")
+	if old then
+		old:Destroy()
+	end
+	local model = ArenaKit.scene("MenuStage", MenuStage.Prims, MenuStage.Particles)
+	model.Parent = ReplicatedStorage
+	task.spawn(function()
+		dress(MenuStage.Pieces, model:FindFirstChild("Dressing") :: Instance)
+		model:SetAttribute("Dressed", true)
+	end)
+	return model
 end
 
 return ArenaBuilder

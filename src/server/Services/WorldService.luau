@@ -67,6 +67,7 @@ end
 function WorldService.init()
 	-- The battle arena templates, on every server (battles run on hub and battle servers).
 	ArenaBuilder.buildAll()
+	ArenaBuilder.buildMenuStage() -- the main menu's own scene (FIX_LOBBY_2 section A)
 	if isBattleServer() then
 		return
 	end

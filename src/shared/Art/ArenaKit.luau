@@ -243,4 +243,22 @@ function ArenaKit.build(arena: Arenas.Arena): Model
 	return model
 end
 
+-- A scene without meshes from data (the main menu's stage, Config/MenuStage): its simple shapes in a
+-- "Dressing" folder and one emitter per particle spec. Pivot = scene centre.
+function ArenaKit.scene(name: string, prims: { Arenas.Prim }, particles: { Arenas.Particles }): Model
+	local model = Instance.new("Model")
+	model.Name = name
+	local dressing = Instance.new("Folder")
+	dressing.Name = "Dressing"
+	for i, spec in prims do
+		ArenaKit.prim(spec, i, dressing)
+	end
+	for _, spec in particles do
+		ArenaKit.particles({ particles = spec } :: any, dressing)
+	end
+	dressing.Parent = model
+	model.WorldPivot = CFrame.new()
+	return model
+end
+
 return table.freeze(ArenaKit)
