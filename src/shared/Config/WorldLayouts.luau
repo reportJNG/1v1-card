@@ -195,6 +195,7 @@ local List: { Layout } = {
 			direction = "drift",
 			size = 0.3,
 		},
+		gate = { landmark = "w3_obelisk", scale = 1.0, stone = "#D8B678", material = "Sandstone" },
 	}, { { "item_sunstone_sand", "w3_sunstone_sand" }, { "item_cactus_fruit", "w3_cactus_fruit" } }, {
 		"item_desert_ruby",
 		"w3_desert_ruby",
