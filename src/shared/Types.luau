@@ -187,6 +187,8 @@ export type ItemDef = {
 	maxStack: number,
 	sellPrice: number, -- Coins per unit at the NPC merchant
 	rare: boolean, -- the world's rare resource (shown in gold at the merchant)
+	icon: string, -- Config/UiAssets slot of its painted icon; until that slot exists, App/ItemIcon
+	-- shows the item's own node mesh (Shared/Domain/ItemArt)
 }
 
 -- ---------------------------------------------------------------- persisted

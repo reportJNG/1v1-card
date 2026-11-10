@@ -11,6 +11,7 @@ local App = script.Parent.Parent
 local Theme = require(App.Theme)
 local Ui = require(App.Ui)
 local Format = require(App.Format)
+local ItemIcon = require(App.ItemIcon)
 
 local C = Theme.Color
 
@@ -151,7 +152,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			ZIndex = 2,
 			Parent = t,
 		})
-		Ui.icon("icon_energy", 54, {
+		ItemIcon.new(itemId, 64, {
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			Position = UDim2.new(0.5, 0, 0, 40),
 			ZIndex = 3,
@@ -239,7 +240,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				Ui.frame({ Name = "Empty", BackgroundTransparency = 1, Size = UDim2.fromOffset(600, 170) })
 			empty.Parent = grid
 			gridLayout.CellSize = UDim2.fromOffset(600, 170)
-			Ui.icon("icon_energy", 72, {
+			Ui.icon("icon_coin", 72, {
 				AnchorPoint = Vector2.new(0.5, 0),
 				Position = UDim2.new(0.5, 0, 0, 12),
 				ImageTransparency = 0.4,

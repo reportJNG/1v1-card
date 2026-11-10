@@ -511,16 +511,21 @@ end
 
 -- ------------------------------------------------------------------ buttons
 
-local STYLE: { [string]: { slot: string, fg: Color3, face: Font } } = {
-	primary = { slot = "button_primary", fg = C.GoldInk, face = F.Title },
-	secondary = { slot = "button_secondary", fg = C.Text, face = F.Title },
-	ghost = { slot = "button_secondary", fg = C.Text, face = F.Bold },
-	success = { slot = "button_robux", fg = C.Text, face = F.Title },
-	robux = { slot = "button_robux", fg = C.Text, face = F.Title },
-	danger = { slot = "button_danger", fg = C.Text, face = F.Title },
-	purple = { slot = "tab_on", fg = C.Text, face = F.Title },
-	tab = { slot = "tab_off", fg = C.Muted, face = F.Bold },
+-- `fill` is the body colour drawn only when the painted image fails to load (an image still in
+-- Roblox moderation renders blank, which once left the merchant's "Sell all" as a bare label).
+local STYLE: { [string]: { slot: string, fg: Color3, face: Font, fill: Color3 } } = {
+	primary = { slot = "button_primary", fg = C.GoldInk, face = F.Title, fill = C.Gold },
+	secondary = { slot = "button_secondary", fg = C.Text, face = F.Title, fill = C.Violet },
+	ghost = { slot = "button_secondary", fg = C.Text, face = F.Bold, fill = C.RaisedHi },
+	success = { slot = "button_robux", fg = C.Text, face = F.Title, fill = Color3.fromHex("#2FB574") },
+	robux = { slot = "button_robux", fg = C.Text, face = F.Title, fill = Color3.fromHex("#2FB574") },
+	danger = { slot = "button_danger", fg = C.Text, face = F.Title, fill = Color3.fromHex("#E0405F") },
+	purple = { slot = "tab_on", fg = C.Text, face = F.Title, fill = C.Violet },
+	tab = { slot = "tab_off", fg = C.Muted, face = F.Bold, fill = C.Raised },
 }
+
+-- How long a button waits for its painted image before drawing the fallback body.
+local SKIN_LOAD_GRACE = 4
 -- Image px of the visible button body (image height minus 2 * bleed), so buttons of any height
 -- keep the same proportions.
 local BODY_PX: { [string]: number } = { button = 80, tab = 52 }
@@ -570,6 +575,15 @@ function Ui.button(text: string, style: string, onClick: () -> (), props: { [str
 		Ui.outline(C.Night, 1, 0.5).Parent = label
 	end
 	Ui.juice(b, skin)
+	-- A button must never be a bare label: if its image hasn't loaded, give it a solid body.
+	task.delay(SKIN_LOAD_GRACE, function()
+		if b.Parent and not skin.IsLoaded then
+			b.BackgroundColor3 = st.fill
+			b.BackgroundTransparency = 0
+			Ui.new("UICorner", { CornerRadius = UDim.new(0.5, 0), Parent = b })
+			Ui.stroke(C.Night, 2).Parent = b
+		end
+	end)
 	-- Gold buttons: a slow shine sweep every few seconds (MISSION 10).
 	if style == "primary" then
 		local shine = Ui.image("card_shine", {
@@ -631,6 +645,9 @@ function Ui.button(text: string, style: string, onClick: () -> (), props: { [str
 			enabled = on
 			skin.ImageTransparency = if on then 0 else 0.45
 			skin.ImageColor3 = if on then C.White else Color3.fromRGB(150, 150, 165)
+			if b.BackgroundTransparency < 1 then -- the fallback body is showing
+				b.BackgroundColor3 = if on then st.fill else Color3.fromRGB(90, 90, 105)
+			end
 			label.TextColor3 = if on then st.fg else C.Muted
 		end,
 		setText = function(t: string)

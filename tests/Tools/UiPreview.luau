@@ -78,6 +78,8 @@ function Preview.profile(): (any, { string })
 	assert(Deck.set(profile, deck).ok, "deck")
 	Inventory.add(profile, "item_greenleaf", 34)
 	Inventory.add(profile, "item_moonpetal", 12)
+	Inventory.add(profile, "item_oak_log", 5)
+	Inventory.add(profile, "item_meadow_crystal", 1)
 	profile.eggBag.egg_basic = { normal = 2, golden = 1 }
 	Quests.roll(profile, NOW)
 	Quests.track(profile, "WinRanked", 1, NOW)

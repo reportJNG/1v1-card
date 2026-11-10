@@ -17,6 +17,7 @@ local function item(
 		maxStack = if rare then 25 else 50,
 		sellPrice = sellPrice,
 		rare = rare == true,
+		icon = id, -- one icon slot per item (GOAL_ALL Phase 3b fills it)
 	}
 end
 

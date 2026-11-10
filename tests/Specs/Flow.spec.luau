@@ -4,6 +4,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PlayState = require(Shared.Domain.PlayState)
 local ReturnSpot = require(Shared.Domain.ReturnSpot)
 local WorldLayout = require(Shared.Domain.WorldLayout)
+local BattleEnd = require(game:GetService("ServerScriptService"):WaitForChild("Server").Battle.BattleEnd)
 
 local function unlocked(...: number): (number) -> boolean
 	local set = {}
@@ -103,6 +104,38 @@ return function()
 				expect(ReturnSpot.choose(bad, unlocked(1, 99)).kind).to.equal("lobby")
 			end
 			expect(ReturnSpot.choose(nil, unlocked(1)).kind).to.equal("lobby")
+		end)
+	end)
+	describe("BattleEnd (every player leaves a finished battle)", function()
+		local result = { winner = 2, reason = "KO", rounds = 9, timeouts = { 0, 0 }, endedByForfeit = false }
+
+		it("sends both ranked players back, with the right result", function()
+			local record = {
+				matchId = "m1",
+				mode = "Ranked",
+				seed = 1,
+				seats = { { userId = 11, name = "A", deck = {} }, { userId = 22, name = "B", deck = {} } },
+			}
+			local out = BattleEnd.leavers(record :: any, result :: any)
+			expect(#out).to.equal(2)
+			expect(out[1].userId).to.equal(11)
+			expect(out[1].won).to.equal(false)
+			expect(out[2].userId).to.equal(22)
+			expect(out[2].won).to.equal(true)
+		end)
+
+		it("sends the Trial player back and never the Guardian", function()
+			local record = {
+				matchId = "t1",
+				mode = "Trial",
+				seed = 1,
+				worldId = 1,
+				seats = { { userId = 11, name = "A", deck = {} }, { name = "Warden", deck = {} } } :: { any },
+			}
+			local out = BattleEnd.leavers(record :: any, result :: any)
+			expect(#out).to.equal(1)
+			expect(out[1].userId).to.equal(11)
+			expect(out[1].won).to.equal(false)
 		end)
 	end)
 end

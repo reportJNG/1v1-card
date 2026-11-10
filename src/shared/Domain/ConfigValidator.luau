@@ -24,6 +24,7 @@ local WorldProps = require(Config.WorldProps)
 local Lighting = require(Config.Lighting)
 local Roster = require(Config.Roster)
 local Odds = require(script.Parent.Odds)
+local ItemArt = require(script.Parent.ItemArt)
 
 export type Report = { errors: { string }, warnings: { string } }
 
@@ -362,6 +363,36 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 		if not isPositiveInt(item.maxStack) or not isPositiveInt(item.sellPrice) then
 			err(`Items: {item.id} needs positive integer maxStack and sellPrice`)
 		end
+	end
+	-- Every item looks like itself (the Oak Log once showed a crystal): its own icon slot, and until
+	-- that slot is live its own resource-node model, never shared with another item.
+	local iconOwner: { [string]: string } = {}
+	local modelOwner: { [string]: string } = {}
+	for _, item in Items.List do
+		if type(item.icon) ~= "string" or item.icon == "" then
+			err(`Items: {item.id} needs an icon slot`)
+		elseif iconOwner[item.icon] then
+			err(`Items: {item.id} shares icon {item.icon} with {iconOwner[item.icon]}`)
+		else
+			iconOwner[item.icon] = item.id
+		end
+		local model = ItemArt.nodeModel(item.id)
+		if model == nil or WorldProps.Models[model] == nil then
+			err(`Items: {item.id} has no resource-node model to show until its icon is live`)
+		elseif modelOwner[model] then
+			err(`Items: {item.id} shares node model {model} with {modelOwner[model]}`)
+		else
+			modelOwner[model] = item.id
+		end
+	end
+	local tempIcons = 0
+	for _, item in Items.List do
+		if UiAssets[item.icon] == nil then
+			tempIcons += 1
+		end
+	end
+	if tempIcons > 0 then
+		launchGap(`Items: {tempIcons} item icons are TEMP (node models until GOAL_ALL Phase 3b)`)
 	end
 
 	-- Egg pools: 6-10 characters each, every character dropping from at least one egg.

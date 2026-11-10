@@ -6,6 +6,9 @@ local Eggs = require(Shared.Config.Eggs)
 local Characters = require(Shared.Config.Characters)
 local Monetization = require(Shared.Config.Monetization)
 local Economy = require(Shared.Config.Economy)
+local Items = require(Shared.Config.Items)
+local WorldProps = require(Shared.Config.WorldProps)
+local ItemArt = require(Shared.Domain.ItemArt)
 
 -- The 24 egg types as named in the icon pack folder (independent of the config file).
 local PACK_EGG_NAMES = {
@@ -209,6 +212,29 @@ return function()
 			for _, c in Characters.List do
 				expect(seen[c.id]).to.equal(true)
 			end
+		end)
+	end)
+
+	describe("Item icons", function()
+		it("gives every item its own icon slot and its own resource-node model", function()
+			local icons: { [string]: string } = {}
+			local models: { [string]: string } = {}
+			for _, item in Items.List do
+				expect(icons[item.icon]).to.equal(nil)
+				icons[item.icon] = item.id
+				local model = ItemArt.nodeModel(item.id)
+				expect(model).to.be.ok()
+				expect(WorldProps.Models[model :: string]).to.be.ok()
+				expect(models[model :: string]).to.equal(nil)
+				models[model :: string] = item.id
+			end
+		end)
+
+		it("shows the Oak Log as the oak-log pile, never a crystal", function()
+			local model = ItemArt.nodeModel("item_oak_log") :: string
+			expect(model).to.equal("w1_oak_log")
+			local note = string.lower(WorldProps.Models[model].note)
+			expect((string.find(note, "crystal", 1, true))).to.equal(nil)
 		end)
 	end)
 

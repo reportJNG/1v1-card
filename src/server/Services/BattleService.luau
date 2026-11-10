@@ -19,6 +19,7 @@ local Server = script.Parent.Parent
 local Router = require(Server:WaitForChild("Net").Router)
 local MatchHost = require(Server:WaitForChild("Battle").MatchHost)
 local MatchRunner = require(Server.Battle.MatchRunner)
+local BattleEnd = require(Server.Battle.BattleEnd)
 local PlayerDataService = require(script.Parent.PlayerDataService)
 local Telemetry = require(script.Parent.Telemetry)
 
@@ -86,9 +87,6 @@ local function settleRanked(record: MatchHost.Record, result: MatchRunner.EndInf
 				reason = result.reason,
 				rounds = result.rounds,
 			})
-			for _, hook in endHooks do
-				task.spawn(hook, userId, record, result.winner == side)
-			end
 		else
 			warn(`[Battle] {record.matchId}: settlement refused for {userId}: {r.err}`)
 		end
@@ -119,11 +117,17 @@ local function settleTrial(record: MatchHost.Record, result: MatchRunner.EndInfo
 		rewards[userId] = { firstClear = false, trophies = 0, coins = 0, gems = 0 }
 	end
 	Telemetry.event(Players:GetPlayerByUserId(userId), "trial_end", { world = record.worldId, won = won })
-	for _, hook in endHooks do
-		task.spawn(hook, userId, record, won)
-	end
 	finishProfile(userId)
 	return rewards
+end
+
+-- Every human seat leaves the battle (back to their spot, out of "battling"), settled or not.
+local function leave(record: MatchHost.Record, result: MatchRunner.EndInfo)
+	for _, l in BattleEnd.leavers(record, result) do
+		for _, hook in endHooks do
+			task.spawn(hook, l.userId, record, l.won)
+		end
+	end
 end
 
 local startHooks: { (userId: number, record: MatchHost.Record) -> () } = {}
@@ -182,9 +186,17 @@ function BattleService.init()
 			end
 		end,
 		onEnd = function(record, result)
-			return if record.mode == "Ranked"
-				then settleRanked(record, result)
-				else settleTrial(record, result)
+			-- Settle, then always let the players leave, even if settling failed.
+			local ok, rewards = pcall(function()
+				return if record.mode == "Ranked"
+					then settleRanked(record, result)
+					else settleTrial(record, result)
+			end)
+			if not ok then
+				warn(`[Battle] {record.matchId}: settlement error: {rewards}`)
+			end
+			leave(record, result)
+			return if ok then rewards else {}
 		end,
 		reconnectSeconds = RECONNECT_SECONDS,
 	})

@@ -18,6 +18,7 @@ local Theme = require(App.Theme)
 local Ui = require(App.Ui)
 local Format = require(App.Format)
 local Visuals = require(App.Visuals)
+local ItemIcon = require(App.ItemIcon)
 local CardActions = require(App.CardActions)
 local Card = require(App.Card)
 local Kit = require(App.Kit)
@@ -418,45 +419,40 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			Parent = parent,
 		})
 		Ui.skin(tile, "tile", 0.5)
-		local name = Ui.text({
-			Text = item.displayName,
-			FontFace = Theme.Face.Bold,
-			TextSize = 12,
-			TextXAlignment = Enum.TextXAlignment.Center,
-			Position = UDim2.fromOffset(4, 10),
-			Size = UDim2.new(1, -8, 0, 34),
+		ItemIcon.new(stack.itemId, 60, {
+			AnchorPoint = Vector2.new(0.5, 0),
+			Position = UDim2.new(0.5, 0, 0, 4),
 			ZIndex = 2,
 			Parent = tile,
-		})
-		Ui.fit(name, 12, 8)
-		Ui.text({
+		}, true)
+		Ui.display({
+			Name = "Count",
 			Text = `×{stack.count}`,
-			FontFace = Theme.Face.Number,
 			TextSize = 20,
-			TextColor3 = C.Gold,
+			TextXAlignment = Enum.TextXAlignment.Right,
+			AnchorPoint = Vector2.new(1, 0),
+			Position = UDim2.new(1, -6, 0, 44),
+			Size = UDim2.fromOffset(60, 22),
+			ZIndex = 3,
+			Parent = tile,
+		}, true)
+		local name = Ui.text({
+			Name = "ItemName",
+			Text = item.displayName,
+			FontFace = Theme.Face.Title,
+			TextSize = 13,
 			TextXAlignment = Enum.TextXAlignment.Center,
-			Position = UDim2.fromOffset(0, 46),
-			Size = UDim2.new(1, 0, 0, 24),
+			TextWrapped = false,
+			Position = UDim2.fromOffset(3, 68),
+			Size = UDim2.new(1, -6, 0, 18),
 			ZIndex = 2,
 			Parent = tile,
 		})
-		Ui.text({
-			Text = `{item.sellPrice} Coins each`,
-			TextSize = 11,
-			TextColor3 = C.Muted,
-			TextXAlignment = Enum.TextXAlignment.Center,
-			Position = UDim2.fromOffset(0, 76),
-			Size = UDim2.new(1, 0, 0, 14),
-			ZIndex = 2,
-			Parent = tile,
-		})
-		Ui.text({
-			Text = `World {item.world}`,
-			TextSize = 11,
-			TextColor3 = C.Muted,
-			TextXAlignment = Enum.TextXAlignment.Center,
-			Position = UDim2.fromOffset(0, 92),
-			Size = UDim2.new(1, 0, 0, 14),
+		Ui.outline(C.Night, 1.5).Parent = name
+		Ui.fit(name, 13, 9)
+		Ui.pricePill(Format.number(item.sellPrice), "icon_coin", 22, {
+			AnchorPoint = Vector2.new(0.5, 0),
+			Position = UDim2.new(0.5, 0, 0, 90),
 			ZIndex = 2,
 			Parent = tile,
 		})
