@@ -346,6 +346,7 @@ local List: { Layout } = {
 			direction = "drift",
 			size = 0.35,
 		},
+		gate = { landmark = "w8_statue", scale = 1.0, stone = "#A89070", material = "Sandstone" },
 	}, { { "item_relic_clay", "w8_relic_clay" }, { "item_runestone", "w8_runestone" } }, {
 		"item_kings_coin",
 		"w8_kings_coin",
