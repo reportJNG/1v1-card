@@ -1,7 +1,14 @@
 --!strict
--- Deck builder: three visually equal slots (design rule 5), deck power and the family bonus
--- shown separately. Saving sends the three uids; the server checks ownership, 3 different
--- characters and enabled cards.
+-- Deck Builder (BAD_GUI_6_DECK_AND_INVENTORY.md; target ui-refs/hd-04, layout only: its card art is
+-- copyrighted), with the Families panel beside it:
+--   three equal slot cards, art first (no names), each with a power plate (sword + big number); tap
+--   a slot to pick it, then a card in the strip below to put there (it flies in)
+--   DECK POWER in big type with a count-up and a green / red arrow when it changes
+--   the family bonus chips and the ranked level cap as chips
+--   a paged strip of the best copy of each character (no scrollbar)
+--   SAVE DECK, gold, grey while nothing changed
+-- Saving sends the three uids; the server checks ownership, 3 different characters and enabled
+-- cards.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Characters = require(Shared.Config.Characters)
@@ -11,7 +18,6 @@ local Progress = require(Shared.Domain.Progress)
 local App = script.Parent.Parent
 local Theme = require(App.Theme)
 local Ui = require(App.Ui)
-local Visuals = require(App.Visuals)
 local Card = require(App.Card)
 local Kit = require(App.Kit)
 local Format = require(App.Format)
@@ -19,7 +25,9 @@ local TweenService = game:GetService("TweenService")
 
 local C = Theme.Color
 
-local STAT_NAME = { hp = "HP", atk = "ATK", def = "DEF", spd = "SPD", crit = "crit" }
+local STAT_NAME = { hp = "HP", atk = "ATK", def = "DEF", spd = "SPD", crit = "CRIT" }
+local PICK = Vector2.new(64, 90)
+local PER_PAGE = 7
 
 -- Equip (CARDS_EGGS_MISSION 4.5): a copy of the card flies from the picker into its slot, leaving
 -- a fading trail of light in its rarity colour. Screen-space, on the ScreenGui itself.
@@ -79,33 +87,56 @@ local function flyIn(gui: Instance, card: any, from: GuiObject, to: GuiObject, r
 	end)
 end
 
+local function outline(label: TextLabel, thickness: number)
+	Ui.outline(C.Night, thickness).Parent = label
+end
+
+local function bigLabel(b: any, max: number)
+	local cap = b.label:FindFirstChildOfClass("UITextSizeConstraint")
+	if cap then
+		cap.MaxTextSize = max
+	end
+	b.label.FontFace = Theme.Face.Display
+end
+
 return function(ctx: any, layer: Frame, _arg: any?): any
 	local view = ctx.state.view
-	local p = Ui.panel(layer, "Deck Builder", ctx.close, UDim2.fromOffset(770, 470), "icon_deck")
+	local p = Ui.panel(layer, "DECK BUILDER", ctx.close, UDim2.fromOffset(600, 490), "icon_deck")
+	p.frame.Position = UDim2.new(0.5, -170, 0.5, 18) -- the Families panel stands to the right
+	local families = require(script.Parent.Families)(ctx, layer, { side = true })
 	local slots: { string? } = { view.deck[1], view.deck[2], view.deck[3] }
 	local active = 1
+	local page = 1
 	local lastPower: number? = nil
 
-	local slotRow = Ui.frame(
-		{ BackgroundTransparency = 1, Size = UDim2.new(0.55, 0, 0, 220), Parent = p.body },
-		{
-			Ui.list(true, 12, Enum.HorizontalAlignment.Center),
-		}
-	)
-	local summary = Ui.frame({
+	local slotRow = Ui.frame({
+		Name = "Slots",
 		BackgroundTransparency = 1,
-		Position = UDim2.fromOffset(0, 228),
-		Size = UDim2.new(0.55, 0, 1, -228),
-		Parent = p.body,
-	}, { Ui.list(false, 6, Enum.HorizontalAlignment.Center) })
-	local pickList = Ui.scroll({
-		Position = UDim2.fromScale(0.57, 0),
-		Size = UDim2.fromScale(0.43, 1),
+		Size = UDim2.new(1, 0, 0, 178),
 		Parent = p.body,
 	})
-	Ui.grid(Vector2.new(76, 108), 6).Parent = pickList
-	-- Room for the rarity badge, which overhangs the top of each card.
-	Ui.new("UIPadding", { PaddingTop = UDim.new(0, 12), PaddingLeft = UDim.new(0, 4), Parent = pickList })
+	local summary = Ui.frame({
+		Name = "Summary",
+		BackgroundTransparency = 1,
+		Position = UDim2.fromOffset(0, 184),
+		Size = UDim2.new(1, 0, 0, 70),
+		Parent = p.body,
+	})
+	local strip = Ui.frame({
+		Name = "Picker",
+		BackgroundTransparency = 1,
+		Position = UDim2.fromOffset(0, 258),
+		Size = UDim2.new(1, 0, 0, PICK.Y + 6),
+		Parent = p.body,
+	})
+	local saveHolder = Ui.frame({
+		Name = "SaveRow",
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(0, 1),
+		Position = UDim2.fromScale(0, 1),
+		Size = UDim2.new(1, 0, 0, 48),
+		Parent = p.body,
+	})
 
 	local render: () -> ()
 
@@ -122,47 +153,74 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		return out
 	end
 
-	render = function()
-		view = ctx.state.view
-		Ui.clear(slotRow)
-		Ui.clear(summary)
-		Ui.clear(pickList)
+	local function changed(): boolean
+		for i = 1, 3 do
+			if slots[i] ~= view.deck[i] then
+				return true
+			end
+		end
+		return false
+	end
+
+	local function renderSlots()
 		for i = 1, 3 do
 			local uid = slots[i]
 			local card = uid and view.cards[uid]
 			local def = card and Characters.ById[card.characterId]
 			local slot = Ui.glowTile("TextButton", {
-				Size = UDim2.fromOffset(130, 178),
+				Size = UDim2.fromOffset(126, 176),
 				LayoutOrder = i,
 				Name = `Slot{i}`,
 				Parent = slotRow,
 			}, if def then Theme.Rarity[def.rarity] else C.Purple, active == i)
 			if card then
-				local portrait = Visuals.portrait(
-					slot,
-					card.characterId,
-					card.golden,
-					Vector2.new(118, 160),
-					true,
-					card.level
-				)
-				-- The card shows its own power on its bottom plate.
-				portrait.Position = UDim2.fromOffset(6, 6)
-			else
-				-- An empty slot: the dashed glowing outline with a "+" (kit `empty_slot`).
-				Kit.image("empty_slot", {
-					Name = "Empty",
-					Position = UDim2.fromOffset(6, 6),
-					Size = UDim2.new(1, -12, 1, -12),
+				local holder = Ui.frame({
+					BackgroundTransparency = 1,
+					Position = UDim2.fromOffset(4, 4),
+					Size = UDim2.new(1, -8, 1, -8),
 					Parent = slot,
 				})
-				Ui.text({
-					Text = `Slot {i}`,
-					TextColor3 = C.Muted,
-					TextXAlignment = Enum.TextXAlignment.Center,
-					AnchorPoint = Vector2.new(0, 1),
-					Position = UDim2.new(0, 0, 1, -18),
-					Size = UDim2.new(1, 0, 0, 16),
+				Card.build(holder, {
+					characterId = card.characterId,
+					golden = card.golden,
+					level = card.level,
+					size = Vector2.new(118, 165),
+					stats = false,
+					bare = true,
+				})
+				local plate = Ui.frame({
+					Name = "PowerPlate",
+					BackgroundColor3 = C.Night,
+					BackgroundTransparency = 0.15,
+					AnchorPoint = Vector2.new(0.5, 1),
+					Position = UDim2.new(0.5, 0, 1, -8),
+					Size = UDim2.new(1, -22, 0, 36),
+					ZIndex = 70,
+					Parent = slot,
+				}, { Ui.corner(10), Ui.stroke(C.Gold, 2, 0.2) })
+				Ui.icon(
+					"icon_power",
+					28,
+					{ Position = UDim2.new(0, 18, 0.5, 0), ZIndex = 71, Parent = plate }
+				)
+				local n = Ui.display({
+					Name = "Power",
+					Text = Format.number(Power.card(card.characterId, card.level)),
+					TextSize = 26,
+					Position = UDim2.fromOffset(32, 0),
+					Size = UDim2.new(1, -36, 1, 0),
+					ZIndex = 71,
+					Parent = plate,
+				})
+				n.TextColor3 = C.White
+				outline(n, 3)
+				Ui.fit(n, 26, 14)
+			else
+				-- An empty slot: the dashed glowing outline with a "+".
+				Kit.image("empty_slot", {
+					Name = "Empty",
+					Position = UDim2.fromOffset(8, 8),
+					Size = UDim2.new(1, -16, 1, -16),
 					Parent = slot,
 				})
 			end
@@ -171,143 +229,113 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				render()
 			end)
 		end
+	end
 
+	-- A chip in the summary row: an optional gem, a few big words.
+	local function chip(row: Instance, order: number, gem: string?, text: string, color: Color3)
+		local c = Ui.frame({
+			BackgroundColor3 = Color3.fromHex("#2A1F5E"),
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, 30),
+			LayoutOrder = order,
+			Parent = row,
+		}, { Ui.corner(15), Ui.stroke(color, 2, 0.1), Ui.list(true, 4) })
+		Ui.pad(8).Parent = c
+		local list = c:FindFirstChildOfClass("UIListLayout") :: UIListLayout
+		list.VerticalAlignment = Enum.VerticalAlignment.Center
+		if gem then
+			Kit.image(gem, { Size = UDim2.fromOffset(24, 24), LayoutOrder = 1, Parent = c })
+		end
+		local t = Ui.display({
+			Text = text,
+			TextSize = 18,
+			TextWrapped = false,
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, 30),
+			LayoutOrder = 2,
+			Parent = c,
+		})
+		t.TextColor3 = color
+		outline(t, 2)
+	end
+
+	local function renderSummary()
 		local s = specs()
-		if s then
-			local preview = Power.deck(s)
-			local league = Progress.leagueFor(view.trophies)
-			-- "Deck Power: 2,770" with a count-up and a green arrow when it improves (`hd-04`).
-			local powerRow = Ui.frame({
-				Name = "DeckPower",
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1, 0, 0, 30),
-				LayoutOrder = 1,
-				Parent = summary,
-			}, { Ui.list(true, 8, Enum.HorizontalAlignment.Center) })
-			Ui.text({
-				Text = "Deck Power:",
-				FontFace = Theme.Face.Title,
-				TextSize = 18,
-				TextWrapped = false,
-				AutomaticSize = Enum.AutomaticSize.X,
-				Size = UDim2.fromOffset(0, 30),
-				LayoutOrder = 1,
-				Parent = powerRow,
-			})
-			local value = Ui.text({
-				Name = "Value",
-				Text = Format.number(preview.total),
-				FontFace = Theme.Face.Number,
-				TextSize = 24,
-				TextColor3 = C.Green,
-				TextWrapped = false,
-				AutomaticSize = Enum.AutomaticSize.X,
-				Size = UDim2.fromOffset(0, 30),
-				LayoutOrder = 2,
-				Parent = powerRow,
-			})
-			Ui.outline(C.Night, 1.5).Parent = value
-			if lastPower and preview.total ~= lastPower and not ctx.reducedMotion() then
+		if s == nil then
+			return
+		end
+		local preview = Power.deck(s)
+		local league = Progress.leagueFor(view.trophies)
+		local powerRow = Ui.frame({
+			Name = "DeckPower",
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, 0, 0, 34),
+			LayoutOrder = 1,
+			Parent = summary,
+		}, { Ui.list(true, 10, Enum.HorizontalAlignment.Center) })
+		local label = Ui.display({
+			Text = "DECK POWER",
+			TextSize = 26,
+			TextWrapped = false,
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, 34),
+			LayoutOrder = 1,
+			Parent = powerRow,
+		})
+		label.TextColor3 = C.White
+		outline(label, 3)
+		local value = Ui.display({
+			Name = "Value",
+			Text = Format.number(preview.total),
+			TextSize = 30,
+			TextWrapped = false,
+			AutomaticSize = Enum.AutomaticSize.X,
+			Size = UDim2.fromOffset(0, 34),
+			LayoutOrder = 2,
+			Parent = powerRow,
+		})
+		value.TextColor3 = C.Green
+		outline(value, 3)
+		if lastPower and preview.total ~= lastPower then
+			if not ctx.reducedMotion() then
 				Ui.countUp(value, lastPower, preview.total, Format.number)
 			end
-			if lastPower and preview.total > lastPower then
-				local arrow = Kit.image("icon_upgrade", {
-					Name = "Up",
-					ImageColor3 = C.Green,
-					Size = UDim2.fromOffset(22, 22),
-					LayoutOrder = 3,
-					Parent = powerRow,
-				})
-				Ui.pulse(arrow, 0.3)
-			end
-			lastPower = preview.total
-			-- The family bonus chip: the family gem, its name and "+2%".
-			local chipRow = Ui.frame({
-				Name = "FamilyBonus",
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1, 0, 0, 26),
-				LayoutOrder = 2,
-				Parent = summary,
-			}, { Ui.list(true, 6, Enum.HorizontalAlignment.Center) })
-			Ui.text({
-				Text = "Family Bonus:",
-				FontFace = Theme.Face.Bold,
-				TextSize = 13,
-				TextColor3 = C.Muted,
-				TextWrapped = false,
-				AutomaticSize = Enum.AutomaticSize.X,
-				Size = UDim2.fromOffset(0, 26),
-				LayoutOrder = 0,
-				Parent = chipRow,
-			})
-			if #preview.families == 0 then
-				Ui.text({
-					Text = "none yet (2 of one family)",
-					TextSize = 12,
-					TextColor3 = C.Muted,
-					AutomaticSize = Enum.AutomaticSize.X,
-					Size = UDim2.fromOffset(0, 26),
-					LayoutOrder = 1,
-					Parent = chipRow,
-				})
-			end
-			for i, f in preview.families do
-				local chip = Ui.frame({
-					BackgroundColor3 = Color3.fromHex("#2A1F5E"),
-					AutomaticSize = Enum.AutomaticSize.X,
-					Size = UDim2.fromOffset(0, 24),
-					LayoutOrder = i,
-					Parent = chipRow,
-				}, { Ui.corner(12), Ui.stroke(C.Purple, 1.5, 0.2), Ui.list(true, 4) })
-				Ui.pad(6).Parent = chip
-				Kit.image(
-					`gem_family_{string.lower(f.family)}`,
-					{ Size = UDim2.fromOffset(20, 20), LayoutOrder = 1, Parent = chip }
-				)
-				Ui.text({
-					Text = f.family,
-					FontFace = Theme.Face.Bold,
-					TextSize = 12,
-					AutomaticSize = Enum.AutomaticSize.X,
-					Size = UDim2.fromOffset(0, 24),
-					LayoutOrder = 2,
-					Parent = chip,
-				})
-				Ui.text({
-					Text = `+{math.floor(f.value * 100 + 0.5)}% {STAT_NAME[f.stat] or f.stat}`,
-					FontFace = Theme.Face.Number,
-					TextSize = 12,
-					TextColor3 = C.Green,
-					AutomaticSize = Enum.AutomaticSize.X,
-					Size = UDim2.fromOffset(0, 24),
-					LayoutOrder = 3,
-					Parent = chip,
-				})
-			end
-			Ui.text({
-				Text = `Ranked in {league.id}: cards above level {league.rankedLevelCap} fight at level {league.rankedLevelCap}.`,
-				TextSize = Theme.Size.small,
-				TextColor3 = C.Muted,
-				TextXAlignment = Enum.TextXAlignment.Center,
+			local up = preview.total > lastPower
+			local arrow = Kit.image("icon_upgrade", {
+				Name = if up then "Up" else "Down",
+				ImageColor3 = if up then C.Green else C.Red,
+				Rotation = if up then 0 else 180,
+				Size = UDim2.fromOffset(28, 28),
 				LayoutOrder = 3,
-				Parent = summary,
+				Parent = powerRow,
 			})
+			Ui.pulse(arrow, 0.3)
 		end
-		local save = Ui.button("Save Deck", "primary", function()
-			local reply = ctx.request("Deck.Set", { uids = { slots[1], slots[2], slots[3] } })
-			if reply.ok then
-				ctx.cheer("SAVED!", "icon_check")
-			end
-		end, { Size = UDim2.fromOffset(220, 40), LayoutOrder = 4, Name = "SaveDeck" })
-		save.setEnabled(s ~= nil)
-		save.instance.Parent = summary
-		local fams = Ui.button("Families", "secondary", function()
-			ctx.open("Families")
-		end, { Size = UDim2.fromOffset(160, 34), LayoutOrder = 5, Name = "Families" })
-		fams.instance.Parent = summary
+		lastPower = preview.total
+		local chipRow = Ui.frame({
+			Name = "FamilyBonus",
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, 0, 0, 30),
+			LayoutOrder = 2,
+			Parent = summary,
+		}, { Ui.list(true, 8, Enum.HorizontalAlignment.Center) })
+		if #preview.families == 0 then
+			chip(chipRow, 1, nil, "NO FAMILY BONUS", C.Muted)
+		end
+		for i, f in preview.families do
+			chip(
+				chipRow,
+				i,
+				`gem_family_{string.lower(f.family)}`,
+				`{string.upper(f.family)} +{math.floor(f.value * 100 + 0.5)}% {STAT_NAME[f.stat] or f.stat}`,
+				C.Green
+			)
+		end
+		chip(chipRow, 9, nil, `LV CAP {league.rankedLevelCap}`, C.Blue)
+	end
 
-		-- The best copy of each character only (a deck takes one copy per character): at most 100
-		-- tiles however many copies the player owns.
+	-- The picker: the best copy of each character (a deck takes one copy per character), paged.
+	local function renderPicker()
 		local best: { [string]: any } = {}
 		for _, c in view.cards do
 			local b = best[c.characterId]
@@ -336,25 +364,49 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			end
 			return a.uid < b.uid
 		end)
-		for i, card in cards do
+		local pages = math.max(1, math.ceil(#cards / PER_PAGE))
+		page = math.clamp(page, 1, pages)
+		local row = Ui.frame({
+			BackgroundTransparency = 1,
+			AnchorPoint = Vector2.new(0.5, 0),
+			Position = UDim2.fromScale(0.5, 0),
+			Size = UDim2.new(1, -110, 1, 0),
+			Parent = strip,
+		}, { Ui.list(true, 8, Enum.HorizontalAlignment.Center) })
+		for i = (page - 1) * PER_PAGE + 1, math.min(#cards, page * PER_PAGE) do
+			local card = cards[i]
 			local usedAt = table.find(slots, card.uid)
-			local tile = Ui.new(
-				"TextButton",
-				{ Text = "", BackgroundTransparency = 1, LayoutOrder = i, Parent = pickList }
-			)
-			local portrait =
-				Visuals.portrait(tile, card.characterId, card.golden, Vector2.new(76, 92), false, card.level)
-			if usedAt then
-				portrait.BackgroundColor3 = C.Stroke
-			end
-			Ui.text({
-				Text = if usedAt then `Slot {usedAt}` else `Lv {card.level}`,
-				TextSize = Theme.Size.small,
-				TextXAlignment = Enum.TextXAlignment.Center,
-				Position = UDim2.fromOffset(0, 92),
-				Size = UDim2.new(1, 0, 0, 16),
-				Parent = tile,
+			local tile: TextButton = Ui.new("TextButton", {
+				Text = "",
+				BackgroundTransparency = 1,
+				Size = UDim2.fromOffset(PICK.X, PICK.Y),
+				LayoutOrder = i,
+				Parent = row,
 			})
+			local built = Card.build(tile, {
+				characterId = card.characterId,
+				golden = card.golden,
+				level = card.level,
+				size = PICK,
+				stats = false,
+				bare = true,
+				hover = true,
+			})
+			if usedAt then
+				local mark = Ui.display({
+					Text = tostring(usedAt),
+					TextSize = 20,
+					BackgroundColor3 = C.Gold,
+					BackgroundTransparency = 0,
+					AnchorPoint = Vector2.new(1, 1),
+					Position = UDim2.new(1, 2, 1, 2),
+					Size = UDim2.fromOffset(24, 24),
+					ZIndex = 80,
+					Parent = tile,
+				})
+				mark.TextColor3 = C.GoldInk
+				Ui.corner(6).Parent = mark
+			end
 			tile.Activated:Connect(function()
 				-- One copy per character: replace any slot holding the same character.
 				for j = 1, 3 do
@@ -369,17 +421,72 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				render()
 				local slotObj = slotRow:FindFirstChild(`Slot{target}`)
 				if slotObj then
-					flyIn(layer, card, portrait, slotObj :: GuiObject, ctx.reducedMotion())
+					flyIn(layer, card, built, slotObj :: GuiObject, ctx.reducedMotion())
 				end
 			end)
 		end
 		if #cards == 0 then
-			Ui.text({ Text = "Hatch eggs in the Shop to get cards.", TextColor3 = C.Muted, Parent = pickList })
+			local t = Ui.display({
+				Text = "HATCH EGGS FOR CARDS",
+				TextSize = 24,
+				Size = UDim2.fromScale(1, 1),
+				Parent = row,
+			})
+			t.TextColor3 = C.White
+			outline(t, 2)
 		end
+		if pages > 1 then
+			for side = -1, 1, 2 do
+				local a = Ui.button(if side < 0 then "◀" else "▶", "secondary", function()
+					page += side
+					render()
+				end, {
+					Name = if side < 0 then "Prev" else "Next",
+					AnchorPoint = Vector2.new(if side < 0 then 0 else 1, 0.5),
+					Position = UDim2.fromScale(if side < 0 then 0 else 1, 0.5),
+					Size = UDim2.fromOffset(44, 60),
+				})
+				bigLabel(a, 26)
+				a.setEnabled(if side < 0 then page > 1 else page < pages)
+				a.instance.Parent = strip
+			end
+		end
+	end
+
+	render = function()
+		view = ctx.state.view
+		Ui.clear(slotRow)
+		Ui.list(true, 16, Enum.HorizontalAlignment.Center).Parent = slotRow
+		Ui.clear(summary)
+		Ui.list(false, 4, Enum.HorizontalAlignment.Center).Parent = summary
+		Ui.clear(strip)
+		Ui.clear(saveHolder)
+		renderSlots()
+		renderSummary()
+		renderPicker()
+		local save = Ui.button("SAVE DECK", "primary", function()
+			local reply = ctx.request("Deck.Set", { uids = { slots[1], slots[2], slots[3] } })
+			if reply.ok then
+				ctx.cheer("SAVED!", "icon_check")
+			end
+		end, {
+			Name = "SaveDeck",
+			AnchorPoint = Vector2.new(0.5, 0),
+			Position = UDim2.fromScale(0.5, 0),
+			Size = UDim2.fromOffset(260, 48),
+		})
+		bigLabel(save, 28)
+		save.setEnabled(specs() ~= nil and changed())
+		save.instance.Parent = saveHolder
+		families.refresh()
 	end
 
 	render()
 	Ui.stagger(slotRow, ctx.reducedMotion())
-	Ui.stagger(pickList, ctx.reducedMotion())
-	return { destroy = function() end, refresh = render }
+	return {
+		destroy = function()
+			families.destroy()
+		end,
+		refresh = render,
+	}
 end

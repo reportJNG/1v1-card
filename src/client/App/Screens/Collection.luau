@@ -62,6 +62,14 @@ local function sortedCards(view: any, filter: string?, query: string): { any }
 	return out
 end
 
+local function bigLabel(b: any, max: number)
+	local cap = b.label:FindFirstChildOfClass("UITextSizeConstraint")
+	if cap then
+		cap.MaxTextSize = max
+	end
+	b.label.FontFace = Theme.Face.Display
+end
+
 local inDeck = CardActions.inDeck
 local spares = CardActions.spares
 
@@ -94,7 +102,7 @@ end
 
 return function(ctx: any, layer: Frame, arg: any?): any
 	local view = ctx.state.view
-	local p = Ui.panel(layer, "Inventory", ctx.close, UDim2.fromOffset(800, 480), "icon_cards")
+	local p = Ui.panel(layer, "INVENTORY", ctx.close, UDim2.fromOffset(800, 480), "icon_cards")
 	local tab = if arg and arg.tab then arg.tab else "All"
 	local page = 1
 	local PAGE_SIZE = 60 -- storage holds up to 1,000 copies; never build them all at once
@@ -127,6 +135,43 @@ return function(ctx: any, layer: Frame, arg: any?): any
 
 	local render: () -> ()
 
+	-- The storage count in the header (target hd-03): cards held / card slots.
+	local storage = Ui.pricePill("0/0", "icon_cards", 36, {
+		Name = "Storage",
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -64, 0.5, 0),
+		ZIndex = 3,
+		Parent = p.header,
+	})
+	local storageAmount = storage:FindFirstChild("Amount") :: TextLabel
+	storageAmount.FontFace = Theme.Face.Display
+	-- The search bar in the header (target hd-03), with its magnifier.
+	local search: TextBox = Ui.new("TextBox", {
+		Name = "Search",
+		Text = "",
+		PlaceholderText = "SEARCH",
+		ClearTextOnFocus = false,
+		FontFace = Theme.Face.Title,
+		TextSize = 20,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextColor3 = C.Text,
+		PlaceholderColor3 = C.Muted,
+		BackgroundColor3 = C.PanelDeep,
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -230, 0.5, 0),
+		Size = UDim2.fromOffset(210, 36),
+		ZIndex = 3,
+		Parent = p.header,
+	}, { Ui.corner(18), Ui.stroke(C.Purple, 2, 0.2), Ui.new("UIPadding", { PaddingLeft = UDim.new(0, 40) }) })
+	Ui.icon("icon_search", 26, { Position = UDim2.new(0, -24, 0.5, 0), ZIndex = 4, Parent = search })
+	search.FocusLost:Connect(function()
+		if string.lower(search.Text) ~= query then
+			query = string.lower(search.Text)
+			page = 1
+			render()
+		end
+	end)
+
 	-- The inspect pane (`hd-03`): the large card on the left; name, rarity pill and family, a
 	-- one-line description, Power / Health / Skill rows with icons, the family bonus in green, and
 	-- Equip / Merge / Card Stats. The full stats panel (board 05) opens from the card or the button.
@@ -134,13 +179,22 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		Ui.clear(inspect)
 		Ui.pad(10).Parent = inspect
 		local card = selected and view.cards[selected]
+		if card == nil and (tab == "All" or tab == "Cards") then
+			local first = sortedCards(view, filter, query)[1]
+			if first then
+				selected = first.uid
+				card = first
+			end
+		end
 		if card == nil then
 			Ui.text({
 				Text = if tab == "Items"
 					then "Sell items at any world's merchant."
 					elseif tab == "Eggs" then "Open eggs from your bag: each one hatches a card."
-					else "Pick a card to inspect it.",
-				TextColor3 = C.Muted,
+					else "Hatch eggs to get cards.",
+				FontFace = Theme.Face.Title,
+				TextSize = 22,
+				TextColor3 = C.Text,
 				Size = UDim2.fromScale(1, 1),
 				TextXAlignment = Enum.TextXAlignment.Center,
 				Parent = inspect,
@@ -181,40 +235,40 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		local name = Ui.text({
 			Name = "Name",
 			Text = def.displayName,
-			FontFace = Theme.Face.Title,
-			TextSize = 20,
+			FontFace = Theme.Face.Display,
+			TextSize = 28,
 			TextWrapped = false,
-			Size = UDim2.new(1, 0, 0, 22),
+			Size = UDim2.new(1, 0, 0, 32),
 			LayoutOrder = 1,
 			Parent = info,
 		})
-		Ui.fit(name, 20, 12)
-		Ui.outline(C.Night, 1.5).Parent = name
+		Ui.fit(name, 28, 14)
+		Ui.outline(C.Night, 3).Parent = name
 		local tags = Ui.frame({
 			BackgroundTransparency = 1,
-			Size = UDim2.new(1, 0, 0, 20),
+			Size = UDim2.new(1, 0, 0, 26),
 			LayoutOrder = 2,
 			Parent = info,
-		}, { Ui.list(true, 6) })
+		}, { Ui.list(true, 8) })
 		local pill = Ui.text({
 			Name = "RarityPill",
 			Text = rdef.badge,
-			FontFace = Theme.Face.Title,
-			TextSize = 12,
+			FontFace = Theme.Face.Display,
+			TextSize = 18,
 			TextColor3 = C.White,
 			TextXAlignment = Enum.TextXAlignment.Center,
 			BackgroundColor3 = rdef.colors[2],
 			AutomaticSize = Enum.AutomaticSize.X,
-			Size = UDim2.fromOffset(0, 20),
+			Size = UDim2.fromOffset(0, 26),
 			Parent = tags,
 		})
 		Ui.pad(7).Parent = pill
 		Ui.corner(6).Parent = pill
 		Ui.outline(C.Night, 1).Parent = pill
 		Ui.text({
-			Text = `{rdef.displayName} · {def.family} Family`,
-			FontFace = Theme.Face.Bold,
-			TextSize = 12,
+			Text = `{string.upper(def.family)}`,
+			FontFace = Theme.Face.Display,
+			TextSize = 18,
 			TextColor3 = rdef.color,
 			TextWrapped = false,
 			AutomaticSize = Enum.AutomaticSize.X,
@@ -224,10 +278,11 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		Ui.text({
 			Name = "Description",
 			Text = def.passive.description,
-			TextSize = 12,
+			FontFace = Theme.Face.Bold,
+			TextSize = 17,
 			TextColor3 = C.Text,
 			TextYAlignment = Enum.TextYAlignment.Top,
-			Size = UDim2.new(1, 0, 0, 30),
+			Size = UDim2.new(1, 0, 0, 40),
 			LayoutOrder = 3,
 			Parent = info,
 		})
@@ -235,25 +290,25 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		local function statRow(icon: string, label: string, value: string, order: number)
 			local row = Ui.frame({
 				BackgroundTransparency = 1,
-				Size = UDim2.new(1, 0, 0, 22),
+				Size = UDim2.new(1, 0, 0, 28),
 				LayoutOrder = order,
 				Parent = info,
 			})
 			Kit.image(
 				icon,
-				{ Size = UDim2.fromOffset(20, 20), Position = UDim2.fromOffset(0, 1), Parent = row }
+				{ Size = UDim2.fromOffset(26, 26), Position = UDim2.fromOffset(0, 1), Parent = row }
 			)
 			local t = Ui.text({
 				Text = `<font color="#9EAED3">{label}:</font> {value}`,
 				RichText = true,
-				FontFace = Theme.Face.Bold,
-				TextSize = 14,
+				FontFace = Theme.Face.Title,
+				TextSize = 20,
 				TextWrapped = false,
-				Position = UDim2.fromOffset(26, 0),
-				Size = UDim2.new(1, -26, 1, 0),
+				Position = UDim2.fromOffset(32, 0),
+				Size = UDim2.new(1, -32, 1, 0),
 				Parent = row,
 			})
-			Ui.fit(t, 14, 9)
+			Ui.fit(t, 20, 12)
 		end
 		statRow("icon_atk", "Power", Format.number(stats.power), 4)
 		statRow("icon_hp", "Health", Format.number(stats.hp), 5)
@@ -262,9 +317,10 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		local statName = STAT_NAME[famDef.bonusStat] or famDef.bonusStat
 		local bonus = Ui.text({
 			Name = "FamilyBonus",
-			Text = `<b>Family Bonus:</b>\n+2% {statName} ({def.family} x2)\n+3% {statName} ({def.family} x3)`,
+			Text = `<b>FAMILY BONUS</b>\n+2% {statName} (x2) · +3% (x3)`,
 			RichText = true,
-			TextSize = 12,
+			FontFace = Theme.Face.Title,
+			TextSize = 17,
 			TextColor3 = C.Green,
 			TextYAlignment = Enum.TextYAlignment.Top,
 			Size = UDim2.new(1, 0, 0, 46),
@@ -289,28 +345,31 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			BackgroundTransparency = 1,
 			AnchorPoint = Vector2.new(0, 1),
 			Position = UDim2.fromScale(0, 1),
-			Size = UDim2.new(1, 0, 0, 34),
+			Size = UDim2.new(1, 0, 0, 40),
 			Parent = inspect,
 		}, { Ui.list(true, 6) })
 		local here = inDeck(view, card.uid)
-		local equip = Ui.button(if here then "Equipped" else "Equip", "purple", function()
+		local equip = Ui.button(if here then "EQUIPPED" else "EQUIP", "purple", function()
 			if not here then
 				CardActions.equip(ctx, card)
 			end
-		end, { LayoutOrder = 1, Size = UDim2.fromOffset(110, 34), Name = "Equip", TextSize = 14 })
+		end, { LayoutOrder = 1, Size = UDim2.fromOffset(120, 40), Name = "Equip" })
+		bigLabel(equip, 20)
 		equip.setEnabled(not card.locked)
 		equip.instance.Parent = actions
 		local plan = CardActions.mergePlan(view, card)
-		if plan then
-			local merge = Ui.button(`Merge {#plan.use}`, "primary", function()
+		if plan and #plan.use > 0 then
+			local merge = Ui.button(`MERGE {#plan.use}`, "primary", function()
 				CardActions.merge(ctx, card)
-			end, { LayoutOrder = 2, Size = UDim2.fromOffset(100, 34), Name = "Merge", TextSize = 14 })
+			end, { LayoutOrder = 2, Size = UDim2.fromOffset(110, 40), Name = "Merge" })
+			bigLabel(merge, 20)
 			merge.setEnabled(#plan.use > 0 and view.coins >= plan.fee)
 			merge.instance.Parent = actions
 		end
-		local details = Ui.button("Card Stats", "secondary", function()
+		local details = Ui.button("STATS", "secondary", function()
 			CardStats.show(ctx, card.uid)
-		end, { LayoutOrder = 3, Size = UDim2.fromOffset(110, 34), Name = "Details", TextSize = 14 })
+		end, { LayoutOrder = 3, Size = UDim2.fromOffset(110, 40), Name = "Details" })
+		bigLabel(details, 20)
 		details.instance.Parent = actions
 		local spareList = spares(view, card)
 		local hasMax = false
@@ -321,7 +380,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		end
 		if hasMax and #spareList > 0 then
 			local price = Economy.CardSale[def.rarity] or 0
-			local sell = Ui.button(`Sell {#spareList}`, "ghost", function()
+			local sell = Ui.button(`SELL {#spareList}`, "ghost", function()
 				ctx.confirm(
 					"Sell spares",
 					`Sell {#spareList} spare {def.displayName} copies for {Format.number(price * #spareList)} Coins?`,
@@ -330,7 +389,8 @@ return function(ctx: any, layer: Frame, arg: any?): any
 						ctx.request("Cards.Sell", { uids = spareList, requestId = ctx.guid() })
 					end
 				)
-			end, { LayoutOrder = 4, Size = UDim2.fromOffset(80, 34), Name = "Sell", TextSize = 13 })
+			end, { LayoutOrder = 4, Size = UDim2.fromOffset(84, 40), Name = "Sell" })
+			bigLabel(sell, 20)
 			sell.instance.Parent = actions
 		end
 	end
@@ -348,21 +408,45 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			golden = card.golden,
 			level = card.level,
 			favorite = card.favorite,
-			size = Vector2.new(88, 104),
+			size = Vector2.new(88, 120),
 			hover = true,
+			bare = true,
+			stats = false,
 		})
 		if selected == card.uid then
-			Ui.stroke(C.Text, 3).Parent = portrait
+			Ui.stroke(C.GoldHi, 3).Parent = portrait
 		end
-		Ui.text({
-			Text = `Lv {card.level}{if inDeck(view, card.uid) then " · In deck" else ""}`,
-			FontFace = Theme.Face.Bold,
-			TextSize = Theme.Size.small,
-			TextXAlignment = Enum.TextXAlignment.Center,
-			Position = UDim2.fromOffset(0, 104),
-			Size = UDim2.new(1, 0, 0, 16),
+		-- a big level top-right, and the deck slot (gold box) when it is in the deck
+		local lv = Ui.display({
+			Name = "Level",
+			Text = `LV{card.level}`,
+			TextSize = 18,
+			TextXAlignment = Enum.TextXAlignment.Right,
+			AnchorPoint = Vector2.new(1, 0),
+			Position = UDim2.new(1, -6, 0, 6),
+			Size = UDim2.fromOffset(52, 22),
+			ZIndex = 60,
 			Parent = tile,
 		})
+		lv.TextColor3 = C.White
+		Ui.outline(C.Night, 3).Parent = lv
+		local slot = table.find(view.deck, card.uid)
+		if slot then
+			local mark = Ui.display({
+				Name = "DeckSlot",
+				Text = tostring(slot),
+				TextSize = 18,
+				BackgroundColor3 = C.Gold,
+				BackgroundTransparency = 0,
+				AnchorPoint = Vector2.new(1, 1),
+				Position = UDim2.new(1, 2, 1, 0),
+				Size = UDim2.fromOffset(24, 24),
+				ZIndex = 61,
+				Parent = tile,
+			})
+			mark.TextColor3 = C.GoldInk
+			Ui.corner(6).Parent = mark
+		end
 		tile.Activated:Connect(function()
 			selected = card.uid
 			render()
@@ -382,18 +466,19 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		icon.Position = UDim2.fromScale(0.5, 0.02)
 		local label = Ui.text({
 			Text = if entry.golden then `Golden {entry.egg.displayName}` else entry.egg.displayName,
-			FontFace = Theme.Face.Bold,
-			TextSize = 11,
+			FontFace = Theme.Face.Display,
+			TextSize = 15,
 			TextWrapped = false,
 			TextXAlignment = Enum.TextXAlignment.Center,
 			Position = UDim2.fromOffset(2, 60),
-			Size = UDim2.new(1, -4, 0, 14),
+			Size = UDim2.new(1, -4, 0, 18),
 			ZIndex = 2,
 			Parent = tile,
 		})
-		Ui.fit(label, 11, 8)
+		Ui.outline(C.Night, 2).Parent = label
+		Ui.fit(label, 15, 10)
 		local golden = entry.golden
-		local open = Ui.button(`Open ×{entry.count}`, if golden then "primary" else "success", function()
+		local open = Ui.button(`OPEN x{entry.count}`, if golden then "primary" else "success", function()
 			local known = Hatch.known(ctx.state.view)
 			local reply = ctx.request("Bag.OpenEgg", { eggId = entry.egg.id, golden = golden })
 			if reply.ok then
@@ -403,10 +488,10 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			Name = "Open",
 			AnchorPoint = Vector2.new(0.5, 1),
 			Position = UDim2.new(0.5, 0, 1, -4),
-			Size = UDim2.new(1, -10, 0, 26),
-			TextSize = 12,
+			Size = UDim2.new(1, -10, 0, 30),
 			ZIndex = 2,
 		})
+		bigLabel(open, 18)
 		open.instance.Parent = tile
 	end
 
@@ -465,11 +550,12 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			{ Ui.list(true, 4) }
 		)
 		if tab == "Cards" or tab == "All" then
-			local allButton = Ui.button("All", if filter == nil then "purple" else "ghost", function()
+			local allButton = Ui.button("ALL", if filter == nil then "purple" else "ghost", function()
 				filter = nil
 				page = 1
 				render()
-			end, { Size = UDim2.fromOffset(40, 28), LayoutOrder = 1, TextSize = 12, Name = "FilterAll" })
+			end, { Size = UDim2.fromOffset(46, 30), LayoutOrder = 1, Name = "FilterAll" })
+			bigLabel(allButton, 16)
 			allButton.instance.Parent = filters
 			-- Rarity chips (kit filter_chip_<rarity>) with the badge letters in the rarity colour.
 			for i, r in RARITY_ORDER do
@@ -489,7 +575,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 				})
 				local label = Ui.display({
 					Text = rdef.badge,
-					TextSize = 15,
+					TextSize = 17,
 					TextColor3 = if active then C.White else rdef.colors[1],
 					Size = UDim2.fromScale(1, 1),
 					ZIndex = 2,
@@ -508,30 +594,9 @@ return function(ctx: any, layer: Frame, arg: any?): any
 				end)
 			end
 		end
-		local search: TextBox = Ui.new("TextBox", {
-			Name = "Search",
-			Text = query,
-			PlaceholderText = "Search…",
-			ClearTextOnFocus = false,
-			FontFace = Theme.Face.Bold,
-			TextSize = 13,
-			TextColor3 = C.Text,
-			PlaceholderColor3 = C.Muted,
-			BackgroundColor3 = C.PanelDeep,
-			Size = UDim2.fromOffset(if tab == "Cards" or tab == "All" then 100 else 280, 28),
-			LayoutOrder = 10,
-			Parent = filters,
-		}, { Ui.corner(8), Ui.stroke(C.Stroke, 1), Ui.pad(6) })
-		search.FocusLost:Connect(function()
-			if search.Text ~= query then
-				query = string.lower(search.Text)
-				page = 1
-				render()
-			end
-		end)
-
 		local grid =
-			Ui.scroll({ Position = UDim2.fromOffset(0, 36), Size = UDim2.new(1, 0, 1, -72), Parent = left })
+			Ui.scroll({ Position = UDim2.fromOffset(0, 36), Size = UDim2.new(1, 0, 1, -76), Parent = left })
+		grid.ScrollBarThickness = 3 -- a thin handle only (60 cards a page)
 		Ui.grid(Vector2.new(88, 120), 8).Parent = grid
 		-- Room for the rarity badge, which overhangs the top of each card.
 		Ui.new("UIPadding", { PaddingTop = UDim.new(0, 12), PaddingLeft = UDim.new(0, 4), Parent = grid })
@@ -556,27 +621,30 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			-- Pager (cards only).
 			local pager = Ui.frame({
 				BackgroundTransparency = 1,
-				Position = UDim2.new(0, 0, 1, -32),
-				Size = UDim2.new(1, 0, 0, 30),
+				Position = UDim2.new(0, 0, 1, -34),
+				Size = UDim2.new(1, 0, 0, 32),
 				Parent = left,
 			}, { Ui.list(true, 8, Enum.HorizontalAlignment.Center) })
-			local prev = Ui.button("<", "ghost", function()
+			local prev = Ui.button("◀", "secondary", function()
 				page -= 1
 				render()
-			end, { Size = UDim2.fromOffset(40, 28), LayoutOrder = 1 })
+			end, { Size = UDim2.fromOffset(44, 32), LayoutOrder = 1 })
+			bigLabel(prev, 22)
 			prev.setEnabled(page > 1)
 			prev.instance.Parent = pager
-			Ui.text({
-				Text = `Page {page}/{pages} · {#cards} cards`,
-				TextXAlignment = Enum.TextXAlignment.Center,
-				Size = UDim2.fromOffset(170, 28),
+			local pageLabel = Ui.display({
+				Text = `{page}/{pages}`,
+				TextSize = 22,
+				Size = UDim2.fromOffset(110, 32),
 				LayoutOrder = 2,
 				Parent = pager,
-			})
-			local nextButton = Ui.button(">", "ghost", function()
+			}, true)
+			Ui.outline(C.Night, 2).Parent = pageLabel
+			local nextButton = Ui.button("▶", "secondary", function()
 				page += 1
 				render()
-			end, { Size = UDim2.fromOffset(40, 28), LayoutOrder = 3 })
+			end, { Size = UDim2.fromOffset(44, 32), LayoutOrder = 3 })
+			bigLabel(nextButton, 22)
 			nextButton.setEnabled(page < pages)
 			nextButton.instance.Parent = pager
 		end
@@ -598,8 +666,10 @@ return function(ctx: any, layer: Frame, arg: any?): any
 					then "No eggs in your bag. Golden eggs come from Trials and the 7-day streak."
 					elseif tab == "Items" then "No items yet. Harvest resource nodes in your world."
 					else "Hatch eggs in the Shop to get cards.",
-				TextColor3 = C.Muted,
-				Size = UDim2.new(1, 0, 0, 40),
+				FontFace = Theme.Face.Title,
+				TextSize = 20,
+				TextColor3 = C.Text,
+				Size = UDim2.new(1, 0, 0, 60),
 				Parent = grid,
 			})
 		end
@@ -642,16 +712,19 @@ return function(ctx: any, layer: Frame, arg: any?): any
 			ZIndex = 2,
 			Parent = b,
 		})
-		Ui.display({
+		local tag = Ui.display({
 			Text = label,
-			TextSize = 11,
+			TextSize = 16,
 			TextWrapped = false,
 			AnchorPoint = Vector2.new(0.5, 1),
-			Position = UDim2.new(0.5, 0, 1, 1),
-			Size = UDim2.new(1, 4, 0, 13),
+			Position = UDim2.new(0.5, 0, 1, 2),
+			Size = UDim2.new(1, 6, 0, 18),
 			ZIndex = 3,
 			Parent = b,
 		})
+		tag.TextColor3 = C.White
+		Ui.outline(C.Night, 2).Parent = tag
+		Ui.fit(tag, 16, 10)
 		Ui.juice(b)
 		b.Activated:Connect(function()
 			Ui.sound("click")
@@ -745,6 +818,7 @@ return function(ctx: any, layer: Frame, arg: any?): any
 		if view == nil then
 			return
 		end
+		storageAmount.Text = `{count(view.cards)}/{view.cardSlots}`
 		if selected and view.cards[selected] == nil then
 			selected = nil
 		end

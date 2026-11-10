@@ -145,7 +145,7 @@ local List: { Types.CharacterDef } = {
 		passive = {
 			id = "dawnlight",
 			displayName = "Dawnlight",
-			description = "Attacks heal her for 10% of the damage dealt.",
+			description = "Attacks heal for 10% of the damage dealt.",
 			effect = { kind = "Lifesteal", value = 0.10 },
 		},
 		look = {

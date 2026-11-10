@@ -20,7 +20,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 5 | Main menu | done, waiting for art (D1-D4) | `ui(5)` | layout 8 · hero 8 · buttons 8 · text 9 · motion 8 · background 7 / logo 7 until D1/D2 (`compare_mainmenu.png`) |
 | 6 | Egg Shop | done, waiting for art (Sheets A, B; C if Option 2) | `ui(6)` | grid 9 · featured 8 · text 8 · buttons 8 · painted 7 until A/B (`compare_eggshop.png`) |
 | 7 | Merchant + every other panel | done, waiting for art (merchant kit, Sheet A) | `ui(7)` | merchant: layout 9 · text 9 · icons 8 · space 8 · buttons 8 · painted 7; panels: text 8 · icons 8 · no web boxes 8 · painted 7 (`compare_merchant.png`, `compare_panels.png`) |
-| 8 | Deck Builder, Families, Inventory | todo | | |
+| 8 | Deck Builder, Families, Inventory | done, waiting for art (Sheets A, B, F1, E4) | `ui(8)` | deck: layout 8 · cards 8 · text 8 · motion 8; inventory: layout 8 · cards 8 · text 8 · inspect 8; painted 7 until the sheets (`compare_deck.png`, `compare_families.png`, `compare_inventory.png`) |
 | 9 | Battle screen + 5 arenas | todo | | |
 | 10 | Battle result | todo | | |
 | 11 | Lobby full upgrade | todo | | |
@@ -231,6 +231,22 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   - **Odds:** tier-coloured rows with the name, rarity and a big %, sized to its rows, a readable note.
   - **Confirmations:** a 22 px body and big CANCEL / action buttons.
 - Panel art stays TEMP until the owner's merchant kit (and Sheet A) are approved and live.
+- Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
+
+### Phase 8 (2026-11-10)
+- **Deck Builder + Families side by side** (target hd-04 layout; its copyrighted card art is never used):
+  three art-first slot cards with a power plate (sword icon, big number); DECK POWER in big type with
+  a count-up and a green or red arrow; the family bonus chips and the ranked level cap as chips; a
+  paged strip of the best copy of each character (deck-slot numbers on the ones in use) that flies
+  into the selected slot; SAVE DECK grey while nothing changed. **Families** is a compact two-column
+  panel of glowing family gems, the active ones gold with their "+N%", and a crown footer.
+- **Inventory** (target hd-03 layout): the search bar with a magnifier and the storage count
+  (13/300) in the header; big vertical tabs; art-first cards (`Card` `bare`, no names, no stat chips)
+  with a big LV and a gold deck-slot box; egg tiles with big labels and OPEN xN; the inspect pane is
+  never an empty placeholder (it opens on the first card), with a big name, rarity and family, a
+  17 px description, 20 px stat rows, the family bonus, and big EQUIPPED / MERGE / STATS / SELL
+  (MERGE only when there are spares). The grid keeps a thin 3 px handle (60 cards a page).
+- **Rename follow-up:** Solaris's passive read "heal her"; it is neutral now.
 - Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
 
 ## Waiting for art
