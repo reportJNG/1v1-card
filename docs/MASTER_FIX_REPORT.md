@@ -22,7 +22,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 7 | Merchant + every other panel | done, waiting for art (merchant kit, Sheet A) | `ui(7)` | merchant: layout 9 · text 9 · icons 8 · space 8 · buttons 8 · painted 7; panels: text 8 · icons 8 · no web boxes 8 · painted 7 (`compare_merchant.png`, `compare_panels.png`) |
 | 8 | Deck Builder, Families, Inventory | done, waiting for art (Sheets A, B, F1, E4) | `ui(8)` | deck: layout 8 · cards 8 · text 8 · motion 8; inventory: layout 8 · cards 8 · text 8 · inspect 8; painted 7 until the sheets (`compare_deck.png`, `compare_families.png`, `compare_inventory.png`) |
 | 9 | Battle screen + 5 arenas | done, waiting for art (H1, H2) | `ui(9)` | bars 9 · timer 8 · action cards 8 · clean 9 · motion 8 · painted 7 until H1/H2 (`compare_battle.png`, `docs/screens/arenas`) |
-| 10 | Battle result | todo | | |
+| 10 | Battle result | done, waiting for art (G1, G2) | `ui(10)` | layout 9 · both fighters 8 · text 9 · rewards 9 · buttons 8 · motion 8 · painted 7 until G1/G2 (`compare_result_defeat.png`, `compare_result_victory.png`; `hd-06` left out of the compare: it shows a franchise-like character) |
 | 11 | Lobby full upgrade | todo | | |
 | 12 | Worlds 1-10 upgrade | todo | | |
 | 13 | Final pass | todo | | |
@@ -302,6 +302,39 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   bolt), a small dark FORFEIT, the 1ST tag, reveal tiles and ROUND word moved off the plate, the KO
   picker waits for the knock-out, Celestial's rock poking through the floor, a readable Storm skyline.
   **Not yet verified:** a phone-size viewport (the Phase 13 final pass covers it).
+
+### Phase 10 (2026-11-10)
+- **Result screen rebuilt to target 16** (`Screens/BattleResult`, over the arena): the VICTORY / DEFEAT
+  banner slams down with a shake and a flash; the player's panel top-left and the opponent's top-right
+  hold only the lead card, name, trophies (GUARDIAN for a Trial), an HP bar with big numbers and three
+  deck pips; each side's **MVP card** (most damage dealt, tracked from the server's Hit events) at the
+  sides, the loser's dimmed; one big line; the player's three deck cards with rarity auras (R and up)
+  and a dark crack overlay with KO on knocked-out cards; reward chips that pop in and count up
+  (Ranked: Coins, trophies, a new league; Trial first clear: trophies, Coins, Gems, Golden egg; a repeat
+  clear says CLEARED BEFORE; a lost Trial says NO REWARD); the reason pill with "!!!" only when it
+  matters (round limit, forfeit, missed picks, voided rewards, the daily limit), never for a plain KO;
+  a big gold CONTINUE with a shine sweep and PLAY AGAIN (opens the Arena queue) after ranked matches.
+  On CONTINUE the Coins won fly to the Coins pill once the HUD is back.
+- **Both fighters in the arena** (`BattleStage.showResult`): the player's own Roblox avatar on the left
+  and the opponent's avatar on the right (the start packet now carries each seat's `userId`; a spec
+  pins it), or the Guardian's standee in a Trial; victory pose (arms up) or defeat pose (head and
+  shoulders down) on the R15 joints; name billboards; family auras; embers (about 40% on touch
+  devices); a slow camera push-in. The fight's bars, medallion and plate hide under the result.
+- **Removed:** the battle log, usernames, rarity words and percentages on the panels.
+- **XP is not shown:** the game has no XP (no temporary logic); quest progress already pops through
+  `Moments` when the profile updates after the match.
+- **Return to the spot:** CONTINUE closes the battle; the server's end hooks (Phase 1) put the player
+  back where they were. Play check: lobby → Trial → forfeit → result → CONTINUE → the same lobby spot
+  with the HUD and the camera on the character (`after_continue_lobby.png`).
+- **Verified:** Edit previews (ranked defeat, Trial first-clear victory with a KO'd card and the round
+  limit) and **Play** (a real Trial in Storm Rooftop, forfeited: the player's real avatar, the Guardian
+  Warden Moss, the Forfeit pill, CONTINUE). Found and fixed in these runs: the fight HUD showing
+  behind the result, the opponent's pips over its HP bar, the reward branch read the start packet's
+  mode instead of the end packet's, a Trial's trophy grant shown as the total, the empty chip row on
+  a lost Trial, the player's name tag under the panel.
+- **Not verified:** a ranked result with a second real player (needs two clients; Phase 13 / a published
+  test place) and the phone-size layout (Phase 13).
+- Checks: StyLua, Selene, luau-lsp clean; **316 passed, 0 failed**.
 
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each

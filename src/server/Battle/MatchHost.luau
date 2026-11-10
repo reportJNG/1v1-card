@@ -64,7 +64,8 @@ end
 local function startPacket(live: Live, side: number): { [string]: any }
 	local seats = {}
 	for i, seat in live.record.seats do
-		seats[i] = { name = seat.name, trophies = seat.trophies, ai = seat.userId == nil }
+		seats[i] =
+			{ name = seat.name, trophies = seat.trophies, ai = seat.userId == nil, userId = seat.userId }
 	end
 	return {
 		matchId = live.record.matchId,

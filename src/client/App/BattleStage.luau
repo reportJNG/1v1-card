@@ -719,6 +719,170 @@ function BattleStage.destroy(self: Stage)
 	end
 end
 
+-- A Roblox avatar for the result scene (nil when it can't be built, e.g. in Edit-mode previews).
+local function avatarOf(userId: number?): Model?
+	if userId == nil or userId <= 0 then
+		return nil
+	end
+	local ok, built = pcall(function()
+		local desc = Players:GetHumanoidDescriptionFromUserId(userId)
+		return Players:CreateHumanoidModelFromDescription(desc, Enum.HumanoidRigType.R15)
+	end)
+	if not ok or built == nil then
+		return nil
+	end
+	local m = built :: Model
+	for _, d in m:GetDescendants() do
+		if d:IsA("Script") or d:IsA("LocalScript") then
+			d:Destroy()
+		elseif d:IsA("BasePart") then
+			d.Anchored = d.Name == "HumanoidRootPart"
+			d.CanCollide = false
+			d.CanQuery = false
+		end
+	end
+	local humanoid = m:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+		humanoid.PlatformStand = true
+	end
+	return m
+end
+
+-- Victory (both arms up) or defeat (head and shoulders down) by turning the R15 joints.
+local function pose(m: Model, won: boolean)
+	local function turn(jointName: string, cf: CFrame)
+		for _, d in m:GetDescendants() do
+			if d:IsA("Motor6D") and d.Name == jointName then
+				d.C0 = d.C0 * cf
+			end
+		end
+	end
+	if won then
+		turn("LeftShoulder", CFrame.Angles(0, 0, math.rad(-150)))
+		turn("RightShoulder", CFrame.Angles(0, 0, math.rad(150)))
+		turn("Neck", CFrame.Angles(math.rad(12), 0, 0))
+	else
+		turn("Neck", CFrame.Angles(math.rad(-30), 0, 0))
+		turn("Waist", CFrame.Angles(math.rad(-14), 0, 0))
+		turn("LeftShoulder", CFrame.Angles(0, 0, math.rad(8)))
+		turn("RightShoulder", CFrame.Angles(0, 0, math.rad(-8)))
+	end
+end
+
+-- A name billboard over a fighter's head (never always-on-top: see Shared/Ui/Billboard).
+local function nameTag(at: BasePart, text: string, color: Color3, height: number)
+	local gui = Instance.new("BillboardGui")
+	gui.Name = "NameTag"
+	gui.Size = UDim2.fromOffset(240, 44)
+	gui.StudsOffsetWorldSpace = Vector3.new(0, height, 0)
+	gui.AlwaysOnTop = false
+	gui.LightInfluence = 0
+	gui.Parent = at
+	local label =
+		Ui.display({ Text = string.upper(text), TextSize = 30, Size = UDim2.fromScale(1, 1), Parent = gui })
+	label.TextColor3 = C.White
+	local stroke = label:FindFirstChildOfClass("UIStroke")
+	if stroke then
+		stroke.Color = color:Lerp(C.Night, 0.5)
+		stroke.Thickness = 3
+	end
+end
+
+export type ResultSide = {
+	userId: number?, -- a player's avatar; nil for the Guardian (its lead card's standee)
+	characterId: string, -- the side's MVP card (standee fallback, aura colour)
+	name: string,
+	won: boolean,
+}
+
+-- The result scene (BAD_GUI_7 section 3): both fighters back on their pads, the player's avatar
+-- on the left and the opponent's (or the Guardian) on the right, in victory or defeat poses with
+-- name billboards; embers rise, and the camera pushes in slowly.
+function BattleStage.showResult(self: Stage, sides: { [number]: ResultSide }, mobile: boolean)
+	self.pending = nil
+	self.queued = {}
+	for side = 1, 2 do
+		local spec = sides[side]
+		local old = self.fighters[side]
+		if old then
+			old:Destroy()
+			self.fighters[side] = nil
+		end
+		local mark = markPos(side, self.you)
+		local color = accentOf(spec.characterId)
+		local toCamera = Vector3.new(HOME_CAM.Position.X, mark.Y, HOME_CAM.Position.Z) - mark
+		local toFoe = (markPos(3 - side, self.you) - mark).Unit
+		local look = (toCamera.Unit * 0.85 + toFoe * 0.3).Unit
+		local avatar = avatarOf(spec.userId)
+		local head: BasePart?
+		local r: Model
+		if avatar then
+			r = avatar
+			local rig = avatar
+			rig.Parent = self.model
+			task.wait() -- parenting re-applies the rig; place it afterwards
+			rig:PivotTo(CFrame.lookAt(mark, mark + look))
+			local box, size = rig:GetBoundingBox()
+			rig:PivotTo(rig:GetPivot() + Vector3.new(0, mark.Y + 0.3 - (box.Position.Y - size.Y / 2), 0))
+			pose(rig, spec.won)
+			head = rig:FindFirstChild("Head") :: BasePart?
+		else
+			r = Standee.build(spec.characterId)
+			r:PivotTo(CFrame.lookAt(mark, mark + look))
+			r.Parent = self.model
+			if not spec.won then
+				r:PivotTo(r:GetPivot() * CFrame.Angles(math.rad(-10), 0, 0))
+			end
+			head = r:FindFirstChild("Panel") :: BasePart?
+		end
+		aura(r, color)
+		if not spec.won then
+			local a = r:FindFirstChild("Aura")
+			local e = a and a:FindFirstChildOfClass("ParticleEmitter")
+			if e then
+				e.Rate = 12
+			end
+		end
+		if head then
+			nameTag(head, spec.name, color, if r:FindFirstChildOfClass("Humanoid") then 1.6 else 4)
+		end
+		self.fighters[side] = r
+		self:ring(mark, color, 12)
+	end
+	-- embers and drifting debris over the arena (about 40% on phones)
+	local holder = part({
+		Name = "ResultEmbers",
+		Size = Vector3.new(60, 1, 30),
+		Position = ORIGIN + Vector3.new(0, -1, -4),
+		Transparency = 1,
+	}, self.model)
+	local e = Instance.new("ParticleEmitter")
+	e.Texture = Ui.asset("sparkle")
+	e.Color = ColorSequence.new(Color3.fromHex("#FFC27A"), Color3.fromHex("#C05AFF"))
+	e.LightEmission = 1
+	e.Size = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0),
+		NumberSequenceKeypoint.new(0.2, 0.35),
+		NumberSequenceKeypoint.new(1, 0),
+	})
+	e.Lifetime = NumberRange.new(3, 6)
+	e.Speed = NumberRange.new(1.5, 4)
+	e.EmissionDirection = Enum.NormalId.Top
+	e.Acceleration = Vector3.new(0.4, 0.8, 0)
+	e.Rate = if mobile then 10 else 26
+	e.Parent = holder
+	-- the slow push-in
+	self.camBase = HOME_CAM
+	if not self.reduced then
+		local v = Instance.new("NumberValue")
+		v.Changed:Connect(function(d)
+			self.camBase = HOME_CAM * CFrame.new(0, 0, -d)
+		end)
+		TweenService:Create(v, TweenInfo.new(6, Enum.EasingStyle.Sine), { Value = 4 }):Play()
+	end
+end
+
 -- Plays one resolved round's events in order, with hit-stop, numbers, shake and VFX.
 -- `special[side]` is true when that side picked a Special this round. `onEvent` is called as each
 -- event lands (the HUD drains HP bars then), `onDone` once the round has played.

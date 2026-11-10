@@ -1189,6 +1189,8 @@ function Battle.open(ctx: any, start: any): Handle
 	intro()
 
 	local chooserPending = false
+	-- damage dealt per side and deck slot, for the result's MVP cards
+	local dealt: { [number]: { [number]: number } } = { [1] = {}, [2] = {} }
 	handle = {
 		round = function(msg)
 			local data = msg.data
@@ -1234,6 +1236,8 @@ function Battle.open(ctx: any, start: any): Handle
 						setEnergy(1, e[6], true)
 						setEnergy(2, e[7], true)
 					elseif kind == "Hit" then
+						local slot = view.sides[e[2]].active
+						dealt[e[2]][slot] = (dealt[e[2]][slot] or 0) + e[3]
 						local target = 3 - e[2]
 						setHp(target, e[5], ui[target].maxHp, true)
 					elseif kind == "Heal" then
@@ -1292,6 +1296,13 @@ function Battle.open(ctx: any, start: any): Handle
 			end
 			trayHolder.Visible = false
 			forfeit.Visible = false
+			-- the result has its own top row: the fight's bars, medallion and plate go
+			medal.Visible = false
+			plate.Visible = false
+			for side = 1, 2 do
+				ui[side].bar.Visible = false
+				ui[side].info.Visible = false
+			end
 			-- let the last round's hits land before the result covers the arena
 			task.spawn(function()
 				local waited = 0
@@ -1299,9 +1310,13 @@ function Battle.open(ctx: any, start: any): Handle
 					waited += task.wait(0.1)
 				end
 				renderAll()
-				BattleResult.show(layer, start, data, view, reduced, function()
-					handle.destroy()
-				end)
+				BattleResult.show(ctx, layer, start, data, view, reduced, {
+					dealt = dealt,
+					stage = stage,
+					onClose = function()
+						handle.destroy()
+					end,
+				})
 			end)
 		end,
 		destroy = function()
