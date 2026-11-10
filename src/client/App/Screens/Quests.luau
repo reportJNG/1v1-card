@@ -62,9 +62,20 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		setBar(progress / def.target)
 		local claimed = entry and entry.claimed
 		local b = Ui.button(if claimed then "Claimed" else "Claim", "success", function()
+			local from = Ui.lastPressed
 			local reply = ctx.request("Quests.Claim", { questId = def.id })
 			if reply.ok then
-				ctx.toast(`Quest complete: {rewardText(def)}`, "good")
+				if def.coins then
+					ctx.near(
+						from,
+						{ text = `+{Format.number(def.coins)}`, icon = "icon_coin", tone = "gold" }
+					)
+					ctx.fly(from, "coins", { icon = "icon_coin", count = 5 })
+				end
+				if def.gems then
+					ctx.near(from, { text = `+{def.gems}`, icon = "icon_gem", tone = "cyan" })
+					ctx.fly(from, "gems", { icon = "icon_gem", count = 4 })
+				end
 			end
 		end, {
 			AnchorPoint = Vector2.new(1, 0.5),
@@ -115,7 +126,13 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			function()
 				local reply = ctx.request("Daily.ClaimStreak")
 				if reply.ok then
-					ctx.toast(`Day {reply.value.day} reward claimed!`, "good")
+					ctx.say(`DAY {reply.value.day}!`, "gold", "icon_calendar")
+					local day = reply.value.day
+					if day < 7 then
+						ctx.fly(Ui.lastPressed, "coins", { icon = "icon_coin", count = 5 })
+					else
+						ctx.fly(Ui.lastPressed, "gems", { icon = "icon_gem", count = 4 })
+					end
 				end
 			end,
 			{ Size = UDim2.fromOffset(150, 44), LayoutOrder = 8, Name = "ClaimStreak", TextSize = 15 }

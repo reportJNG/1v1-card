@@ -115,12 +115,11 @@ function CardActions.merge(ctx: any, card: any): any?
 		return nil
 	end
 	Ui.sound("merge")
-	local def = Characters.ById[card.characterId]
 	if reply.value.toLevel > card.level then
 		task.delay(0.4, Ui.sound, "level_up")
-		ctx.toast(`{def.displayName} is now level {reply.value.toLevel}!`, "good")
+		ctx.say("LEVEL UP!", "gold", "icon_upgrade")
 	else
-		ctx.toast(`{def.displayName} gained merge points.`, "good")
+		ctx.cheer("MERGED!", "icon_upgrade")
 	end
 	return reply.value
 end
@@ -128,13 +127,13 @@ end
 function CardActions.equip(ctx: any, card: any): boolean
 	local deck = CardActions.equipped(ctx.state.view, card)
 	if deck == nil then
-		ctx.toast("A deck needs 3 different characters: hatch more eggs first.", "error")
+		ctx.warn("NEED 3 CARDS", "icon_deck")
 		return false
 	end
 	local reply = ctx.request("Deck.Set", { uids = deck })
 	if reply.ok then
 		Ui.sound("card_flip")
-		ctx.toast(`{Characters.ById[card.characterId].displayName} is in your deck.`, "good")
+		ctx.cheer("IN DECK!", "icon_deck")
 	end
 	return reply.ok
 end

@@ -103,4 +103,54 @@ function Format.error(code: string?): string
 	return ERRORS[base] or base:gsub("(%l)(%u)", "%1 %2")
 end
 
+-- The same errors as a pop (BAD_GUI_THINKING_AND_UI): 1-3 big words and an icon, shown beside the
+-- button that was pressed.
+local ERROR_POPS: { [string]: { text: string, icon: string? } } = {
+	InsufficientFunds = { text = "NEED COINS", icon = "icon_coin" },
+	StorageFull = { text = "STORAGE FULL", icon = "icon_cards" },
+	CardStorageFull = { text = "STORAGE FULL", icon = "icon_cards" },
+	InventoryFull = { text = "BAG FULL" },
+	WorldLocked = { text = "LOCKED", icon = "icon_lock" },
+	EggNotAvailable = { text = "NOT YET", icon = "icon_lock" },
+	RateLimited = { text = "SLOW DOWN" },
+	ProfileNotLoaded = { text = "LOADING..." },
+	ServerError = { text = "TRY AGAIN" },
+	NoDeck = { text = "BUILD A DECK", icon = "icon_deck" },
+	AlreadyQueued = { text = "SEARCHING", icon = "icon_play" },
+	AlreadyInMatch = { text = "IN A MATCH", icon = "icon_play" },
+	TrialCooldown = { text = "WAIT A BIT" },
+	TooFar = { text = "GET CLOSER" },
+	NotReady = { text = "NOT READY" },
+	NotNearMerchant = { text = "GET CLOSER", icon = "icon_coin" },
+	AlreadyClaimed = { text = "CLAIMED", icon = "icon_check" },
+	NotComplete = { text = "NOT DONE", icon = "icon_quests" },
+	PaidRandomItemsRestricted = { text = "NOT AVAILABLE", icon = "icon_lock" },
+	PolicyUnknown = { text = "NOT AVAILABLE", icon = "icon_lock" },
+	QueueUnavailable = { text = "BUSY, RETRY" },
+	EggBagFull = { text = "BAG FULL", icon = "icon_shop" },
+	EggLocked = { text = "LOCKED", icon = "icon_lock" },
+	AlreadyClaimedToday = { text = "BACK TOMORROW", icon = "icon_calendar" },
+	ProductNotPublished = { text = "NOT ON SALE", icon = "icon_lock" },
+	SpareNotBaseCopy = { text = "NOT A SPARE", icon = "icon_cards" },
+	SpareInDeck = { text = "IN YOUR DECK", icon = "icon_deck" },
+	CardInDeck = { text = "IN YOUR DECK", icon = "icon_deck" },
+	NotPlaying = { text = "PRESS PLAY", icon = "icon_play" },
+	CardFavorite = { text = "FAVOURITE" },
+	SpareFavorite = { text = "FAVOURITE" },
+	NoMaxedCopy = { text = "MAX ONE FIRST", icon = "icon_cards" },
+	StorageAtMax = { text = "MAX STORAGE", icon = "icon_cards" },
+	AlreadyMaxLevel = { text = "MAX LEVEL" },
+	NoSpares = { text = "NO SPARES", icon = "icon_cards" },
+	NotSoldForCoins = { text = "NOT FOR COINS", icon = "icon_coin" },
+	NotInMatch = { text = "MATCH OVER" },
+	TooLate = { text = "TOO LATE" },
+	AlreadyPicked = { text = "PICKED", icon = "icon_check" },
+	InQueue = { text = "LEAVE QUEUE FIRST" },
+}
+
+function Format.errorPop(code: string?): { text: string, icon: string? }
+	local base = if code then string.split(code, ":")[1] else "ServerError"
+	return ERROR_POPS[base] or { text = "TRY AGAIN" }
+end
+
 return Format

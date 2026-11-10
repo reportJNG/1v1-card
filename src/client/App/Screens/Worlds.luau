@@ -237,8 +237,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 			Ui.juice(card)
 			card.Activated:Connect(function()
 				if not unlocked then
-					Ui.sound("error")
-					ctx.toast(`World {world.id} unlocks at {Format.number(world.trophiesToUnlock)} trophies.`)
+					ctx.warn(Format.short(world.trophiesToUnlock), "icon_trophy")
 					return
 				end
 				if here then

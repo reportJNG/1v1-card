@@ -215,7 +215,7 @@ local Pushes = table.freeze({
 	"Battle.Start", -- match setup
 	"Battle.Round", -- one round's result
 	"Battle.End", -- result and rewards
-	"Notice", -- { kind, text } short toasts
+	"Notice", -- { kind, text } a short centre pop (App/WorldText)
 })
 
 return table.freeze({

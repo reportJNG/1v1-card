@@ -83,6 +83,7 @@ local function onPlayerAdded(player: Player)
 		PlayerDataService.markDirty(player.UserId)
 	end
 	player:SetAttribute("ProfileLoaded", true)
+	player:SetAttribute("Trophies", loaded.value.trophies) -- shown on name plates (App/Nameplates)
 	Telemetry.event(player, "session_start", {
 		coins = loaded.value.coins,
 		cards = loaded.value.nextCardSerial - 1,
@@ -147,6 +148,9 @@ function PlayerDataService.push(player: Player)
 		return
 	end
 	local view = ClientView.build(profile)
+	if player:GetAttribute("Trophies") ~= profile.trophies then
+		player:SetAttribute("Trophies", profile.trophies)
+	end
 	local old = shadows[player]
 	if old == nil then
 		shadows[player] = view

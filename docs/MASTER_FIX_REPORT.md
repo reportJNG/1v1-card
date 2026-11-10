@@ -13,7 +13,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 |---|---|---|---|---|
 | 0 | Prepare: README, report, before shots, PROMPTS_V3, links, character rename | done | see git log `ui(0)` | n/a |
 | 1 | Bugs from the reports (Sell all, item icons, return-to-spot) | done | `ui(1)` | n/a (bug fixes; screenshots in `docs/screens/phase1`) |
-| 2 | Stop web thinking: WorldText, no toast bars, sweep | todo | | |
+| 2 | Stop web thinking: WorldText, no toast bars, sweep | done | `ui(2)` | big text 8 · icons 8 · on-object 9 · no web boxes 9 (`compare_notifications.png`) |
 | 3 | Image-kit pipeline (cut_sheet, kit.json, slice test, App/Ui/Kit) | todo | | |
 | 3b | Combined icon set (three packs, licences, icon_map.json) | todo | | |
 | 4 | In-game HUD | todo | | |
@@ -79,6 +79,36 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   needs a second player and is left for the Phase 13 pass / a published test place.
 - Other "now" items in the BAD_GUI reports are layout problems owned by their phases (4-10).
 - Checks: StyLua, Selene, luau-lsp clean; **296 passed, 0 failed**.
+
+### Phase 2 (2026-11-10)
+- **The toast bar is gone.** `App/WorldText` shows every message at its source: `pop` over a world
+  object, `near` beside a screen element (errors shake), `center` only when there is no source,
+  `fly` sends icons to their HUD counter, which bounces. Pops are pooled (`Shared/Ui/PopPool`, at
+  most 20 of each kind; a recycled pop's late animation can't touch its new use; 5 specs).
+- **Every former toast** is now the right pop (`docs/GUI_AUDIT_ROBLOX.md` §1): harvest "+2" with the
+  item icon over the node and items flying to the bag; rare drops "RARE +1" in gold; sales "+N" and
+  "THANKS!" over the merchant with coins flying to the Coins bar; errors as 1-3 red words beside the
+  pressed button (`Format.errorPop`); "SAVED!", "IN DECK!", "MERGED!", "LEVEL UP!"; quest claims
+  and the daily streak fly their rewards to the bars.
+- **Moments** (`Shared/Ui/Moments`, 4 specs): quest progress pops "+N" by the quest card, a finished
+  quest "QUEST COMPLETE!", a new world "WORLD N UNLOCKED!" then flies to the WORLDS button.
+- **World text** (`Shared/Ui/Billboard`, used by the server builders and the client): hub signs,
+  world name, merchant name + coin, Guardian name + deck power, LOBBY portal, a name over every
+  resource node (hidden while spent or while its prompt is up), and name + trophies over other
+  players (`App/Nameplates`; the server publishes a `Trophies` attribute).
+- **Found in Play:** always-on-top billboards are not drawn at all with this game's lighting
+  (`App/Prompts` had noted the same), so no billboard uses AlwaysOnTop; pops anchor to their own
+  Attachment a little above the object. A viewport icon draws nothing until its mesh has rendered
+  once, so item meshes are warmed at startup. Roblox runs a signal's newest handlers first, so the
+  "pressed button" is tracked on `InputBegan`.
+- **Panel titles** are big now (Luckiest Guy 32, gradient, 3 px stroke, 46 px icon).
+- **Sweep:** `docs/GUI_AUDIT_ROBLOX.md` lists every text element with a verdict and its owner phase.
+  The rules are in `CLAUDE.md` "UI rules".
+- **Play checks** (`docs/screens/roblox-ui/`): harvest pop with icon and items flying; rare pop; the
+  error pop above the locked World 3 card; selling (coins fly, 500 → 510); world billboards.
+  Not seen live: "QUEST COMPLETE!", "LEVEL UP!" and "WORLD UNLOCKED!" (they need a finished quest, a
+  merge and a trophy gain; the logic is covered by the Moments specs).
+- Checks: StyLua, Selene, luau-lsp clean; **303 passed, 0 failed**.
 
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each

@@ -640,11 +640,11 @@ function CardStats.show(ctx: any, uid: string)
 			local plan = CardActions.mergePlan(view, card)
 			local up = actionButton(buttons, "icon_upgrade", "Upgrade", 1, function()
 				if plan == nil then
-					ctx.toast("This card is at max level.", "error")
+					ctx.fail("AlreadyMaxLevel")
 				elseif #plan.use == 0 then
-					ctx.toast("No spare copies: hatch more of this character to upgrade it.", "error")
+					ctx.fail("NoSpares")
 				elseif view.coins < plan.fee then
-					ctx.toast(Format.error("InsufficientFunds"), "error")
+					ctx.fail("InsufficientFunds")
 				else
 					ctx.confirm(
 						"Upgrade",
@@ -666,7 +666,7 @@ function CardStats.show(ctx: any, uid: string)
 			local here = CardActions.inDeck(view, card.uid)
 			actionButton(buttons, "icon_equip", if here then "Equipped" else "Equip", 3, function()
 				if here then
-					ctx.toast(`{def.displayName} is already in your deck.`, "good")
+					ctx.cheer("IN DECK!", "icon_deck")
 				else
 					CardActions.equip(ctx, card)
 				end

@@ -248,8 +248,24 @@ end
 -- Hover glow, a soft hover tick (at most one every 0.08 s) and press squash for any clickable
 -- GuiObject (ART_STYLE section 4).
 local lastHover = 0
+-- The last button the player pressed, so an error can pop beside it (App/WorldText).
+Ui.lastPressed = nil :: GuiObject?
+Ui.lastPressedAt = 0
+
 function Ui.juice(button: GuiButton, skin: ImageLabel?)
 	local scale = button:FindFirstChildOfClass("UIScale") or Ui.new("UIScale", { Parent = button })
+	-- Tracked on press (InputBegan comes before Activated, whose handlers may run in any order).
+	button.InputBegan:Connect(function(input: InputObject)
+		local t = input.UserInputType
+		if
+			t == Enum.UserInputType.MouseButton1
+			or t == Enum.UserInputType.Touch
+			or t == Enum.UserInputType.Gamepad1
+		then
+			Ui.lastPressed = button
+			Ui.lastPressedAt = os.clock()
+		end
+	end)
 	local base = if skin then skin.ImageColor3 else C.White
 	button.MouseEnter:Connect(function()
 		if os.clock() - lastHover > 0.08 then
@@ -721,20 +737,24 @@ function Ui.panel(parent: Instance, title: string, onClose: (() -> ())?, size: U
 	Ui.skin(header, "panel_header", 0.62)
 	local x = 18
 	if icon then
-		Ui.icon(icon, 38, { Position = UDim2.new(0, 14, 0.5, 0), Parent = header })
-		x = 60
+		Ui.icon(icon, 46, { Position = UDim2.new(0, 12, 0.5, 0), Parent = header })
+		x = 64
 	end
+	-- A huge outlined title with a gradient (BAD_GUI_THINKING_AND_UI: no small header strips).
 	local titleLabel = Ui.text({
 		Name = "Title",
 		Text = title,
-		FontFace = F.Title,
-		TextSize = S.title,
+		FontFace = F.Display,
+		TextSize = 32,
 		TextWrapped = false,
-		Position = UDim2.fromOffset(x, 0),
+		Position = UDim2.fromOffset(x, 2),
 		Size = UDim2.new(1, -x - 60, 1, 0),
 		Parent = header,
 	})
-	Ui.outline(C.Night, 1, 0.4).Parent = titleLabel
+	titleLabel.TextColor3 = C.White
+	Ui.gradient(C.White, C.GoldHi).Parent = titleLabel
+	Ui.outline(C.Night, 3).Parent = titleLabel
+	Ui.fit(titleLabel, 32, 20)
 	if onClose then
 		Ui.closeButton(onClose, {
 			AnchorPoint = Vector2.new(1, 0.5),

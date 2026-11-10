@@ -17,7 +17,9 @@ local C = Theme.Color
 
 local COMMON_ACCENT = Color3.fromHex("#2FD6E0")
 
-return function(ctx: any, layer: Frame, _arg: any?): any
+return function(ctx: any, layer: Frame, arg: any?): any
+	-- The merchant in the world (the Sell prompt's part): sale pops appear over its head.
+	local source = if typeof(arg) == "table" then arg.source else nil
 	local view = ctx.state.view
 	local layout = WorldLayouts.ByWorld[view.currentWorld]
 	local p = Ui.panel(
@@ -70,11 +72,28 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		return 0
 	end
 
-	local function done(coins: number)
-		if coins > 0 then
-			Ui.sound("purchase")
-			ctx.toast(`Sold for {Format.number(coins)} Coins`, "good")
+	-- A sale: "+N" with a coin over the merchant, a "THANKS!" from them, coins flying from the
+	-- pressed button to the Coins bar (BAD_GUI_THINKING_AND_UI section 3).
+	local function done(coins: number, from: GuiObject?)
+		if coins <= 0 then
+			return
 		end
+		Ui.sound("purchase")
+		if source then
+			ctx.popAt(
+				source,
+				{ text = `+{Format.number(coins)}`, icon = "icon_coin", tone = "gold", size = 40 }
+			)
+			task.delay(0.35, function()
+				ctx.popAt(
+					source.Position + Vector3.new(0, 4, 0),
+					{ text = "THANKS!", tone = "white", size = 26 }
+				)
+			end)
+		else
+			ctx.near(from, { text = `+{Format.number(coins)}`, icon = "icon_coin", tone = "gold" })
+		end
+		ctx.fly(from, "coins", { icon = "icon_coin", count = math.clamp(coins // 20 + 2, 3, 6) })
 	end
 
 	local function renderBar(order: { string }, totals: { [string]: number })
@@ -125,7 +144,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				coins += sell(itemId, t[itemId])
 			end
 			busy = false
-			done(coins)
+			done(coins, Ui.lastPressed)
 		end, {
 			Name = "SellAll",
 			AnchorPoint = Vector2.new(1, 0.5),
@@ -214,9 +233,10 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 				return
 			end
 			busy = true
+			local from = Ui.lastPressed
 			local coins = sell(itemId, n)
 			busy = false
-			done(coins)
+			done(coins, from)
 		end, {
 			Name = "Sell",
 			AnchorPoint = Vector2.new(0.5, 1),

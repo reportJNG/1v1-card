@@ -6,8 +6,8 @@
 local ProximityPromptService = game:GetService("ProximityPromptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local Items = require(Shared.Config.Items)
 local Guardians = require(Shared.Config.Guardians)
+local Ui = require(script.Parent.Ui)
 
 local WorldInteraction = {}
 
@@ -24,7 +24,26 @@ local function worldOf(inst: Instance): number?
 	return nil
 end
 
+-- A node's name label steps aside while its own prompt is up (the prompt already names it).
+local function labelOf(prompt: ProximityPrompt): BillboardGui?
+	local part = prompt.Parent
+	local label = part and part:FindFirstChild("NodeLabel")
+	return if label and label:IsA("BillboardGui") then label else nil
+end
+
 function WorldInteraction.start(ctx: any)
+	ProximityPromptService.PromptShown:Connect(function(prompt: ProximityPrompt)
+		local label = if prompt.Name == "Harvest" then labelOf(prompt) else nil
+		if label then
+			label.Enabled = false
+		end
+	end)
+	ProximityPromptService.PromptHidden:Connect(function(prompt: ProximityPrompt)
+		local label = if prompt.Name == "Harvest" then labelOf(prompt) else nil
+		if label then
+			label.Enabled = prompt.Enabled -- still spent: stays hidden until it respawns
+		end
+	end)
 	ProximityPromptService.PromptTriggered:Connect(function(prompt: ProximityPrompt)
 		local part = prompt.Parent
 		if part == nil or not part:IsA("BasePart") then
@@ -38,17 +57,30 @@ function WorldInteraction.start(ctx: any)
 			local reply = ctx.request("Farm.Harvest", { nodeId = nodeId })
 			if reply.ok then
 				local v = reply.value
-				local text = `+{v.count} {Items.ById[v.itemId].displayName}`
+				-- "+2" with the item's own icon pops out of the node, and the items fly to the bag.
+				Ui.sound("sparkle")
+				ctx.popAt(part, { text = `+{v.count}`, itemId = v.itemId, tone = "green", size = 52 })
+				ctx.fly(part, "bag", { itemId = v.itemId, count = math.min(v.count, 4) })
 				if v.rareItemId then
-					text ..= ` · rare: +{v.rareCount} {Items.ById[v.rareItemId].displayName}!`
+					task.delay(0.3, function()
+						ctx.popAt(
+							part.Position + Vector3.new(0, 3, 0),
+							{ text = `RARE +{v.rareCount}`, itemId = v.rareItemId, tone = "gold", size = 52 }
+						)
+						ctx.fly(part, "bag", { itemId = v.rareItemId, count = v.rareCount })
+					end)
 				end
-				ctx.toast(text, "good")
 				-- Dim the node's mesh (a child of the prompt part) until it respawns for this player.
 				local function dim(amount: number)
 					for _, d in part:GetDescendants() do
 						if d:IsA("BasePart") then
 							d.LocalTransparencyModifier = amount
 						end
+					end
+					-- The node's name only floats over nodes that are ready to harvest.
+					local nodeLabel = part:FindFirstChild("NodeLabel")
+					if nodeLabel and nodeLabel:IsA("BillboardGui") then
+						nodeLabel.Enabled = amount == 0
 					end
 				end
 				dim(0.7)
@@ -61,7 +93,7 @@ function WorldInteraction.start(ctx: any)
 		elseif prompt.Name == "WorldLobby" then
 			ctx.request("World.Hub")
 		elseif prompt.Name == "Sell" then
-			ctx.open("Merchant")
+			ctx.open("Merchant", { source = part })
 		elseif prompt.Name == "HubArena" then
 			ctx.open("Play")
 		elseif prompt.Name == "HubPortal" then

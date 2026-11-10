@@ -35,6 +35,8 @@ export type Hud = {
 	select: (id: string?) -> (),
 	setMode: (mode: string, instant: boolean?) -> (),
 	layout: (width: number, scale: number?) -> (),
+	-- Where gains fly to (App/WorldText): "coins", "gems", "bag", "worlds", "quests", "deck".
+	target: (name: string) -> GuiObject?,
 }
 
 -- The six grid buttons (MISSION 3.1 colours). `badge` is the HudBadges dot that lights it.
@@ -659,6 +661,25 @@ function Hud.build(ctx: any, root: Frame): Hud
 			homes[trophy] = UDim2.new(1, -12, 0, 60)
 			quest.Size = UDim2.fromOffset(if width < 760 then 190 else 230, 118)
 			setMode(mode, true)
+		end,
+		target = function(name: string): GuiObject?
+			local key = ({
+				coins = "Coins",
+				gems = "Gems",
+				bag = "Collection",
+				worlds = "Worlds",
+				quests = "QuestCard",
+				deck = "DeckBar",
+			})[name]
+			local found = key and root:FindFirstChild(key, true)
+			if found and found:IsA("GuiObject") then
+				if name == "quests" and not found.Visible then
+					local badge = root:FindFirstChild("QuestTrophy", true)
+					return if badge and badge:IsA("GuiObject") then badge else nil
+				end
+				return found
+			end
+			return nil
 		end,
 		select = function(id: string?)
 			for key, b in buttons do

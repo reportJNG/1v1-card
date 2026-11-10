@@ -27,6 +27,8 @@ local Items = require(Shared.Config.Items)
 local Guardians = require(Shared.Config.Guardians)
 local WorldLayout = require(Shared.Domain.WorldLayout)
 local Standee = require(Shared.Art.Standee)
+local Billboard = require(Shared.Ui.Billboard)
+local Power = require(Shared.Domain.Power)
 local MeshLibrary = require(script.Parent.MeshLibrary)
 
 local WorldBuilder = {}
@@ -78,33 +80,18 @@ local function anchor(name: string, at: Vector3, size: Vector3, parent: Instance
 	}, parent)
 end
 
-local function label(
-	adornee: BasePart,
-	text: string,
-	color: Color3,
-	height: number,
-	distance: number?,
-	studs: number?
-)
-	local gui = Instance.new("BillboardGui")
-	local h = studs or 3.2 -- text height in studs
-	gui.Size = UDim2.fromScale(text:len() * h * 0.28 + h, h)
-	gui.StudsOffset = Vector3.new(0, height, 0)
-	gui.LightInfluence = 0
-	gui.MaxDistance = distance or 90
-	local t = Instance.new("TextLabel")
-	t.Size = UDim2.fromScale(1, 1)
-	t.BackgroundTransparency = 1
-	t.Text = text
-	t.TextColor3 = color
-	t.FontFace = Font.fromEnum(Enum.Font.LuckiestGuy)
-	t.TextScaled = true
-	t.Parent = gui
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Color3.fromHex("#05070F")
-	stroke.Thickness = 2.5
-	stroke.Parent = t
-	gui.Parent = adornee
+-- 12345 -> "12,345" for billboards.
+local function thousands(n: number): string
+	local s = tostring(n)
+	local out = s:reverse():gsub("(%d%d%d)", "%1,"):reverse()
+	return (out:gsub("^,", ""))
+end
+
+-- World text on an object (Shared/Ui/Billboard: one look for every billboard in the game).
+local function label(adornee: BasePart, spec: Billboard.Spec, kind: { maxDistance: number })
+	local full = table.clone(spec) :: any
+	full.maxDistance = full.maxDistance or kind.maxDistance
+	Billboard.make(full).Parent = adornee
 end
 
 local function prompt(parent: BasePart, action: string, object: string, range: number, name: string)
@@ -246,14 +233,14 @@ local function buildSpawn(worldId: number, model: Model, accent: string)
 	spawn.Parent = model
 	local world = Worlds.ById[worldId]
 	local sign = anchor("WorldSign", spawn.Position + Vector3.new(0, 10, -40), Vector3.one, model)
-	label(
-		sign,
-		`WORLD {worldId} · {string.upper(world.displayName)}`,
-		Color3.fromHex("#FFE27A"),
-		0,
-		160,
-		2.4
-	)
+	label(sign, {
+		name = "WorldName",
+		text = string.upper(world.displayName),
+		icon = "icon_worlds",
+		gradient = Billboard.Gold,
+		studs = 3.2,
+		maxDistance = 160,
+	}, Billboard.Kind.place)
 end
 
 local function buildNodes(worldId: number, farm: Folder, accent: string): { () -> () }
@@ -272,6 +259,14 @@ local function buildNodes(worldId: number, farm: Folder, accent: string): { () -
 		if rare then
 			light(p, accent, 14, 1.4)
 		end
+		-- The node's name floats over it; the client hides it while the node is spent for that player.
+		label(p, {
+			name = "NodeLabel",
+			text = item.displayName,
+			gradient = if rare then Billboard.Gold else Billboard.Green,
+			studs = 1.5,
+			offset = Vector3.new(0, if rare then 5.6 else 4.4, 0),
+		}, Billboard.Kind.node)
 		local base = Vector3.new(node.position.x, 0, node.position.z)
 		local rot = (#visuals * 47) % 360
 		table.insert(visuals, function()
@@ -293,7 +288,14 @@ local function buildMerchant(worldId: number, model: Model, name: string): () ->
 	local at = v3(WorldLayout.merchant(worldId))
 	local npc = anchor("Merchant", at + Vector3.new(0, 3.5, 0), Vector3.new(4, 7, 4), folder)
 	npc:SetAttribute("Npc", "Merchant")
-	label(npc, name, Color3.fromHex("#F2C14E"), 13) -- above the cart
+	label(npc, {
+		name = "MerchantName",
+		text = name,
+		icon = "icon_coin",
+		gradient = Billboard.Gold,
+		studs = 2.6,
+		offset = Vector3.new(0, 13, 0), -- above the cart
+	}, Billboard.Kind.npc)
 	prompt(npc, "Sell items", name, WorldLayouts.MERCHANT_RANGE - 2, "Sell")
 	light(npc, "#FFB45A", 18, 1.5)
 	return function()
@@ -312,8 +314,25 @@ local function buildGuardian(worldId: number, model: Model, accent: string): () 
 	local at = v3(WorldLayout.guardian(worldId))
 	local npc = anchor("Guardian", at + Vector3.new(0, 4.5, 0), Vector3.new(5, 9, 5), folder)
 	npc:SetAttribute("Npc", "Guardian")
-	label(npc, `{def.displayName}`, Color3.fromHex("#C4B5FD"), 12)
-	label(npc, "GUARDIAN TRIAL", Color3.fromHex(accent), 9.5)
+	local power = 0
+	for _, unit in def.deck do
+		power += Power.card(unit.characterId, unit.level)
+	end
+	label(npc, {
+		name = "GuardianName",
+		text = def.displayName,
+		gradient = Billboard.Violet,
+		studs = 2.6,
+		offset = Vector3.new(0, 12.5, 0),
+	}, Billboard.Kind.npc)
+	label(npc, {
+		name = "GuardianPower",
+		text = thousands(math.floor(power)),
+		icon = "icon_power",
+		color = Color3.fromHex(accent),
+		studs = 2.2,
+		offset = Vector3.new(0, 9.6, 0),
+	}, Billboard.Kind.npc)
 	prompt(npc, "Challenge", def.displayName, 14, "Challenge")
 	light(npc, "#A469FF", 22, 2.2)
 	-- The Guardian stands in the gate: a standee of its lead card (Shared/Art/Standee), scaled up,
@@ -368,7 +387,14 @@ local function buildLobbyPortal(worldId: number, model: Model): () -> ()
 	light(core, "#C77DFF", 26, 3)
 	local trigger = anchor("Lobby", at + Vector3.new(0, 4, 0), Vector3.new(4, 4, 4), folder)
 	prompt(trigger, "Return", "Back to Lobby", 14, "WorldLobby")
-	label(trigger, "BACK TO LOBBY", Color3.fromHex("#FFE27A"), 13)
+	label(trigger, {
+		name = "LobbySign",
+		text = "LOBBY",
+		icon = "icon_home",
+		gradient = Billboard.Gold,
+		studs = 3,
+		offset = Vector3.new(0, 13, 0),
+	}, Billboard.Kind.place)
 	return function()
 		local ring = prop("portal", at, 180, 1.4, folder)
 		if ring then

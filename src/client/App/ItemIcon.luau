@@ -3,6 +3,7 @@
 -- slot is live, otherwise (TEMP) the item's own resource-node mesh in a small viewport, lit and
 -- slowly turning. Every item therefore always looks like itself (MASTER_FIX_PLAN Phase 1: the
 -- Oak Log once showed a crystal).
+local ContentProvider = game:GetService("ContentProvider")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
@@ -84,6 +85,41 @@ function ItemIcon.new(itemId: string, size: number, props: { [string]: any }?, s
 		end
 	end
 	return vp
+end
+
+-- Warms every item's node mesh so the first pop of an item shows its icon at once: a viewport
+-- draws nothing until its mesh has been rendered once, and preloading the ids alone was not
+-- enough in Play. Each item is drawn once, 2 px wide, in the corner of `parent`, for 15 s.
+function ItemIcon.preload(parent: Instance?)
+	if parent then
+		local strip = Ui.frame({
+			Name = "ItemIconWarmup",
+			BackgroundTransparency = 1,
+			Position = UDim2.new(0, 0, 1, -2),
+			Size = UDim2.fromOffset(2 * #Items.List, 2),
+			Parent = parent,
+		})
+		for i, item in Items.List do
+			ItemIcon.new(item.id, 2, { Position = UDim2.fromOffset((i - 1) * 2, 0), Parent = strip }, true)
+		end
+		task.delay(15, function()
+			strip:Destroy()
+		end)
+	end
+	task.spawn(function()
+		local ids: { string } = {}
+		for _, item in Items.List do
+			local key = ItemArt.nodeModel(item.id)
+			local def = key and WorldProps.Models[key]
+			if def then
+				table.insert(ids, def.mesh)
+				table.insert(ids, def.texture)
+			end
+		end
+		pcall(function()
+			ContentProvider:PreloadAsync(ids)
+		end)
+	end)
 end
 
 return ItemIcon

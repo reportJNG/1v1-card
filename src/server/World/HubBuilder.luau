@@ -8,6 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local HubLayout = require(Shared.Config.HubLayout)
 local UiAssets = require(Shared.Config.UiAssets)
+local Billboard = require(Shared.Ui.Billboard)
 local MeshLibrary = require(script.Parent.MeshLibrary)
 
 local HubBuilder = {}
@@ -86,33 +87,15 @@ local function sign(at: Vector3, text: string, icon: string?, width: number, par
 		CanQuery = false,
 		CanTouch = false,
 	}, parent)
-	local gui = Instance.new("BillboardGui")
-	gui.Size = UDim2.fromScale(width, width / 4)
-	gui.LightInfluence = 0
-	gui.MaxDistance = 260
+	local gui = Billboard.make({
+		name = "Sign",
+		text = text,
+		icon = icon,
+		gradient = Billboard.Gold,
+		studs = width / 4.2,
+		maxDistance = Billboard.Kind.place.maxDistance,
+	})
 	gui.Parent = anchor
-	if icon then
-		local img = Instance.new("ImageLabel")
-		img.Image = asset(icon)
-		img.BackgroundTransparency = 1
-		img.Size = UDim2.fromScale(0.24, 1)
-		img.ScaleType = Enum.ScaleType.Fit
-		img.Parent = gui
-	end
-	local label = Instance.new("TextLabel")
-	label.BackgroundTransparency = 1
-	label.Text = text
-	label.FontFace = Font.fromEnum(Enum.Font.LuckiestGuy)
-	label.TextScaled = true
-	label.TextColor3 = Color3.fromHex("#FFE27A")
-	label.Position = UDim2.fromScale(if icon then 0.26 else 0, 0)
-	label.Size = UDim2.fromScale(if icon then 0.74 else 1, 1)
-	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.Parent = gui
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Color3.fromHex("#05070F")
-	stroke.Thickness = 3
-	stroke.Parent = label
 end
 
 local function portalCore(at: Vector3, rotY: number, radius: number, parent: Instance)

@@ -132,6 +132,19 @@ Piece-style fighter. Full log: `PLAN.md` §4.
    review.** Its first 5 files (`fighter_01..05`) are rejected and must never be used. The
    portrait pack is removed permanently (`CLEANUP_PORTRAIT_PACK.md`).
 
+## UI rules (permanent; `UI_TARGETS.md`, `BAD_GUI_*.md`)
+
+- **No web-style UI:** no snackbars or toast bars, no dark boxes of small text.
+- **Big bold outlined text with icons.** World text sits on top of the object it's about
+  (`Shared/Ui/Billboard`, `App/WorldText`).
+- **Every gain flies to its HUD counter. Every message appears at its source** (`ctx.popAt`,
+  `ctx.near`, `ctx.cheer`, `ctx.warn`, `ctx.fail`, `ctx.fly`; `ctx.say` only when there is no source).
+- **1-4 big words, or an icon plus a number.** Never a paragraph in gameplay.
+- **Visible boxes are painted images (9-slice), never Frame + UICorner + UIStroke.** Display fonts
+  with strokes. Every element has an icon. No empty flat space.
+- **Never polish code-drawn panels.** The painted look = owner-generated component sheets, cut by
+  `scripts/art/cut_sheet.py`, 9-sliced, served through `App/Ui/Kit`.
+
 ## Content rules
 
 - **Adding a character:** append it to `Config/Characters` (the id is permanent) and add it to

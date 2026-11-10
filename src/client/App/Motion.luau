@@ -15,7 +15,6 @@ Motion.count = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Ou
 Motion.stagger = 0.025 -- grid items, s apart
 Motion.goldShineEvery = 5 -- s between shine sweeps on gold buttons
 Motion.selectedPulse = 1.2 -- s, selected tile glow loop
-Motion.toastHold = 2 -- s
 Motion.cardLift = 1.05 -- hovered grid cards
 Motion.glowBreath = 1.5 -- s, card frame glow
 Motion.menuFlyIn = 1.2 -- s, main menu -> playing camera

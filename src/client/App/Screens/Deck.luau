@@ -296,7 +296,7 @@ return function(ctx: any, layer: Frame, _arg: any?): any
 		local save = Ui.button("Save Deck", "primary", function()
 			local reply = ctx.request("Deck.Set", { uids = { slots[1], slots[2], slots[3] } })
 			if reply.ok then
-				ctx.toast("Deck saved.", "good")
+				ctx.cheer("SAVED!", "icon_check")
 			end
 		end, { Size = UDim2.fromOffset(220, 40), LayoutOrder = 4, Name = "SaveDeck" })
 		save.setEnabled(s ~= nil)

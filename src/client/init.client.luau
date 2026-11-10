@@ -104,4 +104,5 @@ end)
 
 WorldInteraction.start(ctx)
 require(AppFolder:WaitForChild("Prompts")).start()
+require(AppFolder:WaitForChild("Nameplates")).start()
 AreaFx.start(ctx)

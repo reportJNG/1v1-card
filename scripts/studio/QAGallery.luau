@@ -134,7 +134,14 @@ function Gallery.hatch(eggId: string, rarities: { string }, golden: boolean?, sk
 		request = function()
 			return { ok = false, err = "QA" }
 		end,
-		toast = function() end,
+		say = function() end,
+		cheer = function() end,
+		warn = function() end,
+		fail = function() end,
+		near = function() end,
+		popAt = function() end,
+		fly = function() end,
+		hudTarget = function() end,
 		state = { view = nil },
 	}
 	Hatch.show(ctx, cards, Eggs.ById[eggId], golden == true, { known = {} })

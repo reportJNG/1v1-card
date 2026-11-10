@@ -1,6 +1,6 @@
 --!strict
 -- The client shell: the main menu, the HUD (top bar + left menu), one modal panel at a time,
--- full-screen overlays (hatch, battle), toasts and confirmations. One state machine
+-- full-screen overlays (hatch, battle), pops (App/WorldText) and confirmations. One state machine
 -- (Shared/Ui/UiFlow) decides what is shown: App feeds it events and applies its view (HUD mode,
 -- blur, input lock, menu camera through `deps.effects`). Screens get a Ctx with everything
 -- injected, so the Studio UI check can build every screen with fake data (scripts/studio/ui-check).
@@ -20,6 +20,9 @@ local HudModule = require(script.Parent.Hud)
 local Kit = require(script.Parent.Kit)
 local Format = require(script.Parent.Format)
 local State = require(script.Parent.State)
+local WorldText = require(script.Parent.WorldText)
+local Feedback = require(script.Parent.Feedback)
+local ItemIcon = require(script.Parent.ItemIcon)
 
 local C = Theme.Color
 
@@ -39,7 +42,15 @@ export type Ctx = {
 	open: (name: string, arg: any?) -> (),
 	close: () -> (),
 	overlay: (build: (layer: Frame) -> Screen) -> Screen,
-	toast: (text: string, kind: string?) -> (),
+	-- Messages are pops at their source, never a toast bar (App/WorldText):
+	say: (text: string, tone: string?, icon: string?) -> (), -- a short centre pop
+	popAt: (source: any, spec: any) -> (), -- over a world object
+	near: (gui: GuiObject?, spec: any) -> (), -- beside a screen element
+	cheer: (text: string, icon: string?) -> (), -- a green pop beside the pressed button
+	warn: (text: string, icon: string?) -> (), -- a red, shaking pop beside the pressed button
+	fail: (err: string?) -> (), -- a server error as a short red pop beside the pressed button
+	fly: (from: any, target: string, spec: any, onLand: (() -> ())?) -> (), -- icons to a HUD counter
+	hudTarget: (name: string) -> GuiObject?,
 	confirm: (title: string, body: string, yes: string, onYes: () -> ()) -> (),
 	leaveToMenu: () -> (),
 	onLeave: (fn: () -> ()) -> (),
@@ -152,25 +163,19 @@ function App.start(deps: Deps): Ctx
 	panelFit = Ui.new("UIScale", { Name = "Fit", Parent = panelLayer })
 	fit()
 	local overlayLayer = Ui.frame({ Name = "Overlays", BackgroundTransparency = 1, Parent = root })
-	local toastLayer = Ui.frame({
-		Name = "Toasts",
-		BackgroundTransparency = 1,
-		AnchorPoint = Vector2.new(0.5, 1),
-		Position = UDim2.new(0.5, 0, 1, -16),
-		Size = UDim2.fromOffset(460, 200),
-		Parent = root,
-	}, {
-		Ui.new("UIListLayout", {
-			VerticalAlignment = Enum.VerticalAlignment.Bottom,
-			HorizontalAlignment = Enum.HorizontalAlignment.Center,
-			Padding = UDim.new(0, 6),
-			SortOrder = Enum.SortOrder.LayoutOrder,
-		}),
-	})
+	-- Pops (App/WorldText) sit above everything; there is no toast bar.
+	local popLayer =
+		Ui.frame({ Name = "Pops", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Parent = root })
+	-- The button the player just pressed: errors and confirmations pop beside it.
+	local function pressed(): GuiObject?
+		if os.clock() - Ui.lastPressedAt < 2 then
+			return Ui.lastPressed
+		end
+		return nil
+	end
 
 	local current: Screen? = nil
 	local overlays: { Screen } = {}
-	local toastCount = 0
 	local ctx: Ctx
 	local flow = UiFlow.new()
 	-- Screens only the shell opens (previews and checks get them too).
@@ -386,40 +391,33 @@ function App.start(deps: Deps): Ctx
 			table.insert(overlays, wrapped)
 			return wrapped
 		end,
-		toast = function(text: string, kind: string?)
-			toastCount += 1
-			Ui.sound(if kind == "error" then "error" else "toast")
-			local color = if kind == "error" then C.Red elseif kind == "good" then C.Green else C.Blue
-			local t = Ui.frame({
-				BackgroundTransparency = 1,
-				Size = UDim2.fromOffset(440, 38),
-				LayoutOrder = toastCount,
-				Parent = toastLayer,
-			})
-			local skin = Ui.skin(t, "toast", 0.52)
-			skin.ImageColor3 = C.White:Lerp(color, 0.35)
-			local label = Ui.text({
-				Text = text,
-				FontFace = Theme.Face.Bold,
-				TextXAlignment = Enum.TextXAlignment.Center,
-				Size = UDim2.fromScale(1, 1),
-				ZIndex = 2,
-				Parent = t,
-			})
-			Ui.outline(C.Night, 1, 0.3).Parent = label
-			Ui.popIn(t)
-			if kind == "error" then
-				Ui.sound("error")
-			end
-			task.delay(3, function()
-				if t.Parent then
-					TweenService:Create(skin, TweenInfo.new(0.3), { ImageTransparency = 1 }):Play()
-					local fade = TweenService:Create(label, TweenInfo.new(0.3), { TextTransparency = 1 })
-					fade:Play()
-					fade.Completed:Wait()
-					t:Destroy()
-				end
-			end)
+		say = function(text: string, tone: string?, icon: string?)
+			Ui.sound(if tone == "red" then "error" else "toast")
+			WorldText.center({ text = text, tone = (tone or "white") :: any, icon = icon })
+		end,
+		popAt = function(source: any, spec: any)
+			WorldText.pop(source, spec)
+		end,
+		near = function(target: GuiObject?, spec: any)
+			WorldText.near(target, spec)
+		end,
+		cheer = function(text: string, icon: string?)
+			Ui.sound("toast")
+			WorldText.near(pressed(), { text = text, icon = icon, tone = "green", size = 30 })
+		end,
+		warn = function(text: string, icon: string?)
+			Ui.sound("error")
+			WorldText.near(pressed(), { text = text, icon = icon, tone = "red", size = 30, shake = true })
+		end,
+		fail = function(err: string?)
+			local e = Format.errorPop(err)
+			ctx.warn(e.text, e.icon)
+		end,
+		fly = function(from: any, target: string, spec: any, onLand: (() -> ())?)
+			WorldText.fly(from, if hud then hud.target(target) else nil, spec, onLand)
+		end,
+		hudTarget = function(name: string): GuiObject?
+			return if hud then hud.target(name) else nil
 		end,
 		-- Menu button: confirm, then the leaving screen and a full reset (MISSION 2.5).
 		leaveToMenu = function()
@@ -470,7 +468,7 @@ function App.start(deps: Deps): Ctx
 		request = function(name: string, payload: any?, quiet: boolean?): Reply
 			local reply = deps.net.request(name, payload)
 			if not reply.ok and not quiet then
-				ctx.toast(Format.error(reply.err), "error")
+				ctx.fail(reply.err)
 			end
 			return reply
 		end,
@@ -496,12 +494,17 @@ function App.start(deps: Deps): Ctx
 					SocialService:PromptGameInvite(player)
 				end)
 			else
-				ctx.toast("Invites aren't available here (they work in the published game).")
+				ctx.warn("LIVE GAME ONLY", "icon_friends")
 			end
 		end,
 	}
 
 	hud = HudModule.build(ctx, hudLayer)
+	WorldText.init(popLayer, function(): number
+		return uiScale.Scale
+	end, ctx.reducedMotion)
+	Feedback.start(ctx)
+	ItemIcon.preload(popLayer)
 	fit()
 	local leaving = false
 	menu = MainMenu.build(menuLayer, {
@@ -589,7 +592,10 @@ function App.start(deps: Deps): Ctx
 		ctx.state:setQueue(status)
 	end)
 	deps.net.on("Notice", function(n)
-		ctx.toast(tostring(n.text), n.kind)
+		ctx.say(
+			tostring(n.text),
+			if n.kind == "error" then "red" elseif n.kind == "good" then "green" else "white"
+		)
 	end)
 	return ctx
 end
