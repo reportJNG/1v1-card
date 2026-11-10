@@ -281,6 +281,7 @@ local List: { Layout } = {
 			direction = "rise",
 			size = 0.4,
 		},
+		gate = { landmark = "w6_pillar", scale = 1.6, stone = "#3A1020", material = "Slate" },
 	}, { { "item_brimroot", "w6_brimroot" }, { "item_hexbone", "w6_hexbone" } }, {
 		"item_void_ember",
 		"w6_void_ember",
