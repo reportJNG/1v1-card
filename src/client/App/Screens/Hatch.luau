@@ -356,9 +356,9 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 		})
 		equipButton.instance.Parent = stage
 		-- big display labels on every button (UI rules: no small plain text)
-		for _, b in { skipButton, doneButton, stopButton, againButton, equipButton } do
-			b.label.FontFace = Theme.Face.Display
-			local cap = b.label:FindFirstChildOfClass("UITextSizeConstraint")
+		for _, button in { skipButton, doneButton, stopButton, againButton, equipButton } do
+			button.label.FontFace = Theme.Face.Display
+			local cap = button.label:FindFirstChildOfClass("UITextSizeConstraint")
 			if cap then
 				cap.MaxTextSize = 26
 			end

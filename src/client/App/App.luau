@@ -130,7 +130,7 @@ function App.start(deps: Deps): Ctx
 			uiScale.Scale = s
 			root.Size = UDim2.fromOffset(vp.X / s, vp.Y / s)
 			if hud then
-				hud.layout(vp.X / s, s)
+				hud.layout(vp.X / s, s, vp.Y / s)
 			end
 			if panelFit then
 				panelFit.Scale = math.min(1, (vp.X / s - 16) / 820) * panelShrink

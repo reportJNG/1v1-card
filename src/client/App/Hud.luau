@@ -36,7 +36,7 @@ export type Hud = {
 	refresh: () -> (),
 	select: (id: string?) -> (),
 	setMode: (mode: string, instant: boolean?) -> (),
-	layout: (width: number, scale: number?) -> (),
+	layout: (width: number, scale: number?, height: number?) -> (),
 	-- Where gains fly to (App/WorldText): "coins", "gems", "bag", "worlds", "quests", "deck".
 	target: (name: string) -> GuiObject?,
 }
@@ -798,7 +798,9 @@ function Hud.build(ctx: any, root: Frame): Hud
 		setMode = setMode,
 		-- Sizes (BAD_GUI_5 section 4): grid buttons 76 px on PC, 64 on phones (never under 44
 		-- physical); deck cards about 130 x 175 on PC and 100 x 135 on phones.
-		layout = function(width: number, scale: number?)
+		-- Deck cards are also capped at 22% of the screen height (found in the Phase 13 pass: on a
+		-- short landscape phone they covered the character).
+		layout = function(width: number, scale: number?, height: number?)
 			local s = scale or 1
 			local phone = s < 1.6
 			local physical = if phone then 64 else 76
@@ -806,6 +808,10 @@ function Hud.build(ctx: any, root: Frame): Hud
 			gridLayout.CellSize = UDim2.fromOffset(B, B)
 			grid.Size = UDim2.fromOffset(2 * B + 10, 2 * B + 12)
 			CW = math.floor((if phone then 100 else 130) / s)
+			local maxH = (height or 540) * 0.22
+			if CW * 1.35 > maxH then
+				CW = math.floor(maxH / 1.35)
+			end
 			CH = math.floor(CW * 1.35)
 			-- touch screens: the grid sits higher, clear of the thumbstick (bottom-left)
 			homes[grid] = if touch then UDim2.new(0, 10, 0.42, 0) else UDim2.new(0, 10, 0.5, 0)
