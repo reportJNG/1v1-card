@@ -1,0 +1,18 @@
+STYLIZED GAME ESSENTIALS — COMMERCIAL GAME ASSET LICENSE
+Version 1.0
+
+The seller grants the purchaser a non-exclusive license to use the supplied icon assets in unlimited personal and commercial games, applications, websites, and related promotional materials. The license applies only to rights the seller is entitled to grant.
+
+YOU MAY:
+- Use the icons in free or paid projects, including client projects.
+- Resize, recolor, crop, and otherwise modify them for your projects.
+- Distribute icons as part of a finished project, where the icons are not offered as standalone assets.
+- Share files with collaborators working on your licensed projects. Those collaborators may not reuse the files in unrelated projects without their own license.
+- Use icons in screenshots, trailers, and marketing for projects containing the assets.
+
+YOU MAY NOT:
+- Resell, share, sublicense, or redistribute the source icons as an asset pack, stock library, template asset collection, or downloadable standalone files, even when modified.
+- Publish the icons in public asset repositories or marketplaces where other people can reuse them as standalone assets. For Roblox, use project assets without releasing them as a reusable public Toolbox pack.
+- Claim the original icon artwork as exclusively yours or grant exclusive rights to it.
+
+Attribution is appreciated but not required. Purchase is a license to use the assets, not a transfer of ownership or an exclusive license. The artwork was produced using generative AI; no exclusive copyright ownership in AI-generated artwork is promised. The files are supplied as-is, without a promise that they fit every project.

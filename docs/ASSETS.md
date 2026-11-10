@@ -179,3 +179,20 @@ Each new slot reuses an id from the licensed APM / ProSoundEffects set already i
 them for a dedicated sound (search the Creator Store for creator ProSoundEffects or APMOfficial).
 All sounds play through `App/Sfx` (Settings volume, 50 ms debounce, ±5 % pitch on presses, coin
 chime rising with the amount).
+
+## Icon packs (GOAL_ALL Phase 3b, licences read 2026-11-10)
+
+| Pack (Downloads folder) | Author | Commercial use | Editing | Credit | Redistribution | Used |
+|---|---|---|---|---|---|---|
+| Free Icon Pack v3.1 (Basic) | gvesster (@gvesster, linktr.ee/gvesster) | yes | not for resale ("color change, redraw" forbidden); we use icons **unedited, scaling only** | optional (credited here) | no reselling, no asset packs | yes: Robux, closed lock, plus (+ the 21 HUD icons already in `art/icons/`) |
+| Stylized Game Essentials (147 icons) | itch.io seller (see `License_and_Info/ITCH_LISTING.md`) | yes, unlimited games | allowed | not required | **no** standalone redistribution, no public repositories or Toolbox packs | yes: 35 of the 39 slots |
+| Free (`Downloads\Free`, 20 PNGs) | unknown | **no licence file** | — | — | — | **no** (GOAL_ALL rule; listed in `WAITING_ON_YOU.md`) |
+
+- Licence texts: `art/icons/LICENSE-free-icon-pack-v3.1.txt`, `art/icons/LICENSE-stylized-game-essentials.txt`.
+- The packs are copied unchanged to `art/icons/<pack>/` **locally only** (git-ignored): the GitHub repo is
+  public, and the Stylized licence forbids redistributing the icons as standalone files. The game
+  uses them through Roblox image uploads, which both licences allow.
+- Never used from the Free Icon Pack: `Exclusive/Toilet with Head` and `Exclusive/Tung` (meme subjects
+  tied to other franchises), `Social/*` (third-party logos), `Item/Credit Card` ("roblox bank").
+- The choice per slot is `art/icons/icon_map.json`; the review sheet is `docs/review/icons_final.png`
+  (local, `docs/review/icons_final.md`). Nothing is uploaded before the owner's OK.

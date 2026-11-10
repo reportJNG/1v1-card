@@ -33,6 +33,16 @@ uploaded or cut.
 - **Every new image** (your sheets, the sliced pieces of `04-merchant-target.png`, the chosen icons)
   is shown to you on a contact sheet in `docs/review/` first, and nothing is uploaded until you OK it.
 
+**Review sheets waiting for your OK** (nothing is used or uploaded before it):
+- `docs/review/ui-kit-v3.png` (8 pieces cut from your merchant target; notes in `ui-kit-v3.md`)
+- `docs/review/icons_final.png` (39 icons from your two licensed packs; notes in `icons_final.md`)
+
+**Icon packs:**
+- `Downloads\Free` (20 PNGs) has **no licence file**, so it isn't used. Add its licence if you want it.
+- The repo on GitHub is **public**. The 21 Free Icon Pack PNGs committed earlier in `art/icons/`
+  are public there; the pack's licence only forbids reselling and asset packs, but you may prefer
+  the repo private. The new packs are kept local only (the Stylized licence forbids redistribution).
+
 **Your desktop still has a folder named "Ultimate Multi-Expre…"**, which looks like the banned
 portrait pack (`CLEANUP_PORTRAIT_PACK.md`). The project never reads it; you may want to delete it so
 it can't be picked up by mistake.

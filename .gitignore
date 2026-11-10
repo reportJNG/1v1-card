@@ -15,3 +15,9 @@ __pycache__/
 art/characters/incoming/
 # Raw character images never go in git: they are reviewed first (CLAUDE.md "Asset safety").
 art/characters/*.png
+# Licensed icon packs: kept locally only. The repo is public and the licences forbid redistributing
+# the icons as standalone files (docs/ASSETS.md "Icon packs"). Only the licence texts and
+# art/icons/icon_map.json are committed; the game uses the icons through Roblox uploads.
+art/icons/free-icon-pack-v3.1/
+art/icons/stylized-game-essentials/
+docs/review/icons_*.png

@@ -15,7 +15,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 1 | Bugs from the reports (Sell all, item icons, return-to-spot) | done | `ui(1)` | n/a (bug fixes; screenshots in `docs/screens/phase1`) |
 | 2 | Stop web thinking: WorldText, no toast bars, sweep | done | `ui(2)` | big text 8 · icons 8 · on-object 9 · no web boxes 9 (`compare_notifications.png`) |
 | 3 | Image-kit pipeline (cut_sheet, kit.json, slice test, App/Ui/Kit) | done, waiting for owner (OK on `docs/review/ui-kit-v3.png`) | `ui(3)` | n/a (pipeline; pieces scored when used) |
-| 3b | Combined icon set (three packs, licences, icon_map.json) | todo | | |
+| 3b | Combined icon set (three packs, licences, icon_map.json) | done, waiting for owner (OK on `docs/review/icons_final.png`) | `ui(3b)` | n/a (scored with the screens that use them) |
 | 4 | In-game HUD | todo | | |
 | 5 | Main menu | todo | | |
 | 6 | Egg Shop | todo | | |
@@ -131,6 +131,19 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   `docs/review/ui-kit-v3.png` + `ui-kit-v3.md`; nothing is used or uploaded before the owner's OK.
 - Checks: StyLua, Selene, luau-lsp clean; **304 passed, 0 failed**.
 
+### Phase 3b (2026-11-10)
+- **Licences read** (`docs/ASSETS.md` "Icon packs"): Free Icon Pack v3.1 (commercial OK, unedited),
+  Stylized Game Essentials (commercial OK, editing OK, no redistribution), `Downloads\Free` (no
+  licence: not used, listed for the owner).
+- **The GitHub repo is public**, so the packs are copied to `art/icons/<pack>/` locally only
+  (git-ignored) with their licence texts committed; the review sheets are local too.
+- **Sheets:** one per pack and `docs/review/icons_final.png` (39 slots: currencies, HUD 4, menu,
+  battle, UI, and 4 farm items). One painted style (35 from Stylized). Choice and reasons:
+  `art/icons/icon_map.json`. The other 26 farm items keep their own node mesh, so no item shows
+  another item's picture.
+- **STOP:** waiting for the owner's OK before any upload (`docs/review/icons_final.md`). The
+  per-slot validator test is added with the upload, when the ids exist.
+
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each
 phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
@@ -155,6 +168,7 @@ phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
 | Egg art: Option 1 (pack eggs in tier tiles) or Option 2 (Sheet C crystal eggs) | 2026-11-10 | pending; Option 1 ships meanwhile |
 | GitHub history scrub of `fighter_01..05` (commit `9969dc6`) | 2026-11-10 | pending: waits for the owner's "go" |
 | Approval of every new image (sliced pieces, icons, sheets) | per review sheet | pending per sheet |
+| OK for the 39 icons (`docs/review/icons_final.png`, local) | 2026-11-10 | pending |
 | OK for the 8 pieces cut from `04-merchant-target.png` (`docs/review/ui-kit-v3.png`) | 2026-11-10 | pending |
 
 ## Incidents

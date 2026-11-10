@@ -1,0 +1,246 @@
+{
+ "note": "GOAL_ALL Phase 3b: slot -> chosen icon (pack and file under art/icons/<pack>/, local only), the reason, and the Config/UiAssets slot it replaces once the owner approves docs/review/icons_final.png and it is uploaded. 'sparkle' uses the kit piece m_sparkle_gold (docs/review/ui-kit-v3.png). Farm items not listed keep their own resource-node mesh (App/ItemIcon): the packs have no correct icon for them (no oak log, ruby, coal, feather...).",
+ "status": "REVIEW",
+ "excluded": {
+  "Free (Downloads\\Free)": "no licence file: not used (GOAL_ALL 3b step 1); listed in WAITING_ON_YOU",
+  "free-icon-pack Exclusive/Toilet with Head, Exclusive/Tung": "meme subjects tied to other franchises: never used",
+  "free-icon-pack Social/*, Item/Credit Card": "third-party logos and a 'roblox bank' card: never used"
+ },
+ "itemsKeepingNodeMesh": "26 farm items (every item without a slot above)",
+ "slots": {
+  "coin": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/02_Currency_and_Valuables/01_gold_coin.png",
+   "reason": "gold coin, painted; reads at 24 px",
+   "replaces": "icon_coin"
+  },
+  "gem": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/02_Currency_and_Valuables/05_blue_diamond.png",
+   "reason": "blue diamond = Gems (cyan means gems)",
+   "replaces": "icon_gem"
+  },
+  "robux": {
+   "pack": "free-icon-pack-v3.1",
+   "file": "free-icon-pack-v3.1/Currency/Robux/256px/Green Robux 1st 256px.png",
+   "reason": "the only Robux icon in the packs; Robux price buttons only",
+   "replaces": null
+  },
+  "cards": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/01_Core_Interface/02_inventory_menu.png",
+   "reason": "CARDS opens the collection/inventory: the backpack the HUD brief asks for",
+   "replaces": "icon_cards"
+  },
+  "eggs": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/10_Pets_and_Eggs/03_golden_egg.png",
+   "reason": "EGGS: a bright gold egg, distinct from the 24 pack eggs",
+   "replaces": "icon_shop"
+  },
+  "worlds": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/15_World_and_Travel/01_world_globe.png",
+   "reason": "WORLDS: globe",
+   "replaces": "icon_worlds"
+  },
+  "pvp": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/12_Weapons_and_Abilities/03_critical_sword.png",
+   "reason": "1v1: the sword with a spark, distinct from the battle Attack sword",
+   "replaces": "icon_play"
+  },
+  "settings": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/01_Core_Interface/03_settings_gear.png",
+   "reason": "gear",
+   "replaces": "icon_settings"
+  },
+  "quests": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/06_Quests_and_Daily_Rewards/01_quest_scroll.png",
+   "reason": "quest scroll",
+   "replaces": "icon_quests"
+  },
+  "shop": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/04_Shop_and_Premium/01_shop_bag.png",
+   "reason": "shop bag (cosmetics/shop entries)",
+   "replaces": null
+  },
+  "daily": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/06_Quests_and_Daily_Rewards/08_daily_reward_calendar.png",
+   "reason": "daily reward calendar",
+   "replaces": "icon_calendar"
+  },
+  "gift": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/07_Chests_and_Event_Rewards/06_wrapped_gift.png",
+   "reason": "gift (claimable rewards)",
+   "replaces": "icon_gift"
+  },
+  "trophy": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/05_Progression_and_Achievements/07_mastery_trophy.png",
+   "reason": "trophy",
+   "replaces": "icon_trophy"
+  },
+  "leaderboard": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/05_Progression_and_Achievements/06_leaderboard_podium.png",
+   "reason": "podium",
+   "replaces": null
+  },
+  "home": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/01_Core_Interface/01_home.png",
+   "reason": "lobby / main menu",
+   "replaces": "icon_home"
+  },
+  "deck": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/13_Equipment_and_Tools/05_defense_shield.png",
+   "reason": "deck (shield crest)",
+   "replaces": "icon_deck"
+  },
+  "attack": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/12_Weapons_and_Abilities/01_sword.png",
+   "reason": "ATTACK",
+   "replaces": "icon_power"
+  },
+  "defend": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/13_Equipment_and_Tools/04_shield.png",
+   "reason": "DEFEND (wooden shield, distinct from the deck crest)",
+   "replaces": null
+  },
+  "special": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/12_Weapons_and_Abilities/05_lightning_strike.png",
+   "reason": "SPECIAL: purple-gold bolt, matches the battle target",
+   "replaces": "icon_energy"
+  },
+  "hp": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/14_Stats_and_Interactions/01_health_heart.png",
+   "reason": "HP heart",
+   "replaces": "icon_hp"
+  },
+  "timer": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/16_Time_and_Tycoon_Resources/02_stopwatch.png",
+   "reason": "pick timer",
+   "replaces": null
+  },
+  "lock": {
+   "pack": "free-icon-pack-v3.1",
+   "file": "free-icon-pack-v3.1/Item/Lock/256px/Lock 1st 256px.png",
+   "reason": "a closed padlock (the Stylized pack only has an open one)",
+   "replaces": "icon_lock"
+  },
+  "check": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/06_Quests_and_Daily_Rewards/05_claim_checkmark.png",
+   "reason": "check",
+   "replaces": "icon_check"
+  },
+  "close": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/01_Core_Interface/07_close_button.png",
+   "reason": "close (the panel close button is the kit piece m_close_button)",
+   "replaces": null
+  },
+  "plus": {
+   "pack": "free-icon-pack-v3.1",
+   "file": "free-icon-pack-v3.1/UI/Plus/256px/Plus 1st 256px.png",
+   "reason": "plus (no plus in the Stylized pack)",
+   "replaces": null
+  },
+  "arrow": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/01_Core_Interface/06_back_arrow.png",
+   "reason": "back / page arrow",
+   "replaces": null
+  },
+  "upgrade": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/05_Progression_and_Achievements/03_upgrade_arrow.png",
+   "reason": "upgrade / level up",
+   "replaces": null
+  },
+  "star": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/06_Quests_and_Daily_Rewards/06_reward_star.png",
+   "reason": "star (rarity stars, rewards)",
+   "replaces": null
+  },
+  "crown": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/04_Shop_and_Premium/07_vip_crown.png",
+   "reason": "crown (RARE badge, level-15 crown)",
+   "replaces": null
+  },
+  "info": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/01_Core_Interface/05_information_symbol.png",
+   "reason": "info",
+   "replaces": "icon_odds"
+  },
+  "sell": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/04_Shop_and_Premium/04_price_tag.png",
+   "reason": "sell / tag (merchant buttons)",
+   "replaces": null
+  },
+  "cart": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/04_Shop_and_Premium/02_shopping_cart.png",
+   "reason": "merchant header cart",
+   "replaces": null
+  },
+  "search": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/01_Core_Interface/04_search_magnifier.png",
+   "reason": "inventory search",
+   "replaces": "icon_search"
+  },
+  "friends": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/03_Social_and_Multiplayer/02_friends.png",
+   "reason": "invite friends",
+   "replaces": "icon_friends"
+  },
+  "notify": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/17_Bonus_Icons/03_notification_bell.png",
+   "reason": "notification bell",
+   "replaces": null
+  },
+  "item_meadow_crystal": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/02_Currency_and_Valuables/07_green_gem.png",
+   "reason": "Meadow Crystal: emerald crystal",
+   "replaces": "item_meadow_crystal"
+  },
+  "item_glacier_shard": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/12_Weapons_and_Abilities/06_ice_crystal.png",
+   "reason": "Glacier Shard: ice crystal",
+   "replaces": "item_glacier_shard"
+  },
+  "item_seraph_gold": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/02_Currency_and_Valuables/08_gold_bar.png",
+   "reason": "Seraph Gold: gold bar",
+   "replaces": "item_seraph_gold"
+  },
+  "item_null_quartz": {
+   "pack": "stylized-game-essentials",
+   "file": "stylized-game-essentials/02_Currency_and_Valuables/06_purple_crystal.png",
+   "reason": "Null Quartz: violet quartz",
+   "replaces": "item_null_quartz"
+  }
+ }
+}
