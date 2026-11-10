@@ -53,7 +53,14 @@ function FarmService.init()
 		if not sessionAllows(player, "sell") then
 			return Result.fail("NotPlaying")
 		end
-		if not Farming.nearMerchant(profile :: any, WorldService.positionOf(player)) then
+		local area = player:GetAttribute("World") -- set by the server (WorldService), never the client
+		if
+			not Farming.nearMerchant(
+				profile :: any,
+				WorldService.positionOf(player),
+				if type(area) == "number" then area else nil
+			)
+		then
 			return Result.fail("NotNearMerchant")
 		end
 		local r = Inventory.sell(profile :: any, args.itemId, args.count, `item:{args.requestId}`, os.time())

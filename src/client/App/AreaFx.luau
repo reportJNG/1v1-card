@@ -92,9 +92,9 @@ function AreaFx.apply(name: string, instant: boolean?)
 		s.SkyboxUp = p.sky.up
 		s.SkyboxDn = p.sky.dn
 		s.StarCount = p.sky.stars
-		s.MoonAngularSize = 0
+		s.MoonAngularSize = p.sky.moon or 0
 		s.SunAngularSize = 0
-		s.CelestialBodiesShown = false
+		s.CelestialBodiesShown = p.sky.moon ~= nil
 	elseif sky then
 		sky:Destroy()
 	end
@@ -169,6 +169,10 @@ function AreaFx.setMusic(on: boolean)
 end
 
 local onMenu = false
+local reducedOf: () -> boolean = function()
+	return false
+end
+local lobbyMotion: (Instance) -> ()
 
 local function refresh()
 	local player = Players.LocalPlayer
@@ -215,8 +219,62 @@ local function spinPortal(hub: Instance)
 	end
 end
 
+-- The lobby's slow motion (FIX_LOBBY section 4.7): the golden card statue turns, the banners sway
+-- and the lanterns flicker. Client-only and purely visual; still under reduced motion.
+function lobbyMotion(hub: Instance)
+	local architecture = hub:WaitForChild("Architecture", 30)
+	if architecture == nil then
+		return
+	end
+	local spinners: { BasePart } = {}
+	local swayers: { { part: BasePart, home: CFrame } } = {}
+	for _, d in architecture:GetChildren() do
+		if d:IsA("BasePart") then
+			local fx = d:GetAttribute("Fx")
+			if fx == "Spin" then
+				table.insert(spinners, d)
+			elseif fx == "Sway" then
+				table.insert(swayers, { part = d, home = d.CFrame })
+			end
+		end
+	end
+	local lights: { { light: PointLight, base: number } } = {}
+	local models = hub:FindFirstChild("Models")
+	local function addLights(root: Instance)
+		for _, d in root:GetDescendants() do
+			if d:IsA("PointLight") and d.Color.R > d.Color.B then -- warm lantern and fire light
+				table.insert(lights, { light = d, base = d.Brightness })
+			end
+		end
+	end
+	if models then
+		task.delay(8, function() -- the meshes stream in on the server
+			addLights(models)
+		end)
+	end
+	local t0 = os.clock()
+	task.spawn(function()
+		while hub.Parent do
+			local t = os.clock() - t0
+			if not reducedOf() then
+				for _, p in spinners do
+					p.CFrame = CFrame.new(p.Position) * CFrame.Angles(0, t * 0.6, 0)
+				end
+				for i, s in swayers do
+					s.part.CFrame = s.home * CFrame.Angles(0, 0, math.sin(t * 1.3 + i) * math.rad(4))
+				end
+				for i, l in lights do
+					l.light.Brightness = l.base * (0.88 + 0.12 * math.noise(t * 3, i))
+				end
+			end
+			task.wait(1 / 20)
+		end
+	end)
+end
+
 -- Follows the player's World attribute and the battle screen (ctx.state "battle").
 function AreaFx.start(ctx: any)
+	reducedOf = ctx.reducedMotion
 	current = nil
 	AreaFx.apply("hub", true)
 	local player = Players.LocalPlayer
@@ -250,6 +308,7 @@ function AreaFx.start(ctx: any)
 		local hub = workspace:WaitForChild("Hub", 60)
 		if hub then
 			spinPortal(hub)
+			lobbyMotion(hub)
 		end
 	end)
 	-- The Back to Lobby portals stream in with their worlds (StreamingEnabled).

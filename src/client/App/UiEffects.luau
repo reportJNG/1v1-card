@@ -62,7 +62,7 @@ end
 local function menuCFrame(t: number): CFrame
 	local o = HubLayout.ORIGIN
 	local centre = Vector3.new(o[1], o[2], o[3])
-	local eye = centre + Vector3.new(-6 + math.sin(t * 0.05) * 5, 11 + math.sin(t * 0.08) * 0.6, 92)
+	local eye = centre + Vector3.new(-8 + math.sin(t * 0.05) * 5, 14 + math.sin(t * 0.08) * 0.6, 128)
 	local look = centre + Vector3.new(10 + math.sin(t * 0.04) * 3, 13, -40)
 	return CFrame.lookAt(eye, look)
 end

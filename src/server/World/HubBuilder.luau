@@ -1,12 +1,17 @@
 --!strict
--- Builds the hub plaza from Config/HubLayout: the plaza floor with glowing path edges, every
--- generated mesh model (one MeshPart each, loaded once per mesh with AssetService and cloned),
--- lantern lights, the Worlds portal core, signs, interaction prompts, falling petals and the
--- spawn. The floor and spawn exist on return; the meshes stream in on a background thread.
+-- Builds the lobby from Config/HubLayout (FIX_LOBBY.md): the ground, paths, steps, river,
+-- fountain and card statue, stalls and shrine as simple shapes (Shared/Art/ArenaKit.prim); every
+-- generated mesh (one MeshPart each, loaded once per mesh with AssetService and cloned); the egg
+-- pedestals with the pack eggs; lantern and brazier lights; fire, fountain spray, fireflies and
+-- petals; the Worlds portal core; world text over every place; interaction prompts and the
+-- spawn. The ground and spawn exist on return; the meshes stream in on a background thread.
 -- Idempotent: rebuilding replaces the previous hub. Runs on Hub servers only.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local HubLayout = require(Shared.Config.HubLayout)
+local WorldProps = require(Shared.Config.WorldProps)
+local Eggs = require(Shared.Config.Eggs)
+local ArenaKit = require(Shared.Art.ArenaKit)
 local UiAssets = require(Shared.Config.UiAssets)
 local Billboard = require(Shared.Ui.Billboard)
 local MeshLibrary = require(script.Parent.MeshLibrary)
@@ -45,10 +50,12 @@ local function slab(props: { [string]: any }, parent: Instance): Part
 end
 
 local light: (BasePart, Vector3, string, number, number) -> ()
+local life: (Vector3, Instance) -> ()
+local eggPedestals: (Vector3, Instance) -> ()
 
 -- One model piece at `origin + at`, standing on the ground.
 local function place(piece: HubLayout.Piece, i: number, origin: Vector3, parent: Instance)
-	local def = HubLayout.Models[piece.model]
+	local def = HubLayout.Models[piece.model] or WorldProps.Models[piece.model]
 	local m = MeshLibrary.place(piece.model, def, origin + v(piece.at), piece.rotY, piece.scale)
 	if m == nil then
 		return
@@ -193,6 +200,137 @@ local function petals(origin: Vector3, parent: Instance)
 	e.Parent = area
 end
 
+-- A small particle emitter on an invisible part (fire, spray, fireflies).
+local function emitter(name: string, at: Vector3, size: Vector3, spec: { [string]: any }, parent: Instance)
+	local holder = slab({
+		Name = name,
+		Size = size,
+		Position = at,
+		Transparency = 1,
+		CanCollide = false,
+		CanQuery = false,
+		CanTouch = false,
+	}, parent)
+	local e = Instance.new("ParticleEmitter")
+	e.Texture = asset(spec.texture or "sparkle")
+	e.Rate = spec.rate
+	e.Lifetime = spec.lifetime
+	e.Speed = spec.speed
+	e.LightEmission = 1
+	e.Color = spec.color
+	e.Size = spec.size
+	e.EmissionDirection = spec.direction or Enum.NormalId.Top
+	e.SpreadAngle = spec.spread or Vector2.new(10, 10)
+	e.Acceleration = spec.acceleration or Vector3.zero
+	e.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 1),
+		NumberSequenceKeypoint.new(0.15, 0),
+		NumberSequenceKeypoint.new(0.8, 0.1),
+		NumberSequenceKeypoint.new(1, 1),
+	})
+	e.Parent = holder
+end
+
+-- The lobby's life: fire in every brazier, spray over the fountain, fireflies along the river.
+function life(origin: Vector3, architecture: Instance)
+	for _, d in architecture:GetDescendants() do
+		if d:IsA("BasePart") and d:GetAttribute("Fx") == "Brazier" then
+			emitter("Fire", d.Position + Vector3.new(0, 0.8, 0), Vector3.new(2, 0.2, 2), {
+				rate = 26,
+				lifetime = NumberRange.new(0.5, 0.9),
+				speed = NumberRange.new(3, 6),
+				color = ColorSequence.new(Color3.fromHex("#FFE08A"), Color3.fromHex("#FF4A1E")),
+				size = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 1.4),
+					NumberSequenceKeypoint.new(1, 0),
+				}),
+				acceleration = Vector3.new(0, 3, 0),
+			}, d)
+		end
+	end
+	emitter("FountainSpray", origin + Vector3.new(0, 5.4, 0), Vector3.new(3, 0.2, 3), {
+		rate = 18,
+		lifetime = NumberRange.new(0.8, 1.2),
+		speed = NumberRange.new(5, 8),
+		spread = Vector2.new(25, 25),
+		color = ColorSequence.new(Color3.fromHex("#E6F6FF"), Color3.fromHex("#7CC8FF")),
+		size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.5), NumberSequenceKeypoint.new(1, 0.2) }),
+		acceleration = Vector3.new(0, -14, 0),
+	}, architecture)
+	local f = HubLayout.FIREFLIES
+	emitter("Fireflies", origin + v(f.at), Vector3.new(f.area[1], 1, f.area[2]), {
+		rate = f.rate,
+		lifetime = NumberRange.new(4, 7),
+		speed = NumberRange.new(0.3, 1),
+		spread = Vector2.new(180, 180),
+		color = ColorSequence.new(Color3.fromHex("#F4FF9A"), Color3.fromHex("#9AFF7A")),
+		size = NumberSequence.new({
+			NumberSequenceKeypoint.new(0, 0.25),
+			NumberSequenceKeypoint.new(1, 0.15),
+		}),
+		acceleration = Vector3.new(0, 0.3, 0),
+	}, architecture)
+end
+
+-- The egg pavilion's pedestals: a glowing pedestal per egg, the egg's pack image (unedited) and its
+-- Coin price floating over it.
+function eggPedestals(origin: Vector3, parent: Instance)
+	local folder = Instance.new("Folder")
+	folder.Name = "EggPedestals"
+	for _, spot in HubLayout.EggPedestals do
+		local egg = Eggs.ById[spot.egg]
+		if egg then
+			local at = origin + v(spot.at)
+			slab({
+				Name = egg.id,
+				Shape = Enum.PartType.Cylinder,
+				Size = Vector3.new(2, 3.4, 3.4),
+				CFrame = CFrame.new(at + Vector3.new(0, 1, 0)) * CFrame.Angles(0, 0, math.rad(90)),
+				Color = Color3.fromHex("#E6E0F6"),
+				Material = Enum.Material.Marble,
+			}, folder)
+			local glow = slab({
+				Name = "Glow",
+				Shape = Enum.PartType.Cylinder,
+				Size = Vector3.new(0.15, 3.7, 3.7),
+				CFrame = CFrame.new(at + Vector3.new(0, 2.05, 0)) * CFrame.Angles(0, 0, math.rad(90)),
+				Color = Color3.fromHex("#C77DFF"),
+				Material = Enum.Material.Neon,
+				Transparency = 0.2,
+				CanCollide = false,
+				CastShadow = false,
+			}, folder)
+			local gui = Instance.new("BillboardGui")
+			gui.Name = "Egg"
+			gui.Size = UDim2.fromScale(4, 4.6)
+			gui.StudsOffsetWorldSpace = Vector3.new(0, 2.6, 0)
+			gui.LightInfluence = 0
+			gui.MaxDistance = 140
+			gui.AlwaysOnTop = false -- see Shared/Ui/Billboard
+			gui.Parent = glow
+			local img = Instance.new("ImageLabel")
+			img.BackgroundTransparency = 1
+			img.Image = egg.icon.normalAssetId or ""
+			img.ScaleType = Enum.ScaleType.Fit
+			img.Size = UDim2.fromScale(1, 1)
+			img.Parent = gui
+			if egg.coinPrice then
+				local price = Billboard.make({
+					name = "Price",
+					text = tostring(egg.coinPrice),
+					icon = "icon_coin",
+					gradient = Billboard.Gold,
+					studs = 1.2,
+					maxDistance = 90,
+				})
+				price.StudsOffsetWorldSpace = Vector3.new(0, 5.9, 0)
+				price.Parent = glow
+			end
+		end
+	end
+	folder.Parent = parent
+end
+
 function HubBuilder.build(parent: Instance): Model
 	local old = parent:FindFirstChild("Hub")
 	if old then
@@ -203,44 +341,17 @@ function HubBuilder.build(parent: Instance): Model
 	hub:SetAttribute("WorldId", 0)
 	local origin = HubBuilder.origin()
 
-	-- Floor: an outer ground, the plaza slab, the path and its glowing edges.
-	local plaza = HubLayout.PLAZA
-	local centre = origin + Vector3.new(plaza.center[1], 0, plaza.center[2])
-	slab({
-		Name = "Ground",
-		Size = Vector3.new(900, 2, 900),
-		Position = centre - Vector3.new(0, 1.4, 0),
-		Color = Color3.fromHex("#241B44"),
-		Material = Enum.Material.Ground,
-	}, hub)
-	slab({
-		Name = "Plaza",
-		Size = Vector3.new(plaza.size[1], 2, plaza.size[2]),
-		Position = centre - Vector3.new(0, 1, 0),
-		Color = Color3.fromHex("#463D6E"),
-		Material = Enum.Material.Slate,
-	}, hub)
-	local path = plaza.path
-	local length = path.from - path.to
-	local pathCentre = origin + Vector3.new(0, 0, (path.from + path.to) / 2)
-	slab({
-		Name = "Path",
-		Size = Vector3.new(path.width, 0.2, length),
-		Position = pathCentre + Vector3.new(0, 0.05, 0),
-		Color = Color3.fromHex("#6A5C9C"),
-		Material = Enum.Material.Pavement,
-	}, hub)
-	for _, side in { -1, 1 } do
-		slab({
-			Name = "PathEdge",
-			Size = Vector3.new(0.35, 0.25, length),
-			Position = pathCentre + Vector3.new(side * (path.width / 2 + 0.2), 0.1, 0),
-			Color = Color3.fromHex("#A469FF"),
-			Material = Enum.Material.Neon,
-			CanCollide = false,
-			CastShadow = false,
-		}, hub)
+	-- Ground, paths, steps, the fountain and card statue, the stalls: simple shapes from data.
+	local architecture = Instance.new("Folder")
+	architecture.Name = "Architecture"
+	for i, spec in HubLayout.Prims do
+		local shifted = table.clone(spec)
+		shifted.at = { spec.at[1] + origin.X, spec.at[2] + origin.Y, spec.at[3] + origin.Z }
+		ArenaKit.prim(shifted, i, architecture)
 	end
+	architecture.Parent = hub
+	life(origin, architecture)
+	eggPedestals(origin, hub)
 
 	-- Models.
 	local models = Instance.new("Folder")
@@ -264,6 +375,28 @@ function HubBuilder.build(parent: Instance): Model
 			-- At chest height, whatever the feature's height (the portal core floats at 16 studs,
 			-- which put its prompt at the edge of its range).
 			prompt(Vector3.new(at.X, origin.Y + 3, at.Z), f.prompt, hub)
+		end
+		if key == "quests" then
+			-- a big "!" over the board while a quest is ready to claim (App/WorldInteraction)
+			local alert = Billboard.make({
+				name = "QuestAlert",
+				text = "!",
+				gradient = { Color3.fromHex("#FFE08A"), Color3.fromHex("#FF4A5E") },
+				studs = 4,
+				maxDistance = Billboard.Kind.place.maxDistance,
+			})
+			alert.StudsOffsetWorldSpace = Vector3.new(0, 9, 0)
+			alert.Enabled = false
+			local holder = slab({
+				Name = "QuestAlert",
+				Size = Vector3.one,
+				Position = at,
+				Transparency = 1,
+				CanCollide = false,
+				CanQuery = false,
+				CanTouch = false,
+			}, hub)
+			alert.Parent = holder
 		end
 		if f.sign then
 			sign(

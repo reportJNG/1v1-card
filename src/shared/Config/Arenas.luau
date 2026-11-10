@@ -34,6 +34,9 @@ export type Prim = {
 	transparency: number?,
 	rot: Vec?, -- degrees
 	tag: string?, -- "Spin": turned slowly by the client
+	image: string?, -- a Config/UiAssets slot shown on both faces
+	collide: boolean?, -- solid to players (default: not)
+	name: string?,
 	light: { color: string, range: number, brightness: number }?,
 }
 

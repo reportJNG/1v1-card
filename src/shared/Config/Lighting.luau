@@ -16,7 +16,16 @@ export type Preset = {
 	bloom: { intensity: number, size: number, threshold: number },
 	color: { brightness: number, contrast: number, saturation: number, tint: string },
 	sunRays: { intensity: number, spread: number },
-	sky: { ft: string, bk: string, lf: string, rt: string, up: string, dn: string, stars: number }?,
+	sky: {
+		ft: string,
+		bk: string,
+		lf: string,
+		rt: string,
+		up: string,
+		dn: string,
+		stars: number,
+		moon: number?,
+	}?,
 }
 
 local HUB_SKY = {
@@ -27,6 +36,7 @@ local HUB_SKY = {
 	up = "rbxassetid://102373425404745",
 	dn = "rbxassetid://78110207209561",
 	stars = 0,
+	moon = 16, -- Roblox's built-in moon (no upload), angular size
 }
 
 local Presets: { [string]: Preset } = {

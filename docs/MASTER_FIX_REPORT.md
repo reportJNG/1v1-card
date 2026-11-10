@@ -23,7 +23,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 8 | Deck Builder, Families, Inventory | done, waiting for art (Sheets A, B, F1, E4) | `ui(8)` | deck: layout 8 · cards 8 · text 8 · motion 8; inventory: layout 8 · cards 8 · text 8 · inspect 8; painted 7 until the sheets (`compare_deck.png`, `compare_families.png`, `compare_inventory.png`) |
 | 9 | Battle screen + 5 arenas | done, waiting for art (H1, H2) | `ui(9)` | bars 9 · timer 8 · action cards 8 · clean 9 · motion 8 · painted 7 until H1/H2 (`compare_battle.png`, `docs/screens/arenas`) |
 | 10 | Battle result | done, waiting for art (G1, G2) | `ui(10)` | layout 9 · both fighters 8 · text 9 · rewards 9 · buttons 8 · motion 8 · painted 7 until G1/G2 (`compare_result_defeat.png`, `compare_result_victory.png`; `hd-06` left out of the compare: it shows a franchise-like character) |
-| 11 | Lobby full upgrade | todo | | |
+| 11 | Lobby full upgrade | done, waiting for owner (hero props and a night sky through the review gate) | `map(lobby)` | landmarks 9 · clarity 9 · mood 8 · life 8 · performance 9 · detail 7 until the hero props (`docs/screens/lobby/compare_lobby.png`, `docs/LOBBY_AUDIT.md`) |
 | 12 | Worlds 1-10 upgrade | todo | | |
 | 13 | Final pass | todo | | |
 | 14 | Characters: rename done in Phase 0; art waits for "new images are in" | done, waiting for owner (art) | | |
@@ -336,6 +336,38 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   test place) and the phone-size layout (Phase 13).
 - Checks: StyLua, Selene, luau-lsp clean; **316 passed, 0 failed**.
 
+### Phase 11 (2026-11-10)
+- **The zone plan from FIX_LOBBY §3, built** (`Config/HubLayout` data, `Server/World/HubBuilder`; the
+  simple shapes reuse `Shared/Art/ArenaKit.prim`, which gained face images, collision and names):
+  spawn circle facing north → lantern-string path → river with a wooden bridge → a round cobbled
+  plaza with inlays, a marble fountain (spray, light) and the golden card statue (an original trophy,
+  turning slowly) → four paths to the **1v1 ARENA** terrace (steps, a 2× torii with a round sword
+  sign, the arena hall, two winged-lion guardian statues, braziers, swaying banners), the **WORLDS**
+  portal on a two-tier dais (braziers), the **EGGS** pavilion (five glowing pedestals with the real
+  World 1 pack eggs, unedited, and their Coin prices), the **Lantern Trader** (cart, crates, sacks),
+  the **quest board** and the **daily shrine**; pagodas, a two-ring cherry grove and floating
+  islands at the edges; Roblox's built-in moon in the sky.
+- **Every place opens its panel:** Arena queue, Worlds, Egg Shop, Merchant (a real lobby merchant: the
+  server's sell range check now takes the player's area, and in the lobby only the lobby merchant
+  trades; spec added), Quests (board and shrine). World text on every place; a big "!" over the board
+  while a quest is ready; the DAILY sign and the chest's glow while today's reward waits.
+- **Life:** petals, fireflies over the river, fountain spray, brazier fire, portal sparks, lantern
+  flicker, the turning statue and swaying banners (client-side, off with reduced motion).
+- **Performance:** 399 parts (48 meshes), 21 PointLights, 8 emitters (budget 6,000 / 40).
+- **The main menu camera** moved back so the new lantern posts by the bridge don't fill its shot.
+- **Play checks:** spawn on the new circle facing the plaza; the six lobby prompts exist; selling at the
+  Lantern Trader paid 12 Coins and selling from the spawn was refused (`NotNearMerchant`); the
+  tutorial counted the sale; DAILY sign and chest glow on for a new player, no "!" with nothing to
+  claim; the card statue turns.
+- **Waiting, by the asset rules:** the Blender hero props (torii, portal gate, pagodas, lantern,
+  fountain, statue), any `generate_mesh` / `generate_material` asset and a new night skybox all create
+  new uploaded images, so each goes through the review gate first; the layout takes them as data
+  changes. "Detail and polish" scores 7 until then. The optional leaderboard is left out (no ranked
+  leaderboard store is designed yet). Not checked: a phone-size view and the MicroProfiler (Phase 13).
+- Tests: `Lobby.spec` (every place has a prompt and sign, only existing meshes, lights within 40, an
+  open walk from the spawn to the plaza, real eggs on the pedestals, the merchant point at its stall)
+  and the lobby merchant in `Worlds.spec`. StyLua, Selene, luau-lsp clean; **321 passed, 0 failed**.
+
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each
 phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
@@ -352,6 +384,7 @@ phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
 | F1 (inventory extras) | 8 | not received |
 | C (crystal eggs) | 6 | only if Option 2 |
 | Lobby concept | 11 | optional |
+| Lobby hero props (Blender) + night skybox | 11 | to be made and reviewed (new textures need the gate) |
 | 5 character images | 14 | not received (`NEW_5_CHARACTERS.md`) |
 
 ## Owner decisions

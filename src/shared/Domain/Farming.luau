@@ -76,13 +76,21 @@ function Farming.harvest(profile: Types.PlayerProfile, nodeId: string, ctx: Cont
 	})
 end
 
--- Is the player close enough to their current world's merchant to trade?
-function Farming.nearMerchant(profile: Types.PlayerProfile, position: WorldLayout.Point?): boolean
+-- Is the player close enough to a merchant to trade? `area` is where the server has the player
+-- (its World attribute): 0 = the lobby, whose merchant stands by the spawn; otherwise the merchant
+-- of the player's current world.
+function Farming.nearMerchant(
+	profile: Types.PlayerProfile,
+	position: WorldLayout.Point?,
+	area: number?
+): boolean
 	if position == nil then
 		return false
 	end
-	return WorldLayout.distance(position, WorldLayout.merchant(profile.currentWorld))
-		<= WorldLayouts.MERCHANT_RANGE
+	local merchant = if area == 0
+		then WorldLayout.hubMerchant()
+		else WorldLayout.merchant(profile.currentWorld)
+	return WorldLayout.distance(position, merchant) <= WorldLayouts.MERCHANT_RANGE
 end
 
 return table.freeze(Farming)

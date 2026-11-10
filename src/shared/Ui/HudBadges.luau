@@ -14,7 +14,7 @@ export type Dots = { Quests: boolean, Shop: boolean, Deck: boolean }
 export type Tracker = { text: string, progress: number, target: number }?
 
 -- True when a quest in the view is complete and not yet claimed.
-local function questReady(view: any): boolean
+function HudBadges.questReady(view: any): boolean
 	for id, q in view.quests or {} do
 		local def = QuestsCfg.ById[id]
 		if def and not q.claimed and q.progress >= def.target then
@@ -22,6 +22,11 @@ local function questReady(view: any): boolean
 		end
 	end
 	return false
+end
+
+-- True when today's streak reward hasn't been claimed yet.
+function HudBadges.dailyReady(view: any, now: number): boolean
+	return ((view.daily or {}).lastClaimDay or -1) ~= now // DAY
 end
 
 function HudBadges.dots(view: any, now: number): Dots
@@ -36,7 +41,7 @@ function HudBadges.dots(view: any, now: number): Dots
 	end
 	return {
 		-- a finished quest to claim, or today's streak reward
-		Quests = questReady(view) or (daily.lastClaimDay or -1) ~= today,
+		Quests = HudBadges.questReady(view) or (daily.lastClaimDay or -1) ~= today,
 		-- today's free egg, or eggs waiting in the bag
 		Shop = (daily.freeEggDay or -1) ~= today or bagged,
 		-- a deck isn't complete

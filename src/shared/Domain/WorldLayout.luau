@@ -4,6 +4,7 @@
 -- harvest use the same numbers.
 local Config = script.Parent.Parent.Config
 local WorldLayouts = require(Config.WorldLayouts)
+local HubLayout = require(Config.HubLayout)
 
 export type Point = { x: number, y: number, z: number }
 
@@ -28,6 +29,12 @@ end
 function WorldLayout.merchant(world: number): Point
 	local o = WorldLayout.origin(world)
 	return { x = o.x - 40, y = 1, z = o.z + 100 }
+end
+
+-- The lobby's merchant (Config/HubLayout.MERCHANT, from the lobby origin).
+function WorldLayout.hubMerchant(): Point
+	local o, m = HubLayout.ORIGIN, HubLayout.MERCHANT
+	return { x = o[1] + m[1], y = o[2] + m[2], z = o[3] + m[3] }
 end
 
 function WorldLayout.guardian(world: number): Point

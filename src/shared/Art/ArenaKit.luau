@@ -90,7 +90,10 @@ function ArenaKit.core(arena: Arenas.Arena, parent: Instance): Folder
 	return folder
 end
 
-local function prim(spec: Arenas.Prim, i: number, parent: Instance)
+-- One simple shape from data (Config/Arenas, Config/HubLayout): blocks, upright cylinders, balls
+-- and flat rings, with an optional light, face image (a UiAssets slot on both faces), collision
+-- and an "Fx" tag the client animates.
+function ArenaKit.prim(spec: Arenas.Prim, i: number, parent: Instance)
 	local at = v3(spec.at)
 	local rot = spec.rot or { 0, 0, 0 }
 	local turn = CFrame.Angles(math.rad(rot[1]), math.rad(rot[2]), math.rad(rot[3]))
@@ -131,8 +134,33 @@ local function prim(spec: Arenas.Prim, i: number, parent: Instance)
 	p.Color = color
 	p.Material = mat
 	p.Transparency = spec.transparency or 0
+	p.CanCollide = spec.collide == true
+	if spec.name then
+		p.Name = spec.name
+	end
 	if spec.tag then
 		p:SetAttribute("Fx", spec.tag)
+	end
+	if spec.image then
+		local faces: { Enum.NormalId } = if spec.shape == "Cylinder"
+			then { Enum.NormalId.Left, Enum.NormalId.Right }
+			else { Enum.NormalId.Front, Enum.NormalId.Back }
+		for _, face in faces do
+			local gui = Instance.new("SurfaceGui")
+			gui.Name = "Image"
+			gui.Face = face
+			gui.LightInfluence = 0.3
+			gui.CanvasSize = Vector2.new(256, 256)
+			gui.Parent = p
+			local img = Instance.new("ImageLabel")
+			img.BackgroundTransparency = 1
+			img.Image = asset(spec.image)
+			img.ScaleType = Enum.ScaleType.Fit
+			img.AnchorPoint = Vector2.new(0.5, 0.5)
+			img.Position = UDim2.fromScale(0.5, 0.5)
+			img.Size = UDim2.fromScale(0.8, 0.8)
+			img.Parent = gui
+		end
 	end
 	if spec.light then
 		addLight(p, spec.light.color, spec.light.range, spec.light.brightness)
@@ -207,7 +235,7 @@ function ArenaKit.build(arena: Arenas.Arena): Model
 	local dressing = Instance.new("Folder")
 	dressing.Name = "Dressing"
 	for i, spec in ArenaLayout.prims(arena) do
-		prim(spec, i, dressing)
+		ArenaKit.prim(spec, i, dressing)
 	end
 	ArenaKit.particles(arena, dressing)
 	dressing.Parent = model

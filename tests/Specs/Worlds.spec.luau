@@ -265,6 +265,11 @@ return function()
 			expect(Farming.nearMerchant(p, { x = m.x + 5, y = m.y, z = m.z })).to.equal(true)
 			expect(Farming.nearMerchant(p, { x = m.x + 40, y = m.y, z = m.z })).to.equal(false)
 			expect(Farming.nearMerchant(p, nil)).to.equal(false)
+			-- in the lobby only the lobby's merchant trades
+			local h = WorldLayout.hubMerchant()
+			expect(Farming.nearMerchant(p, { x = h.x + 4, y = h.y, z = h.z }, 0)).to.equal(true)
+			expect(Farming.nearMerchant(p, { x = m.x + 5, y = m.y, z = m.z }, 0)).to.equal(false)
+			expect(Farming.nearMerchant(p, { x = h.x + 4, y = h.y, z = h.z }, p.currentWorld)).to.equal(false)
 		end)
 	end)
 
