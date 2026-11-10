@@ -376,6 +376,7 @@ local List: { Layout } = {
 			direction = "rise",
 			size = 0.4,
 		},
+		gate = { landmark = "w9_monolith", scale = 2.4, stone = "#1E1A2E", material = "Slate" },
 	}, { { "item_umbral_moss", "w9_umbral_moss" }, { "item_null_quartz", "w9_null_quartz" } }, {
 		"item_rift_eye",
 		"w9_rift_eye",
