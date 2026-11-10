@@ -25,7 +25,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 10 | Battle result | done, waiting for art (G1, G2) | `ui(10)` | layout 9 · both fighters 8 · text 9 · rewards 9 · buttons 8 · motion 8 · painted 7 until G1/G2 (`compare_result_defeat.png`, `compare_result_victory.png`; `hd-06` left out of the compare: it shows a franchise-like character) |
 | 11 | Lobby full upgrade | done, waiting for owner (hero props and a night sky through the review gate) | `map(lobby)` | landmarks 9 · clarity 9 · mood 8 · life 8 · performance 9 · detail 7 until the hero props (`docs/screens/lobby/compare_lobby.png`, `docs/LOBBY_AUDIT.md`) |
 | 12 | Worlds 1-10 upgrade | done, waiting for owner (hero props, MaterialVariants and skies through the review gate) | `map(world1)` … `map(world10)` | each world: landmark 8 · nodes 8 · clarity 8 · mood 8 (`docs/screens/worlds/compare_world*.png`) |
-| 13 | Final pass | todo | | |
+| 13 | Final pass | done | `fix(13)`, `docs(13)` | fresh-player run at desktop and phone landscape; 2 bugs fixed (`docs/screens/final_master`) |
 | 14 | Characters: rename done in Phase 0; art waits for "new images are in" | done, waiting for owner (art) | | |
 
 ## Phase notes
@@ -391,6 +391,32 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 - Screens: `docs/screens/worlds/after/` (same arrival camera for every world) and
   `compare_world01..10` against the earlier overview shots. Checks: StyLua, Selene, luau-lsp clean;
   **322 passed, 0 failed**.
+
+### Phase 13 (2026-11-10)
+- **One continuous fresh-player run in Play** (500 Coins, starter deck), at 1682 × 753 and at a phone
+  landscape view of 926 × 465 (`docs/screens/final_master`, numbered in order): main menu over the new
+  lobby → PLAY → lobby → Egg Shop → x1 hatch (500 → 250) → inventory (4/300, deck slots 1-3) → WORLDS →
+  Green Plains under its new gate (tutorial 2/7) → harvest 5 nodes (3/7) → Farmer Tobb → SELL ALL
+  (250 → 296) → Guardian Trial (confirm, intro in Celestial Isle, rounds with the reveal and 1ST tag,
+  ROUND 3, Special unlocking at 2 energy) → forfeit → DEFEAT result with both fighters, KO crack,
+  NO REWARD and the Forfeit pill → CONTINUE → back on the exact spot (0.00 studs, World 1) → gift →
+  Quests → CLAIM DAY 1 (296 → 396). Phone size: HUD, Egg Shop and a battle (Frozen Shrine) fit.
+  (The lobby merchant sale, the x8 hatch path and the result's Victory branch were checked in earlier
+  phases; the x8 button is the same request with `count = 8`.)
+- **Bugs found and fixed:**
+  1. **Stuck blurred screen:** the Egg Shop's X could be pressed under a hatch result; the shop closed
+     but the flow still returned to it after the hatch, leaving the screen blurred with the HUD hidden
+     and nothing to press. `UiFlow` now clears the hatch's return when its panel closes, the hatch stage
+     takes every click, and a `UiFlow` spec covers it (`bug_stuck_blur_before_fix.jpg`).
+  2. **Deck bar too tall on a short landscape phone:** the three cards covered the character
+     (`16_phone_hud_before_fix.jpg`). They are now capped at 22% of the screen height
+     (`19_phone_hud_after_fix.jpg`).
+  - Also: the hatch result's buttons now use big display type and the small caption under the card is
+    gone (the card shows its name and rarity).
+- **Not covered here:** a ranked match between two real players and real DataStores/teleports (need a
+  published test place; `PLAN.md` §7), the MicroProfiler on low-end emulation, a portrait phone.
+- `PLAN.md` §2/§6 and `STATUS.md` updated. Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds;
+  **323 passed, 0 failed**.
 
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each

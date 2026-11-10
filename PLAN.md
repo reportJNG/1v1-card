@@ -32,7 +32,7 @@ Detailed specs live elsewhere; this file points to them:
   worlds and cosmetics only. There are no wagers: the winner gets a purse paid by the game.
 - Everything is server-authoritative.
 
-## 2. Current state (as of 2026-11-09, end of session)
+## 2. Current state (as of 2026-11-10, end of session)
 
 **Built and verified** (`STATUS.md`, `docs/MISSION_REPORT.md`):
 - **Every game system:** economy, eggs and odds, cards, merging, decks, battle engine (identical
@@ -58,6 +58,12 @@ Detailed specs live elsewhere; this file points to them:
   played on its replacement) and three clipping issues.
 - 291 headless tests pass; StyLua, Selene, luau-lsp strict and the Rojo builds are clean.
 - **GitHub:** `https://github.com/reportJNG/1v1-card` (`main`); every step is committed and pushed.
+
+- **MASTER_FIX_PLAN phases 0-13 done (2026-11-10):** every bad-UI report rebuilt to its target
+  (HUD, main menu, Egg Shop, merchant and panels, deck/families/inventory, battle screen, battle
+  result), 5 battle arenas, the lobby rebuilt to the FIX_LOBBY zone plan, spawn gates in all 10
+  worlds, and a final fresh-player pass at desktop and phone sizes. Painted pieces stay TEMP until
+  the owner's sheets pass the review gate (`docs/MASTER_FIX_REPORT.md`). 323 headless tests pass.
 
 **Not done:**
 - **Card with character art** (`MISSION.md` 6.3) and Phase 2's "first approved batch shown
@@ -161,9 +167,10 @@ Done on 2026-11-09 (each committed and pushed): 1 safety rules, 2 cleanup, 3 re-
    - check "Card with character" in Play on every card size, the stats panel and the egg reveal,
      then tick it and Phase 2's last items in `MISSION.md`
    - **no uploads until the owner confirms the 43 portrait-pack assets are archived**
-2. **Run `MASTER_FIX_PLAN.md` phases 0-12** (then 13, the final pass), with `GOAL_ALL.md`'s Phase 3b
-   (the combined icon set) after Phase 3 and Phase 14 (characters) at the end. Progress, scores and
-   what waits for art: `docs/MASTER_FIX_REPORT.md`.
+2. **`MASTER_FIX_PLAN.md` phases 0-13 are done.** Next is each phase's "art swap" as the owner's
+   sheets arrive (cut, review sheet, OK, upload in 5s, swap, re-score), the icon and kit uploads
+   once `docs/review/icons_final.png` and `ui-kit-v3.png` are approved, and Phase 14's character
+   art on "new images are in". `docs/MASTER_FIX_REPORT.md` lists what waits for which sheet.
 3. **Re-run `sim/balance.py --all`** before more characters are turned on (the five were re-tuned
    for the 5-card roster).
 

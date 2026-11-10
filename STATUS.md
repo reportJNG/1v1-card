@@ -29,6 +29,10 @@
 | Character art pipeline under the asset safety rules (review gate, owner approval, no expressions, upload groups of 5) | `scripts/art/characters.py`, `ANIME_FOLDER.md` | `characters.py selftest` |
 | Battle reactions as effects only (sword, shield, KO ring) | `App/BattleStage` | Play mode (recorded during a 15-round Trial) |
 | 100 character art briefs | `Config/Characters` (`look`), `sim/roster_looks.py` | ConfigValidator spec |
+| MASTER_FIX_PLAN UI (2026-11-10): toast-free WorldText, clean HUD + tutorial, main menu, Egg Shop, merchant and every panel, deck/families/inventory, battle screen to target 18, battle result with both fighters | `App/WorldText`, `App/Hud`, `App/MainMenu`, `Screens/*`, `Screens/Battle`, `Screens/BattleResult` | Play mode, compare images in `docs/screens/roblox-ui`, `docs/MASTER_FIX_REPORT.md` |
+| 5 battle arenas (Sakura Courtyard, Frozen Shrine, Volcano Forge, Celestial Isle, Storm Rooftop), picked by the server from the match seed | `Config/Arenas`, `Shared/Domain/ArenaLayout`, `Shared/Art/ArenaKit`, `Server/World/ArenaBuilder` | Arenas.spec, Play mode (`docs/screens/arenas`) |
+| Lobby rebuilt to the FIX_LOBBY zone plan, with a working lobby merchant, quest board and daily shrine | `Config/HubLayout`, `Server/World/HubBuilder` | Lobby.spec, Worlds.spec, Play mode (`docs/screens/lobby`, `docs/LOBBY_AUDIT.md`) |
+| Worlds 1-10: spawn gate, landmarks, readable nodes, paths | `Config/WorldLayouts` (`theme.gate`), `Server/World/WorldBuilder` | Worlds.spec, `docs/screens/worlds/compare_world*.png` |
 
 ## Placeholder (marked in `Config/ContentStatus` / `status = "Placeholder"`; release builds refuse them)
 
@@ -40,10 +44,10 @@
 | Odds bands, egg prices, economy prices, item prices, quest rewards | Starting values |
 | Character numbers | Pass the balance gate; still need real playtests |
 | Guardian decks | Difficulty curve needs playtests (`sim/trials.py`: 36-53% for a random deck) |
-| World art | First pass: generated terrain and meshes, code-drawn skies, Studio-captured picker thumbnails, APM tracks picked by title |
+| World art | Spawn gates and readable nodes (Phase 12) on generated terrain and meshes, code-drawn skies, Studio-captured picker thumbnails, APM tracks picked by title |
 | Party Egg odds | Stand-in Event band |
-| All UI images | TEMP code-drawn stand-ins (`art/ui/temp`) until the owner's art (`art/ui/PROMPTS.md`) |
-| Hub art | Generated meshes and a code-drawn sky, awaiting slice approval |
+| All UI images | Layouts final (MASTER_FIX_PLAN 4-10); painted pieces are TEMP until the owner's sheets (`art/ui/PROMPTS_V3.md`) pass the review gate |
+| Hub art | Zone layout built (Phase 11) from generated meshes and simple parts; Blender hero props and a night skybox wait for the review gate |
 | Sound choices | Every slot filled with licensed APM/PSE audio, picked without listening; the owner reviews |
 
 ## Designed but not built (by decision)
