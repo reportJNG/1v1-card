@@ -224,6 +224,7 @@ local List: { Layout } = {
 			direction = "fall",
 			size = 0.35,
 		},
+		gate = { landmark = "w4_spire", scale = 1.1, stone = "#3F6FA8", material = "Slate", ring = "#2A7BD8" },
 	}, { { "item_frost_lichen", "w4_frost_lichen" }, { "item_glacier_shard", "w4_glacier_shard" } }, {
 		"item_aurora_pearl",
 		"w4_aurora_pearl",
