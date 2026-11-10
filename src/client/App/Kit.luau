@@ -23,6 +23,13 @@ export type Size = "large" | "medium" | "small"
 -- centre as a SliceCenter rect. `live` is false while the TEMP fallback is drawn.
 export type Piece = { image: string, size: Vector2, slice: Rect?, live: boolean }
 
+-- Whether a painted piece is LIVE (approved and uploaded); screens with no TEMP stand-in for a
+-- piece (the main menu's D1 background tiles) only use it then.
+function Kit.live(name: string): boolean
+	local p = UiKit.Pieces[name]
+	return p ~= nil and p.id ~= nil
+end
+
 function Kit.piece(name: string): Piece
 	local p = UiKit.Pieces[name]
 	assert(p, `unknown UI kit piece {name}`)

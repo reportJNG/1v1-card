@@ -524,8 +524,19 @@ function App.start(deps: Deps): Ctx
 				ui("play")
 			end)
 		end,
-		open = function(name: string)
-			ctx.open(name)
+		open = function(name: string, arg: any?)
+			ctx.open(name, arg)
+		end,
+		live = deps.effects ~= nil, -- the real lobby shows behind the menu (UiEffects' menu camera)
+		view = function()
+			return ctx.state.view
+		end,
+		onChanged = function(fn: () -> ())
+			ctx.state.changed:connect(function(what: string)
+				if what == "profile" then
+					fn()
+				end
+			end)
 		end,
 	}, ctx.reducedMotion)
 	apply(true)

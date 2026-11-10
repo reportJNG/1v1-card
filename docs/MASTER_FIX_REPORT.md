@@ -17,7 +17,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 3 | Image-kit pipeline (cut_sheet, kit.json, slice test, App/Ui/Kit) | done, waiting for owner (OK on `docs/review/ui-kit-v3.png`) | `ui(3)` | n/a (pipeline; pieces scored when used) |
 | 3b | Combined icon set (three packs, licences, icon_map.json) | done, waiting for owner (OK on `docs/review/icons_final.png`) | `ui(3b)` | n/a (scored with the screens that use them) |
 | 4 | In-game HUD | done, waiting for art (E1-E4) | `ui(4)` | clean 9 · buttons 9 · text 8 · painted 7 until E1-E4 (`compare_hud.png`) |
-| 5 | Main menu | todo | | |
+| 5 | Main menu | done, waiting for art (D1-D4) | `ui(5)` | layout 8 · hero 8 · buttons 8 · text 9 · motion 8 · background 7 / logo 7 until D1/D2 (`compare_mainmenu.png`) |
 | 6 | Egg Shop | todo | | |
 | 7 | Merchant + every other panel | todo | | |
 | 8 | Deck Builder, Families, Inventory | todo | | |
@@ -167,6 +167,26 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 - **Bug found in Play:** the ≡ dropdown's skin was stacked by its list layout and pushed the rows off
   screen; the rows now live in their own frame.
 - **Painted look waits for E1-E4** (`art/ui/PROMPTS_V3.md` §2): the layout and behaviour are final.
+- Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
+
+### Phase 5 (2026-11-10)
+- **Only** the logo, PLAY, SHOP, the Coins/Gems pills and the hero are on the menu; the four tiles,
+  tagline, version line, drifting card backs and card showcase are gone. SHOP opens the Egg Shop
+  over the menu; the pills' "+" open the Coins / Gems tips.
+- **Background:** the D1 path is built (four `menu_bg_*` kit pieces in a 2 × 2, 16:9 cover-fit container
+  drifting ±1%, used as soon as they are LIVE). Until then the menu shows **the real night lobby** through
+  a re-composed menu camera (low on the plaza, through the torii, the Worlds portal on the right:
+  target 09's composition), with a dark left third for the buttons and 12 falling petals. This is the
+  FIX_LOBBY §4.9 option; Phase 11's lobby upgrade improves it directly.
+- **Hero:** the player's own avatar (`CreateHumanoidModelFromDescription`, in a ViewportFrame + WorldModel,
+  warm rim light), standing centre-right like target 09, head near the top and feet on the plaza,
+  fading in when it has loaded. Idle: a slow bob and turn and the left arm raised toward a fan of the
+  player's three deck cards. Found in Play: parenting re-applies the rig (it jumped 5.7 studs), and a
+  WorldModel doesn't step joints, so the pose is set on anchored parts each frame.
+- **Logo** (TEMP until D2): a crown over "1V1" in a pink-to-gold gradient and "CARD" in white, 5 px
+  strokes, bobbing. **PLAY** (gold, crossed swords both sides, breathing) and **SHOP** (purple, egg
+  icon until the cart icon is approved).
+- Not checked here: 750 × 1334 portrait (Phase 13).
 - Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
 
 ## Waiting for art

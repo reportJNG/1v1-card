@@ -56,13 +56,14 @@ local function controls(): any?
 	return if okC then c else nil
 end
 
--- The menu shot: a slow drift over the lobby plaza toward the Worlds portal and the arena.
+-- The menu shot (BAD_GUI_4 target 09's composition): low on the plaza, looking north through the
+-- torii to the arena with the Worlds portal on the right, drifting very slowly. It is the main
+-- menu's background until the owner's painted D1 is live.
 local function menuCFrame(t: number): CFrame
 	local o = HubLayout.ORIGIN
 	local centre = Vector3.new(o[1], o[2], o[3])
-	local a = math.rad(-20 + math.sin(t * 0.05) * 18)
-	local eye = centre + Vector3.new(math.sin(a) * 120, 42 + math.sin(t * 0.08) * 4, 70 + math.cos(a) * 60)
-	local look = centre + Vector3.new(math.sin(t * 0.04) * 20, 14, -60)
+	local eye = centre + Vector3.new(-6 + math.sin(t * 0.05) * 5, 11 + math.sin(t * 0.08) * 0.6, 92)
+	local look = centre + Vector3.new(10 + math.sin(t * 0.04) * 3, 13, -40)
 	return CFrame.lookAt(eye, look)
 end
 
