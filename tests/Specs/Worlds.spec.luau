@@ -259,6 +259,24 @@ return function()
 			expect(Inventory.countOf(p, node.resource.rareItemId :: string)).to.equal(1)
 		end)
 
+		it("gives each world's spawn gate an existing landmark mesh, clear of the nodes", function()
+			local WorldProps = require(Shared.Config.WorldProps)
+			for _, layout in WorldLayouts.List do
+				local gate = layout.theme.gate
+				if gate then
+					expect(WorldProps.Models[gate.landmark]).to.be.ok()
+					local spots = WorldLayout.landmarks(layout.world)
+					table.insert(spots, WorldLayout.arch(layout.world))
+					for _, spot in spots do
+						for _, node in WorldLayout.nodes(layout.world) do
+							local dx, dz = spot.x - node.position.x, spot.z - node.position.z
+							expect(math.sqrt(dx * dx + dz * dz) > WorldLayout.CLEAR_NODE + 12).to.equal(true)
+						end
+					end
+				end
+			end
+		end)
+
 		it("only trades with the merchant of the player's world, in range", function()
 			local p = Helpers.profile()
 			local m = WorldLayout.merchant(1)

@@ -37,6 +37,25 @@ function WorldLayout.hubMerchant(): Point
 	return { x = o[1] + m[1], y = o[2] + m[2], z = o[3] + m[3] }
 end
 
+-- The welcome arch over the path, 18 studs into the field from the spawn, and the two landmark
+-- meshes framing the spawn plaza (Config/WorldLayouts theme.gate), wide enough that the merchant
+-- and the Guardian stay in view.
+WorldLayout.ARCH_AHEAD = 18
+WorldLayout.LANDMARK_SIDE = 26
+
+function WorldLayout.arch(world: number): Point
+	local s = WorldLayout.spawn(world)
+	return { x = s.x, y = 0, z = s.z - WorldLayout.ARCH_AHEAD }
+end
+
+function WorldLayout.landmarks(world: number): { Point }
+	local a = WorldLayout.arch(world)
+	return {
+		{ x = a.x - WorldLayout.LANDMARK_SIDE, y = 0, z = a.z + 10 },
+		{ x = a.x + WorldLayout.LANDMARK_SIDE, y = 0, z = a.z + 10 },
+	}
+end
+
 function WorldLayout.guardian(world: number): Point
 	local o = WorldLayout.origin(world)
 	return { x = o.x + 40, y = 1, z = o.z + 100 }
@@ -148,7 +167,13 @@ function WorldLayout.decor(world: number): { Placement }
 		WorldLayout.merchant(world),
 		WorldLayout.guardian(world),
 		WorldLayout.lobbyPortal(world),
+		WorldLayout.arch(world),
 	}
+	if def.theme.gate then
+		for _, p in WorldLayout.landmarks(world) do
+			table.insert(spots, p)
+		end
+	end
 	local feature = def.theme.terrain.centre
 	local half = WorldLayouts.WORLD_SIZE / 2
 	local function clear(p: Point, radius: number): boolean

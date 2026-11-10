@@ -45,12 +45,24 @@ export type Ambience = {
 	size: number,
 }
 
+-- The landmark at the spawn (MASTER_FIX_PLAN Phase 12): a paved plaza, a welcome arch over the
+-- path into the field in the world's stone and accent, and two big copies of the world's signature
+-- mesh flanking it.
+export type Gate = {
+	landmark: string, -- Config/WorldProps key
+	scale: number,
+	stone: string, -- the arch and plaza colour
+	material: string, -- Enum.Material name
+	ring: string?, -- node rings and gate trim on light ground (default: white, the accent)
+}
+
 export type Theme = {
 	ground: string, -- UI colour of the world (picker fallback)
 	accent: string,
 	terrain: TerrainSpec,
 	decor: { Decor },
 	ambience: Ambience,
+	gate: Gate?,
 }
 
 export type Layout = {
@@ -125,6 +137,7 @@ local List: { Layout } = {
 			direction = "drift",
 			size = 0.4,
 		},
+		gate = { landmark = "w1_windmill", scale = 1.2, stone = "#9A6A40", material = "WoodPlanks" },
 	}, { { "item_greenleaf", "w1_greenleaf" }, { "item_oak_log", "w1_oak_log" } }, {
 		"item_meadow_crystal",
 		"w1_meadow_crystal",

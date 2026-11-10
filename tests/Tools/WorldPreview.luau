@@ -57,6 +57,13 @@ function WorldPreview.shot(worldId: number): (Vector3, Vector3)
 	return origin + Vector3.new(-40, 58, 118), origin + Vector3.new(20, 0, -70)
 end
 
+-- The arrival shot (Phase 12): from just behind the spawn, over the gate into the field.
+function WorldPreview.arrival(worldId: number): (Vector3, Vector3)
+	local o = WorldLayout.origin(worldId)
+	local origin = Vector3.new(o.x, o.y, o.z)
+	return origin + Vector3.new(-14, 30, 178), origin + Vector3.new(6, 0, 20)
+end
+
 function WorldPreview.show(worldId: number): { number }
 	areaFx().apply(if worldId == 0 then "hub" else `world{worldId}`, true)
 	local sky = Lighting:FindFirstChild("AreaSky")

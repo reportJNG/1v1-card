@@ -67,6 +67,14 @@ local function part(props: { [string]: any }, parent: Instance): Part
 	return p
 end
 
+-- The generated ground's surface height. Terrain snaps to 4-stud voxels, so the field filled up to
+-- y = 0 comes out at y = 2 (measured in every world, 2026-11-10; a build-time raycast can't see
+-- terrain written in the same frame). Node meshes, their rings and the gate stand on it.
+local GROUND_Y = 2
+local function groundY(_x: number, _z: number): number
+	return GROUND_Y
+end
+
 -- An invisible anchor part (prompts, labels, lights hang off it).
 local function anchor(name: string, at: Vector3, size: Vector3, parent: Instance): Part
 	return part({
@@ -174,6 +182,17 @@ function WorldBuilder.terrain(worldId: number, terrain: Terrain)
 		material(spec.path)
 	)
 	terrain:FillCylinder(CFrame.new(spawn.X, -2, spawn.Z + 10), 4, 26, material(spec.path))
+	-- Paths from the spawn to the merchant and the Guardian.
+	for _, target in { v3(WorldLayout.merchant(worldId)), v3(WorldLayout.guardian(worldId)) } do
+		local from = Vector3.new(spawn.X, -2, spawn.Z)
+		local to = Vector3.new(target.X, -2, target.Z)
+		local mid = (from + to) / 2
+		terrain:FillBlock(
+			CFrame.lookAt(mid, to),
+			Vector3.new(8, 4, (to - from).Magnitude),
+			material(spec.path)
+		)
+	end
 
 	-- The centre feature: a pond, a frozen lake, a lava pool or a lawn.
 	if spec.centre then
@@ -217,6 +236,93 @@ end
 
 ------------------------------------------------------------------------------------- the world
 
+-- The landmark at the spawn (Phase 12): a paved plaza with an accent ring, a welcome arch over the
+-- path into the field (lit pillars, a glowing trim) and two big copies of the world's signature mesh
+-- flanking it. Returns where the world's name sign goes (over the arch).
+local function buildGate(worldId: number, model: Model, accent: string, gate: WorldLayouts.Gate): Vector3
+	local folder = Instance.new("Folder")
+	folder.Name = "Gate"
+	folder.Parent = model
+	local s = v3(WorldLayout.spawn(worldId))
+	local a = v3(WorldLayout.arch(worldId))
+	local g = groundY(a.X, a.Z)
+	local stone = Color3.fromHex(gate.stone)
+	local mat = material(gate.material)
+	local glow = Color3.fromHex(gate.ring or accent)
+	part({
+		Name = "Plaza",
+		Shape = Enum.PartType.Cylinder,
+		Size = Vector3.new(0.4, 30, 30),
+		CFrame = CFrame.new(s.X, g + 0.1, s.Z + 2) * CFrame.Angles(0, 0, math.rad(90)),
+		Color = stone:Lerp(Color3.new(0, 0, 0), 0.15),
+		Material = mat,
+		CanCollide = true,
+	}, folder)
+	part({
+		Name = "PlazaRing",
+		Shape = Enum.PartType.Cylinder,
+		Size = Vector3.new(0.12, 31, 31),
+		CFrame = CFrame.new(s.X, g + 0.14, s.Z + 2) * CFrame.Angles(0, 0, math.rad(90)),
+		Color = glow,
+		Material = Enum.Material.Neon,
+		Transparency = 0.35,
+		CanCollide = false,
+	}, folder)
+	for _, side in { -1, 1 } do
+		local pillar = part({
+			Name = "Pillar",
+			Size = Vector3.new(3, 16, 3),
+			Position = Vector3.new(a.X + side * 10, g + 8, a.Z),
+			Color = stone,
+			Material = mat,
+			CanCollide = true,
+		}, folder)
+		light(pillar, accent, 18, 1.6)
+		part({
+			Name = "PillarCap",
+			Size = Vector3.new(3.8, 1, 3.8),
+			Position = Vector3.new(a.X + side * 10, g + 0.5, a.Z),
+			Color = stone:Lerp(Color3.new(0, 0, 0), 0.25),
+			Material = mat,
+			CanCollide = true,
+		}, folder)
+	end
+	part({
+		Name = "Lintel",
+		Size = Vector3.new(26, 2.4, 3.6),
+		Position = Vector3.new(a.X, g + 17.2, a.Z),
+		Color = stone,
+		Material = mat,
+		CanCollide = true,
+	}, folder)
+	part({
+		Name = "Trim",
+		Size = Vector3.new(26.2, 0.5, 3.8),
+		Position = Vector3.new(a.X, g + 15.8, a.Z),
+		Color = glow,
+		Material = Enum.Material.Neon,
+		CanCollide = false,
+	}, folder)
+	-- the two landmark meshes stream in with the rest of the world's meshes
+	local spots = WorldLayout.landmarks(worldId)
+	task.spawn(function()
+		for i, p in spots do
+			local m = prop(
+				gate.landmark,
+				v3(p) + Vector3.new(0, g, 0),
+				if i == 1 then 20 else -20,
+				gate.scale,
+				folder
+			)
+			if m then
+				m.Name = `Landmark{i}`
+				m.CanCollide = true
+			end
+		end
+	end)
+	return Vector3.new(a.X, g + 22, a.Z)
+end
+
 local function buildSpawn(worldId: number, model: Model, accent: string)
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name = "Spawn"
@@ -232,7 +338,12 @@ local function buildSpawn(worldId: number, model: Model, accent: string)
 	spawn:SetAttribute("Placeholder", true)
 	spawn.Parent = model
 	local world = Worlds.ById[worldId]
-	local sign = anchor("WorldSign", spawn.Position + Vector3.new(0, 10, -40), Vector3.one, model)
+	local gate = WorldLayouts.ByWorld[worldId].theme.gate
+	local signAt = spawn.Position + Vector3.new(0, 10, -40)
+	if gate then
+		signAt = buildGate(worldId, model, accent, gate)
+	end
+	local sign = anchor("WorldSign", signAt, Vector3.one, model)
 	label(sign, {
 		name = "WorldName",
 		text = string.upper(world.displayName),
@@ -244,6 +355,8 @@ local function buildSpawn(worldId: number, model: Model, accent: string)
 end
 
 local function buildNodes(worldId: number, farm: Folder, accent: string): { () -> () }
+	local gate = WorldLayouts.ByWorld[worldId].theme.gate
+	local ringColour = if gate and gate.ring then gate.ring else "#F4F8FF"
 	local nodes = Instance.new("Folder")
 	nodes.Name = "Nodes"
 	nodes.Parent = farm
@@ -259,6 +372,23 @@ local function buildNodes(worldId: number, farm: Folder, accent: string): { () -
 		if rare then
 			light(p, accent, 14, 1.4)
 		end
+		-- a glowing ring on the ground, so a node reads from across the field (gold for rare ones)
+		part({
+			Name = "Ring",
+			Shape = Enum.PartType.Cylinder,
+			Size = Vector3.new(0.2, 8, 8),
+			CFrame = CFrame.new(
+				node.position.x,
+				groundY(node.position.x, node.position.z) + 0.12,
+				node.position.z
+			) * CFrame.Angles(0, 0, math.rad(90)),
+			Color = if rare then Color3.fromHex("#FFC54B") else Color3.fromHex(ringColour),
+			Material = Enum.Material.Neon,
+			Transparency = 0.25,
+			CanQuery = false,
+			CanCollide = false,
+			CastShadow = false,
+		}, p)
 		-- The node's name floats over it; the client hides it while the node is spent for that player.
 		label(p, {
 			name = "NodeLabel",
@@ -267,10 +397,10 @@ local function buildNodes(worldId: number, farm: Folder, accent: string): { () -
 			studs = 1.5,
 			offset = Vector3.new(0, if rare then 5.6 else 4.4, 0),
 		}, Billboard.Kind.node)
-		local base = Vector3.new(node.position.x, 0, node.position.z)
+		local base = Vector3.new(node.position.x, groundY(node.position.x, node.position.z), node.position.z)
 		local rot = (#visuals * 47) % 360
 		table.insert(visuals, function()
-			local m = prop(node.resource.model, base, rot, if rare then 1.15 else 1, p)
+			local m = prop(node.resource.model, base, rot, if rare then 1.9 else 1.6, p)
 			if m then
 				m.Name = "Visual"
 				m.CanCollide = false
