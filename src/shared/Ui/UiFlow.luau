@@ -129,6 +129,10 @@ function UiFlow.send(f: Flow, event: Event, arg: string?): boolean
 			f.panel = nil
 		elseif f.top == "Result" then
 			f.top = "None"
+		elseif f.top == "Hatching" and f.resume == "Panel" then
+			-- the panel under a hatch was closed: the hatch then returns to the game, not to a panel
+			-- that no longer exists (found in the Phase 13 pass: a blurred screen with no way out)
+			f.resume, f.resumePanel = "None", nil
 		end
 	elseif event == "hatchStart" then
 		if f.top == "None" or f.top == "Panel" then

@@ -85,6 +85,18 @@ return function()
 			expect(modal.blur).to.equal(true)
 		end)
 
+		it("returns to the game, not a closed panel, when the panel under a hatch was closed", function()
+			local f = playing()
+			UiFlow.send(f, "open", "Shop")
+			UiFlow.send(f, "hatchStart")
+			UiFlow.send(f, "close") -- the shop under the hatch closes
+			expect(UiFlow.state(f)).to.equal("Hatching")
+			UiFlow.send(f, "hatchEnd")
+			expect(UiFlow.state(f)).to.equal("Playing")
+			expect(f.panel).to.equal(nil)
+			expect(UiFlow.view(f).blur).to.equal(false)
+		end)
+
 		it("hides the hub HUD completely during hatching, battles and results", function()
 			local f = playing()
 			UiFlow.send(f, "open", "Shop")

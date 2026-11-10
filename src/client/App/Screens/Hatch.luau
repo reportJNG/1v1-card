@@ -243,6 +243,18 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 		})
 		tween(bg, 0.4, { BackgroundTransparency = 0.12 })
 		local stage = Ui.frame({ Name = "HatchStage", BackgroundTransparency = 1, Parent = layer })
+		-- the stage takes every click, so nothing under the hatch (the shop's X) can be pressed
+		local blocker: TextButton = Ui.new("TextButton", {
+			Name = "InputBlocker",
+			Text = "",
+			AutoButtonColor = false,
+			BackgroundTransparency = 1,
+			Position = UDim2.fromScale(-0.5, -0.5),
+			Size = UDim2.fromScale(2, 2),
+			ZIndex = 0,
+			Parent = stage,
+		})
+		blocker.Modal = false
 		local rays = Ui.image("light_rays", {
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			Position = UDim2.fromScale(0.5, 0.46),
@@ -293,7 +305,7 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 
 		local skipped = false
 		local token = 0
-		local skipButton = Ui.button("Skip", "ghost", function()
+		local skipButton = Ui.button("SKIP", "ghost", function()
 			skipped = true
 		end, {
 			Name = "Skip",
@@ -303,7 +315,7 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 			ZIndex = 12,
 		})
 		skipButton.instance.Parent = stage
-		local doneButton = Ui.button("Continue", "primary", function()
+		local doneButton = Ui.button("CONTINUE", "primary", function()
 			handle.destroy()
 		end, {
 			Name = "Continue",
@@ -314,7 +326,7 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 			ZIndex = 12,
 		})
 		doneButton.instance.Parent = stage
-		local stopButton = Ui.button("Stop auto-open", "secondary", function()
+		local stopButton = Ui.button("STOP AUTO", "secondary", function()
 			Hatch.auto = false
 		end, {
 			Name = "StopAuto",
@@ -325,7 +337,7 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 			ZIndex = 12,
 		})
 		stopButton.instance.Parent = stage
-		local againButton = Ui.button("Open Again", "secondary", function() end, {
+		local againButton = Ui.button("OPEN AGAIN", "secondary", function() end, {
 			Name = "OpenAgain",
 			AnchorPoint = Vector2.new(1, 1),
 			Position = UDim2.new(0.5, -132, 1, -34),
@@ -334,7 +346,7 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 			ZIndex = 12,
 		})
 		againButton.instance.Parent = stage
-		local equipButton = Ui.button("Equip", "secondary", function() end, {
+		local equipButton = Ui.button("EQUIP", "secondary", function() end, {
 			Name = "Equip",
 			AnchorPoint = Vector2.new(0, 1),
 			Position = UDim2.new(0.5, 132, 1, -34),
@@ -343,6 +355,14 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 			ZIndex = 12,
 		})
 		equipButton.instance.Parent = stage
+		-- big display labels on every button (UI rules: no small plain text)
+		for _, b in { skipButton, doneButton, stopButton, againButton, equipButton } do
+			b.label.FontFace = Theme.Face.Display
+			local cap = b.label:FindFirstChildOfClass("UITextSizeConstraint")
+			if cap then
+				cap.MaxTextSize = 26
+			end
+		end
 		-- Tap anywhere to skip to the cards.
 		local tapSkip = Ui.new("TextButton", {
 			Name = "TapSkip",
@@ -626,7 +646,7 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 					if faceCard then
 						faceCard.Size = UDim2.fromOffset(size.X, size.Y)
 					end
-					label.Visible = not small
+					label.Visible = false
 					sticker.Visible = true
 				end
 				if skipped then
@@ -655,7 +675,7 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 				end
 				sil.Visible = false
 				face.Visible = true
-				label.Visible = not small
+				label.Visible = false
 				if faceCard and not skipped then
 					faceCard.Size = UDim2.fromOffset(2, size.Y)
 					tween(faceCard, 0.24, { Size = UDim2.fromOffset(size.X, size.Y) }, Enum.EasingStyle.Back)

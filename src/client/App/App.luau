@@ -261,6 +261,7 @@ function App.start(deps: Deps): Ctx
 			dropPanel(true)
 			apply()
 		elseif current then
+			UiFlow.send(flow, "close") -- under a hatch: it must not return to this panel
 			dropPanel(false)
 		end
 	end
