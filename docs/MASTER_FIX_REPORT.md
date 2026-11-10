@@ -21,7 +21,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 6 | Egg Shop | done, waiting for art (Sheets A, B; C if Option 2) | `ui(6)` | grid 9 · featured 8 · text 8 · buttons 8 · painted 7 until A/B (`compare_eggshop.png`) |
 | 7 | Merchant + every other panel | done, waiting for art (merchant kit, Sheet A) | `ui(7)` | merchant: layout 9 · text 9 · icons 8 · space 8 · buttons 8 · painted 7; panels: text 8 · icons 8 · no web boxes 8 · painted 7 (`compare_merchant.png`, `compare_panels.png`) |
 | 8 | Deck Builder, Families, Inventory | done, waiting for art (Sheets A, B, F1, E4) | `ui(8)` | deck: layout 8 · cards 8 · text 8 · motion 8; inventory: layout 8 · cards 8 · text 8 · inspect 8; painted 7 until the sheets (`compare_deck.png`, `compare_families.png`, `compare_inventory.png`) |
-| 9 | Battle screen + 5 arenas | todo | | |
+| 9 | Battle screen + 5 arenas | done, waiting for art (H1, H2) | `ui(9)` | bars 9 · timer 8 · action cards 8 · clean 9 · motion 8 · painted 7 until H1/H2 (`compare_battle.png`, `docs/screens/arenas`) |
 | 10 | Battle result | todo | | |
 | 11 | Lobby full upgrade | todo | | |
 | 12 | Worlds 1-10 upgrade | todo | | |
@@ -248,6 +248,60 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   (MERGE only when there are spares). The grid keeps a thin 3 px handle (60 cards a page).
 - **Rename follow-up:** Solaris's passive read "heal her"; it is neutral now.
 - Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
+
+### Phase 9 (2026-11-10)
+- **Battle screen rebuilt to target 18** (`Screens/Battle`): two long HP bars meeting at a hexagon
+  timer medallion (ring drains, last 3 s red with a tick and a pulse) and a ROUND plate; under each
+  bar only the name with status icons (burn, chill, weaken; they pop when applied), the italic
+  rarity badge, an HP sub-bar with "hp / max" and the energy diamonds. Bars drain from the medallion
+  side with a white chip trail and a small shake, in step with each hit as the arena plays it (not
+  when the packet arrives).
+- **Action tray:** three tall cards (ATTACK red sword, DEFEND blue shield, SPECIAL (cost) purple with
+  the gold Lightning bolt) on a glass tray with the energy pips toward the Special; the Special is
+  dimmed with a lock without enough energy. Pick: the card lifts and glows, the others dim, LOCKED IN
+  stamps; the opponent shows a pulsing "?" card until the reveal; both picks then flip in under the
+  medallion and a gold 1ST tag (no percentage) marks who acts first.
+- **Removed:** the battle log, the "You act first: 20%" pill, usernames, trophies, families, KO lists
+  and ability names on screen, and the big red Forfeit (now a small dark FORFEIT with a confirm,
+  "Forfeit counts as a loss").
+- **Moments:** the arena intro (camera sweep around the map, the map name banner, fighters drop onto
+  their pads with an impact ring, the VS badge slams in; tap to skip, ~2.5 s), ROUND N, big damage
+  numbers (CRIT! in gold over red, green +heal), PARRY! with a flash, Special camera cut + aura burst
+  + screen flash, K.O.! with a slow-motion beat after which the fighter shatters into its aura
+  particles; the KO replacement picker waits until the knock-out has played. Reduced motion keeps
+  the information and drops the sweep, flashes and shakes.
+- **Fighters:** standees with a glowing family-colour aura (particles and light) on light pads that
+  take the family colour (the target's aura treatment; real models come from the art pipeline).
+- **5 arenas** (`Config/Arenas`, `Shared/Domain/ArenaLayout`, `Shared/Art/ArenaKit`,
+  `Server/World/ArenaBuilder`): Sakura Courtyard, Frozen Shrine, Volcano Forge, Celestial Isle,
+  Storm Rooftop. One shared core (40-stud platform, rim and inner ring, two light pads, spawn and
+  camera points) and per-map dressing, lighting preset (`Config/Lighting arena_*`), sky, particles
+  and music (`Config/Sounds music_arena_*`, APMOfficial); Celestial's light rings turn, Storm Rooftop
+  has lightning flashes with thunder (PSE). The server picks the map from the match seed and sends it
+  in `Battle.Start`, so both players and a reconnect get the same map; the area's lighting and music
+  come back after the battle.
+- **Deviations, logged:** the templates live in `ReplicatedStorage.Arenas` rather than
+  `ServerStorage`, because each client builds its own stage (a hub server can host several local
+  battles at once); they're built on every server, including battle servers. The dressing reuses the
+  meshes already generated for the hub and worlds (no new uploads, no Creator Store models), so no
+  review gate was needed; Blender / `generate_scene` hero props are a later art pass through the
+  gate. The old `HubLayout.StageProps` backdrop is replaced by the arenas.
+- **Budget:** largest map (Storm Rooftop) is 118 parts including a 46-tower skyline; one ambient
+  emitter per map (rate 9-60) plus one aura emitter per fighter.
+- **The result screen** was moved unchanged into `Screens/BattleResult` for Phase 10.
+- Tests: `Arenas.spec` (five maps; same map for the same seed; all five maps used, each 15-25% over
+  5,000 seeds; identical core in every map; deterministic skyline, no prop on the platform; config
+  validates; both players get the same map in the start packet) and `ConfigValidator` arena rules.
+  StyLua, Selene, luau-lsp clean; **315 passed, 0 failed**.
+- **Verified in Studio** with the real screen and real MatchRunner rounds (`UiPreview.battle`) in all
+  five maps: intro, picking, reveal, damage, K.O. (`docs/screens/arenas`), and in **Play**: a real
+  Guardian Trial (Session.Play, Trial.Start) where the server picked Sakura Courtyard from the seed,
+  `Battle.Start` carried it, the client cloned the server's template with its 13 meshes, and a click
+  on ATTACK locked in, revealed and played the round (`play_trial_sakura.png`, `play_reveal.png`).
+  Fixes from these runs: the Special icon (the pack's "energy" icon is a green gem; now the Lightning
+  bolt), a small dark FORFEIT, the 1ST tag, reveal tiles and ROUND word moved off the plate, the KO
+  picker waits for the knock-out, Celestial's rock poking through the floor, a readable Storm skyline.
+  **Not yet verified:** a phone-size viewport (the Phase 13 final pass covers it).
 
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each

@@ -285,4 +285,89 @@ Presets.world10 = world(
 	)
 )
 
+-- One preset per battle arena (Config/Arenas, BAD_GUI_8 section 5): night and focused, with the
+-- fighters lit by the stage's key lights. Skies reuse the hub's and the worlds' drawn skyboxes.
+local function arena(
+	clock: number,
+	brightness: number,
+	ambient: { string }, -- { Ambient, OutdoorAmbient }
+	atmosphere: { any }, -- { density, color, decay, haze, glare }
+	color: { any }, -- { contrast, saturation, tint, exposure, brightness }
+	bloom: number,
+	arenaSky: any
+): Preset
+	return {
+		clockTime = clock,
+		brightness = brightness,
+		exposure = color[4] or 0,
+		ambient = ambient[1],
+		outdoorAmbient = ambient[2],
+		envDiffuse = 0.45,
+		envSpecular = 0.8,
+		atmosphere = {
+			density = atmosphere[1],
+			offset = 0.1,
+			color = atmosphere[2],
+			decay = atmosphere[3],
+			haze = atmosphere[4],
+			glare = atmosphere[5],
+		},
+		bloom = { intensity = bloom, size = 30, threshold = 1.2 },
+		color = { brightness = color[5] or 0, contrast = color[1], saturation = color[2], tint = color[3] },
+		sunRays = { intensity = 0, spread = 0 },
+		sky = arenaSky,
+	}
+end
+
+-- purple night, warm lantern pools
+Presets.arena_sakura = arena(
+	20.5,
+	2,
+	{ "#3A2F66", "#4A3C8A" },
+	{ 0.4, "#3A2470", "#140A2E", 2, 0 },
+	{ 0.18, 0.22, "#FFF4FA", 0.4 },
+	1,
+	HUB_SKY
+)
+-- cold blue glacier night under the aurora
+Presets.arena_frozen = arena(
+	21,
+	2.2,
+	{ "#3E5A86", "#6A8CC0" },
+	{ 0.3, "#9CC8F0", "#2A4A7A", 1.4, 0.2 },
+	{ 0.16, 0.12, "#EAF6FF", 0.3 },
+	0.9,
+	Presets.world4.sky
+)
+-- red-orange underglow from the lava
+Presets.arena_volcano = arena(
+	19,
+	1.8,
+	{ "#5A2A20", "#8A3A24" },
+	{ 0.42, "#8A3A20", "#2A0E06", 1.8, 0.2 },
+	{ 0.2, 0.2, "#FFF0E2", 0.3 },
+	1.1,
+	Presets.world5.sky
+)
+-- golden sunset over the clouds
+Presets.arena_celestial = arena(
+	17.6,
+	2.6,
+	{ "#7A6A58", "#C0A27A" },
+	{ 0.24, "#FFD9A0", "#C07A50", 1, 0.5 },
+	{ 0.12, 0.2, "#FFF4E0", 0.1, 0.02 },
+	0.8,
+	Presets.world10.sky
+)
+-- dark blue storm night over the city
+Presets.arena_storm = arena(
+	0,
+	1.6,
+	{ "#2A3050", "#3A4470" },
+	{ 0.36, "#2A3A6A", "#0A0E1E", 1.6, 0 },
+	{ 0.2, 0.1, "#E6EEFF", 0.45 },
+	1.1,
+	Presets.world9.sky
+)
+
 return table.freeze(Presets)

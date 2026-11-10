@@ -154,20 +154,6 @@ local Pieces: { Piece } = {
 	{ model = "sky_island", at = { 280, 50, -40 }, rotY = 15, scale = 2.2 },
 }
 
--- The battle stage backdrop (App/BattleStage clones it behind the stage), studs from the
--- stage centre; fighters stand at x = -11 and x = +11, the camera looks from +Z.
-local StageProps: { Piece } = {
-	{ model = "torii", at = { 0, 0, -26 }, scale = 1.3 },
-	{ model = "pagoda", at = { -46, 0, -62 }, rotY = 20, scale = 1.2 },
-	{ model = "pagoda", at = { 48, 0, -66 }, rotY = -20, scale = 1.05 },
-	{ model = "cherry_tree", at = { -34, 0, -32 }, rotY = 40, scale = 0.9 },
-	{ model = "cherry_tree", at = { 36, 0, -30 }, rotY = 220, scale = 0.85 },
-	lantern(-30, -18),
-	lantern(30, -18),
-	{ model = "sky_island", at = { -60, 40, -130 }, rotY = 60, scale = 2.4 },
-	{ model = "sky_island", at = { 70, 60, -150 }, rotY = 200, scale = 2.8 },
-}
-
 -- Interactive spots. Prompts only open a screen on the client (Play, Worlds, Shop); every
 -- action behind them goes through the normal server-checked remotes.
 local Features: { [string]: Feature } = {
@@ -197,6 +183,5 @@ return table.freeze({
 	PORTAL_CORE_RADIUS = 9,
 	Models = table.freeze(Models),
 	Pieces = table.freeze(Pieces),
-	StageProps = table.freeze(StageProps),
 	Features = table.freeze(Features),
 })

@@ -252,7 +252,6 @@ function HubBuilder.build(parent: Instance): Model
 		for i, piece in HubLayout.Pieces do
 			place(piece, i, origin, models)
 		end
-		HubBuilder.buildStageProps()
 	end)
 
 	-- Interactive features.
@@ -292,23 +291,6 @@ function HubBuilder.build(parent: Instance): Model
 
 	hub.Parent = parent
 	return hub
-end
-
--- The battle stage backdrop, shared through ReplicatedStorage (clients clone it locally around
--- their own stage). Its pivot is the stage centre.
-function HubBuilder.buildStageProps(): Model
-	local old = ReplicatedStorage:FindFirstChild("StageProps")
-	if old then
-		old:Destroy()
-	end
-	local props = Instance.new("Model")
-	props.Name = "StageProps"
-	for i, piece in HubLayout.StageProps do
-		place(piece, i, Vector3.zero, props)
-	end
-	props.WorldPivot = CFrame.new()
-	props.Parent = ReplicatedStorage
-	return props
 end
 
 return HubBuilder

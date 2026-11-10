@@ -91,6 +91,14 @@ its 3 resource node types (`w<n>_<item>`). Every mesh id, texture id, native siz
 description is in `src/shared/Config/WorldProps.luau`, which is the list of record. They contain no
 scripts. The worlds reuse the hub's `portal` mesh for the Back to Lobby portal.
 
+## Battle arenas (MASTER_FIX_PLAN Phase 9, 2026-11-10)
+
+The 5 arena maps (`Config/Arenas`) reuse only meshes this project already generated for the hub and
+the worlds (`Config/HubLayout.Models`, `Config/WorldProps`), plus simple parts, the existing skies
+(`Config/Lighting`) and the `petal` / `sparkle` particle images. **No new images or meshes were
+uploaded and no Creator Store models were used.** Hero props from Blender / `generate_scene` are a
+later art pass and go through the review gate first.
+
 ## Creator Store assets
 
 | Asset id | Name | Creator | Type | Used for | Scripts removed | License check |
@@ -139,6 +147,12 @@ scripts. The worlds reuse the hub's `portal` mesh for the Back to Lobby portal.
 | `parry` | 9119072660 | Shield Clang As Hit Metal Sword Hubcap 1 | ProSoundEffects | SFX |
 | `ko` | 9113225986 | Axe Impact Giant Thuddy Hits On Wood Floor 5 | ProSoundEffects | SFX |
 | `defeat` | 125909120236588 | Mounting Consequences StingA | APMOfficial | SFX |
+| `music_arena_sakura` | 9038221558 | Tairitsu | APMOfficial | Arena: Sakura Courtyard (taiko hybrid) |
+| `music_arena_frozen` | 9039666736 | Magical Night (b) | APMOfficial | Arena: Frozen Shrine (same as world 4) |
+| `music_arena_volcano` | 1839685565 | Light The Fire | APMOfficial | Arena: Volcano Forge (same as world 5) |
+| `music_arena_celestial` | 9038610306 | A Heroic Legend No Choir | APMOfficial | Arena: Celestial Isle |
+| `music_arena_storm` | 9046674561 | Taiko Thunderstorm--ALT. 1 | APMOfficial | Arena: Storm Rooftop |
+| `thunder` | 9120016256 | Thunder Cracks Big Rumbling Blasts Booming 3 | ProSoundEffects | Storm Rooftop lightning |
 
 The world tracks were picked by title and description (Claude can't hear audio); the owner reviews
 them (`docs/WAITING_ON_YOU.md`). The SFX were picked the same way (title, description, length);

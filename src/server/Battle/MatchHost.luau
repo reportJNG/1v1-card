@@ -9,6 +9,7 @@ local Types = require(Shared.Types)
 local Result = require(Shared.Domain.Result)
 local BattleRules = require(Shared.Battle.BattleRules)
 local Prng = require(Shared.Battle.Prng)
+local ArenaLayout = require(Shared.Domain.ArenaLayout)
 local MatchRunner = require(script.Parent.MatchRunner)
 local BattleAI = require(script.Parent.BattleAI)
 
@@ -69,6 +70,8 @@ local function startPacket(live: Live, side: number): { [string]: any }
 		matchId = live.record.matchId,
 		mode = live.record.mode,
 		worldId = live.record.worldId,
+		-- the arena map, from the match seed: the same for both players and on a reconnect
+		arena = ArenaLayout.pick(live.record.seed),
 		you = side,
 		seats = seats,
 		view = live.runner:view(),

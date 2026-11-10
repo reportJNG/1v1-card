@@ -48,6 +48,7 @@ local Sounds: { [string]: Sound } = {
 	hit_special = { id = "rbxassetid://9125404320", volume = 0.6, kind = "sfx" }, -- PSE "Boom Impact Deep Distant Thumping Hits Booming 36"
 	parry = { id = "rbxassetid://9119072660", volume = 0.6, kind = "sfx" }, -- PSE "Shield Clang As Hit Metal Sword Hubcap 1"
 	ko = { id = "rbxassetid://9113225986", volume = 0.7, kind = "sfx" }, -- PSE "Axe Impact Giant Thuddy Hits On Wood Floor 5"
+	thunder = { id = "rbxassetid://9120016256", volume = 0.45, kind = "sfx" }, -- PSE "Thunder Cracks Big Rumbling Blasts Booming 3" (Storm Rooftop)
 	victory = { id = "rbxassetid://1844384292", volume = 0.5, kind = "sfx" }, -- APM "Sports Fanfare"
 	defeat = { id = "rbxassetid://125909120236588", volume = 0.5, kind = "sfx" }, -- APM "Mounting Consequences StingA"
 	-- Music
@@ -66,6 +67,13 @@ local Sounds: { [string]: Sound } = {
 	music_world8 = { id = "rbxassetid://1838829561", volume = 0.25, kind = "music", looped = true }, -- APM "Mysterious Gate"
 	music_world9 = { id = "rbxassetid://9044407121", volume = 0.25, kind = "music", looped = true }, -- APM "Back to the Shadows Underscore"
 	music_world10 = { id = "rbxassetid://1840939025", volume = 0.25, kind = "music", looped = true }, -- APM "Ideal World (a)"
+	-- One track per battle arena (Config/Arenas). APMOfficial, picked by title and description;
+	-- the owner should listen and confirm (docs/WAITING_ON_YOU.md).
+	music_arena_sakura = { id = "rbxassetid://9038221558", volume = 0.25, kind = "music", looped = true }, -- APM "Tairitsu" (taiko hybrid)
+	music_arena_frozen = { id = "rbxassetid://9039666736", volume = 0.25, kind = "music", looped = true }, -- APM "Magical Night (b)"
+	music_arena_volcano = { id = "rbxassetid://1839685565", volume = 0.25, kind = "music", looped = true }, -- APM "Light The Fire"
+	music_arena_celestial = { id = "rbxassetid://9038610306", volume = 0.25, kind = "music", looped = true }, -- APM "A Heroic Legend No Choir"
+	music_arena_storm = { id = "rbxassetid://9046674561", volume = 0.25, kind = "music", looped = true }, -- APM "Taiko Thunderstorm--ALT. 1"
 }
 
 return table.freeze(Sounds)

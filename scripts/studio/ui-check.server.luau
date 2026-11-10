@@ -232,6 +232,7 @@ check("Battle", function()
 	local b = Battle.open(ctx, {
 		matchId = "ui",
 		mode = "Ranked",
+		arena = "sakura",
 		you = 1,
 		seats = { { name = "You", trophies = 760 }, { name = "Kestrel_88", trophies = 790 } },
 		view = runner:view(),

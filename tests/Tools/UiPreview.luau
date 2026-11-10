@@ -173,8 +173,9 @@ function Preview.hatch(golden: boolean?)
 	require(Screens.Hatch).show(ctx, { c }, Eggs.ById.egg_basic, golden == true)
 end
 
--- A real battle from MatchRunner: start and `rounds` resolved rounds. Returns the handle and runner.
-function Preview.battle(rounds: number?): (any, any)
+-- A real battle from MatchRunner: start and `rounds` resolved rounds, in `arena` (a Config/Arenas
+-- id; default Sakura Courtyard). Returns the handle and runner.
+function Preview.battle(rounds: number?, arena: string?): (any, any)
 	local ctx = Preview.app(true)
 	local s = state :: any
 	local NOW = Preview.NOW
@@ -200,6 +201,7 @@ function Preview.battle(rounds: number?): (any, any)
 	local b = Battle.open(ctx, {
 		matchId = "ui",
 		mode = "Ranked",
+		arena = arena or "sakura",
 		you = 1,
 		seats = { { name = "You", trophies = 760 }, { name = "Kestrel_88", trophies = 790 } },
 		view = runner:view(),

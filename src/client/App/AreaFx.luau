@@ -1,7 +1,8 @@
 --!strict
 -- Client-side area presentation: applies the Config/Lighting preset and the music for where the
 -- player is (World attribute 0 = hub, n = world n with preset "world<n>" and music
--- "music_world<n>", or "arena" while a battle screen is open) and animates the portal swirls in
+-- "music_world<n>", or the battle arena's own preset and music while a battle screen is open:
+-- Config/Arenas) and animates the portal swirls in
 -- the hub and in every world. Purely visual; nothing here affects game state.
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
@@ -9,6 +10,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Presets = require(Shared.Config.Lighting)
+local Arenas = require(Shared.Config.Arenas)
 local Ui = require(script.Parent.Ui)
 local Sounds = require(Shared.Config.Sounds)
 local SoundService = game:GetService("SoundService")
@@ -99,6 +101,7 @@ function AreaFx.apply(name: string, instant: boolean?)
 end
 
 local battleOpen = false
+local battleArena: string? = nil
 local musicOn = true
 local musicVolume = 0.8 -- the player's music volume (Settings, 0-1)
 local track: Sound? = nil
@@ -174,8 +177,9 @@ local function refresh()
 		AreaFx.apply("hub")
 		playMusic("music_menu")
 	elseif battleOpen then
-		AreaFx.apply("arena")
-		playMusic("music_battle")
+		local arena = battleArena and Arenas.ById[battleArena]
+		AreaFx.apply(if arena and Presets[arena.lighting] then arena.lighting else "arena")
+		playMusic(if arena and Sounds[arena.music] then arena.music else "music_battle")
 	elseif world == 0 or world == nil then
 		AreaFx.apply("hub")
 		playMusic("music_hub")
@@ -186,8 +190,10 @@ local function refresh()
 	end
 end
 
-function AreaFx.setBattle(open: boolean)
+-- While a battle is open the arena's preset and music play; the area's come back after.
+function AreaFx.setBattle(open: boolean, arena: string?)
 	battleOpen = open
+	battleArena = if open then arena else nil
 	refresh()
 end
 
@@ -225,7 +231,8 @@ function AreaFx.start(ctx: any)
 				refresh()
 			end
 		elseif what == "battle" then
-			AreaFx.setBattle(ctx.state.battle ~= nil)
+			local battle = ctx.state.battle
+			AreaFx.setBattle(battle ~= nil, battle and battle.arena)
 		elseif what == "profile" then
 			-- The player's audio settings (saved on the server, Settings.Set).
 			local settings = ctx.state.view and ctx.state.view.settings

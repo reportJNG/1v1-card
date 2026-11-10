@@ -24,6 +24,9 @@ local UiKit = require(Config.UiKit)
 local WorldProps = require(Config.WorldProps)
 local Lighting = require(Config.Lighting)
 local Roster = require(Config.Roster)
+local Arenas = require(Config.Arenas)
+local Sounds = require(Config.Sounds)
+local ArenaLayout = require(script.Parent.ArenaLayout)
 local Odds = require(script.Parent.Odds)
 local ItemArt = require(script.Parent.ItemArt)
 
@@ -533,6 +536,45 @@ function ConfigValidator.validate(options: { release: boolean? }?): Report
 				if Characters.ById[spec.characterId] == nil then
 					err(`Guardians: world {world.id} uses unknown character {spec.characterId}`)
 				end
+			end
+		end
+	end
+
+	-- Battle arenas (BAD_GUI_8 section 5): five maps, each with its preset, music and particles,
+	-- and only meshes the game already has.
+	if #Arenas.List ~= 5 then
+		err(`Arenas: expected 5 maps, found {#Arenas.List}`)
+	end
+	local arenaIds: { [string]: boolean } = {}
+	for _, arena in Arenas.List do
+		if arenaIds[arena.id] then
+			err(`Arenas: duplicate id {arena.id}`)
+		end
+		arenaIds[arena.id] = true
+		if type(arena.weight) ~= "number" or arena.weight <= 0 then
+			err(`Arenas: {arena.id} needs a positive weight`)
+		end
+		if Lighting[arena.lighting] == nil then
+			err(`Arenas: {arena.id} uses unknown lighting preset {arena.lighting}`)
+		end
+		local music = Sounds[arena.music]
+		if music == nil or music.kind ~= "music" then
+			err(`Arenas: {arena.id} uses unknown music slot {arena.music}`)
+		end
+		if UiAssets[arena.particles.texture] == nil then
+			err(`Arenas: {arena.id} particles use unknown image slot {arena.particles.texture}`)
+		end
+		if arena.particles.rate > 80 then
+			err(`Arenas: {arena.id} particle rate {arena.particles.rate} is over the budget (80)`)
+		end
+		for _, piece in arena.dressing do
+			if ArenaLayout.modelDef(piece.model) == nil then
+				err(`Arenas: {arena.id} dressing uses unknown model {piece.model}`)
+			end
+		end
+		for _, fx in arena.fx do
+			if fx ~= "lightning" and fx ~= "spin" then
+				err(`Arenas: {arena.id} has unknown effect {fx}`)
 			end
 		end
 	end

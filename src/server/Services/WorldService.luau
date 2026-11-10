@@ -17,6 +17,7 @@ local Server = script.Parent.Parent
 local Router = require(Server:WaitForChild("Net").Router)
 local WorldBuilder = require(Server:WaitForChild("World").WorldBuilder)
 local HubBuilder = require(Server:WaitForChild("World").HubBuilder)
+local ArenaBuilder = require(Server:WaitForChild("World").ArenaBuilder)
 local PlayerDataService = require(script.Parent.PlayerDataService)
 local Telemetry = require(script.Parent.Telemetry)
 
@@ -64,6 +65,8 @@ function WorldService.positionOf(player: Player): WorldLayout.Point?
 end
 
 function WorldService.init()
+	-- The battle arena templates, on every server (battles run on hub and battle servers).
+	ArenaBuilder.buildAll()
 	if isBattleServer() then
 		return
 	end
