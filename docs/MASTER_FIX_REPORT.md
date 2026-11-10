@@ -18,7 +18,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 3b | Combined icon set (three packs, licences, icon_map.json) | done, waiting for owner (OK on `docs/review/icons_final.png`) | `ui(3b)` | n/a (scored with the screens that use them) |
 | 4 | In-game HUD | done, waiting for art (E1-E4) | `ui(4)` | clean 9 · buttons 9 · text 8 · painted 7 until E1-E4 (`compare_hud.png`) |
 | 5 | Main menu | done, waiting for art (D1-D4) | `ui(5)` | layout 8 · hero 8 · buttons 8 · text 9 · motion 8 · background 7 / logo 7 until D1/D2 (`compare_mainmenu.png`) |
-| 6 | Egg Shop | todo | | |
+| 6 | Egg Shop | done, waiting for art (Sheets A, B; C if Option 2) | `ui(6)` | grid 9 · featured 8 · text 8 · buttons 8 · painted 7 until A/B (`compare_eggshop.png`) |
 | 7 | Merchant + every other panel | todo | | |
 | 8 | Deck Builder, Families, Inventory | todo | | |
 | 9 | Battle screen + 5 arenas | todo | | |
@@ -187,6 +187,25 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   strokes, bobbing. **PLAY** (gold, crossed swords both sides, breathing) and **SHOP** (purple, egg
   icon until the cart icon is approved).
 - Not checked here: 750 × 1334 portrait (Phase 13).
+- Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
+
+### Phase 6 (2026-11-10)
+- **Rebuilt to target 06** (`Screens/Shop`): EGGS / EGG BAG tabs and a pager with big arrows and the
+  page's worlds ("WORLDS 1-3") instead of a scroll row; a **4 × 2 grid** of tier-coloured tiles (name
+  on top in outlined display type, the egg bobbing in its glow, a big price pill in the bottom edge,
+  a lock with "WORLD N" for locked worlds, a FREE ribbon on the Basic egg while the daily egg waits,
+  the selected tile lifts and glows); the **featured panel** (big gold title, the egg on its pedestal
+  with turning rays, popping in on selection; "COMMON → LEGENDARY" in rarity colours from
+  `Domain/Odds` with the ODDS pill; a big price; chunky x1 / x3 / x8 that grey out when unaffordable;
+  a big FREE EGG gift button; Robux buttons only for products on sale while policy allows; AUTO as
+  a small toggle). Locked eggs show the unlock trophies instead.
+- **Removed:** the scrollbar, "World 1 · Green Plains" and every sub-20 px line, the "x1 soon" /
+  "x3 soon" placeholders (a Robux button now appears only for a product that is on sale), the wide
+  green free-egg bar, the "Auto-open: Off" text.
+- **Egg Bag:** the same tiles with a big "x2", Golden markers (gold tile, ODDS for Golden eggs) and
+  OPEN, paged.
+- Purchase, odds and policy logic are unchanged (same requests; the server decides).
+- **Eggs:** the Egg Icon Pack, unedited (Option 1), until the owner decides on Sheet C.
 - Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
 
 ## Waiting for art
