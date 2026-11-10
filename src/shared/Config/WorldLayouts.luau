@@ -252,6 +252,7 @@ local List: { Layout } = {
 			direction = "rise",
 			size = 0.35,
 		},
+		gate = { landmark = "w5_spire", scale = 0.7, stone = "#2A2026", material = "Basalt" },
 	}, { { "item_ash_coal", "w5_ash_coal" }, { "item_obsidian", "w5_obsidian" } }, {
 		"item_magma_heart",
 		"w5_magma_heart",
