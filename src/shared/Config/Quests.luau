@@ -6,7 +6,8 @@
 
 export type QuestDef = {
 	id: string,
-	kind: string, -- "WinRanked" | "PlayRanked" | "Harvest" | "Hatch" | "SellItems" | "Merge" | "TrialWin" | "TrialFirstClear"
+	kind: string, -- "WinRanked" | "PlayRanked" | "Harvest" | "Hatch" | "SellItems" | "Merge" | "TrialWin" |
+	-- "TrialFirstClear" | "Travel" | "DeckSet" | "QueueJoin"
 	target: number,
 	world: number?,
 	text: string,
@@ -49,6 +50,23 @@ local Achievements: { QuestDef } = {
 	},
 }
 
+-- The first-session tutorial (BAD_GUI_5_INGAME_HUD section 2.3): shown in the HUD's quest panel, in
+-- this order, until every step is done; then the panel shows the dailies. Tracked on the server like
+-- achievements (ids "t_*" in profile.quests); no rewards, and they can't be claimed.
+local Tutorial: { QuestDef } = {
+	{ id = "t_travel", kind = "Travel", target = 1, text = "Travel to a world" },
+	{ id = "t_harvest", kind = "Harvest", target = 5, text = "Harvest resources" },
+	{ id = "t_sell", kind = "SellItems", target = 1, text = "Sell to a merchant" },
+	{ id = "t_hatch", kind = "Hatch", target = 1, text = "Hatch an egg" },
+	{ id = "t_deck", kind = "DeckSet", target = 1, text = "Save your deck" },
+	{ id = "t_trial", kind = "TrialWin", target = 1, text = "Win a Guardian Trial" },
+	{ id = "t_arena", kind = "QueueJoin", target = 1, text = "Try the 1v1 Arena" },
+}
+local TutorialById: { [string]: QuestDef } = {}
+for _, q in Tutorial do
+	TutorialById[q.id] = q
+end
+
 local ById: { [string]: QuestDef } = {}
 for _, q in Daily do
 	ById[q.id] = q
@@ -60,6 +78,8 @@ end
 return table.freeze({
 	Daily = table.freeze(Daily),
 	Achievements = table.freeze(Achievements),
-	ById = table.freeze(ById),
+	Tutorial = table.freeze(Tutorial),
+	TutorialById = table.freeze(TutorialById),
+	ById = table.freeze(ById), -- dailies and achievements (claimable); tutorial steps are not
 	dailyCount = 3,
 })

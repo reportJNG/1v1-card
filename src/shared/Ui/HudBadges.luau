@@ -81,6 +81,27 @@ export type QuestCard = { title: string, done: number, total: number, rows: { Qu
 -- two task rows, unfinished first; with no dailies, the unfinished achievements ("Goals"). Nil when
 -- there is nothing to show.
 function HudBadges.questCard(view: any): QuestCard?
+	-- The tutorial comes first, until every step is done (BAD_GUI_5 section 2.3).
+	if not (view.flags and view.flags.tutorialDone) then
+		local rows: { QuestRow } = {}
+		local done = 0
+		for _, def in QuestsCfg.Tutorial do
+			local q = view.quests and view.quests[def.id]
+			local progress = if q then math.min(q.progress, def.target) else 0
+			local finished = progress >= def.target
+			if finished then
+				done += 1
+			elseif #rows < 2 then
+				table.insert(
+					rows,
+					{ text = def.text, progress = progress, target = def.target, done = false }
+				)
+			end
+		end
+		if #rows > 0 then
+			return { title = "Tutorial", done = done, total = #QuestsCfg.Tutorial, rows = rows }
+		end
+	end
 	local dailies: { any }, goals: { any } = {}, {}
 	for id, q in view.quests or {} do
 		local def = QuestsCfg.ById[id]

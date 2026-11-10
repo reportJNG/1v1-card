@@ -44,6 +44,7 @@ export type Options = {
 	stats: boolean?, -- show the ATK / DEF chips (default: medium and large cards)
 	sticker: ("new" | "dup" | "max")?,
 	favorite: boolean?,
+	bare: boolean?, -- art first, no words (BAD_GUI_5 deck bar): hides the name, rarity line and small level
 }
 
 -- Per rarity: aura and glow strength, particles, and how often the shine sweeps.
@@ -539,6 +540,14 @@ function Card.build(parent: Instance, o: Options): Frame
 		Parent = face,
 	}, math.max(1, h * 0.006))
 	lvl:SetAttribute("Stage", stage.id)
+	if o.bare then
+		for _, n in { "Name", "NamePlate", "Rarity", "Level" } do
+			local g = face:FindFirstChild(n)
+			if g and g:IsA("GuiObject") then
+				g.Visible = false
+			end
+		end
+	end
 	if not small then
 		local gs = math.floor((L.gemY[2] - L.gemY[1]) * h)
 		local gem = Kit.image(`gem_family_{string.lower(def.family)}`, {

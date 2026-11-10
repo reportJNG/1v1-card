@@ -83,6 +83,19 @@ function Quests.track(profile: Types.PlayerProfile, kind: string, amount: number
 	for _, def in QuestsCfg.Achievements do
 		add(def)
 	end
+	if not profile.flags.tutorialDone then
+		local all = true
+		for _, def in QuestsCfg.Tutorial do
+			add(def)
+			local e = profile.quests[def.id]
+			if e == nil or e.progress < def.target then
+				all = false
+			end
+		end
+		if all then
+			profile.flags.tutorialDone = true
+		end
+	end
 end
 
 export type Claim = { questId: string, coins: number, gems: number, egg: string? }

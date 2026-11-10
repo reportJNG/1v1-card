@@ -97,6 +97,7 @@ function EconomyService.init()
 	Router.handle("Deck.Set", function(player, args, profile)
 		local r = Deck.set(profile :: any, args.uids)
 		if r.ok then
+			Quests.track(profile :: any, "DeckSet", 1, os.time())
 			Telemetry.event(player, "deck_set", {})
 		end
 		return r

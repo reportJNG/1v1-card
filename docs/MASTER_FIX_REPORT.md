@@ -16,7 +16,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 2 | Stop web thinking: WorldText, no toast bars, sweep | done | `ui(2)` | big text 8 · icons 8 · on-object 9 · no web boxes 9 (`compare_notifications.png`) |
 | 3 | Image-kit pipeline (cut_sheet, kit.json, slice test, App/Ui/Kit) | done, waiting for owner (OK on `docs/review/ui-kit-v3.png`) | `ui(3)` | n/a (pipeline; pieces scored when used) |
 | 3b | Combined icon set (three packs, licences, icon_map.json) | done, waiting for owner (OK on `docs/review/icons_final.png`) | `ui(3b)` | n/a (scored with the screens that use them) |
-| 4 | In-game HUD | todo | | |
+| 4 | In-game HUD | done, waiting for art (E1-E4) | `ui(4)` | clean 9 · buttons 9 · text 8 · painted 7 until E1-E4 (`compare_hud.png`) |
 | 5 | Main menu | todo | | |
 | 6 | Egg Shop | todo | | |
 | 7 | Merchant + every other panel | todo | | |
@@ -143,6 +143,31 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   another item's picture.
 - **STOP:** waiting for the owner's OK before any upload (`docs/review/icons_final.md`). The
   per-slot validator test is added with the upload, when the ids exist.
+
+### Phase 4 (2026-11-10)
+- **Clean HUD** (`App/Hud`, rewritten to BAD_GUI_5): only a 2 × 2 grid of big labelled buttons (CARDS,
+  EGGS, WORLDS, 1v1; bouncing dots, an idle shimmer, press squash), a round ≡ menu (Settings,
+  Quests, Main Menu, and Lobby while in a world), bigger currency pills (big icon over the left end,
+  30 px number, glossy +), a gift button only while something is claimable, the quest panel, and
+  the deck bar. Removed: the 6-button column, both home buttons, the trophy button, the 1v1 button
+  by the deck, the deck button (the deck bar opens the Deck Builder; it carries the deck dot).
+- **Deck bar:** 3 tall art-first cards (`Card.build` gained `bare`: no name, rarity line or small
+  level) with a big "Lv.N" top-right, 4 stage stars on a dark strip, and a framed slot number;
+  ~130 × 175 px on PC, ~100 × 135 on phones.
+- **Tutorial** (`Config/Quests.Tutorial`, 7 steps: travel, harvest, sell, hatch, save deck, win a
+  Trial, try the Arena): tracked on the server like achievements (new kinds Travel, DeckSet,
+  QueueJoin in WorldService, EconomyService, MatchmakingService), no rewards, not claimable; sets
+  the existing `flags.tutorialDone` when finished. The panel shows TUTORIAL N/7 and the next two
+  steps, a new step slides in when one finishes; then it shows the dailies. It doesn't auto-hide
+  while the tutorial runs (it would hide it from new players); dailies tuck away after 10 s idle.
+  4 specs (`Tutorial.spec`); HudBadges specs keep their meaning.
+- **Mobile:** grid 64 px, the grid sits higher on touch screens (thumbstick), the quest panel starts
+  collapsed on touch, deck cards shrink. Checked in Play at Studio's 1042 × 433 view (a phone-like
+  aspect); 1334 × 750 is part of the Phase 13 pass.
+- **Bug found in Play:** the ≡ dropdown's skin was stacked by its list layout and pushed the rows off
+  screen; the rows now live in their own frame.
+- **Painted look waits for E1-E4** (`art/ui/PROMPTS_V3.md` §2): the layout and behaviour are final.
+- Checks: StyLua, Selene, luau-lsp clean; **308 passed, 0 failed**.
 
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each

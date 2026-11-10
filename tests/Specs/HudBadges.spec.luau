@@ -12,6 +12,7 @@ local function view(over: { [string]: any }?): any
 		eggBag = {},
 		daily = { lastClaimDay = TODAY, freeEggDay = TODAY },
 		quests = {},
+		flags = { tutorialDone = true }, -- the tutorial has its own specs (Tutorial.spec)
 	}
 	for k, x in (over or {}) :: { [string]: any } do
 		v[k] = x

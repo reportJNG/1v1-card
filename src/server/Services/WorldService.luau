@@ -11,6 +11,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Result = require(Shared.Domain.Result)
 local Progress = require(Shared.Domain.Progress)
+local Quests = require(Shared.Domain.Quests)
 local WorldLayout = require(Shared.Domain.WorldLayout)
 local Server = script.Parent.Parent
 local Router = require(Server:WaitForChild("Net").Router)
@@ -78,6 +79,7 @@ function WorldService.init()
 			return r
 		end
 		place(player, args.worldId)
+		Quests.track(profile :: any, "Travel", 1, os.time())
 		Telemetry.event(player, "travel", { world = args.worldId })
 		return Result.ok({ worldId = args.worldId })
 	end)

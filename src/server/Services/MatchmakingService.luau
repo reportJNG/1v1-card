@@ -24,6 +24,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Result = require(Shared.Domain.Result)
 local Deck = require(Shared.Domain.Deck)
 local Progress = require(Shared.Domain.Progress)
+local Quests = require(Shared.Domain.Quests)
 local Server = script.Parent.Parent
 local Router = require(Server:WaitForChild("Net").Router)
 local MM = Server:WaitForChild("Matchmaking")
@@ -428,7 +429,14 @@ function MatchmakingService.init()
 		if not SessionService.allows(player, "queue") then
 			return Result.fail("NotPlaying")
 		end
-		return joinQueue(player, profile)
+		local r = joinQueue(player, profile)
+		if r.ok and profile then
+			-- The tutorial's "Try the 1v1 Arena" (this remote doesn't mutate otherwise).
+			Quests.track(profile :: any, "QueueJoin", 1, os.time())
+			PlayerDataService.markDirty(player.UserId)
+			PlayerDataService.push(player)
+		end
+		return r
 	end, { mutates = false })
 	Router.handle("Queue.Leave", function(player)
 		return leaveQueue(player)
