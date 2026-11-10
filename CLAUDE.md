@@ -17,6 +17,11 @@ them first, then continue with the next unfinished step without waiting to be as
 @docs/CONVERSATION.md
 @HANDOFF.md
 @STATUS.md
+@MASTER_FIX_PLAN.md
+@docs/MASTER_FIX_REPORT.md
+
+The current work is `MASTER_FIX_PLAN.md` phases 0-13 plus `GOAL_ALL.md` (Phase 3b icons, Phase
+14 characters); `docs/MASTER_FIX_REPORT.md` says which phase is next.
 
 The owner's original brief files and concept board are in `docs/brief/`.
 

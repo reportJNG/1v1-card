@@ -18,7 +18,7 @@ Every character here is original.
 
 **Card art template:**
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, <character description>
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, <character description>
 
 **Model reference template:**
 
@@ -36,7 +36,7 @@ Flame · Legendary · Skirmisher
 
 Card art → `art/characters/sorin_embervale/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, tailored crimson frock coat with gold buttons, high boots, ember-lined collar; colour scheme crimson red (#C2412D), ember orange (#FFB347) and near-black violet (#1E1A2B); holding a slim rapier wreathed in sparks; signature silhouette: the tall flared coat collar and a raised rapier; expression and pose suggest: elegant duellist with a short temper.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, tailored crimson frock coat with gold buttons, high boots, ember-lined collar; colour scheme crimson red (#C2412D), ember orange (#FFB347) and near-black violet (#1E1A2B); holding a slim rapier wreathed in sparks; signature silhouette: the tall flared coat collar and a raised rapier; expression and pose suggest: elegant duellist with a short temper.
 
 Model reference → `art/characters/sorin_embervale/front.png`
 
@@ -48,7 +48,7 @@ Flame · Mythical · Skirmisher
 
 Card art → `art/characters/cyrus_coalbrand/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, black coal-plated heavy armour with glowing orange seams, tattered half-cape; colour scheme crimson red (#C2412D), ember orange (#FFB347) and orange (#FF8A3D); holding a massive branding-iron halberd; signature silhouette: glowing armour seams and a long halberd taller than him; expression and pose suggest: grim, intense and utterly focused.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, black coal-plated heavy armour with glowing orange seams, tattered half-cape; colour scheme crimson red (#C2412D), ember orange (#FFB347) and orange (#FF8A3D); holding a massive branding-iron halberd; signature silhouette: glowing armour seams and a long halberd taller than him; expression and pose suggest: grim, intense and utterly focused.
 
 Model reference → `art/characters/cyrus_coalbrand/front.png`
 
@@ -60,7 +60,7 @@ Flame · Rare · Skirmisher
 
 Card art → `art/characters/hoshi_blazewright/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, orange work overalls rolled at the sleeves, tool belt, welding goggles pushed up on the forehead; colour scheme crimson red (#C2412D), ember orange (#FFB347) and grey (#6B7280); holding a flint-striker gauntlet that throws sparks; signature silhouette: goggles on the forehead and one oversized gauntlet; expression and pose suggest: inventive tinkerer who laughs at explosions.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, orange work overalls rolled at the sleeves, tool belt, welding goggles pushed up on the forehead; colour scheme crimson red (#C2412D), ember orange (#FFB347) and grey (#6B7280); holding a flint-striker gauntlet that throws sparks; signature silhouette: goggles on the forehead and one oversized gauntlet; expression and pose suggest: inventive tinkerer who laughs at explosions.
 
 Model reference → `art/characters/hoshi_blazewright/front.png`
 
@@ -72,7 +72,7 @@ Flame · Common · Striker
 
 Card art → `art/characters/kaida_cinderhart/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, cropped red tunic with ember-orange trim, wrapped shins, a short cape scorched at the edges; colour scheme crimson red (#C2412D), ember orange (#FFB347) and dark brown (#3A2A24); holding a whip of braided red cord with a glowing tip; signature silhouette: a short scorched cape and a coiled whip on the hip; expression and pose suggest: bright, competitive and a little reckless.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, cropped red tunic with ember-orange trim, wrapped shins, a short cape scorched at the edges; colour scheme crimson red (#C2412D), ember orange (#FFB347) and dark brown (#3A2A24); holding a whip of braided red cord with a glowing tip; signature silhouette: a short scorched cape and a coiled whip on the hip; expression and pose suggest: bright, competitive and a little reckless.
 
 Model reference → `art/characters/kaida_cinderhart/front.png`
 
@@ -84,23 +84,23 @@ Flame · Epic · Bruiser
 
 Card art → `art/characters/pyrelle_ashveil/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, long ash-grey dress with flame-red underlayers, feathered shawl like phoenix plumes; colour scheme crimson red (#C2412D), ember orange (#FFB347) and pale parchment (#F4E3C1); holding a fan of red feathers; signature silhouette: a feather-plumed shawl that spreads like wings; expression and pose suggest: graceful and serene, believes every ending is a new start.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, long ash-grey dress with flame-red underlayers, feathered shawl like phoenix plumes; colour scheme crimson red (#C2412D), ember orange (#FFB347) and pale parchment (#F4E3C1); holding a fan of red feathers; signature silhouette: a feather-plumed shawl that spreads like wings; expression and pose suggest: graceful and serene, believes every ending is a new start.
 
 Model reference → `art/characters/pyrelle_ashveil/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, long ash-grey dress with flame-red underlayers, feathered shawl like phoenix plumes; colour scheme crimson red (#C2412D), ember orange (#FFB347) and pale parchment (#F4E3C1); holding a fan of red feathers; signature silhouette: a feather-plumed shawl that spreads like wings; expression and pose suggest: graceful and serene, believes every ending is a new start.
 
-### Ren Emberfang (`ren_emberfang`)
+### Rook Emberforge (`ren_emberfang`)
 
 Flame · Rare · Striker
 
 Card art → `art/characters/ren_emberfang/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, sleeveless red brigandine over a charcoal undershirt, ember-stitched sash, bracers with brass rivets; colour scheme crimson red (#C2412D), ember orange (#FFB347) and charcoal (#2B2B33); holding a broad single-edged fang-shaped cleaver; signature silhouette: swept-back flame-shaped red hair and the oversized curved cleaver on one shoulder; expression and pose suggest: hot-headed and loyal, first to charge in and first to apologise.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, bronze chest plate over a dark red tunic, rolled-up sleeves, thick leather gloves and boots, a plain red cloth tied around his forehead, an anvil-and-flame crest on his belt buckle; colour scheme crimson red (#C2412D), ember orange (#FFB347) and amber (#B87333); holding a big forge hammer with glowing orange cracks and small embers; signature silhouette: the oversized forge hammer over one shoulder and short dark-red hair; expression and pose suggest: sturdy, determined blacksmith warrior who never leaves a job half done.
 
 Model reference → `art/characters/ren_emberfang/front.png`
 
-> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, sleeveless red brigandine over a charcoal undershirt, ember-stitched sash, bracers with brass rivets; colour scheme crimson red (#C2412D), ember orange (#FFB347) and charcoal (#2B2B33); holding a broad single-edged fang-shaped cleaver; signature silhouette: swept-back flame-shaped red hair and the oversized curved cleaver on one shoulder; expression and pose suggest: hot-headed and loyal, first to charge in and first to apologise.
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, bronze chest plate over a dark red tunic, rolled-up sleeves, thick leather gloves and boots, a plain red cloth tied around his forehead, an anvil-and-flame crest on his belt buckle; colour scheme crimson red (#C2412D), ember orange (#FFB347) and amber (#B87333); holding a big forge hammer with glowing orange cracks and small embers; signature silhouette: the oversized forge hammer over one shoulder and short dark-red hair; expression and pose suggest: sturdy, determined blacksmith warrior who never leaves a job half done.
 
 ### Tomo Kilnfist (`tomo_kilnfist`)
 
@@ -108,7 +108,7 @@ Flame · Common · Bruiser
 
 Card art → `art/characters/tomo_kilnfist/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, leather apron over bare arms, rolled trousers, soot-stained headwrap; colour scheme crimson red (#C2412D), ember orange (#FFB347) and chestnut brown (#8A5A3B); holding a stone kiln-hammer; signature silhouette: a stocky frame with a hammer as big as the torso; expression and pose suggest: big, loud and goodhearted blacksmith.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, leather apron over bare arms, rolled trousers, soot-stained headwrap; colour scheme crimson red (#C2412D), ember orange (#FFB347) and chestnut brown (#8A5A3B); holding a stone kiln-hammer; signature silhouette: a stocky frame with a hammer as big as the torso; expression and pose suggest: big, loud and goodhearted blacksmith.
 
 Model reference → `art/characters/tomo_kilnfist/front.png`
 
@@ -122,7 +122,7 @@ Ice · Rare · Striker
 
 Card art → `art/characters/fennix_snowmantle/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, white hooded mantle with fox-ear hood points, fitted grey leggings, fur boots; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and rust red (#C84B31); holding a short recurve bow of ice; signature silhouette: fox-ear hood points and a bow on the back; expression and pose suggest: cool, sarcastic tracker.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, white hooded mantle with fox-ear hood points, fitted grey leggings, fur boots; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and rust red (#C84B31); holding a short recurve bow of ice; signature silhouette: fox-ear hood points and a bow on the back; expression and pose suggest: cool, sarcastic tracker.
 
 Model reference → `art/characters/fennix_snowmantle/front.png`
 
@@ -134,11 +134,23 @@ Ice · Epic · Guardian
 
 Card art → `art/characters/hale_frostmere/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, heavy layered blue-grey robes, beaded ice charms, a broad-brimmed snow hat; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and sage (#8FB3A3); holding a walking staff hung with ice charms; signature silhouette: the wide flat brimmed hat and the charm-hung staff; expression and pose suggest: wise healer of few words.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, heavy layered blue-grey robes, beaded ice charms, a broad-brimmed snow hat; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and sage (#8FB3A3); holding a walking staff hung with ice charms; signature silhouette: the wide flat brimmed hat and the charm-hung staff; expression and pose suggest: wise healer of few words.
 
 Model reference → `art/characters/hale_frostmere/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, heavy layered blue-grey robes, beaded ice charms, a broad-brimmed snow hat; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and sage (#8FB3A3); holding a walking staff hung with ice charms; signature silhouette: the wide flat brimmed hat and the charm-hung staff; expression and pose suggest: wise healer of few words.
+
+### Halvard Frostwarden (`yuki_frostveil`)
+
+Ice · Epic · Guardian
+
+Card art → `art/characters/yuki_frostveil/card.png`
+
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, pale blue crystal armour with frosted silver trim, a short white-blue cape, a helmet with the visor raised showing his calm face, short light-brown hair, a round shield with his own frost crest; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and pale silver (#C0C8D4); holding a long ice lance with a snowflake-shaped tip; signature silhouette: the raised-visor helmet, the long lance and faint frost mist around his feet; expression and pose suggest: calm, patient knight who holds the line and never retreats.
+
+Model reference → `art/characters/yuki_frostveil/front.png`
+
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, pale blue crystal armour with frosted silver trim, a short white-blue cape, a helmet with the visor raised showing his calm face, short light-brown hair, a round shield with his own frost crest; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and pale silver (#C0C8D4); holding a long ice lance with a snowflake-shaped tip; signature silhouette: the raised-visor helmet, the long lance and faint frost mist around his feet; expression and pose suggest: calm, patient knight who holds the line and never retreats.
 
 ### Mika Rimeshard (`mika_rimeshard`)
 
@@ -146,7 +158,7 @@ Ice · Common · Skirmisher
 
 Card art → `art/characters/mika_rimeshard/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, short pale-blue skating jacket, striped scarf, skate boots with ice blades; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and orchid pink (#E85D9C); holding two thrown ice shards; signature silhouette: a very long striped scarf and skate blades; expression and pose suggest: playful and quick, always one step ahead.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, short pale-blue skating jacket, striped scarf, skate boots with ice blades; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and orchid pink (#E85D9C); holding two thrown ice shards; signature silhouette: a very long striped scarf and skate blades; expression and pose suggest: playful and quick, always one step ahead.
 
 Model reference → `art/characters/mika_rimeshard/front.png`
 
@@ -158,7 +170,7 @@ Ice · Mythical · Support
 
 Card art → `art/characters/odran_icevein/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, towering frost-blue robes with icicle fringe, crystalline crown of spikes; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and pale sky blue (#BFE6FF); holding a long sceptre of living ice; signature silhouette: a jagged icicle crown and the floor-length icicle fringe; expression and pose suggest: ancient, patient, speaks like falling snow.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, towering frost-blue robes with icicle fringe, crystalline crown of spikes; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and pale sky blue (#BFE6FF); holding a long sceptre of living ice; signature silhouette: a jagged icicle crown and the floor-length icicle fringe; expression and pose suggest: ancient, patient, speaks like falling snow.
 
 Model reference → `art/characters/odran_icevein/front.png`
 
@@ -170,7 +182,7 @@ Ice · Common · Guardian
 
 Card art → `art/characters/rinna_glacierborn/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, puffy snow-white parka with blue fur trim, mittens, knee-high snow boots; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and slate blue (#3E6E8E); holding a round shield of packed snow and ice; signature silhouette: a round puffy parka hood and a round shield; expression and pose suggest: shy but stubborn, never backs down from a friend's fight.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, puffy snow-white parka with blue fur trim, mittens, knee-high snow boots; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and slate blue (#3E6E8E); holding a round shield of packed snow and ice; signature silhouette: a round puffy parka hood and a round shield; expression and pose suggest: shy but stubborn, never backs down from a friend's fight.
 
 Model reference → `art/characters/rinna_glacierborn/front.png`
 
@@ -182,23 +194,11 @@ Ice · Legendary · Trickster
 
 Card art → `art/characters/setsu_winterglass/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, sleek glass-blue kimono-cut coat with a crystal obi, layered sleeves; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and deep blue (#2D3A6B); holding a pair of glassy crystal daggers; signature silhouette: wide layered sleeves that fan out like snowflakes; expression and pose suggest: cold perfectionist who secretly loves snowfall.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, sleek glass-blue kimono-cut coat with a crystal obi, layered sleeves; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and deep blue (#2D3A6B); holding a pair of glassy crystal daggers; signature silhouette: wide layered sleeves that fan out like snowflakes; expression and pose suggest: cold perfectionist who secretly loves snowfall.
 
 Model reference → `art/characters/setsu_winterglass/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, sleek glass-blue kimono-cut coat with a crystal obi, layered sleeves; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and deep blue (#2D3A6B); holding a pair of glassy crystal daggers; signature silhouette: wide layered sleeves that fan out like snowflakes; expression and pose suggest: cold perfectionist who secretly loves snowfall.
-
-### Yuki Frostveil (`yuki_frostveil`)
-
-Ice · Epic · Guardian
-
-Card art → `art/characters/yuki_frostveil/card.png`
-
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, layered pale-blue winter robe with a high stiff collar, frosted pauldron on one shoulder; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and slate blue (#4A6FA5); holding a tall rectangular ice tower-shield; signature silhouette: the door-sized crystal shield and a long trailing veil of frost-white hair; expression and pose suggest: calm, patient and dry-humoured; speaks softly and never retreats.
-
-Model reference → `art/characters/yuki_frostveil/front.png`
-
-> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, layered pale-blue winter robe with a high stiff collar, frosted pauldron on one shoulder; colour scheme ice blue (#7FB8E0), frost white (#E8F6FF) and slate blue (#4A6FA5); holding a tall rectangular ice tower-shield; signature silhouette: the door-sized crystal shield and a long trailing veil of frost-white hair; expression and pose suggest: calm, patient and dry-humoured; speaks softly and never retreats.
 
 ## Lightning
 
@@ -208,7 +208,7 @@ Lightning · Common · Skirmisher
 
 Card art → `art/characters/juno_sparkwhip/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, yellow and navy circus-style vest, puffed sleeves, striped tights; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and rose pink (#FF5E7E); holding a crackling electric whip; signature silhouette: a puffed-sleeve vest and a lightning-shaped whip trail; expression and pose suggest: mischievous show-off.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, yellow and navy circus-style vest, puffed sleeves, striped tights; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and rose pink (#FF5E7E); holding a crackling electric whip; signature silhouette: a puffed-sleeve vest and a lightning-shaped whip trail; expression and pose suggest: mischievous show-off.
 
 Model reference → `art/characters/juno_sparkwhip/front.png`
 
@@ -220,7 +220,7 @@ Lightning · Rare · Striker
 
 Card art → `art/characters/kenji_thunderpeak/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dark blue monk robes tied with a yellow cord, wooden prayer beads, straw sandals; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and straw beige (#D9C08A); holding a heavy iron staff; signature silhouette: a tall shaved topknot and the staff held behind the shoulders; expression and pose suggest: serious mountain monk, slow to speak, fast to strike.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dark blue monk robes tied with a yellow cord, wooden prayer beads, straw sandals; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and straw beige (#D9C08A); holding a heavy iron staff; signature silhouette: a tall shaved topknot and the staff held behind the shoulders; expression and pose suggest: serious mountain monk, slow to speak, fast to strike.
 
 Model reference → `art/characters/kenji_thunderpeak/front.png`
 
@@ -232,23 +232,11 @@ Lightning · Legendary · Support
 
 Card art → `art/characters/mira_stormglen/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, navy sky-captain coat with brass buttons, a peaked aviator cap with goggles; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and silver white (#F2F5FF); holding a brass lightning-rod staff; signature silhouette: the lightning-rod staff with a spinning ring on top; expression and pose suggest: calm captain who reads the sky.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, navy sky-captain coat with brass buttons, a peaked aviator cap with goggles; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and silver white (#F2F5FF); holding a brass lightning-rod staff; signature silhouette: the lightning-rod staff with a spinning ring on top; expression and pose suggest: calm captain who reads the sky.
 
 Model reference → `art/characters/mira_stormglen/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, navy sky-captain coat with brass buttons, a peaked aviator cap with goggles; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and silver white (#F2F5FF); holding a brass lightning-rod staff; signature silhouette: the lightning-rod staff with a spinning ring on top; expression and pose suggest: calm captain who reads the sky.
-
-### Rai Stormvolt (`rai_stormvolt`)
-
-Lightning · Common · Skirmisher
-
-Card art → `art/characters/rai_stormvolt/card.png`
-
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, short cropped jacket with zig-zag yellow piping, fingerless gloves, track shoes with lightning soles; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and silver white (#F2F5FF); holding twin short batons that crackle at the tips; signature silhouette: a tall upswept cowlick of blue hair and a long scarf tail that flicks behind; expression and pose suggest: restless and cheerful, can't sit still, talks in quick bursts.
-
-Model reference → `art/characters/rai_stormvolt/front.png`
-
-> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, short cropped jacket with zig-zag yellow piping, fingerless gloves, track shoes with lightning soles; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and silver white (#F2F5FF); holding twin short batons that crackle at the tips; signature silhouette: a tall upswept cowlick of blue hair and a long scarf tail that flicks behind; expression and pose suggest: restless and cheerful, can't sit still, talks in quick bursts.
 
 ### Tarik Arcflash (`tarik_arcflash`)
 
@@ -256,7 +244,7 @@ Lightning · Mythical · Skirmisher
 
 Card art → `art/characters/tarik_arcflash/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, aerodynamic navy bodysuit with yellow arc stripes, finned ankle boots; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and sky blue (#45BEFF); holding two bladed tonfa; signature silhouette: finned boots and a long streak of blue hair; expression and pose suggest: never-still speedster with a huge grin.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, aerodynamic navy bodysuit with yellow arc stripes, finned ankle boots; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and sky blue (#45BEFF); holding two bladed tonfa; signature silhouette: finned boots and a long streak of blue hair; expression and pose suggest: never-still speedster with a huge grin.
 
 Model reference → `art/characters/tarik_arcflash/front.png`
 
@@ -268,7 +256,7 @@ Lightning · Epic · Trickster
 
 Card art → `art/characters/volta_skyrend/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, white lab-style long coat with blue circuit lines, high collar, one mechanical arm; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and ember orange (#FFB347); holding a coil-gun gauntlet; signature silhouette: the mechanical arm and a long coat with a split tail; expression and pose suggest: arrogant genius who measures everything.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, white lab-style long coat with blue circuit lines, high collar, one mechanical arm; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and ember orange (#FFB347); holding a coil-gun gauntlet; signature silhouette: the mechanical arm and a long coat with a split tail; expression and pose suggest: arrogant genius who measures everything.
 
 Model reference → `art/characters/volta_skyrend/front.png`
 
@@ -280,11 +268,23 @@ Lightning · Common · Bruiser
 
 Card art → `art/characters/zeph_boltcaller/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, sleeveless yellow vest, baggy navy pants, wrapped fists, lightning-bolt belt buckle; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and dark brown (#3A2A24); holding bare fists in lightning wraps; signature silhouette: wild spiky windswept hair and wrapped oversized fists; expression and pose suggest: hot-blooded brawler who loves storms.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, sleeveless yellow vest, baggy navy pants, wrapped fists, lightning-bolt belt buckle; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and dark brown (#3A2A24); holding bare fists in lightning wraps; signature silhouette: wild spiky windswept hair and wrapped oversized fists; expression and pose suggest: hot-blooded brawler who loves storms.
 
 Model reference → `art/characters/zeph_boltcaller/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, sleeveless yellow vest, baggy navy pants, wrapped fists, lightning-bolt belt buckle; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and dark brown (#3A2A24); holding bare fists in lightning wraps; signature silhouette: wild spiky windswept hair and wrapped oversized fists; expression and pose suggest: hot-blooded brawler who loves storms.
+
+### Zephyr Volt (`rai_stormvolt`)
+
+Lightning · Common · Skirmisher
+
+Card art → `art/characters/rai_stormvolt/card.png`
+
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, teal hoodie with grey storm-cloud shaped shoulder pads and a small lightning-bolt emblem of his own design, fingerless gloves, cargo shorts, high-top sneakers; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and teal (#2EC4B6); holding two short metal batons crackling with teal lightning; signature silhouette: aviator goggles pushed up on short dark navy hair and the cloud-shaped shoulder pads; expression and pose suggest: young, playful and confident street brawler.
+
+Model reference → `art/characters/rai_stormvolt/front.png`
+
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, teal hoodie with grey storm-cloud shaped shoulder pads and a small lightning-bolt emblem of his own design, fingerless gloves, cargo shorts, high-top sneakers; colour scheme royal blue (#3A55C8), electric yellow (#FFE14D) and teal (#2EC4B6); holding two short metal batons crackling with teal lightning; signature silhouette: aviator goggles pushed up on short dark navy hair and the cloud-shaped shoulder pads; expression and pose suggest: young, playful and confident street brawler.
 
 ## Shadow
 
@@ -294,7 +294,7 @@ Shadow · Common · Trickster
 
 Card art → `art/characters/corvin_duskweaver/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dark feathered hooded cloak, layered grey wraps, crow-feather pauldrons; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and dusty violet (#6B5B95); holding a curved hook-knife on a cord; signature silhouette: a crow-feather hood that ends in a beak-like point; expression and pose suggest: soft-spoken trickster who collects secrets.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dark feathered hooded cloak, layered grey wraps, crow-feather pauldrons; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and dusty violet (#6B5B95); holding a curved hook-knife on a cord; signature silhouette: a crow-feather hood that ends in a beak-like point; expression and pose suggest: soft-spoken trickster who collects secrets.
 
 Model reference → `art/characters/corvin_duskweaver/front.png`
 
@@ -306,7 +306,7 @@ Shadow · Mythical · Support
 
 Card art → `art/characters/isolde_murkwater/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, deep purple and teal layered gown with water-weed trims, pearl veil from a tiara; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and sea teal (#3FA7A0); holding a trident staff dripping dark water; signature silhouette: a tall tiara with a hanging pearl veil and the trident; expression and pose suggest: mysterious queen of a drowned court.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, deep purple and teal layered gown with water-weed trims, pearl veil from a tiara; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and sea teal (#3FA7A0); holding a trident staff dripping dark water; signature silhouette: a tall tiara with a hanging pearl veil and the trident; expression and pose suggest: mysterious queen of a drowned court.
 
 Model reference → `art/characters/isolde_murkwater/front.png`
 
@@ -318,11 +318,23 @@ Shadow · Rare · Skirmisher
 
 Card art → `art/characters/kagen_hollowmere/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, fitted charcoal hunting leathers, long hooded scarf, quiver of black darts; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and teal (#4FD1C5); holding a pair of black short swords; signature silhouette: the long hooded scarf trailing in two tails; expression and pose suggest: patient hunter who never wastes a move.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, fitted charcoal hunting leathers, long hooded scarf, quiver of black darts; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and teal (#4FD1C5); holding a pair of black short swords; signature silhouette: the long hooded scarf trailing in two tails; expression and pose suggest: patient hunter who never wastes a move.
 
 Model reference → `art/characters/kagen_hollowmere/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, fitted charcoal hunting leathers, long hooded scarf, quiver of black darts; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and teal (#4FD1C5); holding a pair of black short swords; signature silhouette: the long hooded scarf trailing in two tails; expression and pose suggest: patient hunter who never wastes a move.
+
+### Nox Veilstrider (`vesper_shade`)
+
+Shadow · Legendary · Trickster
+
+Card art → `art/characters/vesper_shade/card.png`
+
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, deep purple and black leather armour, a hood lined in violet with the face fully visible, short black hair, a silver crescent-moon emblem on the chest, a utility belt with small pouches; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and pale lilac grey (#C9C2D9); holding two round chakram blades glowing soft purple; signature silhouette: the violet-lined hood and the two round chakrams, with faint shadow wisps around his boots; expression and pose suggest: focused, serious night ranger who watches before he strikes.
+
+Model reference → `art/characters/vesper_shade/front.png`
+
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, deep purple and black leather armour, a hood lined in violet with the face fully visible, short black hair, a silver crescent-moon emblem on the chest, a utility belt with small pouches; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and pale lilac grey (#C9C2D9); holding two round chakram blades glowing soft purple; signature silhouette: the violet-lined hood and the two round chakrams, with faint shadow wisps around his boots; expression and pose suggest: focused, serious night ranger who watches before he strikes.
 
 ### Raith Nightfall (`raith_nightfall`)
 
@@ -330,7 +342,7 @@ Shadow · Rare · Striker
 
 Card art → `art/characters/raith_nightfall/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dark grey sleeveless greatcoat, arm wraps, belt with three buckles; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and cool grey (#A3A3B5); holding a long single-edged night-blade; signature silhouette: a tattered greatcoat hem and the long blade on the back; expression and pose suggest: brooding swordsman with a dry wit.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dark grey sleeveless greatcoat, arm wraps, belt with three buckles; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and cool grey (#A3A3B5); holding a long single-edged night-blade; signature silhouette: a tattered greatcoat hem and the long blade on the back; expression and pose suggest: brooding swordsman with a dry wit.
 
 Model reference → `art/characters/raith_nightfall/front.png`
 
@@ -342,7 +354,7 @@ Shadow · Epic · Support
 
 Card art → `art/characters/selene_gloomfeather/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, flowing dark violet gown with feathered sleeves, silver moon hairpin; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and pale violet (#DCD6F7); holding a fan of dark feathers; signature silhouette: a tall feather collar and drooping feathered sleeves; expression and pose suggest: melancholy poet who protects her friends fiercely.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, flowing dark violet gown with feathered sleeves, silver moon hairpin; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and pale violet (#DCD6F7); holding a fan of dark feathers; signature silhouette: a tall feather collar and drooping feathered sleeves; expression and pose suggest: melancholy poet who protects her friends fiercely.
 
 Model reference → `art/characters/selene_gloomfeather/front.png`
 
@@ -354,37 +366,13 @@ Shadow · Common · Guardian
 
 Card art → `art/characters/umbra_veilstep/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, thick layered dark cloth armour with violet stitching, broad round hat; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and amethyst (#6E4BC4); holding a heavy shadow-iron round shield; signature silhouette: the broad round hat and a rounded heavy silhouette; expression and pose suggest: gentle giant who prefers the shadows.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, thick layered dark cloth armour with violet stitching, broad round hat; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and amethyst (#6E4BC4); holding a heavy shadow-iron round shield; signature silhouette: the broad round hat and a rounded heavy silhouette; expression and pose suggest: gentle giant who prefers the shadows.
 
 Model reference → `art/characters/umbra_veilstep/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, thick layered dark cloth armour with violet stitching, broad round hat; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and amethyst (#6E4BC4); holding a heavy shadow-iron round shield; signature silhouette: the broad round hat and a rounded heavy silhouette; expression and pose suggest: gentle giant who prefers the shadows.
 
-### Vesper Shade (`vesper_shade`)
-
-Shadow · Legendary · Trickster
-
-Card art → `art/characters/vesper_shade/card.png`
-
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, fitted dusk-purple longcoat with asymmetric hem, silver chain clasps, one long glove; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and pale lilac grey (#C9C2D9); holding a thin crescent-curved blade; signature silhouette: a long high ponytail and the asymmetric coat hem that sweeps to one side; expression and pose suggest: quiet, precise and amused by everyone else's mistakes.
-
-Model reference → `art/characters/vesper_shade/front.png`
-
-> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, fitted dusk-purple longcoat with asymmetric hem, silver chain clasps, one long glove; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and pale lilac grey (#C9C2D9); holding a thin crescent-curved blade; signature silhouette: a long high ponytail and the asymmetric coat hem that sweeps to one side; expression and pose suggest: quiet, precise and amused by everyone else's mistakes.
-
 ## Divine
-
-### Aurelia Dawn (`aurelia_dawn`)
-
-Divine · Mythical · Support
-
-Card art → `art/characters/aurelia_dawn/card.png`
-
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, flowing cream and gold vestments with a sunburst gorget, layered skirt panels, soft sandals; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and peach (#FF9F6B); holding a tall staff topped with a floating sun-ring; signature silhouette: the floating sun-ring halo behind the head and the tall staff; expression and pose suggest: warm, steady and unshakably kind; the team's heart.
-
-Model reference → `art/characters/aurelia_dawn/front.png`
-
-> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, flowing cream and gold vestments with a sunburst gorget, layered skirt panels, soft sandals; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and peach (#FF9F6B); holding a tall staff topped with a floating sun-ring; signature silhouette: the floating sun-ring halo behind the head and the tall staff; expression and pose suggest: warm, steady and unshakably kind; the team's heart.
 
 ### Benedia Lightwell (`benedia_lightwell`)
 
@@ -392,7 +380,7 @@ Divine · Rare · Guardian
 
 Card art → `art/characters/benedia_lightwell/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, layered cream robes with a gold well-and-water emblem, wide sleeves, a lantern belt; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and emerald (#48DA97); holding a staff with a glowing water-lantern; signature silhouette: a hanging lantern on a hooked staff; expression and pose suggest: motherly and wise, keeps a cool head.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, layered cream robes with a gold well-and-water emblem, wide sleeves, a lantern belt; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and emerald (#48DA97); holding a staff with a glowing water-lantern; signature silhouette: a hanging lantern on a hooked staff; expression and pose suggest: motherly and wise, keeps a cool head.
 
 Model reference → `art/characters/benedia_lightwell/front.png`
 
@@ -404,7 +392,7 @@ Divine · Common · Striker
 
 Card art → `art/characters/caelan_sunward/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, white surcoat with a gold sun emblem over light mail, gold-trimmed gauntlets; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and crimson red (#C2412D); holding a bright arming sword; signature silhouette: a sun-disc emblem on the chest and a raised sword; expression and pose suggest: sunny, confident knight-errant.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, white surcoat with a gold sun emblem over light mail, gold-trimmed gauntlets; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and crimson red (#C2412D); holding a bright arming sword; signature silhouette: a sun-disc emblem on the chest and a raised sword; expression and pose suggest: sunny, confident knight-errant.
 
 Model reference → `art/characters/caelan_sunward/front.png`
 
@@ -416,7 +404,7 @@ Divine · Legendary · Skirmisher
 
 Card art → `art/characters/elio_dawnspire/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, ornate white and gold plate with spired pauldrons, long gold tabard; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and royal blue (#3A55C8); holding a spire-shaped lance; signature silhouette: tall spired pauldrons and the lance; expression and pose suggest: righteous, intense and a little too proud.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, ornate white and gold plate with spired pauldrons, long gold tabard; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and royal blue (#3A55C8); holding a spire-shaped lance; signature silhouette: tall spired pauldrons and the lance; expression and pose suggest: righteous, intense and a little too proud.
 
 Model reference → `art/characters/elio_dawnspire/front.png`
 
@@ -428,7 +416,7 @@ Divine · Rare · Guardian
 
 Card art → `art/characters/lumi_haloheart/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, pale yellow dress armour with heart-shaped breastplate, white boots; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and blossom pink (#FF9AD5); holding a heart-shaped kite shield; signature silhouette: a small floating halo ring and the heart shield; expression and pose suggest: bubbly optimist who never stops believing.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, pale yellow dress armour with heart-shaped breastplate, white boots; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and blossom pink (#FF9AD5); holding a heart-shaped kite shield; signature silhouette: a small floating halo ring and the heart shield; expression and pose suggest: bubbly optimist who never stops believing.
 
 Model reference → `art/characters/lumi_haloheart/front.png`
 
@@ -440,7 +428,7 @@ Divine · Epic · Skirmisher
 
 Card art → `art/characters/ophira_graceblade/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, flowing white and gold dancer's wraps, ribbon sashes, anklets with bells; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and ice blue (#7FB8E0); holding twin crescent dancing blades; signature silhouette: long ribbons spiralling around the body; expression and pose suggest: elegant dancer who fights like a ballet.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, flowing white and gold dancer's wraps, ribbon sashes, anklets with bells; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and ice blue (#7FB8E0); holding twin crescent dancing blades; signature silhouette: long ribbons spiralling around the body; expression and pose suggest: elegant dancer who fights like a ballet.
 
 Model reference → `art/characters/ophira_graceblade/front.png`
 
@@ -452,11 +440,23 @@ Divine · Common · Guardian
 
 Card art → `art/characters/seraphel_brightvow/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, white and gold acolyte tabard, short cape, satchel of bandages; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and periwinkle (#9EAED3); holding a small bell-topped mace; signature silhouette: a short winged cape and a bell mace; expression and pose suggest: earnest young acolyte who over-prepares.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, white and gold acolyte tabard, short cape, satchel of bandages; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and periwinkle (#9EAED3); holding a small bell-topped mace; signature silhouette: a short winged cape and a bell mace; expression and pose suggest: earnest young acolyte who over-prepares.
 
 Model reference → `art/characters/seraphel_brightvow/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, white and gold acolyte tabard, short cape, satchel of bandages; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and periwinkle (#9EAED3); holding a small bell-topped mace; signature silhouette: a short winged cape and a bell mace; expression and pose suggest: earnest young acolyte who over-prepares.
+
+### Solaris Dawnbringer (`aurelia_dawn`)
+
+Divine · Mythical · Support
+
+Card art → `art/characters/aurelia_dawn/card.png`
+
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, white and gold plate armour engraved with sun rays, a flowing white cape with gold edges, short wavy brown hair; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and peach (#FF9F6B); holding a golden greatsword glowing with warm light; signature silhouette: a large golden sun-disc halo floating behind his back and small floating light motes; expression and pose suggest: proud, heroic sun paladin who stands in front of his team.
+
+Model reference → `art/characters/aurelia_dawn/front.png`
+
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, white and gold plate armour engraved with sun rays, a flowing white cape with gold edges, short wavy brown hair; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and peach (#FF9F6B); holding a golden greatsword glowing with warm light; signature silhouette: a large golden sun-disc halo floating behind his back and small floating light motes; expression and pose suggest: proud, heroic sun paladin who stands in front of his team.
 
 ## Beast
 
@@ -466,7 +466,7 @@ Beast · Legendary · Guardian
 
 Card art → `art/characters/bram_stagcrown/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, heavy moss-green robes, bark-plated armour, cloak of autumn leaves; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and amber (#C98A1C); holding a gnarled wooden greatstaff; signature silhouette: a magnificent antler crown; expression and pose suggest: old forest lord, kind but terrifying when roused.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, heavy moss-green robes, bark-plated armour, cloak of autumn leaves; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and amber (#C98A1C); holding a gnarled wooden greatstaff; signature silhouette: a magnificent antler crown; expression and pose suggest: old forest lord, kind but terrifying when roused.
 
 Model reference → `art/characters/bram_stagcrown/front.png`
 
@@ -478,7 +478,7 @@ Beast · Common · Guardian
 
 Card art → `art/characters/brannok_ironhide/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, thick fur mantle over hammered iron scale armour, wide belt with a bear-claw buckle; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and gunmetal (#5E6A73); holding a pair of heavy iron-banded gauntlets; signature silhouette: huge rounded fur shoulders and a broad low stance; expression and pose suggest: gruff, stubborn and gentle with the young; a wall that talks.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, thick fur mantle over hammered iron scale armour, wide belt with a bear-claw buckle; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and gunmetal (#5E6A73); holding a pair of heavy iron-banded gauntlets; signature silhouette: huge rounded fur shoulders and a broad low stance; expression and pose suggest: gruff, stubborn and gentle with the young; a wall that talks.
 
 Model reference → `art/characters/brannok_ironhide/front.png`
 
@@ -490,7 +490,7 @@ Beast · Common · Bruiser
 
 Card art → `art/characters/grak_thornmaw/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, patchwork hide vest, thorned bone necklace, ragged shorts; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and moss green (#5E8A3A); holding a thorn-studded club; signature silhouette: a huge underbite jaw-guard and the thorny club; expression and pose suggest: hungry, blunt and surprisingly funny.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, patchwork hide vest, thorned bone necklace, ragged shorts; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and moss green (#5E8A3A); holding a thorn-studded club; signature silhouette: a huge underbite jaw-guard and the thorny club; expression and pose suggest: hungry, blunt and surprisingly funny.
 
 Model reference → `art/characters/grak_thornmaw/front.png`
 
@@ -502,7 +502,7 @@ Beast · Rare · Skirmisher
 
 Card art → `art/characters/lyra_wildpelt/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, short fur tunic, leather wraps, wolf-pelt hood with ears; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and tan (#D9B48A); holding a pair of bone claw-knives; signature silhouette: a wolf-ear pelt hood and a long bushy tail; expression and pose suggest: free spirit raised by wolves, loves the hunt.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, short fur tunic, leather wraps, wolf-pelt hood with ears; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and tan (#D9B48A); holding a pair of bone claw-knives; signature silhouette: a wolf-ear pelt hood and a long bushy tail; expression and pose suggest: free spirit raised by wolves, loves the hunt.
 
 Model reference → `art/characters/lyra_wildpelt/front.png`
 
@@ -514,7 +514,7 @@ Beast · Rare · Trickster
 
 Card art → `art/characters/tavi_howlstride/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, short grey fur jacket, ripped leggings, tooth necklace; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and periwinkle (#9EAED3); holding a hooked boomerang; signature silhouette: big pointed ears, a fluffy tail and the boomerang; expression and pose suggest: loyal and loud, howls at every victory.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, short grey fur jacket, ripped leggings, tooth necklace; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and periwinkle (#9EAED3); holding a hooked boomerang; signature silhouette: big pointed ears, a fluffy tail and the boomerang; expression and pose suggest: loyal and loud, howls at every victory.
 
 Model reference → `art/characters/tavi_howlstride/front.png`
 
@@ -526,7 +526,7 @@ Beast · Common · Guardian
 
 Card art → `art/characters/tusk_boulderhide/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, thick hide armour with stone plates, carved tusk shoulder guards; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and steel grey (#7B8794); holding a boulder-sized round stone shield; signature silhouette: two huge upturned tusk shoulder guards; expression and pose suggest: slow, kind and utterly immovable.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, thick hide armour with stone plates, carved tusk shoulder guards; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and steel grey (#7B8794); holding a boulder-sized round stone shield; signature silhouette: two huge upturned tusk shoulder guards; expression and pose suggest: slow, kind and utterly immovable.
 
 Model reference → `art/characters/tusk_boulderhide/front.png`
 
@@ -538,7 +538,7 @@ Beast · Epic · Trickster
 
 Card art → `art/characters/nessa_fangwood/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, green and brown leaf-cloak over fitted leathers, fang earrings, bare feet with wraps; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and jade green (#2F7A4D); holding a long fang-tipped spear; signature silhouette: a leaf cloak with jagged edges and the fang spear; expression and pose suggest: sly forest stalker who loves riddles.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, green and brown leaf-cloak over fitted leathers, fang earrings, bare feet with wraps; colour scheme chestnut brown (#8A5A3B), tan (#D9B48A) and jade green (#2F7A4D); holding a long fang-tipped spear; signature silhouette: a leaf cloak with jagged edges and the fang spear; expression and pose suggest: sly forest stalker who loves riddles.
 
 Model reference → `art/characters/nessa_fangwood/front.png`
 
@@ -552,7 +552,7 @@ Dragon · Legendary · Skirmisher
 
 Card art → `art/characters/aldra_skyserpent/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, flowing teal and green serpent-scale robes, long feathered sleeves; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and cream (#F1E6C8); holding a long serpent-head glaive; signature silhouette: a long serpentine scarf coiling in the air; expression and pose suggest: regal and distant, rarely touches the ground.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, flowing teal and green serpent-scale robes, long feathered sleeves; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and cream (#F1E6C8); holding a long serpent-head glaive; signature silhouette: a long serpentine scarf coiling in the air; expression and pose suggest: regal and distant, rarely touches the ground.
 
 Model reference → `art/characters/aldra_skyserpent/front.png`
 
@@ -564,7 +564,7 @@ Dragon · Rare · Striker
 
 Card art → `art/characters/drakon_emberwing/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, red flight jacket with scale-patterned shoulders, flight goggles, gauntlet with a talon; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and gold (#FFC54B); holding a winged-hilt broadsword; signature silhouette: small scaled wings sprouting from the back; expression and pose suggest: brash young dragon-rider who never lands.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, red flight jacket with scale-patterned shoulders, flight goggles, gauntlet with a talon; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and gold (#FFC54B); holding a winged-hilt broadsword; signature silhouette: small scaled wings sprouting from the back; expression and pose suggest: brash young dragon-rider who never lands.
 
 Model reference → `art/characters/drakon_emberwing/front.png`
 
@@ -576,7 +576,7 @@ Dragon · Mythical · Skirmisher
 
 Card art → `art/characters/korr_flamejaw/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, massive dark green scale plate with ember-glowing gaps, horned helm with jaw guard; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and bright red (#FF3B3B); holding giant clawed gauntlets; signature silhouette: a horned helm shaped like a dragon's jaw; expression and pose suggest: ferocious, hungry for a worthy rival.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, massive dark green scale plate with ember-glowing gaps, horned helm with jaw guard; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and bright red (#FF3B3B); holding giant clawed gauntlets; signature silhouette: a horned helm shaped like a dragon's jaw; expression and pose suggest: ferocious, hungry for a worthy rival.
 
 Model reference → `art/characters/korr_flamejaw/front.png`
 
@@ -588,7 +588,7 @@ Dragon · Common · Guardian
 
 Card art → `art/characters/ryuna_scalebright/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, jade scale-mail dress armour, layered skirts, scale bracelets; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and frost white (#E8F6FF); holding a large scale-patterned round shield; signature silhouette: a long braided tail-like hair rope and the shield; expression and pose suggest: gentle keeper who talks to every dragon.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, jade scale-mail dress armour, layered skirts, scale bracelets; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and frost white (#E8F6FF); holding a large scale-patterned round shield; signature silhouette: a long braided tail-like hair rope and the shield; expression and pose suggest: gentle keeper who talks to every dragon.
 
 Model reference → `art/characters/ryuna_scalebright/front.png`
 
@@ -600,7 +600,7 @@ Dragon · Common · Skirmisher
 
 Card art → `art/characters/sythe_cragscale/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, light grey-green scaled vest, climbing harness, claw-tipped gloves; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and crimson red (#C2412D); holding two talon-shaped sickles; signature silhouette: a long thin scaled tail and sickles; expression and pose suggest: cocky climber who dives from cliffs for fun.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, light grey-green scaled vest, climbing harness, claw-tipped gloves; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and crimson red (#C2412D); holding two talon-shaped sickles; signature silhouette: a long thin scaled tail and sickles; expression and pose suggest: cocky climber who dives from cliffs for fun.
 
 Model reference → `art/characters/sythe_cragscale/front.png`
 
@@ -612,7 +612,7 @@ Dragon · Epic · Bruiser
 
 Card art → `art/characters/taren_ashscale/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dark green scale-mail jerkin with ash-grey dragon-scale shoulder plates, wrapped forearms; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and ash grey (#B5B0A8); holding a jagged greatsword shaped like a dragon's spine; signature silhouette: two swept-back horn crests on the head and the spined greatsword; expression and pose suggest: proud and fierce, slow to trust, fiercely protective once won over.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dark green scale-mail jerkin with ash-grey dragon-scale shoulder plates, wrapped forearms; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and ash grey (#B5B0A8); holding a jagged greatsword shaped like a dragon's spine; signature silhouette: two swept-back horn crests on the head and the spined greatsword; expression and pose suggest: proud and fierce, slow to trust, fiercely protective once won over.
 
 Model reference → `art/characters/taren_ashscale/front.png`
 
@@ -624,7 +624,7 @@ Dragon · Epic · Bruiser
 
 Card art → `art/characters/vharos_wyrmfang/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, heavy green dragon-scale armour, gold coins sewn into the belt, fang necklace; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and gold (#FFC54B); holding a two-handed fang axe; signature silhouette: a hunched heavy back and a double-headed axe; expression and pose suggest: greedy, gruff and proud of his hoard.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, heavy green dragon-scale armour, gold coins sewn into the belt, fang necklace; colour scheme jade green (#2F7A4D), flame orange (#FF6A2B) and gold (#FFC54B); holding a two-handed fang axe; signature silhouette: a hunched heavy back and a double-headed axe; expression and pose suggest: greedy, gruff and proud of his hoard.
 
 Model reference → `art/characters/vharos_wyrmfang/front.png`
 
@@ -638,7 +638,7 @@ Warrior · Legendary · Support
 
 Card art → `art/characters/asha_warbanner/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, polished steel cuirass with red cape, plumed helm under the arm; colour scheme steel grey (#7B8794), scarlet (#D2462E) and gold (#FFC54B); holding a war-banner spear; signature silhouette: a tall banner flowing above her head; expression and pose suggest: inspiring general, booming voice, warm smile.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, polished steel cuirass with red cape, plumed helm under the arm; colour scheme steel grey (#7B8794), scarlet (#D2462E) and gold (#FFC54B); holding a war-banner spear; signature silhouette: a tall banner flowing above her head; expression and pose suggest: inspiring general, booming voice, warm smile.
 
 Model reference → `art/characters/asha_warbanner/front.png`
 
@@ -650,7 +650,7 @@ Warrior · Epic · Guardian
 
 Card art → `art/characters/duran_oakblade/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, oak-brown leather armour with steel studs, green cloak, wooden bracers; colour scheme steel grey (#7B8794), scarlet (#D2462E) and jade green (#2F7A4D); holding a broad wooden-hilted greatsword; signature silhouette: a broad cloak and a wide greatsword planted in the ground; expression and pose suggest: steady woodsman-soldier, few words, big heart.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, oak-brown leather armour with steel studs, green cloak, wooden bracers; colour scheme steel grey (#7B8794), scarlet (#D2462E) and jade green (#2F7A4D); holding a broad wooden-hilted greatsword; signature silhouette: a broad cloak and a wide greatsword planted in the ground; expression and pose suggest: steady woodsman-soldier, few words, big heart.
 
 Model reference → `art/characters/duran_oakblade/front.png`
 
@@ -662,7 +662,7 @@ Warrior · Common · Striker
 
 Card art → `art/characters/hideo_ironvow/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, grey lamellar armour with red cords, tall topknot tied with red cord, wooden sandals; colour scheme steel grey (#7B8794), scarlet (#D2462E) and scarlet (#D2462E); holding a straight iron sword; signature silhouette: a tall topknot and square lamellar shoulders; expression and pose suggest: earnest recruit who keeps every promise.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, grey lamellar armour with red cords, tall topknot tied with red cord, wooden sandals; colour scheme steel grey (#7B8794), scarlet (#D2462E) and scarlet (#D2462E); holding a straight iron sword; signature silhouette: a tall topknot and square lamellar shoulders; expression and pose suggest: earnest recruit who keeps every promise.
 
 Model reference → `art/characters/hideo_ironvow/front.png`
 
@@ -674,7 +674,7 @@ Warrior · Rare · Bruiser
 
 Card art → `art/characters/marza_steelheart/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, battered steel breastplate over red wraps, one huge pauldron; colour scheme steel grey (#7B8794), scarlet (#D2462E) and gold (#FFC54B); holding a flanged steel mace; signature silhouette: one giant pauldron and a heavy mace; expression and pose suggest: blunt veteran who laughs in the face of danger.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, battered steel breastplate over red wraps, one huge pauldron; colour scheme steel grey (#7B8794), scarlet (#D2462E) and gold (#FFC54B); holding a flanged steel mace; signature silhouette: one giant pauldron and a heavy mace; expression and pose suggest: blunt veteran who laughs in the face of danger.
 
 Model reference → `art/characters/marza_steelheart/front.png`
 
@@ -686,7 +686,7 @@ Warrior · Common · Bruiser
 
 Card art → `art/characters/rook_hammerfall/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, chunky steel plates on bare arms, belt of tools, a cracked helmet; colour scheme steel grey (#7B8794), scarlet (#D2462E) and chestnut brown (#8A5A3B); holding a giant sledgehammer; signature silhouette: a very wide build and a sledgehammer over one shoulder; expression and pose suggest: cheerful brute who solves problems by hitting them.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, chunky steel plates on bare arms, belt of tools, a cracked helmet; colour scheme steel grey (#7B8794), scarlet (#D2462E) and chestnut brown (#8A5A3B); holding a giant sledgehammer; signature silhouette: a very wide build and a sledgehammer over one shoulder; expression and pose suggest: cheerful brute who solves problems by hitting them.
 
 Model reference → `art/characters/rook_hammerfall/front.png`
 
@@ -698,7 +698,7 @@ Warrior · Epic · Trickster
 
 Card art → `art/characters/takeo_shieldbreak/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dark steel half-armour with red lacing, scarred bare arms; colour scheme steel grey (#7B8794), scarlet (#D2462E) and steel grey (#7B8794); holding a huge two-handed hammer-pick; signature silhouette: a massive hammer-pick held across the back; expression and pose suggest: fierce challenger who loves a strong opponent.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dark steel half-armour with red lacing, scarred bare arms; colour scheme steel grey (#7B8794), scarlet (#D2462E) and steel grey (#7B8794); holding a huge two-handed hammer-pick; signature silhouette: a massive hammer-pick held across the back; expression and pose suggest: fierce challenger who loves a strong opponent.
 
 Model reference → `art/characters/takeo_shieldbreak/front.png`
 
@@ -710,7 +710,7 @@ Warrior · Rare · Skirmisher
 
 Card art → `art/characters/valdis_spearwind/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, light grey scale shirt, red sash, crested open helm; colour scheme steel grey (#7B8794), scarlet (#D2462E) and royal blue (#3A55C8); holding a long spear with a red tassel; signature silhouette: a crested helm and a spear far taller than him; expression and pose suggest: disciplined vanguard who leads from the front.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, light grey scale shirt, red sash, crested open helm; colour scheme steel grey (#7B8794), scarlet (#D2462E) and royal blue (#3A55C8); holding a long spear with a red tassel; signature silhouette: a crested helm and a spear far taller than him; expression and pose suggest: disciplined vanguard who leads from the front.
 
 Model reference → `art/characters/valdis_spearwind/front.png`
 
@@ -724,7 +724,7 @@ Ninja · Rare · Trickster
 
 Card art → `art/characters/aya_needlefall/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, fitted charcoal suit with rows of needle holsters, short teal cape; colour scheme midnight navy (#22303F), teal (#4FD1C5) and rose (#FF668F); holding fans of throwing needles; signature silhouette: a short high-collared cape and needles fanned in both hands; expression and pose suggest: precise and clinical, notes every weakness.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, fitted charcoal suit with rows of needle holsters, short teal cape; colour scheme midnight navy (#22303F), teal (#4FD1C5) and rose (#FF668F); holding fans of throwing needles; signature silhouette: a short high-collared cape and needles fanned in both hands; expression and pose suggest: precise and clinical, notes every weakness.
 
 Model reference → `art/characters/aya_needlefall/front.png`
 
@@ -736,7 +736,7 @@ Ninja · Epic · Striker
 
 Card art → `art/characters/hiko_windstep/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, loose dark wind-blown robe with teal lining, wooden sandals; colour scheme midnight navy (#22303F), teal (#4FD1C5) and frost white (#E8F6FF); holding a folding war-fan; signature silhouette: an oversized war-fan and a billowing open robe; expression and pose suggest: laid-back, always half-asleep until the fight starts.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, loose dark wind-blown robe with teal lining, wooden sandals; colour scheme midnight navy (#22303F), teal (#4FD1C5) and frost white (#E8F6FF); holding a folding war-fan; signature silhouette: an oversized war-fan and a billowing open robe; expression and pose suggest: laid-back, always half-asleep until the fight starts.
 
 Model reference → `art/characters/hiko_windstep/front.png`
 
@@ -748,7 +748,7 @@ Ninja · Legendary · Skirmisher
 
 Card art → `art/characters/joro_smokeleap/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dark purple stage-ninja robes, smoke-grey scarf, lantern charms; colour scheme midnight navy (#22303F), teal (#4FD1C5) and soft lilac (#B98CFF); holding a smoke-pipe staff; signature silhouette: billowing smoke-grey scarf and a long pipe-staff; expression and pose suggest: theatrical master of vanishing acts.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dark purple stage-ninja robes, smoke-grey scarf, lantern charms; colour scheme midnight navy (#22303F), teal (#4FD1C5) and soft lilac (#B98CFF); holding a smoke-pipe staff; signature silhouette: billowing smoke-grey scarf and a long pipe-staff; expression and pose suggest: theatrical master of vanishing acts.
 
 Model reference → `art/characters/joro_smokeleap/front.png`
 
@@ -760,7 +760,7 @@ Ninja · Common · Skirmisher
 
 Card art → `art/characters/kaze_silentleaf/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dark teal wrapped tunic, leaf-patterned sash, split-toe boots; colour scheme midnight navy (#22303F), teal (#4FD1C5) and leaf green (#9AD06B); holding a short straight blade hidden in a leaf scabbard; signature silhouette: a large green leaf-shaped hat; expression and pose suggest: quiet and kind, communicates with hand signs.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dark teal wrapped tunic, leaf-patterned sash, split-toe boots; colour scheme midnight navy (#22303F), teal (#4FD1C5) and leaf green (#9AD06B); holding a short straight blade hidden in a leaf scabbard; signature silhouette: a large green leaf-shaped hat; expression and pose suggest: quiet and kind, communicates with hand signs.
 
 Model reference → `art/characters/kaze_silentleaf/front.png`
 
@@ -772,7 +772,7 @@ Ninja · Rare · Trickster
 
 Card art → `art/characters/rena_mistcut/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, grey-blue layered wraps that fade into mist at the hem, long sleeves; colour scheme midnight navy (#22303F), teal (#4FD1C5) and pale lilac grey (#C9C2D9); holding a long thin needle-sword; signature silhouette: mist-trailing sleeves and hem; expression and pose suggest: elusive and calm, smiles when she disappears.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, grey-blue layered wraps that fade into mist at the hem, long sleeves; colour scheme midnight navy (#22303F), teal (#4FD1C5) and pale lilac grey (#C9C2D9); holding a long thin needle-sword; signature silhouette: mist-trailing sleeves and hem; expression and pose suggest: elusive and calm, smiles when she disappears.
 
 Model reference → `art/characters/rena_mistcut/front.png`
 
@@ -784,7 +784,7 @@ Ninja · Common · Skirmisher
 
 Card art → `art/characters/suzu_quickveil/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, short navy jacket with teal bell charms, shorts, wrapped shins; colour scheme midnight navy (#22303F), teal (#4FD1C5) and gold (#FFC54B); holding a pair of bell-tied kunai; signature silhouette: twin round hair buns with bells; expression and pose suggest: energetic youngest of the clan, always racing.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, short navy jacket with teal bell charms, shorts, wrapped shins; colour scheme midnight navy (#22303F), teal (#4FD1C5) and gold (#FFC54B); holding a pair of bell-tied kunai; signature silhouette: twin round hair buns with bells; expression and pose suggest: energetic youngest of the clan, always racing.
 
 Model reference → `art/characters/suzu_quickveil/front.png`
 
@@ -796,7 +796,7 @@ Ninja · Common · Striker
 
 Card art → `art/characters/toru_paperblade/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, ink-black scholar's coat, paper talismans pinned on the sleeves; colour scheme midnight navy (#22303F), teal (#4FD1C5) and silver white (#F2F5FF); holding folded paper blades; signature silhouette: a cloud of floating paper slips around him; expression and pose suggest: shy calligrapher with a sharp hidden talent.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, ink-black scholar's coat, paper talismans pinned on the sleeves; colour scheme midnight navy (#22303F), teal (#4FD1C5) and silver white (#F2F5FF); holding folded paper blades; signature silhouette: a cloud of floating paper slips around him; expression and pose suggest: shy calligrapher with a sharp hidden talent.
 
 Model reference → `art/characters/toru_paperblade/front.png`
 
@@ -810,7 +810,7 @@ Royal · Common · Guardian
 
 Card art → `art/characters/alaric_highmantle/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, purple long mantle over polished half-plate, gold chain of office; colour scheme royal purple (#5B2A86), gold (#FFC54B) and pale silver (#C0C7D6); holding a long-handled ceremonial halberd; signature silhouette: a very high stiff collar on the mantle; expression and pose suggest: old-fashioned gentleman knight.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, purple long mantle over polished half-plate, gold chain of office; colour scheme royal purple (#5B2A86), gold (#FFC54B) and pale silver (#C0C7D6); holding a long-handled ceremonial halberd; signature silhouette: a very high stiff collar on the mantle; expression and pose suggest: old-fashioned gentleman knight.
 
 Model reference → `art/characters/alaric_highmantle/front.png`
 
@@ -822,7 +822,7 @@ Royal · Epic · Guardian
 
 Card art → `art/characters/cassia_crownguard/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, purple and gold guard uniform with a tall shako hat, white gloves; colour scheme royal purple (#5B2A86), gold (#FFC54B) and navy (#2A3760); holding a gold-rimmed kite shield; signature silhouette: a tall plumed shako hat; expression and pose suggest: devoted bodyguard, deadpan humour.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, purple and gold guard uniform with a tall shako hat, white gloves; colour scheme royal purple (#5B2A86), gold (#FFC54B) and navy (#2A3760); holding a gold-rimmed kite shield; signature silhouette: a tall plumed shako hat; expression and pose suggest: devoted bodyguard, deadpan humour.
 
 Model reference → `art/characters/cassia_crownguard/front.png`
 
@@ -834,7 +834,7 @@ Royal · Common · Guardian
 
 Card art → `art/characters/edric_velvetshield/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, purple velvet doublet with gold slashes, short cape, feathered cap; colour scheme royal purple (#5B2A86), gold (#FFC54B) and emerald (#48DA97); holding a velvet-wrapped buckler; signature silhouette: a wide feathered cap; expression and pose suggest: smooth-talking noble with a soft heart.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, purple velvet doublet with gold slashes, short cape, feathered cap; colour scheme royal purple (#5B2A86), gold (#FFC54B) and emerald (#48DA97); holding a velvet-wrapped buckler; signature silhouette: a wide feathered cap; expression and pose suggest: smooth-talking noble with a soft heart.
 
 Model reference → `art/characters/edric_velvetshield/front.png`
 
@@ -846,7 +846,7 @@ Royal · Legendary · Striker
 
 Card art → `art/characters/isadora_gildwing/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, gold-trimmed purple riding coat, winged hairpiece, high boots; colour scheme royal purple (#5B2A86), gold (#FFC54B) and pale gold (#FFF1B8); holding a gilded sabre; signature silhouette: gold wing hair ornaments and a riding coat tail; expression and pose suggest: fearless princess who sneaks out to fight.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, gold-trimmed purple riding coat, winged hairpiece, high boots; colour scheme royal purple (#5B2A86), gold (#FFC54B) and pale gold (#FFF1B8); holding a gilded sabre; signature silhouette: gold wing hair ornaments and a riding coat tail; expression and pose suggest: fearless princess who sneaks out to fight.
 
 Model reference → `art/characters/isadora_gildwing/front.png`
 
@@ -858,7 +858,7 @@ Royal · Mythical · Skirmisher
 
 Card art → `art/characters/leopold_lionmark/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, gold and purple royal plate with a lion-head pauldron, red fur mantle; colour scheme royal purple (#5B2A86), gold (#FFC54B) and crimson red (#C2412D); holding a massive lion-headed greatsword; signature silhouette: a lion-mane fur mantle and lion pauldron; expression and pose suggest: proud king with a lion's roar.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, gold and purple royal plate with a lion-head pauldron, red fur mantle; colour scheme royal purple (#5B2A86), gold (#FFC54B) and crimson red (#C2412D); holding a massive lion-headed greatsword; signature silhouette: a lion-mane fur mantle and lion pauldron; expression and pose suggest: proud king with a lion's roar.
 
 Model reference → `art/characters/leopold_lionmark/front.png`
 
@@ -870,7 +870,7 @@ Royal · Rare · Guardian
 
 Card art → `art/characters/regina_goldcrest/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, royal purple gown armour with gold crest breastplate, ermine-trimmed cape; colour scheme royal purple (#5B2A86), gold (#FFC54B) and silver white (#F2F5FF); holding a crested gold tower shield; signature silhouette: a tall gold crest crown and wide cape; expression and pose suggest: commanding queen who never raises her voice.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, royal purple gown armour with gold crest breastplate, ermine-trimmed cape; colour scheme royal purple (#5B2A86), gold (#FFC54B) and silver white (#F2F5FF); holding a crested gold tower shield; signature silhouette: a tall gold crest crown and wide cape; expression and pose suggest: commanding queen who never raises her voice.
 
 Model reference → `art/characters/regina_goldcrest/front.png`
 
@@ -884,7 +884,7 @@ Cosmic · Rare · Striker
 
 Card art → `art/characters/astra_novaheart/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, navy flight suit with pink star patches, star-shaped hair clips; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and light gold (#FFE27A); holding a star-tipped wand; signature silhouette: a cluster of star hair clips and a flared jacket; expression and pose suggest: wide-eyed dreamer who fights for the stars.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, navy flight suit with pink star patches, star-shaped hair clips; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and light gold (#FFE27A); holding a star-tipped wand; signature silhouette: a cluster of star hair clips and a flared jacket; expression and pose suggest: wide-eyed dreamer who fights for the stars.
 
 Model reference → `art/characters/astra_novaheart/front.png`
 
@@ -896,7 +896,7 @@ Cosmic · Rare · Bruiser
 
 Card art → `art/characters/celeste_moonrift/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, pale lavender moon-robe with crescent ornaments, silver slippers; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and frost white (#E8F6FF); holding a crescent-moon staff; signature silhouette: a large crescent ornament behind the head; expression and pose suggest: soothing and dreamy, hums lullabies.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, pale lavender moon-robe with crescent ornaments, silver slippers; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and frost white (#E8F6FF); holding a crescent-moon staff; signature silhouette: a large crescent ornament behind the head; expression and pose suggest: soothing and dreamy, hums lullabies.
 
 Model reference → `art/characters/celeste_moonrift/front.png`
 
@@ -908,7 +908,7 @@ Cosmic · Legendary · Guardian
 
 Card art → `art/characters/halcyon_starwake/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, navy and silver armour with constellation engravings, a ring-shaped back halo; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and soft lilac (#B98CFF); holding a planet-ring shield; signature silhouette: a planetary ring shield and a ring halo on the back; expression and pose suggest: serene guardian of the night sky.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, navy and silver armour with constellation engravings, a ring-shaped back halo; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and soft lilac (#B98CFF); holding a planet-ring shield; signature silhouette: a planetary ring shield and a ring halo on the back; expression and pose suggest: serene guardian of the night sky.
 
 Model reference → `art/characters/halcyon_starwake/front.png`
 
@@ -920,7 +920,7 @@ Cosmic · Mythical · Skirmisher
 
 Card art → `art/characters/lyss_nebulight/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, flowing nebula-dyed gown that fades pink to violet to blue, starlit veil; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and white (#FFFFFF); holding a lance of solid starlight; signature silhouette: a nebula-gradient gown and a starlit veil; expression and pose suggest: enigmatic, speaks in riddles of light.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, flowing nebula-dyed gown that fades pink to violet to blue, starlit veil; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and white (#FFFFFF); holding a lance of solid starlight; signature silhouette: a nebula-gradient gown and a starlit veil; expression and pose suggest: enigmatic, speaks in riddles of light.
 
 Model reference → `art/characters/lyss_nebulight/front.png`
 
@@ -932,7 +932,7 @@ Cosmic · Epic · Trickster
 
 Card art → `art/characters/nyx_voidglimmer/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, black bodysuit with a shimmering void-pattern cloak, floating shards; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and sky blue (#45BEFF); holding a crescent of void shards; signature silhouette: floating shards orbiting the shoulders; expression and pose suggest: unsettling, curious and oddly polite.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, black bodysuit with a shimmering void-pattern cloak, floating shards; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and sky blue (#45BEFF); holding a crescent of void shards; signature silhouette: floating shards orbiting the shoulders; expression and pose suggest: unsettling, curious and oddly polite.
 
 Model reference → `art/characters/nyx_voidglimmer/front.png`
 
@@ -944,7 +944,7 @@ Cosmic · Common · Skirmisher
 
 Card art → `art/characters/orin_starfall/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, oversized navy coat covered in constellation embroidery, scarf; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and gold (#FFC54B); holding a telescope staff; signature silhouette: an oversized coat and a telescope staff; expression and pose suggest: brave young stargazer, clumsy and determined.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, oversized navy coat covered in constellation embroidery, scarf; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and gold (#FFC54B); holding a telescope staff; signature silhouette: an oversized coat and a telescope staff; expression and pose suggest: brave young stargazer, clumsy and determined.
 
 Model reference → `art/characters/orin_starfall/front.png`
 
@@ -956,7 +956,7 @@ Cosmic · Epic · Trickster
 
 Card art → `art/characters/quill_cometrider/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, cropped navy jacket with a comet-tail cape, star goggles; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and orange (#FF8A3D); holding a comet-tipped lance; signature silhouette: a long comet-tail cape streaming behind; expression and pose suggest: daredevil who rides comets for fun.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, cropped navy jacket with a comet-tail cape, star goggles; colour scheme deep indigo (#1C1F4A), neon pink (#FF7BE5) and orange (#FF8A3D); holding a comet-tipped lance; signature silhouette: a long comet-tail cape streaming behind; expression and pose suggest: daredevil who rides comets for fun.
 
 Model reference → `art/characters/quill_cometrider/front.png`
 
@@ -970,7 +970,7 @@ Ancient · Legendary · Skirmisher
 
 Card art → `art/characters/gideon_ashpillar/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, weathered stone-grey legionary armour, crested helm, jade-trimmed cape; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and scarlet (#D2462E); holding a pillar-shaped stone warhammer; signature silhouette: a tall crested helm and the pillar hammer; expression and pose suggest: last soldier of a lost empire, honourable to a fault.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, weathered stone-grey legionary armour, crested helm, jade-trimmed cape; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and scarlet (#D2462E); holding a pillar-shaped stone warhammer; signature silhouette: a tall crested helm and the pillar hammer; expression and pose suggest: last soldier of a lost empire, honourable to a fault.
 
 Model reference → `art/characters/gideon_ashpillar/front.png`
 
@@ -982,7 +982,7 @@ Ancient · Common · Trickster
 
 Card art → `art/characters/mada_relicborn/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, explorer's vest over sand-coloured wraps, many pouches, relic amulets; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and purple (#A469FF); holding a cursed jade idol on a chain; signature silhouette: many dangling amulets and a swinging idol; expression and pose suggest: curious relic-hunter with a sticky-fingers habit.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, explorer's vest over sand-coloured wraps, many pouches, relic amulets; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and purple (#A469FF); holding a cursed jade idol on a chain; signature silhouette: many dangling amulets and a swinging idol; expression and pose suggest: curious relic-hunter with a sticky-fingers habit.
 
 Model reference → `art/characters/mada_relicborn/front.png`
 
@@ -994,7 +994,7 @@ Ancient · Epic · Bruiser
 
 Card art → `art/characters/ozric_tombwarden/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dusty bronze tomb armour with jade inlays, tattered burial wraps; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and dark brown (#3A2A24); holding a heavy tomb-key maul; signature silhouette: a giant key-shaped maul and trailing burial wraps; expression and pose suggest: grim guardian bound to an old oath.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dusty bronze tomb armour with jade inlays, tattered burial wraps; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and dark brown (#3A2A24); holding a heavy tomb-key maul; signature silhouette: a giant key-shaped maul and trailing burial wraps; expression and pose suggest: grim guardian bound to an old oath.
 
 Model reference → `art/characters/ozric_tombwarden/front.png`
 
@@ -1006,7 +1006,7 @@ Ancient · Rare · Guardian
 
 Card art → `art/characters/petra_stonesong/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, earthy layered robes with jade stone beads, carved stone circlet; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and amber (#C98A1C); holding a stone tuning-fork staff; signature silhouette: a forked tuning staff and beaded robes; expression and pose suggest: gentle singer whose voice moves mountains.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, earthy layered robes with jade stone beads, carved stone circlet; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and amber (#C98A1C); holding a stone tuning-fork staff; signature silhouette: a forked tuning staff and beaded robes; expression and pose suggest: gentle singer whose voice moves mountains.
 
 Model reference → `art/characters/petra_stonesong/front.png`
 
@@ -1018,7 +1018,7 @@ Ancient · Rare · Guardian
 
 Card art → `art/characters/sila_fossilkeep/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, layered khaki robes with fossil-shell armour plates, round spectacles; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and khaki (#E8C98A); holding a spiral ammonite shield; signature silhouette: a spiral shell shield and round glasses; expression and pose suggest: careful archivist of ancient life.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, layered khaki robes with fossil-shell armour plates, round spectacles; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and khaki (#E8C98A); holding a spiral ammonite shield; signature silhouette: a spiral shell shield and round glasses; expression and pose suggest: careful archivist of ancient life.
 
 Model reference → `art/characters/sila_fossilkeep/front.png`
 
@@ -1030,7 +1030,7 @@ Ancient · Common · Guardian
 
 Card art → `art/characters/thorne_runeward/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, sandstone-coloured tunic with carved rune plates, leather apron; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and mint green (#5FD3A0); holding a rune-carved stone shield; signature silhouette: a square stone shield covered in glowing runes; expression and pose suggest: grumpy stone-carver who hums while he works.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, sandstone-coloured tunic with carved rune plates, leather apron; colour scheme sandstone (#9C8B6E), mint green (#5FD3A0) and mint green (#5FD3A0); holding a rune-carved stone shield; signature silhouette: a square stone shield covered in glowing runes; expression and pose suggest: grumpy stone-carver who hums while he works.
 
 Model reference → `art/characters/thorne_runeward/front.png`
 
@@ -1044,7 +1044,7 @@ Mystic · Common · Guardian
 
 Card art → `art/characters/faelan_glyphstone/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, plain violet scholar robes, a satchel of glyph stones, round cap; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and periwinkle (#9EAED3); holding a hovering glyph-stone shield; signature silhouette: floating glyph stones around a book; expression and pose suggest: studious young warder, always reading.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, plain violet scholar robes, a satchel of glyph stones, round cap; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and periwinkle (#9EAED3); holding a hovering glyph-stone shield; signature silhouette: floating glyph stones around a book; expression and pose suggest: studious young warder, always reading.
 
 Model reference → `art/characters/faelan_glyphstone/front.png`
 
@@ -1056,7 +1056,7 @@ Mystic · Epic · Guardian
 
 Card art → `art/characters/ilsa_charmweave/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, violet and teal shawl over a layered skirt, charm bracelets, head scarf; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and blossom pink (#FF9AD5); holding a weaving loom-staff with threads of light; signature silhouette: a head scarf with tassels and glowing threads; expression and pose suggest: warm fortune-teller who always sees the bright side.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, violet and teal shawl over a layered skirt, charm bracelets, head scarf; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and blossom pink (#FF9AD5); holding a weaving loom-staff with threads of light; signature silhouette: a head scarf with tassels and glowing threads; expression and pose suggest: warm fortune-teller who always sees the bright side.
 
 Model reference → `art/characters/ilsa_charmweave/front.png`
 
@@ -1068,7 +1068,7 @@ Mystic · Common · Trickster
 
 Card art → `art/characters/mirelle_hexwhisper/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, purple layered witch robes with patchwork sleeves, crooked tall hat; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and emerald (#48DA97); holding a crooked wand; signature silhouette: a tall crooked pointed hat; expression and pose suggest: shy witch who mutters jinxes under her breath.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, purple layered witch robes with patchwork sleeves, crooked tall hat; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and emerald (#48DA97); holding a crooked wand; signature silhouette: a tall crooked pointed hat; expression and pose suggest: shy witch who mutters jinxes under her breath.
 
 Model reference → `art/characters/mirelle_hexwhisper/front.png`
 
@@ -1080,7 +1080,7 @@ Mystic · Mythical · Skirmisher
 
 Card art → `art/characters/quen_spiralsight/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, flowing violet robes with spiral embroidery, a spiral third-eye circlet; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and sky blue (#45BEFF); holding a spiral staff; signature silhouette: spiral rings floating around the head; expression and pose suggest: unblinking seer who sees every outcome.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, flowing violet robes with spiral embroidery, a spiral third-eye circlet; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and sky blue (#45BEFF); holding a spiral staff; signature silhouette: spiral rings floating around the head; expression and pose suggest: unblinking seer who sees every outcome.
 
 Model reference → `art/characters/quen_spiralsight/front.png`
 
@@ -1092,7 +1092,7 @@ Mystic · Rare · Trickster
 
 Card art → `art/characters/yara_moonhex/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, midnight-violet corset coat, moon charms, high-heeled boots; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and frost white (#E8F6FF); holding a moon-shaped sickle; signature silhouette: a moon sickle and long moon-charm earrings; expression and pose suggest: sharp-tongued night witch.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, midnight-violet corset coat, moon charms, high-heeled boots; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and frost white (#E8F6FF); holding a moon-shaped sickle; signature silhouette: a moon sickle and long moon-charm earrings; expression and pose suggest: sharp-tongued night witch.
 
 Model reference → `art/characters/yara_moonhex/front.png`
 
@@ -1104,7 +1104,7 @@ Mystic · Rare · Striker
 
 Card art → `art/characters/zarek_spellbind/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dark violet duelling coat with glowing glyph chains wrapped around the arms; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and gold (#FFC54B); holding chains of glowing glyphs; signature silhouette: glyph chains wrapping both arms; expression and pose suggest: intense duelling mage who binds his foes.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dark violet duelling coat with glowing glyph chains wrapped around the arms; colour scheme violet (#3E2A6B), soft lilac (#B98CFF) and gold (#FFC54B); holding chains of glowing glyphs; signature silhouette: glyph chains wrapping both arms; expression and pose suggest: intense duelling mage who binds his foes.
 
 Model reference → `art/characters/zarek_spellbind/front.png`
 
@@ -1118,7 +1118,7 @@ Spirit · Common · Bruiser
 
 Card art → `art/characters/aoi_wisplight/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, pale mint kimono-cut tunic with wispy sleeves, paper lantern; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and gold (#FFC54B); holding a paper lantern on a pole; signature silhouette: a lantern on a pole and floating wisps; expression and pose suggest: gentle and sleepy, followed by friendly wisps.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, pale mint kimono-cut tunic with wispy sleeves, paper lantern; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and gold (#FFC54B); holding a paper lantern on a pole; signature silhouette: a lantern on a pole and floating wisps; expression and pose suggest: gentle and sleepy, followed by friendly wisps.
 
 Model reference → `art/characters/aoi_wisplight/front.png`
 
@@ -1130,7 +1130,7 @@ Spirit · Legendary · Support
 
 Card art → `art/characters/eira_mistsong/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, flowing white and teal mist gown, long veil, glowing throat pendant; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and soft lilac (#B98CFF); holding a harp of mist; signature silhouette: a floating mist harp and a long veil; expression and pose suggest: ethereal singer whose songs drain sorrow.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, flowing white and teal mist gown, long veil, glowing throat pendant; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and soft lilac (#B98CFF); holding a harp of mist; signature silhouette: a floating mist harp and a long veil; expression and pose suggest: ethereal singer whose songs drain sorrow.
 
 Model reference → `art/characters/eira_mistsong/front.png`
 
@@ -1142,7 +1142,7 @@ Spirit · Epic · Skirmisher
 
 Card art → `art/characters/kiri_lanternwake/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, teal traveller's coat hung with tiny lanterns, wide bucket hat; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and lantern amber (#FFB45A); holding a lantern flail; signature silhouette: many small lanterns hanging off the coat; expression and pose suggest: cheerful guide who lights the way home.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, teal traveller's coat hung with tiny lanterns, wide bucket hat; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and lantern amber (#FFB45A); holding a lantern flail; signature silhouette: many small lanterns hanging off the coat; expression and pose suggest: cheerful guide who lights the way home.
 
 Model reference → `art/characters/kiri_lanternwake/front.png`
 
@@ -1154,7 +1154,7 @@ Spirit · Rare · Guardian
 
 Card art → `art/characters/rowan_soulkeeper/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, grey-teal long coat with spirit-bell chains, wide-brimmed hat; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and purple (#A469FF); holding a bell-hung shield; signature silhouette: a wide hat and hanging spirit bells; expression and pose suggest: solemn keeper of lost souls, secretly sentimental.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, grey-teal long coat with spirit-bell chains, wide-brimmed hat; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and purple (#A469FF); holding a bell-hung shield; signature silhouette: a wide hat and hanging spirit bells; expression and pose suggest: solemn keeper of lost souls, secretly sentimental.
 
 Model reference → `art/characters/rowan_soulkeeper/front.png`
 
@@ -1166,7 +1166,7 @@ Spirit · Rare · Guardian
 
 Card art → `art/characters/shiro_spiritmoss/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, mossy green and white robes, bark sandals, moss growing on the shoulders; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and moss green (#5E8A3A); holding a mossy root-staff; signature silhouette: moss shoulders and a curling root staff; expression and pose suggest: quiet forest hermit, part tree, part spirit.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, mossy green and white robes, bark sandals, moss growing on the shoulders; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and moss green (#5E8A3A); holding a mossy root-staff; signature silhouette: moss shoulders and a curling root staff; expression and pose suggest: quiet forest hermit, part tree, part spirit.
 
 Model reference → `art/characters/shiro_spiritmoss/front.png`
 
@@ -1178,7 +1178,7 @@ Spirit · Epic · Trickster
 
 Card art → `art/characters/tamsin_ghostbloom/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, translucent white dress with blooming flower hem, flower crown; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and neon pink (#FF7BD5); holding a bouquet that bursts into ghost-petals; signature silhouette: a flower crown and a fading translucent hem; expression and pose suggest: playful ghost girl who loves flowers.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, translucent white dress with blooming flower hem, flower crown; colour scheme pale seafoam (#A9D8D0), white (#FFFFFF) and neon pink (#FF7BD5); holding a bouquet that bursts into ghost-petals; signature silhouette: a flower crown and a fading translucent hem; expression and pose suggest: playful ghost girl who loves flowers.
 
 Model reference → `art/characters/tamsin_ghostbloom/front.png`
 
@@ -1192,7 +1192,7 @@ Demon · Legendary · Skirmisher
 
 Card art → `art/characters/corran_ashenhorn/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, heavy ash-black demon plate with red cracks, spiked shoulder plates; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and sandstone (#9C8B6E); holding a giant cleaving glaive; signature silhouette: huge ram horns and spiked shoulders; expression and pose suggest: relentless warlord who never stops advancing.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, heavy ash-black demon plate with red cracks, spiked shoulder plates; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and sandstone (#9C8B6E); holding a giant cleaving glaive; signature silhouette: huge ram horns and spiked shoulders; expression and pose suggest: relentless warlord who never stops advancing.
 
 Model reference → `art/characters/corran_ashenhorn/front.png`
 
@@ -1204,7 +1204,7 @@ Demon · Rare · Trickster
 
 Card art → `art/characters/draxa_bloodthorn/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, dark red thorned corset gown, rose thorn vines, bat-wing collar; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and dark plum (#2B2540); holding a thorn-whip; signature silhouette: a bat-wing collar and thorn vines; expression and pose suggest: charming vampiric trickster.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, dark red thorned corset gown, rose thorn vines, bat-wing collar; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and dark plum (#2B2540); holding a thorn-whip; signature silhouette: a bat-wing collar and thorn vines; expression and pose suggest: charming vampiric trickster.
 
 Model reference → `art/characters/draxa_bloodthorn/front.png`
 
@@ -1216,7 +1216,7 @@ Demon · Common · Bruiser
 
 Card art → `art/characters/malric_hellbrand/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, torn black leather vest, red brand marks on the arms, chain belt; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and steel grey (#7B8794); holding a chained branding hammer; signature silhouette: two short curved horns and a chain hammer; expression and pose suggest: rowdy brawler with a hellish appetite.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, torn black leather vest, red brand marks on the arms, chain belt; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and steel grey (#7B8794); holding a chained branding hammer; signature silhouette: two short curved horns and a chain hammer; expression and pose suggest: rowdy brawler with a hellish appetite.
 
 Model reference → `art/characters/malric_hellbrand/front.png`
 
@@ -1228,7 +1228,7 @@ Demon · Mythical · Skirmisher
 
 Card art → `art/characters/ruska_sinmaw/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, red and black jester-like coat with dice charms, wide grin mask on the belt; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and gold (#FFC54B); holding a pair of dice-weighted flails; signature silhouette: a three-pointed jester hood and dice flails; expression and pose suggest: gleeful gambler demon who loves a lucky strike.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, red and black jester-like coat with dice charms, wide grin mask on the belt; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and gold (#FFC54B); holding a pair of dice-weighted flails; signature silhouette: a three-pointed jester hood and dice flails; expression and pose suggest: gleeful gambler demon who loves a lucky strike.
 
 Model reference → `art/characters/ruska_sinmaw/front.png`
 
@@ -1240,7 +1240,7 @@ Demon · Epic · Striker
 
 Card art → `art/characters/vesh_cinderhorn/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, black and crimson tailcoat, cinder-glowing horn tips, gloved hands; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and gold (#FFC54B); holding a cinder-tipped cane-sword; signature silhouette: tall swept horns and a tailcoat; expression and pose suggest: cruel smile, polite manners.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, black and crimson tailcoat, cinder-glowing horn tips, gloved hands; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and gold (#FFC54B); holding a cinder-tipped cane-sword; signature silhouette: tall swept horns and a tailcoat; expression and pose suggest: cruel smile, polite manners.
 
 Model reference → `art/characters/vesh_cinderhorn/front.png`
 
@@ -1252,7 +1252,7 @@ Demon · Rare · Skirmisher
 
 Card art → `art/characters/zuri_brimclaw/card.png`
 
-> transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, 3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, consistent proportions (slightly large head), no text, no logo, no frame, original design, crimson cropped jacket with ember sleeves, clawed gloves, devil tail; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and ember orange (#FFB347); holding fire claws; signature silhouette: a pointed devil tail and long claws; expression and pose suggest: fast, fiery and hungry for chaos.
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, crimson cropped jacket with ember sleeves, clawed gloves, devil tail; colour scheme blood maroon (#4A1022), bright red (#FF3B3B) and ember orange (#FFB347); holding fire claws; signature silhouette: a pointed devil tail and long claws; expression and pose suggest: fast, fiery and hungry for chaos.
 
 Model reference → `art/characters/zuri_brimclaw/front.png`
 

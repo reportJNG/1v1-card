@@ -38,6 +38,19 @@ return function()
 				rarities[def.rarity] = true
 			end
 		end)
+
+		it("shows the five original names from NEW_5_CHARACTERS.md, ids unchanged", function()
+			local names = {
+				rai_stormvolt = "Zephyr Volt",
+				ren_emberfang = "Rook Emberforge",
+				yuki_frostveil = "Halvard Frostwarden",
+				vesper_shade = "Nox Veilstrider",
+				aurelia_dawn = "Solaris Dawnbringer",
+			}
+			for _, id in Roster.active do
+				expect(Characters.ById[id].displayName).to.equal(names[id])
+			end
+		end)
 	end)
 
 	describe("egg odds with the active roster", function()

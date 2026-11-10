@@ -2,6 +2,46 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
+## 00000. The master fix plan (2026-11-10; `MASTER_FIX_PLAN.md`, progress in `docs/MASTER_FIX_REPORT.md`)
+Claude builds every screen's new layout and behaviour now with TEMP images, so nothing waits on
+you. The painted look comes from these sheets. **Exact prompts: `art/ui/PROMPTS_V3.md`.** Flat
+magenta background, no text (unless stated), no characters, saved to `art/ui/sheets/`.
+
+| Priority | Sheet | File | Unlocks |
+|---|---|---|---|
+| 1 | A: panel / button / pill kit | `eggshop_frame.png` | HUD, menu, shop, all panels, deck |
+| 2 | E1-E4: HUD buttons, currency, quest panel, deck cards | `hud_*.png` | the in-game HUD |
+| 3 | D1-D4: menu background (**no character**), logo, buttons, pills | `menu_*.png`, `logo.png` | the main menu |
+| 4 | B: egg tiles by tier | `eggshop_tiles.png` | Egg Shop, inventory |
+| 5 | Merchant kit + icon sheet | `merchant_kit.png`, `icons.png` | merchant and every panel |
+| 6 | H1-H2: battle action cards, top HUD | `battle_*.png` | battle screen |
+| 7 | G1-G2: result banners, result pieces | `result_*.png` | Victory / Defeat |
+| 8 | F1: inventory/deck extras | `inv_extras.png` | deck, families, inventory |
+| 9 | C: crystal eggs (only if Option 2 below) | `eggs_crystal_*.png` | Egg Shop eggs |
+| 10 | Lobby concept (optional) | `lobby_concept.png` | the lobby layout |
+| any | 5 original character images | `Downloads\New folder` | cards (`NEW_5_CHARACTERS.md`) |
+
+⚠️ `08`/`09` (main menu) contain a copyrighted character and `11`, `14`, `15`, `hd-03`, `hd-04`
+contain copyrighted card art. Use them only as style references in your image tool; they are never
+uploaded or cut.
+
+**Decisions:**
+- **Egg art:** Option 1, keep the Egg Icon Pack eggs inside the new glowing tier tiles (what ships
+  now), or Option 2, new crystal eggs from Sheet C that match the target exactly.
+- **GitHub history scrub** of `fighter_01..05` (commit `9969dc6`): Claude will show the exact
+  commands and affected commits and waits for your **"go"**.
+- **Every new image** (your sheets, the sliced pieces of `04-merchant-target.png`, the chosen icons)
+  is shown to you on a contact sheet in `docs/review/` first, and nothing is uploaded until you OK it.
+
+**Your desktop still has a folder named "Ultimate Multi-Expre…"**, which looks like the banned
+portrait pack (`CLEANUP_PORTRAIT_PACK.md`). The project never reads it; you may want to delete it so
+it can't be picked up by mistake.
+
+**The five characters are renamed** (ids and stats unchanged): Zephyr Volt (N), Rook Emberforge
+(R), Halvard Frostwarden (SR), Nox Veilstrider (SSR), Solaris Dawnbringer (UR). Their image prompts
+are in `NEW_5_CHARACTERS.md` and `art/characters/PROMPTS.md`; say **"new images are in"** when they
+are in `Downloads\New folder`.
+
 ## 0000. What Claude needs from you (2026-11-09; also `PLAN.md` section 7)
 - **GitHub history:** a commit on 2026-11-09 (`9969dc6`) accidentally included the rejected
   `fighter_01..05` images from `art/characters/`. They are untracked now (`a5444cc`) and git-ignored,

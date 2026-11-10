@@ -485,13 +485,17 @@ No stuns, because losing turns feels bad on mobile.
 
 The stats below are Level 1 Common base values by role. Rarity adds +0–8%.
 
+Five of them were renamed on 2026-11-10 (`NEW_5_CHARACTERS.md`); ids and stats are unchanged. The
+sample match below still uses the launch names: Ren = Rook Emberforge, Yuki = Halvard
+Frostwarden, Rai = Zephyr Volt, Vesper = Nox Veilstrider, Aurelia = Solaris Dawnbringer.
+
 | Character | Family | Rarity | Role | HP / ATK / DEF / SPD | Special (cost) | Passive |
 | --- | --- | --- | --- | --- | --- | --- |
-| Ren Emberfang | Flame | Rare | Striker | 585 / 340 / 90 / 110 | Ember Rush (3): 1.65× and Burn for 2 rounds | +10% damage to Burning targets |
-| Yuki Frostveil | Ice | Epic | Guardian | 748 / 260 / 140 / 85 | Glacier Ward (3): shield of 25% max HP, and the target is Chilled | +10% damage to Chilled targets |
-| Rai Stormvolt | Lightning | Common | Skirmisher | 553 / 300 / 90 / 135 | Static Step (2): 1.45× and acts first | +1 Energy when acting first |
-| Vesper Shade | Shadow | Legendary | Trickster | 585 / 300 / 100 / 120 | Umbral Mark (3): 1.4× and Weaken; partly pierces Defend | 10% crit chance |
-| Aurelia Dawn | Divine | Mythical | Support | 650 / 260 / 110 / 100 | Radiant Mend (3): heal 30% and cleanse | Attacks heal her for 10% of the damage dealt |
+| Rook Emberforge | Flame | Rare | Striker | 585 / 340 / 90 / 110 | Ember Rush (3): 1.65× and Burn for 2 rounds | +10% damage to Burning targets |
+| Halvard Frostwarden | Ice | Epic | Guardian | 748 / 260 / 140 / 85 | Glacier Ward (3): shield of 25% max HP, and the target is Chilled | +10% damage to Chilled targets |
+| Zephyr Volt | Lightning | Common | Skirmisher | 553 / 300 / 90 / 135 | Static Step (2): 1.45× and acts first | +1 Energy when acting first |
+| Nox Veilstrider | Shadow | Legendary | Trickster | 585 / 300 / 100 / 120 | Umbral Mark (3): 1.4× and Weaken; partly pierces Defend | 10% crit chance |
+| Solaris Dawnbringer | Divine | Mythical | Support | 650 / 260 / 110 / 100 | Radiant Mend (3): heal 30% and cleanse | Attacks heal him for 10% of the damage dealt |
 | Brannok Ironhide | Beast | Common | Guardian | 748 / 260 / 140 / 85 | Thick Hide (2): 50% block and reflect 80% | +30% DEF below half HP |
 | Taren Ashscale | Dragon | Epic | Bruiser | 683 / 320 / 110 / 95 | Dragon's Wrath (4): 2.2×, ignores 30% DEF, 10% recoil | +10% ATK below half HP |
 

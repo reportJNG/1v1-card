@@ -42,13 +42,15 @@ Prompts: `art/ui/PROMPTS_V3.md`.
 | **Deck Builder + Families** | `bad-gui/14-target-deck-builder…` (layout only), `ui-refs/hd-04-deck-builder-families.png` | `BAD_GUI_6_DECK_AND_INVENTORY.md` |
 | **Inventory + inspect** | `bad-gui/15-target-inventory…` (layout only), `ui-refs/hd-03-inventory-card.png` | `BAD_GUI_6_DECK_AND_INVENTORY.md` |
 | Cards (frames, template, stats, animations, rarity) | `ui-refs-2/03..08` | `MISSION.md` §6 |
-| Arena | `ui-refs/hd-05-arena.png` (no bet panel!) | `MISSION.md` §8 |
+| Arena (queue panel) | `ui-refs/hd-05-arena.png` (no bet panel!) | `MISSION.md` §8 |
+| **Battle screen (fighting) + 5 arena maps** | `bad-gui/18-target-battle-screen.png` | `BAD_GUI_8_BATTLE_SCREEN.md` |
 | **Battle result (Victory / Defeat)** | `bad-gui/16-target-battle-result.png`, `ui-refs/hd-06-victory.png` | `BAD_GUI_7_BATTLE_RESULT.md` |
 | Worlds | `ui-refs/hd-07-worlds.png` | `MISSION.md` §8 |
+| **Lobby map (hub), marked BAD** | `docs/brief/concept-board.png` (hub), `bad-gui/09-main-menu-target.png` (scene only; character is layout-only) | `FIX_LOBBY.md` |
 | Overall mood | `docs/brief/concept-board.png` | `docs/ART_STYLE.md` |
 
 **Bad examples to never repeat:** `bad-gui/01` (toast bar), `03` (merchant), `05` (egg shop), `07`
-(main menu), `10` (in-game HUD), `17` (battle result).
+(main menu), `10` (in-game HUD), `17` (battle result), `19` (battle screen).
 
 ## How every UI task is judged
 A side-by-side comparison (target | ours) in `docs/screens/roblox-ui/compare_<screen>.png`,

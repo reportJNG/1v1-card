@@ -518,9 +518,12 @@ def color_name(hexv):
 
 
 # Card art (the layered card's character layer, App/Card): a transparent cutout.
-CARD_TEMPLATE = ("transparent background, single character, upper body to knees, dynamic pose, anime cel-shaded, "
-                 "3/4 view, crisp dark outlines, flat two-tone shading, strong rim light in the family accent colour, "
-                 "consistent proportions (slightly large head), no text, no logo, no frame, original design")
+CARD_TEMPLATE = ("Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime "
+                 "cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper "
+                 "body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, "
+                 "confident closed-mouth expression, original character design, no text, no logo, no watermark")
+# The shared style from NEW_5_CHARACTERS.md (the owner's template, 2026-11-09); the background is
+# removed by scripts/art/characters.py after review.
 # Model reference (the 3D pipeline: image-to-3D, cleanup, cel-shading, R15 rig).
 PROMPT_TEMPLATE = ("full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded "
                    "game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), "

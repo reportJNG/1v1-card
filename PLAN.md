@@ -46,8 +46,9 @@ Detailed specs live elsewhere; this file points to them:
 - **Portrait pack removed** (`CLAUDE.md` Asset safety, `CLEANUP_PORTRAIT_PACK.md` section 2): files,
   ids, code and config references, docs; scrubbed from git history before the first push. Battle
   reactions are effects only (sword, shield, red KO ring + "KO!").
-- **5-card mode** (section 5): `Config/Roster.active` = Rai Stormvolt (N), Ren Emberfang (R), Yuki
-  Frostveil (SR), Vesper Shade (SSR), Aurelia Dawn (UR). Eggs, the Odds panel, the starter deck and
+- **5-card mode** (section 5): `Config/Roster.active` = Zephyr Volt (N), Rook Emberforge (R), Halvard
+  Frostwarden (SR), Nox Veilstrider (SSR), Solaris Dawnbringer (UR) (renamed 2026-11-10 from Rai,
+  Ren, Yuki, Vesper and Aurelia; ids unchanged). Eggs, the Odds panel, the starter deck and
   the Guardians use only them; the five were re-tuned (balance targets met; Trials 42-53%).
 - **Phase 2 reworked** to the new rules: `scripts/art/characters.py` with the review gate, owner
   approval, no face sheets, no expressions, upload groups of 5; `selftest` passes.
@@ -160,9 +161,9 @@ Done on 2026-11-09 (each committed and pushed): 1 safety rules, 2 cleanup, 3 re-
    - check "Card with character" in Play on every card size, the stats panel and the egg reveal,
      then tick it and Phase 2's last items in `MISSION.md`
    - **no uploads until the owner confirms the 43 portrait-pack assets are archived**
-2. **The next GUI mission:** `UI_TARGETS.md` and the `BAD_GUI_*.md` briefs (`docs/brief/bad-gui`),
-   which the owner added on 2026-11-09. Start it when the owner says so; its painted kit pieces go
-   through the same review gate.
+2. **Run `MASTER_FIX_PLAN.md` phases 0-12** (then 13, the final pass), with `GOAL_ALL.md`'s Phase 3b
+   (the combined icon set) after Phase 3 and Phase 14 (characters) at the end. Progress, scores and
+   what waits for art: `docs/MASTER_FIX_REPORT.md`.
 3. **Re-run `sim/balance.py --all`** before more characters are turned on (the five were re-tuned
    for the 5-card roster).
 
