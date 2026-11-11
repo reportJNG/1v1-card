@@ -10,7 +10,7 @@ return table.freeze({
 		eventOdds = "The Party Egg uses a stand-in Event band until event design.",
 		eggPrices = "Egg coin prices are starting values pending the economy simulation.",
 		economyPrices = "Card storage, item slot and merge prices are starting values.",
-		characterNumbers = "All 100 characters pass sim/balance.py (47-53% win rate each), but numbers need real playtest tuning.",
+		characterNumbers = "Every character passes sim/balance.py (the 100 at 47-53% each; the active roster at 45-55%), but numbers need real playtest tuning.",
 		items = "Item names and merchant prices for all 10 worlds are starting values pending the economy simulation.",
 		worldArt = "Worlds are a first art pass (generated terrain, generate_mesh props, code-drawn skies, picker thumbnails captured in Studio) awaiting the owner's review and a hero pass.",
 		questRewards = "Quest targets and rewards are starting values.",

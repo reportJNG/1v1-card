@@ -179,22 +179,25 @@ return function()
 	end)
 
 	describe("Character catalog", function()
-		it("ships the full 100-character roster, launch characters first and unchanged in order", function()
-			expect(#Characters.List).to.equal(100)
-			expect(Characters.MaxCatalogSize).to.equal(100)
-			local launch = {
-				"ren_emberfang",
-				"yuki_frostveil",
-				"rai_stormvolt",
-				"vesper_shade",
-				"aurelia_dawn",
-				"brannok_ironhide",
-				"taren_ashscale",
-			}
-			for i, id in launch do
-				expect(Characters.List[i].id).to.equal(id)
+		it(
+			"ships the 100-character roster plus set 02, launch characters first and unchanged in order",
+			function()
+				expect(#Characters.List).to.equal(103)
+				expect(Characters.MaxCatalogSize).to.equal(103)
+				local launch = {
+					"ren_emberfang",
+					"yuki_frostveil",
+					"rai_stormvolt",
+					"vesper_shade",
+					"aurelia_dawn",
+					"brannok_ironhide",
+					"taren_ashscale",
+				}
+				for i, id in launch do
+					expect(Characters.List[i].id).to.equal(id)
+				end
 			end
-		end)
+		)
 
 		it("puts every character in 6-10 character egg pools, each in at least one egg", function()
 			local seen = {}

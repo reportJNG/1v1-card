@@ -27,30 +27,41 @@ end
 
 return function()
 	describe("Roster.active", function()
-		it("lists five known, enabled, different characters, one per rarity", function()
-			expect(#Roster.active).to.equal(5)
+		it("lists known, enabled, different characters covering every rarity (five plus set 02)", function()
+			expect(#Roster.active).to.equal(8)
+			local seen: { [string]: boolean } = {}
 			local rarities: { [string]: boolean } = {}
 			for _, id in Roster.active do
 				local def = Characters.ById[id]
 				expect(def).to.be.ok()
 				expect(def.enabled).to.equal(true)
-				expect(rarities[def.rarity]).to.equal(nil)
+				expect(seen[id]).to.equal(nil)
+				seen[id] = true
 				rarities[def.rarity] = true
+			end
+			for _, rarity in { "Common", "Rare", "Epic", "Legendary", "Mythical" } do
+				expect(rarities[rarity]).to.equal(true)
 			end
 		end)
 
-		it("shows the five original names from NEW_5_CHARACTERS.md, ids unchanged", function()
-			local names = {
-				rai_stormvolt = "Zephyr Volt",
-				ren_emberfang = "Rook Emberforge",
-				yuki_frostveil = "Halvard Frostwarden",
-				vesper_shade = "Nox Veilstrider",
-				aurelia_dawn = "Solaris Dawnbringer",
-			}
-			for _, id in Roster.active do
-				expect(Characters.ById[id].displayName).to.equal(names[id])
+		it(
+			"shows the names from NEW_5_CHARACTERS.md and NEW_ASSETS_LEVEL1.md set 02, ids unchanged",
+			function()
+				local names = {
+					rai_stormvolt = "Zephyr Volt",
+					ren_emberfang = "Rook Emberforge",
+					yuki_frostveil = "Halvard Frostwarden",
+					vesper_shade = "Nox Veilstrider",
+					aurelia_dawn = "Solaris Dawnbringer",
+					brann_cinderfall = "Brann Cinderfall",
+					kael_voidbinder = "Kael Voidbinder",
+					aurex_sunforge = "Aurex Sunforge",
+				}
+				for _, id in Roster.active do
+					expect(Characters.ById[id].displayName).to.equal(names[id])
+				end
 			end
-		end)
+		)
 	end)
 
 	describe("egg odds with the active roster", function()

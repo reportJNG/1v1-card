@@ -71,9 +71,12 @@ Detailed specs live elsewhere; this file points to them:
   sound). Scores: spawn 9, everything else 8 (`docs/LOBBY_AUDIT.md`). New textures, hero meshes
   and a night skybox wait for the review gate. 329 headless tests pass.
 
-- **Character art live (2026-11-10):** Rook Emberforge, Halvard Frostwarden, Nox Veilstrider and
-  Solaris Dawnbringer, approved in writing and uploaded in one batch of 4 (no rejections), show on
-  cards, the deck, hatch reveals, the menu and in battle.
+- **Character art live (2026-11-10, set 02 on 2026-11-11):** Rook Emberforge, Halvard Frostwarden
+  and Nox Veilstrider (set 1), and three new characters, Kael Voidbinder (Shadow, Epic), Brann
+  Cinderfall (Flame, Common) and Aurex Sunforge (Divine, Legendary), approved in writing and
+  uploaded (batches of 4 and 3, no rejections), show on cards, the deck, hatch reveals, the menu and
+  in battle. The active roster is 8 (`Config/Roster.active`); `sim/balance.py` passes on it.
+  Solaris Dawnbringer's approval was withdrawn on 2026-11-11: back to TEMP art.
 
 **Not done:**
 - **Zephyr Volt (N) art:** the held nature image isn't approved; waiting for a new storm image.

@@ -162,9 +162,7 @@ local List: { Types.CharacterDef } = {
 			silhouette = "a golden sun halo behind his head and golden light ribbons swirling around him",
 		},
 		enabled = true,
-		assets = {
-			cardArt = "rbxassetid://95044429524790",
-		},
+		assets = {}, -- the uploaded image's approval was withdrawn 2026-11-11 (TEMP art, WAITING_ON_YOU.md)
 	},
 	{
 		id = "brannok_ironhide",
@@ -3031,6 +3029,106 @@ local List: { Types.CharacterDef } = {
 		assets = {},
 	},
 	-- END generated roster
+	-- BEGIN set 02 (sim/roster.py set02 write). Edit the numbers in sim/roster_tuned.json.
+	{
+		id = "kael_voidbinder",
+		displayName = "Kael Voidbinder",
+		family = "Shadow",
+		rarity = "Epic",
+		role = "Trickster",
+		special = {
+			id = "void_chains",
+			displayName = "Void Chains",
+			cost = 3,
+			kind = "Damage",
+			multiplier = 1.33,
+			pierceGuard = 0.25,
+			applies = { { status = "Weaken", target = "Opponent", rounds = 2, value = 0.2 } },
+		},
+		passive = {
+			id = "binding_edge",
+			displayName = "Binding Edge",
+			description = "+5% critical hit chance.",
+			effect = { value = 0.05, kind = "CritBonus" },
+		},
+		look = {
+			personality = "Quiet, cold shadow fighter who binds his foes in chains of void",
+			outfit = "a long black and violet hooded coat bound with silver chains, a black scarf over the mouth, dark boots",
+			colors = { "#2B2540", "#9B7BFF", "#C0C7D6" },
+			weapon = "a long jagged violet void blade",
+			silhouette = "spiky black hair, chains wrapped round the coat and violet shadow wisps around him",
+		},
+		enabled = true,
+		assets = {
+			cardArt = "rbxassetid://97146311237330",
+		},
+	},
+	{
+		id = "brann_cinderfall",
+		displayName = "Brann Cinderfall",
+		family = "Flame",
+		rarity = "Common",
+		role = "Bruiser",
+		special = {
+			id = "cinderfall",
+			displayName = "Cinderfall",
+			cost = 4,
+			kind = "Damage",
+			multiplier = 2.403,
+			armorPen = 0.3,
+			recoilFraction = 0.1,
+		},
+		passive = {
+			id = "smoulder_rage",
+			displayName = "Smoulder Rage",
+			description = "+10% ATK below half HP.",
+			effect = { value = 0.1, kind = "LowHpStat", stat = "atk", threshold = 0.5 },
+		},
+		look = {
+			personality = "Hot-headed fire brawler who charges first and never backs down",
+			outfit = "a black and crimson battle coat wrapped in iron chains, a red scarf over the mouth, a red sash, dark boots",
+			colors = { "#C2412D", "#FFB347", "#5E6A73" },
+			weapon = "a jagged blade of red flame",
+			silhouette = "spiky dark-red hair, the chains across his coat and red flames curling round him",
+		},
+		enabled = true,
+		assets = {
+			cardArt = "rbxassetid://81736814181018",
+		},
+	},
+	{
+		id = "aurex_sunforge",
+		displayName = "Aurex Sunforge",
+		family = "Divine",
+		rarity = "Legendary",
+		role = "Skirmisher",
+		special = {
+			id = "sunforge_blade",
+			displayName = "Sunforge Blade",
+			cost = 3,
+			kind = "Damage",
+			multiplier = 1.259,
+			applies = { { status = "Burn", target = "Opponent", rounds = 2, value = 0.06 } },
+		},
+		passive = {
+			id = "dawn_start",
+			displayName = "Dawn Start",
+			description = "+1 Energy when acting first.",
+			effect = { value = 1, kind = "EnergyOnFirst" },
+		},
+		look = {
+			personality = "Calm, noble sun warrior who forges light into a blade",
+			outfit = "a white and black long coat with gold trim and a gold sash, a white scarf, white boots",
+			colors = { "#F1E6C8", "#FFD45C", "#1E1A2B" },
+			weapon = "a golden sun sword trailing light",
+			silhouette = "messy golden hair and rings of golden light circling him",
+		},
+		enabled = true,
+		assets = {
+			cardArt = "rbxassetid://85449122675132",
+		},
+	},
+	-- END set 02
 }
 
 local ById: { [string]: Types.CharacterDef } = {}
@@ -3039,7 +3137,7 @@ for _, def in List do
 end
 
 -- Design capacity. The validator fails if the catalog grows past this without a review.
-local MAX_CATALOG_SIZE = 100
+local MAX_CATALOG_SIZE = 103 -- 100, plus set 02 added by the owner (2026-11-11)
 
 return table.freeze({
 	List = table.freeze(List),

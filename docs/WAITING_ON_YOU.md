@@ -2,14 +2,20 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
-## 000000. Zephyr Volt (N) still has TEMP art (2026-11-10)
-Your four approved fighters are live on the cards, deck, hatch reveal and battle: Rook Emberforge,
-Halvard Frostwarden, Nox Veilstrider and Solaris Dawnbringer (`docs/review/new5-2026-11-10.md`,
-uploaded in one batch of 4, no rejections). **Zephyr Volt** (`rai_stormvolt`, the N card) keeps
-the TEMP silhouette art: `HOLD_nature_fighter_N.png` is not approved (it reads as a well-known
-hero-academy lead, `NEW_ASSETS_LEVEL1.md` note 3). Put a new Zephyr Volt image (the storm prompt in
-`NEW_5_CHARACTERS.md` section 1: teal hoodie, cloud shoulder pads, goggles, two lightning batons) in
-`Downloads\New folder` as `zephyr_volt.png` and say which file you approve.
+## 000000. Two cards still have TEMP art; one upload to archive (2026-11-11)
+Live with approved art: Rook Emberforge, Halvard Frostwarden, Nox Veilstrider (set 1) and the three
+new set 02 characters Kael Voidbinder, Brann Cinderfall and Aurex Sunforge (uploaded in one batch of
+3, no rejections; `docs/review/set02-2026-11-11.md`). Two cards keep the TEMP silhouette art:
+- **Zephyr Volt** (`rai_stormvolt`, N): `zephyr_volt.png` is not approved (silver spiky hair with a
+  mask over the mouth reads as a famous ninja-anime teacher, `NEW_ASSETS_LEVEL1.md` note A), and
+  `HOLD_nature_fighter_N.png` stays held. A new image with dark-blue or teal hair and no mask (the
+  storm prompt in `NEW_5_CHARACTERS.md` section 1) fixes it.
+- **Solaris Dawnbringer** (`aurelia_dawn`, UR): you withdrew the approval on 2026-11-11, so the art
+  is out of the game. A regenerated image (brown or gold hair, no scarf, `NEW_ASSETS_LEVEL1.md`
+  note 2) fixes it.
+- **Archive on create.roblox.com:** the Solaris image already uploaded, `rbxassetid://95044429524790`.
+  Nothing in the game uses it any more.
+- `HOLD_venom_fighter.png` stays held (note B) and is never used.
 
 ## 00000. The master fix plan (2026-11-10; `MASTER_FIX_PLAN.md`, progress in `docs/MASTER_FIX_REPORT.md`)
 Claude builds every screen's new layout and behaviour now with TEMP images, so nothing waits on
@@ -28,7 +34,7 @@ magenta background, no text (unless stated), no characters, saved to `art/ui/she
 | 8 | F1: inventory/deck extras | `inv_extras.png` | deck, families, inventory |
 | 9 | C: crystal eggs (only if Option 2 below) | `eggs_crystal_*.png` | Egg Shop eggs |
 | 10 | Lobby concept (optional) | `lobby_concept.png` | the lobby layout |
-| any | 1 Zephyr Volt image (4 of 5 are live) | `Downloads\New folder` | the N card (`NEW_5_CHARACTERS.md` §1) |
+| any | New Zephyr Volt and Solaris Dawnbringer images (6 of 8 active cards have art) | `Downloads\New folder` | the N and UR cards (`NEW_5_CHARACTERS.md` §1, §5) |
 
 ⚠️ `08`/`09` (main menu) contain a copyrighted character and `11`, `14`, `15`, `hd-03`, `hd-04`
 contain copyrighted card art. Use them only as style references in your image tool; they are never

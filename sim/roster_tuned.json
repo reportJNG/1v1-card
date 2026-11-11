@@ -99,7 +99,10 @@
   "vesper_shade": 1.5,
   "aurelia_dawn": 0.33,
   "brannok_ironhide": 0.818,
-  "taren_ashscale": 1.15
+  "taren_ashscale": 1.15,
+  "kael_voidbinder": 1.33,
+  "brann_cinderfall": 2.403,
+  "aurex_sunforge": 1.259
  },
  "winrates": {
   "ren_emberfang": 0.5058823529411764,
@@ -202,5 +205,10 @@
   "draxa_bloodthorn": 0.4984076433121019,
   "corran_ashenhorn": 0.5005709065996803,
   "ruska_sinmaw": 0.4983621899859616
+ },
+ "set02_winrates": {
+  "kael_voidbinder": 0.4968343885371543,
+  "brann_cinderfall": 0.4852144422846272,
+  "aurex_sunforge": 0.5192701156624494
  }
 }

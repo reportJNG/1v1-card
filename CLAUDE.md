@@ -148,7 +148,8 @@ Piece-style fighter. Full log: `PLAN.md` §4.
 ## Content rules
 
 - **Adding a character:** append it to `Config/Characters` (the id is permanent) and add it to
-  egg pools. The catalog is capped at 100 until that's reviewed.
+  egg pools. The catalog is capped at 103 (the 100 plus set 02, added by the owner on 2026-11-11)
+  until that's reviewed.
 - **Placeholder content** is marked: `status = "Placeholder"` on eggs and entries in
   `Config/ContentStatus`. The validator warns in development and refuses release builds.
 - **Eggs:** exactly the 24 `Eggs.RequiredIds`: 23 world eggs and the Party event egg. Use the icon files exactly as supplied. The pack

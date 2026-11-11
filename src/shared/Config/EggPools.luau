@@ -5,7 +5,7 @@
 
 return table.freeze({
 	egg_basic = table.freeze({
-		Common = table.freeze({ "brannok_ironhide", "hideo_ironvow", "rook_hammerfall" }),
+		Common = table.freeze({ "brann_cinderfall", "brannok_ironhide", "hideo_ironvow", "rook_hammerfall" }),
 		Rare = table.freeze({ "marza_steelheart", "valdis_spearwind" }),
 		Epic = table.freeze({ "duran_oakblade", "takeo_shieldbreak" }),
 		Legendary = table.freeze({ "asha_warbanner" }),
@@ -14,18 +14,18 @@ return table.freeze({
 		Common = table.freeze({ "aoi_wisplight", "grak_thornmaw", "tusk_boulderhide" }),
 		Rare = table.freeze({ "lyra_wildpelt", "tavi_howlstride" }),
 		Epic = table.freeze({ "kiri_lanternwake", "nessa_fangwood" }),
-		Legendary = table.freeze({ "bram_stagcrown" }),
+		Legendary = table.freeze({ "aurex_sunforge", "bram_stagcrown" }),
 	}),
 	egg_cracked = table.freeze({
 		Common = table.freeze({ "corvin_duskweaver", "mada_relicborn", "thorne_runeward" }),
 		Rare = table.freeze({ "petra_stonesong", "sila_fossilkeep" }),
-		Epic = table.freeze({ "ozric_tombwarden", "selene_gloomfeather" }),
+		Epic = table.freeze({ "kael_voidbinder", "ozric_tombwarden", "selene_gloomfeather" }),
 		Legendary = table.freeze({ "gideon_ashpillar" }),
 	}),
 	egg_cat = table.freeze({
 		Common = table.freeze({ "kaze_silentleaf", "suzu_quickveil", "toru_paperblade" }),
 		Rare = table.freeze({ "aya_needlefall", "rena_mistcut" }),
-		Epic = table.freeze({ "hiko_windstep", "volta_skyrend" }),
+		Epic = table.freeze({ "hiko_windstep", "kael_voidbinder", "volta_skyrend" }),
 		Legendary = table.freeze({ "joro_smokeleap" }),
 	}),
 	egg_dog = table.freeze({
@@ -58,7 +58,7 @@ return table.freeze({
 		Common = table.freeze({ "orin_starfall", "rinna_glacierborn", "ryuna_scalebright" }),
 		Rare = table.freeze({ "draxa_bloodthorn", "lumi_haloheart" }),
 		Epic = table.freeze({ "pyrelle_ashveil" }),
-		Legendary = table.freeze({ "elio_dawnspire" }),
+		Legendary = table.freeze({ "aurex_sunforge", "elio_dawnspire" }),
 		Mythical = table.freeze({ "aurelia_dawn" }),
 	}),
 	egg_ice = table.freeze({
@@ -76,7 +76,7 @@ return table.freeze({
 		Mythical = table.freeze({ "cyrus_coalbrand" }),
 	}),
 	egg_mine = table.freeze({
-		Common = table.freeze({ "mada_relicborn", "thorne_runeward" }),
+		Common = table.freeze({ "brann_cinderfall", "mada_relicborn", "thorne_runeward" }),
 		Rare = table.freeze({ "raith_nightfall", "ren_emberfang" }),
 		Epic = table.freeze({ "taren_ashscale", "vesh_cinderhorn" }),
 		Legendary = table.freeze({ "sorin_embervale" }),
@@ -90,9 +90,9 @@ return table.freeze({
 		Mythical = table.freeze({ "korr_flamejaw" }),
 	}),
 	egg_demon = table.freeze({
-		Common = table.freeze({ "corvin_duskweaver", "malric_hellbrand" }),
+		Common = table.freeze({ "brann_cinderfall", "corvin_duskweaver", "malric_hellbrand" }),
 		Rare = table.freeze({ "draxa_bloodthorn", "zuri_brimclaw" }),
-		Epic = table.freeze({ "selene_gloomfeather", "vesh_cinderhorn" }),
+		Epic = table.freeze({ "kael_voidbinder", "selene_gloomfeather", "vesh_cinderhorn" }),
 		Legendary = table.freeze({ "vesper_shade" }),
 		Mythical = table.freeze({ "ruska_sinmaw" }),
 	}),
@@ -100,7 +100,7 @@ return table.freeze({
 		Common = table.freeze({ "caelan_sunward", "seraphel_brightvow" }),
 		Rare = table.freeze({ "benedia_lightwell", "lumi_haloheart" }),
 		Epic = table.freeze({ "kiri_lanternwake", "ophira_graceblade" }),
-		Legendary = table.freeze({ "eira_mistsong", "elio_dawnspire" }),
+		Legendary = table.freeze({ "aurex_sunforge", "eira_mistsong", "elio_dawnspire" }),
 		Mythical = table.freeze({ "lyss_nebulight" }),
 	}),
 	egg_kraken = table.freeze({

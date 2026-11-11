@@ -129,6 +129,27 @@ NEW = [
     ("Ruska Sinmaw", "Mythical", "Skirmisher", "burst", "crit", "Sin Maw", "Cruel Fortune"),
 ]
 
+# Set 02 (NEW_ASSETS_LEVEL1.md, 2026-11-11): three characters added for the owner's approved images.
+# Kept apart from NEW so the 93 above, their pools and their tuned numbers never move. Each has one
+# tuned knob like the others (`python sim/roster.py set02 tune`, then `set02 write`), and its own egg
+# pool placements (SET02_POOLS), applied on top of the designed pools.
+# (name, rarity, role, archetype, passive, special name, passive name, family)
+SET02 = [
+    ("Kael Voidbinder", "Epic", "Trickster", "weaken", "crit", "Void Chains", "Binding Edge", "Shadow"),
+    ("Brann Cinderfall", "Common", "Bruiser", "burst", "fury", "Cinderfall", "Smoulder Rage", "Flame"),
+    ("Aurex Sunforge", "Legendary", "Skirmisher", "burn", "first", "Sunforge Blade", "Dawn Start", "Divine"),
+]
+SET02_POOLS = {  # egg -> ids added to that egg's pool (themed eggs whose band drops the rarity; 10 at most)
+    "egg_basic": ["brann_cinderfall"],
+    "egg_mine": ["brann_cinderfall"],
+    "egg_cracked": ["kael_voidbinder"],
+    "egg_cat": ["kael_voidbinder"],
+    "egg_demon": ["brann_cinderfall", "kael_voidbinder"],
+    "egg_spotted": ["aurex_sunforge"],
+    "egg_royal": ["aurex_sunforge"],
+    "egg_angel": ["aurex_sunforge"],
+}
+
 # Display names changed after a web name check (2026-11-06) because they were too close to existing
 # characters (Corran Horn, Duran of Trials of Mana, Sorin Markov / the Embervale setting, Nessa of
 # Pokemon). Ids stay the original slugs: ids are permanent and already saved in profiles.
@@ -240,6 +261,19 @@ def build(knobs):
     return out
 
 
+def build_set02(knobs):
+    out = []
+    for (name, rarity, role, arche, pcode, sname, pname, family) in SET02:
+        cid = slug(name)
+        out.append({
+            "id": cid, "displayName": name, "family": family, "rarity": rarity, "role": role,
+            "special": special_of(arche, sname, knobs.get(cid, KNOB0[arche])),
+            "passive": passive_of(pcode, family, arche, pname),
+            "arche": arche,
+        })
+    return out
+
+
 def engine_char(c):
     """The content.json shape the Python engine reads."""
     return {"id": c["id"], "family": c["family"], "rarity": c["rarity"], "role": c["role"],
@@ -264,7 +298,7 @@ def evaluate(matches_per_worker, workers=8, seed=0):
 
 def tune(rounds=10):
     base = json.load(open(CONTENT))
-    launch = [c for c in base["characters"] if c["id"] not in {slug(n[0]) for n in NEW}]
+    launch = [c for c in base["characters"] if c["id"] not in {slug(n[0]) for n in NEW + SET02}]
     assert len(launch) == 7, f"expected the 7 launch characters in content.json, got {len(launch)}"
     knobs = json.load(open(TUNED))["knobs"] if os.path.exists(TUNED) else {}
     for (name, _, _, arche, *_ ) in NEW:
@@ -319,7 +353,7 @@ def lua(v, indent):
     return "{ " + ", ".join(f"{k} = {lua(v[k], indent)}" for k in keys) + " }"
 
 
-def luau_entry(c):
+def luau_entry(c, assets="\t\tassets = {},"):
     s, p = c["special"], c["passive"]
     lines = ["\t{", f'\t\tid = "{c["id"]}",', f'\t\tdisplayName = {lua(c["displayName"], 0)},',
              f'\t\tfamily = "{c["family"]}",', f'\t\trarity = "{c["rarity"]}",', f'\t\trole = "{c["role"]}",',
@@ -330,7 +364,7 @@ def luau_entry(c):
             lines.append(f"\t\t\t{k} = {lua(s[k], 3)},")
     lines += ["\t\t},", "\t\tpassive = {", f'\t\t\tid = "{p["id"]}",', f'\t\t\tdisplayName = {lua(p["displayName"], 0)},',
               f'\t\t\tdescription = {lua(p["description"], 0)},', f'\t\t\teffect = {lua(p["effect"], 3)},', "\t\t},",
-              "\t\tenabled = true,", "\t\tassets = {},", "\t},"]
+              "\t\tenabled = true,", assets, "\t},"]
     return "\n".join(lines)
 
 
@@ -445,6 +479,98 @@ def write_pools(pools):
     open(path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
 
 
+SET02_BEGIN = "\t-- BEGIN set 02 (sim/roster.py set02 write). Edit the numbers in sim/roster_tuned.json.\n"
+SET02_END = "\t-- END set 02\n"
+
+
+def write_set02_characters(chars):
+    path = os.path.join(ROOT, "src", "shared", "Config", "Characters.luau")
+    src = open(path, encoding="utf-8").read()
+    # keep each character's uploaded assets (scripts/art/characters.py apply writes them)
+    kept = {}
+    for c in chars:
+        m = re.search(r'\tid = "' + c["id"] + r'",.*?\n(\t\tassets = \{.*?\},)\n\t\},', src, re.S)
+        if m:
+            kept[c["id"]] = m.group(1)
+    block = SET02_BEGIN + "\n".join(luau_entry(c, kept.get(c["id"], "\t\tassets = {},")) for c in chars) + "\n" + SET02_END
+    if SET02_BEGIN in src:
+        a = src.index(SET02_BEGIN); b = src.index(SET02_END) + len(SET02_END)
+        src = src[:a] + block + src[b:]
+    else:
+        end = src.index(MARK_END) + len(MARK_END)
+        src = src[:end] + block + src[end:]
+    open(path, "w", encoding="utf-8").write(src)
+
+
+def add_set02_pools(pools, by_rarity):
+    for egg, ids in SET02_POOLS.items():
+        for cid in ids:
+            lst = pools[egg].setdefault(by_rarity[cid], [])
+            if cid not in lst:
+                lst.append(cid)
+                lst.sort()
+    return pools
+
+
+def read_pools():
+    """The pools as written in Config/EggPools.luau."""
+    src = open(os.path.join(ROOT, "src", "shared", "Config", "EggPools.luau"), encoding="utf-8").read()
+    pools = {}
+    for m in re.finditer(r"\t(egg_[a-z_]+) = table.freeze\(\{\n((?:\t\t[^\n]*\n)*?)\t\}\),", src):
+        pool = {}
+        for r in re.finditer(r"(\w+) = table.freeze\(\{ ([^}]*) \}\)", m.group(2)):
+            pool[r.group(1)] = re.findall(r'"([a-z0-9_]+)"', r.group(2))
+        pools[m.group(1)] = pool
+    return pools
+
+
+def set02_engine_content(knobs):
+    """content.json with set 02 added or updated (the engine's input for tuning)."""
+    base = json.load(open(CONTENT))
+    ids = {slug(n[0]) for n in SET02}
+    base["characters"] = [c for c in base["characters"] if c["id"] not in ids] + \
+        [engine_char(c) for c in build_set02(knobs)]
+    json.dump(base, open(CONTENT, "w"), indent=1)
+
+
+def tune_set02(rounds=8):
+    """Tunes only set 02's knobs, on the active roster (Config/Roster.luau), at the gate's level 8.
+    The other characters' numbers never move."""
+    saved = json.load(open(TUNED)) if os.path.exists(TUNED) else {"knobs": {}}
+    knobs = saved["knobs"]
+    arche_of = {slug(n[0]): n[3] for n in SET02}
+    for cid, arche in arche_of.items():
+        knobs.setdefault(cid, KNOB0[arche])
+    wr = {}
+    for r in range(rounds):
+        set02_engine_content(knobs)
+        wr = evaluate(4000, seed=40 + r)
+        print(f"round {r}: " + ", ".join(f"{c} {wr[c]:.1%}" for c in sorted(wr)), flush=True)
+        if all(abs(wr[c] - 0.5) <= 0.02 for c in arche_of) and all(0.45 <= v <= 0.55 for v in wr.values()):
+            break
+        for c, arche in arche_of.items():
+            err = 0.5 - wr[c]
+            if abs(err) <= 0.012:
+                continue
+            gain = 1.6 if arche in ("shield", "heal", "stance") else 1.1
+            knobs[c] = clamp_knob(arche, knobs[c] * (1 + max(-0.12, min(0.12, gain * err))))
+    saved["knobs"] = knobs
+    saved.setdefault("set02_winrates", {}).update({c: wr.get(c) for c in arche_of})
+    json.dump(saved, open(TUNED, "w"), indent=1)
+    set02_engine_content(knobs)
+    print("knobs:", {c: knobs[c] for c in arche_of})
+
+
+def write_set02():
+    knobs = json.load(open(TUNED))["knobs"]
+    chars = build_set02(knobs)
+    write_set02_characters(chars)
+    ids = {c["id"] for c in chars}
+    pools = {egg: {r: [i for i in lst if i not in ids] for r, lst in pool.items()} for egg, pool in read_pools().items()}
+    write_pools(add_set02_pools(pools, {c["id"]: c["rarity"] for c in chars}))
+    print(f"wrote set 02: {[c['id'] for c in chars]} and their pool placements")
+
+
 def write_launch_knobs(knobs):
     path = os.path.join(ROOT, "src", "shared", "Config", "Characters.luau")
     src = open(path, encoding="utf-8").read()
@@ -469,7 +595,9 @@ def write():
     everyone = [{"id": c["id"], "family": c["family"], "rarity": c["rarity"]} for c in base["characters"]
                 if c["id"] in launch_ids] + [{"id": c["id"], "family": c["family"], "rarity": c["rarity"]} for c in chars]
     pools, missing = design_pools(everyone)
-    write_pools(pools)
+    set02 = build_set02(knobs)
+    write_set02_characters(set02)
+    write_pools(add_set02_pools(pools, {c["id"]: c["rarity"] for c in set02}))
     sizes = [sum(len(v) for v in p.values()) for p in pools.values()]
     print(f"wrote {len(chars)} characters and {len(pools)} pools (sizes {min(sizes)}-{max(sizes)}); uncovered: {missing}")
 
@@ -619,3 +747,10 @@ if __name__ == "__main__":
         write_looks()
     elif cmd == "prompts":
         write_prompts()
+    elif cmd == "set02":
+        sub = sys.argv[2] if len(sys.argv) > 2 else "write"
+        if sub == "tune":
+            tune_set02(int(sys.argv[3]) if len(sys.argv) > 3 else 8)
+        else:
+            write_set02()
+            write_looks()

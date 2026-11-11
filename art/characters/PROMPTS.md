@@ -30,6 +30,18 @@ Until a character's card art exists, its card shows a TEMP role silhouette tinte
 
 ## Flame
 
+### Brann Cinderfall (`brann_cinderfall`)
+
+Flame · Common · Bruiser
+
+Card art → `art/characters/brann_cinderfall/card.png`
+
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, a black and crimson battle coat wrapped in iron chains, a red scarf over the mouth, a red sash, dark boots; colour scheme crimson red (#C2412D), ember orange (#FFB347) and gunmetal (#5E6A73); holding a jagged blade of red flame; signature silhouette: spiky dark-red hair, the chains across his coat and red flames curling round him; expression and pose suggest: hot-headed fire brawler who charges first and never backs down.
+
+Model reference → `art/characters/brann_cinderfall/front.png`
+
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, a black and crimson battle coat wrapped in iron chains, a red scarf over the mouth, a red sash, dark boots; colour scheme crimson red (#C2412D), ember orange (#FFB347) and gunmetal (#5E6A73); holding a jagged blade of red flame; signature silhouette: spiky dark-red hair, the chains across his coat and red flames curling round him; expression and pose suggest: hot-headed fire brawler who charges first and never backs down.
+
 ### Cassius Emberreach (`sorin_embervale`)
 
 Flame · Legendary · Skirmisher
@@ -312,6 +324,18 @@ Model reference → `art/characters/isolde_murkwater/front.png`
 
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, deep purple and teal layered gown with water-weed trims, pearl veil from a tiara; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and sea teal (#3FA7A0); holding a trident staff dripping dark water; signature silhouette: a tall tiara with a hanging pearl veil and the trident; expression and pose suggest: mysterious queen of a drowned court.
 
+### Kael Voidbinder (`kael_voidbinder`)
+
+Shadow · Epic · Trickster
+
+Card art → `art/characters/kael_voidbinder/card.png`
+
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, a long black and violet hooded coat bound with silver chains, a black scarf over the mouth, dark boots; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and pale silver (#C0C7D6); holding a long jagged violet void blade; signature silhouette: spiky black hair, chains wrapped round the coat and violet shadow wisps around him; expression and pose suggest: quiet, cold shadow fighter who binds his foes in chains of void.
+
+Model reference → `art/characters/kael_voidbinder/front.png`
+
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, a long black and violet hooded coat bound with silver chains, a black scarf over the mouth, dark boots; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and pale silver (#C0C7D6); holding a long jagged violet void blade; signature silhouette: spiky black hair, chains wrapped round the coat and violet shadow wisps around him; expression and pose suggest: quiet, cold shadow fighter who binds his foes in chains of void.
+
 ### Kagen Hollowmere (`kagen_hollowmere`)
 
 Shadow · Rare · Skirmisher
@@ -373,6 +397,18 @@ Model reference → `art/characters/umbra_veilstep/front.png`
 > full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, thick layered dark cloth armour with violet stitching, broad round hat; colour scheme dark plum (#2B2540), lavender (#9B7BFF) and amethyst (#6E4BC4); holding a heavy shadow-iron round shield; signature silhouette: the broad round hat and a rounded heavy silhouette; expression and pose suggest: gentle giant who prefers the shadows.
 
 ## Divine
+
+### Aurex Sunforge (`aurex_sunforge`)
+
+Divine · Legendary · Skirmisher
+
+Card art → `art/characters/aurex_sunforge/card.png`
+
+> Roblox R15 avatar proportions (blocky body, slightly bigger head), drawn in a clean anime cel-shaded style, thick dark outline, vibrant colours, soft rim light, one character only, upper body to knees, 3/4 view, plain flat light-grey background, fully clothed battle outfit, confident closed-mouth expression, original character design, no text, no logo, no watermark, a white and black long coat with gold trim and a gold sash, a white scarf, white boots; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and near-black violet (#1E1A2B); holding a golden sun sword trailing light; signature silhouette: messy golden hair and rings of golden light circling him; expression and pose suggest: calm, noble sun warrior who forges light into a blade.
+
+Model reference → `art/characters/aurex_sunforge/front.png`
+
+> full body, front view, A-pose, plain light-grey background, single character, anime cel-shaded game character, consistent proportions (6 heads tall, slightly large head, chunky hands and feet), crisp dark outlines, flat two-tone shading, no text, no logo, original design, a white and black long coat with gold trim and a gold sash, a white scarf, white boots; colour scheme cream (#F1E6C8), warm gold (#FFD45C) and near-black violet (#1E1A2B); holding a golden sun sword trailing light; signature silhouette: messy golden hair and rings of golden light circling him; expression and pose suggest: calm, noble sun warrior who forges light into a blade.
 
 ### Benedia Lightwell (`benedia_lightwell`)
 

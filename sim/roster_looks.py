@@ -1,4 +1,4 @@
-"""Visual and personality design for all 100 characters (docs/ART_STYLE.md section 5).
+"""Visual and personality design for every character (the 100 plus set 02) (docs/ART_STYLE.md section 5).
 
 Each entry: personality, outfit, personal colour (the third colour after the family's body and
 accent colours in Config/Art.FamilyColors), weapon, silhouette (the one shape that must read at
@@ -246,6 +246,23 @@ LOOKS = {
                          "#9C8B6E", "a giant cleaving glaive", "huge ram horns and spiked shoulders"),
     "ruska_sinmaw": ("Gleeful gambler demon who loves a lucky strike", "red and black jester-like coat with dice charms, wide grin mask on the belt",
                      "#FFC54B", "a pair of dice-weighted flails", "a three-pointed jester hood and dice flails"),
+    # ------------------------------------------------------------------ set 02 (NEW_ASSETS_LEVEL1.md, 2026-11-11)
+    # Written from the owner-approved images (docs/review/set02-2026-11-11.md).
+    "kael_voidbinder": ("Quiet, cold shadow fighter who binds his foes in chains of void",
+        "a long black and violet hooded coat bound with silver chains, a black scarf over the mouth, dark boots",
+        "#C0C7D6",
+        "a long jagged violet void blade",
+        "spiky black hair, chains wrapped round the coat and violet shadow wisps around him"),
+    "brann_cinderfall": ("Hot-headed fire brawler who charges first and never backs down",
+        "a black and crimson battle coat wrapped in iron chains, a red scarf over the mouth, a red sash, dark boots",
+        "#5E6A73",
+        "a jagged blade of red flame",
+        "spiky dark-red hair, the chains across his coat and red flames curling round him"),
+    "aurex_sunforge": ("Calm, noble sun warrior who forges light into a blade",
+        "a white and black long coat with gold trim and a gold sash, a white scarf, white boots",
+        "#1E1A2B",
+        "a golden sun sword trailing light",
+        "messy golden hair and rings of golden light circling him"),
 }
 
-assert len(LOOKS) == 100, len(LOOKS)
+assert len(LOOKS) == 103, len(LOOKS)

@@ -26,7 +26,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 11 | Lobby full upgrade | done, waiting for owner (hero props and a night sky through the review gate) | `map(lobby)` | landmarks 9 · clarity 9 · mood 8 · life 8 · performance 9 · detail 7 until the hero props (`docs/screens/lobby/compare_lobby.png`, `docs/LOBBY_AUDIT.md`) |
 | 12 | Worlds 1-10 upgrade | done, waiting for owner (hero props, MaterialVariants and skies through the review gate) | `map(world1)` … `map(world10)` | each world: landmark 8 · nodes 8 · clarity 8 · mood 8 (`docs/screens/worlds/compare_world*.png`) |
 | 13 | Final pass | done | `fix(13)`, `docs(13)` | fresh-player run at desktop and phone landscape; 2 bugs fixed (`docs/screens/final_master`) |
-| 14 | Characters: renamed; 4 of 5 with approved art live (Rook, Halvard, Nox, Solaris) | done, waiting for owner (a Zephyr Volt image) | `art(14)` | cards 9 · hatch 9 · battle 8 · deck 8 · art-first 9 (`compare_card_art.png`, `docs/screens/cards_art`) |
+| 14 | Characters: renamed; set 1 (Rook, Halvard, Nox) and set 02 (Kael, Brann, Aurex, new) live; Solaris withdrawn | done, waiting for owner (Zephyr Volt and Solaris images) | `art(14)`, `art(14b)` | cards 9 · hatch 9 · battle 8 · deck 9 · art-first 9 (`compare_card_art.png`, `compare_card_art_set02.png`, `docs/screens/cards_art`) |
 | FIX_LOBBY_2 | A: the main menu's own scene; B: the big lobby upgrade (spawn shrine, giant double torii, temple gate + light pillar, egg pagoda + golden egg, tiled plaza, walls, shelf edge, ambient sound) | done, waiting for owner (hero meshes, textures and a night skybox through the review gate) | `map(menu)`, `map(lobby2)` | menu: never shows the lobby (`compare_menu_stage.png`); lobby: spawn 9 · plaza 8 · arena 8 · portal 8 · eggs 8 · aerial 8 · phone 8 (`docs/screens/lobby/compare_lobby2.png`) |
 
 ## Phase notes
@@ -440,6 +440,33 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 - **Zephyr Volt** (N) keeps TEMP art, logged in `docs/WAITING_ON_YOU.md`.
 - Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds; **323 passed, 0 failed**.
 
+### Phase 14b: set 02 (2026-11-11)
+- **Owner OK (written, confirmed in chat):** rook_emberforge, halvard_frostwarden, nox_veilstrider,
+  kael_voidbinder, brann_cinderfall, aurex_sunforge; NOT solaris_dawnbringer, zephyr_volt, HOLD_*,
+  fighter_01..05.
+- **Solaris withdrawn:** `aurelia_dawn` is back to TEMP art; its processed and batch copies are deleted and it
+  is out of `map.json` / `ids.json`; the uploaded image waits for the owner to archive it.
+- **Three new characters** (ids permanent; `sim/roster.py` SET02, written into their own block by
+  `python sim/roster.py set02 write`, which keeps uploaded asset ids): Kael Voidbinder (Shadow, Epic,
+  Trickster, Void Chains), Brann Cinderfall (Flame, Common, Bruiser, Cinderfall), Aurex Sunforge (Divine,
+  Legendary, Skirmisher, Sunforge Blade). Roles follow the roster's rarity rules (premium Support only;
+  low-rarity damage as Bruisers). Each has one knob tuned on the active roster only
+  (`set02 tune`); the other characters' numbers did not move. The catalog cap went from 100 to 103
+  (CLAUDE.md, validator, spec).
+- **Active roster: 8** (the five plus set 02). `sim/balance.py` on it: characters 45.2-54.3%, length
+  14.5, attack-only 56%, adaptive 59% avg, random vs sensible 5-15% (15.0% vs reader70, on the
+  "< 15%" line). Guardian Trials (`sim/trials.py`): 38-53% (World 9 dipped to 38% from 42%; the
+  Guardian decks are unchanged and still Placeholder).
+- **Egg pools:** Brann in Basic, Mine and Demon; Kael in Cracked, Cat and Demon; Aurex in Spotted, Royal
+  and Angel (every pool stays within 6-10).
+- **Art:** reviewed (`docs/review/set02-2026-11-11.md`), processed (`characters.py`), uploaded in one
+  batch of 3 with **no moderation, rejection or 403**, ids in `Config/Characters`. Checked in Studio on the
+  card grid, the hatch reveal, the deck builder and a battle (`docs/screens/cards_art/set02_*`,
+  `compare_card_art_set02.png`).
+- **Names:** "Kael" and "Brann" are also first names of Warcraft characters; the full names are the
+  owner's and original. Display names can change without touching ids.
+- Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds; **329 passed, 0 failed**.
+
 ### FIX_LOBBY_2 (2026-11-10/11)
 - **Section A** (`map(menu)`): the main menu has its own cinematic scene (`Config/MenuStage`,
   `App/MenuScene`) 20,000 studs from the lobby; PLAY fades through black and the camera settles
@@ -477,7 +504,7 @@ phase will swap in (prompts in `art/ui/PROMPTS_V3.md`):
 | Lobby concept | 11 | optional |
 | Lobby hero props (Blender) + night skybox | 11 | to be made and reviewed (new textures need the gate) |
 | World hero props, MaterialVariants, skies | 12 | to be made and reviewed (new textures need the gate) |
-| Zephyr Volt image | 14 | not received (4 of 5 characters are live) |
+| Zephyr Volt and Solaris Dawnbringer images | 14 | not received (6 of 8 active characters are live) |
 
 ## Owner decisions
 | Decision | Asked | Answer |
