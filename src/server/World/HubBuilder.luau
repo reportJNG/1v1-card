@@ -11,6 +11,8 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local HubLayout = require(Shared.Config.HubLayout)
 local WorldProps = require(Shared.Config.WorldProps)
 local Eggs = require(Shared.Config.Eggs)
+local EggTiers = require(Shared.Config.EggTiers)
+local Rarities = require(Shared.Config.Rarities)
 local ArenaKit = require(Shared.Art.ArenaKit)
 local UiAssets = require(Shared.Config.UiAssets)
 local Billboard = require(Shared.Ui.Billboard)
@@ -257,6 +259,55 @@ function life(origin: Vector3, architecture: Instance)
 		size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.5), NumberSequenceKeypoint.new(1, 0.2) }),
 		acceleration = Vector3.new(0, -14, 0),
 	}, architecture)
+	-- FIX_LOBBY_2: water jets arcing into the pool, mist where the waterfalls leave the shelf, and
+	-- gold motes drifting over the arena terrace (tagged shapes in Config/LobbyDecor).
+	for _, d in architecture:GetDescendants() do
+		if not d:IsA("BasePart") then
+			continue
+		end
+		local fx = d:GetAttribute("Fx")
+		if fx == "Jet" then
+			local outward = Vector3.new(d.Position.X - origin.X, 0, d.Position.Z - origin.Z).Unit
+			emitter("Jet", d.Position, Vector3.new(0.6, 0.2, 0.6), {
+				rate = 14,
+				lifetime = NumberRange.new(0.9, 1.1),
+				speed = NumberRange.new(7, 8),
+				spread = Vector2.new(4, 4),
+				color = ColorSequence.new(Color3.fromHex("#F2FBFF"), Color3.fromHex("#8FD3FF")),
+				size = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0.45),
+					NumberSequenceKeypoint.new(1, 0.25),
+				}),
+				acceleration = Vector3.new(0, -16, 0) - outward * 6,
+			}, d)
+		elseif fx == "Mist" then
+			emitter("Mist", d.Position, d.Size, {
+				rate = 6,
+				lifetime = NumberRange.new(3, 5),
+				speed = NumberRange.new(1, 3),
+				spread = Vector2.new(60, 60),
+				color = ColorSequence.new(Color3.fromHex("#E8F6FF"), Color3.fromHex("#B8C8FF")),
+				size = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 3),
+					NumberSequenceKeypoint.new(1, 7),
+				}),
+				acceleration = Vector3.new(0, 0.6, 0),
+			}, d)
+		elseif fx == "GoldMotes" then
+			emitter("GoldMotes", d.Position, d.Size, {
+				rate = 10,
+				lifetime = NumberRange.new(5, 8),
+				speed = NumberRange.new(0.4, 1.2),
+				spread = Vector2.new(180, 180),
+				color = ColorSequence.new(Color3.fromHex("#FFF1B8"), Color3.fromHex("#FFC54B")),
+				size = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0.3),
+					NumberSequenceKeypoint.new(1, 0.15),
+				}),
+				acceleration = Vector3.new(0, 0.5, 0),
+			}, d)
+		end
+	end
 	local f = HubLayout.FIREFLIES
 	emitter("Fireflies", origin + v(f.at), Vector3.new(f.area[1], 1, f.area[2]), {
 		rate = f.rate,
@@ -272,8 +323,8 @@ function life(origin: Vector3, architecture: Instance)
 	}, architecture)
 end
 
--- The egg pavilion's pedestals: a glowing pedestal per egg, the egg's pack image (unedited) and its
--- Coin price floating over it.
+-- The egg pavilion's pedestals: a pedestal per egg glowing in the egg's tier colour with a turning
+-- ring, the egg's pack image (unedited) and its Coin price floating over it.
 function eggPedestals(origin: Vector3, parent: Instance)
 	local folder = Instance.new("Folder")
 	folder.Name = "EggPedestals"
@@ -281,12 +332,13 @@ function eggPedestals(origin: Vector3, parent: Instance)
 		local egg = Eggs.ById[spot.egg]
 		if egg then
 			local at = origin + v(spot.at)
+			local tier = Rarities.Defs[EggTiers.of(egg)].colors[4]
 			slab({
 				Name = egg.id,
 				Shape = Enum.PartType.Cylinder,
 				Size = Vector3.new(2, 3.4, 3.4),
 				CFrame = CFrame.new(at + Vector3.new(0, 1, 0)) * CFrame.Angles(0, 0, math.rad(90)),
-				Color = Color3.fromHex("#E6E0F6"),
+				Color = Color3.fromHex("#5B5088"),
 				Material = Enum.Material.Marble,
 			}, folder)
 			local glow = slab({
@@ -294,12 +346,21 @@ function eggPedestals(origin: Vector3, parent: Instance)
 				Shape = Enum.PartType.Cylinder,
 				Size = Vector3.new(0.15, 3.7, 3.7),
 				CFrame = CFrame.new(at + Vector3.new(0, 2.05, 0)) * CFrame.Angles(0, 0, math.rad(90)),
-				Color = Color3.fromHex("#C77DFF"),
+				Color = tier,
 				Material = Enum.Material.Neon,
 				Transparency = 0.2,
 				CanCollide = false,
 				CastShadow = false,
 			}, folder)
+			ArenaKit.prim({
+				shape = "Ring",
+				size = { 4.6, 0.12, 20 },
+				at = { at.X, at.Y + 0.5, at.Z },
+				color = tier:ToHex(),
+				material = "Neon",
+				transparency = 0.15,
+				tag = "Spin",
+			}, 0, glow)
 			local gui = Instance.new("BillboardGui")
 			gui.Name = "Egg"
 			gui.Size = UDim2.fromScale(4, 4.6)
@@ -342,12 +403,28 @@ function HubBuilder.build(parent: Instance): Model
 	local origin = HubBuilder.origin()
 
 	-- Ground, paths, steps, the fountain and card statue, the stalls: simple shapes from data.
+	-- A shape with a `group` goes in that landmark's model, streamed as one piece (Atomic).
 	local architecture = Instance.new("Folder")
 	architecture.Name = "Architecture"
+	local groups: { [string]: Model } = {}
 	for i, spec in HubLayout.Prims do
 		local shifted = table.clone(spec)
 		shifted.at = { spec.at[1] + origin.X, spec.at[2] + origin.Y, spec.at[3] + origin.Z }
-		ArenaKit.prim(shifted, i, architecture)
+		local into: Instance = architecture
+		local name = spec.group
+		if name then
+			local g: Model? = groups[name]
+			if not g then
+				local made = Instance.new("Model")
+				made.Name = name
+				made.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
+				made.Parent = architecture
+				groups[name] = made
+				g = made
+			end
+			into = g :: Model
+		end
+		ArenaKit.prim(shifted, i, into)
 	end
 	architecture.Parent = hub
 	life(origin, architecture)

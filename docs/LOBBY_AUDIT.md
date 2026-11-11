@@ -72,3 +72,61 @@ are far under budget. The Phase 13 final pass covers the phone-size run.
 | Life | 8 | petals, fireflies, fountain spray, fire, the turning statue, swaying banners, flickering lanterns |
 | Performance | 9 | 399 parts, 21 lights, 8 emitters |
 | Detail and polish | **7** | the architecture is simple parts; the Blender hero props wait for the review gate |
+
+## FIX_LOBBY_2 section B (2026-11-11)
+
+What changed (`Config/LobbyDecor`, merged into `Config/HubLayout`; built by `Server/World/HubBuilder`,
+moved by `App/AreaFx`):
+- **Spawn (B1):** a raised three-tier spawn shrine with gold inlay rings replaces the yellow ring:
+  a pulsing summoning disc, two turning rune rings, eight rune stones, four tall lantern pillars
+  with hanging paper lanterns (4 lights), cobbles around it, flower beds. The first PLAY each
+  session brings a petal and light burst with a whoosh and "WELCOME TO 1V1 CARD" (the camera's
+  settle from above is section A's). The path is laid in tiles with stone lanterns, a koi stream
+  (five glowing koi swim it) and cherry trees over it; the spawn spot now stands on the shrine
+  (`SPAWN` y 1.5; a spec checks it).
+- **Landmarks (B2):** a giant double torii (3x and 2.3x), a bigger sword sign, a red carpet with
+  gold edges up wider steps, braziers and the two statues further out, a terrace twice as deep in
+  carved tiles, gold motes over it. The WORLDS portal stands in a tall temple gate with eight rune
+  stones orbiting it and a light pillar into the sky. The egg stall sits in a two-floor red
+  pagoda with lit windows, eave lanterns and a giant golden egg on the roof; the pedestals glow in
+  their egg's tier colour with turning rings. The plaza has a pool with four water jets, three
+  floating gold cards orbiting the statue, tiled rings, benches, planters and flower beds.
+- **Detail and life (B3):** low walls with cap lanterns, clipped bushes and a tiled border around
+  the courtyard; the ground is a shelf now, with a rocky rim, waterfalls off both ends of the
+  river with mist, mist banks below and invisible walls; side pagodas moved outside the walls.
+  Shooting stars every 8-15 s, swaying lanterns, koi, pulsing light pillar, bobbing golden egg.
+  Ambient sound zones (licensed PSE, looped, at the player's SFX volume): fountain water, both
+  waterfalls, wind chimes by the shrine, wind at three edges. Merchant, quest "!" and DAILY
+  markers are unchanged.
+- **Not done, by the asset rules:** no new textures, meshes or skybox (they need the review gate).
+  Lit windows are on the egg pagoda only; the pagoda meshes' own windows come from their texture.
+
+### Performance (B4)
+
+Studio, Edit mode, `HubBuilder.build` (2026-11-11):
+
+| Measure | Budget (FIX_LOBBY_2 B4) | Before (Phase 11) | After |
+|---|---|---|---|
+| Parts and meshes | about 3,000-4,500, 6,000 at most | 399 (48 meshes) | **3,230** (59 meshes) |
+| Dynamic lights | 40 or fewer | 21 | **26** |
+| Particle emitters | halved on mobile | 8 | **15** (rates halved on touch devices by the client) |
+| Client motion per update (Play, 22 moving parts, 7 rings, 26 lights) | | | **0.47 ms**, at most 30 updates a second |
+
+- **Streaming:** StreamingEnabled stays on; the spawn shrine, the WORLDS gate and the egg pagoda
+  are Atomic models; repeated props are clones of one mesh each (MeshLibrary). The client motion
+  collects the lobby again whenever it streams back in.
+- **Frame time:** Studio keeps a background Play window at 15 fps (66.7 ms flat in both runs), so a
+  real frame time couldn't be measured on this machine; the lobby's own client work is the 0.47 ms
+  above. A MicroProfiler run on a phone needs a published test place (PLAN.md section 7).
+
+### Scores (`docs/screens/lobby/compare_lobby2.png`, shots in `docs/screens/lobby2`)
+
+| View | Score | Why |
+|---|---|---|
+| Spawn | **9** | the glowing shrine and lantern pillars frame a tiled path to the torii in the centre, the pagoda with its golden egg on the left, the portal gate and its light pillar on the right |
+| Plaza | 8 | tiled rings, pool and jets, floating cards, benches, planters, flower beds |
+| Arena gate | 8 | the 3x double torii towers over the carpet and statues |
+| Worlds portal | 8 | temple gate, orbiting rune stones, light pillar |
+| Egg pavilion | 8 | two-floor red pagoda, lit windows, golden egg, tier-glow pedestals; the simple roofs are the weakest part |
+| Aerial | 8 | walled courtyard on a shelf with a rocky rim, waterfalls and mist |
+| Phone (986 x 405) | 8 | shrine, gates and signs read; HUD unchanged |

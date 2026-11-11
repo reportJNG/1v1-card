@@ -38,6 +38,8 @@ export type Prim = {
 	collide: boolean?, -- solid to players (default: not)
 	name: string?,
 	light: { color: string, range: number, brightness: number }?,
+	attrs: { [string]: any }?, -- extra attributes for the client's motion (axis, centre, speed)
+	group: string?, -- builds into a landmark Model of this name (streamed atomically)
 }
 
 export type Particles = {

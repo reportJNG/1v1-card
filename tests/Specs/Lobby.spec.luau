@@ -8,6 +8,7 @@ local HubLayout = require(Shared.Config.HubLayout)
 local WorldProps = require(Shared.Config.WorldProps)
 local Eggs = require(Shared.Config.Eggs)
 local UiAssets = require(Shared.Config.UiAssets)
+local Sounds = require(Shared.Config.Sounds)
 
 local function modelOf(key: string): any
 	return HubLayout.Models[key] or WorldProps.Models[key]
@@ -68,6 +69,56 @@ return function()
 				expect(math.abs(x) < 8 and z > 36 and z < spawn[3]).to.equal(false)
 			end
 		end)
+
+		it("stands the spawn on top of the spawn shrine (FIX_LOBBY_2 B1)", function()
+			local spawn = HubLayout.SPAWN
+			local top = -math.huge
+			for _, prim in HubLayout.Prims do
+				local d = math.sqrt((prim.at[1] - spawn[1]) ^ 2 + (prim.at[3] - spawn[3]) ^ 2)
+				if prim.collide and prim.shape == "Cylinder" and d < 1 then
+					top = math.max(top, prim.at[2] + prim.size[2] / 2)
+				end
+			end
+			expect(math.abs(top - spawn[2]) < 0.01).to.equal(true)
+		end)
+
+		it("stays within the part budget (about 3,000-4,500, at most 6,000)", function()
+			local parts = #HubLayout.Pieces
+			for _, prim in HubLayout.Prims do
+				parts += if prim.shape == "Ring" then prim.size[3] else 1
+			end
+			expect(parts >= 2500).to.equal(true)
+			expect(parts <= 4500).to.equal(true)
+		end)
+
+		it(
+			"gives every ambient zone a looping licensed sound and every moving shape a known motion",
+			function()
+				for _, zone in HubLayout.Ambient do
+					local def = Sounds[zone.sound]
+					expect(def).to.be.ok()
+					expect(def.id).to.be.ok()
+					expect(def.looped).to.equal(true)
+				end
+				local known = {
+					Spin = true,
+					Sway = true,
+					Pulse = true,
+					Orbit = true,
+					Koi = true,
+					Bob = true,
+					Brazier = true,
+					Jet = true,
+					Mist = true,
+					GoldMotes = true,
+				}
+				for _, prim in HubLayout.Prims do
+					if prim.tag then
+						expect(known[prim.tag]).to.equal(true)
+					end
+				end
+			end
+		)
 
 		it("puts real eggs on the pedestals and the merchant point at its stall", function()
 			for _, spot in HubLayout.EggPedestals do

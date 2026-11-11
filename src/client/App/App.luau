@@ -94,6 +94,80 @@ local function waitForLobby(timeout: number)
 	end
 end
 
+-- The first arrival in the lobby each session (FIX_LOBBY_2 B1): a burst of petals and light around
+-- the character with a whoosh, then "WELCOME TO 1V1 CARD" (the camera's settle from above is
+-- UiEffects'). Client-local and purely visual; reduced motion keeps only the words.
+local welcomed = false
+local function welcome(reduced: boolean)
+	if welcomed then
+		return
+	end
+	welcomed = true
+	local player = Players.LocalPlayer
+	local root = player and player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if root and root:IsA("BasePart") and not reduced then
+		local burst = Instance.new("Part")
+		burst.Name = "WelcomeBurst"
+		burst.Anchored = true
+		burst.CanCollide = false
+		burst.CanQuery = false
+		burst.CanTouch = false
+		burst.Transparency = 1
+		burst.Size = Vector3.new(4, 1, 4)
+		burst.Position = root.Position - Vector3.new(0, 2.5, 0)
+		burst.Parent = workspace
+		local flash = Instance.new("PointLight")
+		flash.Color = Color3.fromHex("#FFD9F0")
+		flash.Range = 24
+		flash.Brightness = 6
+		flash.Parent = burst
+		for _, spec in
+			{
+				{ texture = "petal", count = 46, colors = { "#FFD6EC", "#FF9FD0" }, size = 0.7, speed = 14 },
+				{
+					texture = "sparkle",
+					count = 30,
+					colors = { "#FFF1B8", "#C9B6FF" },
+					size = 0.9,
+					speed = 10,
+				},
+			}
+		do
+			local e = Instance.new("ParticleEmitter")
+			e.Texture = Ui.asset(spec.texture)
+			e.Enabled = false
+			e.Lifetime = NumberRange.new(1.4, 2.4)
+			e.Speed = NumberRange.new(spec.speed * 0.6, spec.speed)
+			e.SpreadAngle = Vector2.new(70, 70)
+			e.Acceleration = Vector3.new(0, -6, 0)
+			e.Drag = 1.5
+			e.Rotation = NumberRange.new(0, 360)
+			e.RotSpeed = NumberRange.new(-120, 120)
+			e.LightEmission = if spec.texture == "petal" then 0.2 else 1
+			e.Color = ColorSequence.new(Color3.fromHex(spec.colors[1]), Color3.fromHex(spec.colors[2]))
+			e.Size = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, spec.size),
+				NumberSequenceKeypoint.new(1, spec.size * 0.4),
+			})
+			e.Transparency = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, 0),
+				NumberSequenceKeypoint.new(0.8, 0.1),
+				NumberSequenceKeypoint.new(1, 1),
+			})
+			e.Parent = burst
+			e:Emit(spec.count)
+		end
+		TweenService:Create(flash, TweenInfo.new(1.2), { Brightness = 0 }):Play()
+		task.delay(3, function()
+			burst:Destroy()
+		end)
+	end
+	Ui.sound("hatch_burst")
+	task.delay(0.5, function()
+		WorldText.center({ text = "WELCOME TO 1V1 CARD", tone = "gold", size = 54, duration = 2.6 })
+	end)
+end
+
 type Hud = HudModule.Hud
 
 function App.start(deps: Deps): Ctx
@@ -534,11 +608,15 @@ function App.start(deps: Deps): Ctx
 			end
 			leaving = true
 			task.spawn(function()
-				if ctx.request("Session.Play").ok then
+				local ok = ctx.request("Session.Play").ok
+				if ok then
 					waitForLobby(5)
 				end
 				leaving = false
 				ui("play")
+				if ok then
+					task.delay(0.6, welcome, ctx.reducedMotion())
+				end
 			end)
 		end,
 		open = function(name: string, arg: any?)

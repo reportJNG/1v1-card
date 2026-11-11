@@ -13,7 +13,10 @@ local Presets = require(Shared.Config.Lighting)
 local Arenas = require(Shared.Config.Arenas)
 local Ui = require(script.Parent.Ui)
 local Sounds = require(Shared.Config.Sounds)
+local HubLayout = require(Shared.Config.HubLayout)
 local SoundService = game:GetService("SoundService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 local AreaFx = {}
 
@@ -104,6 +107,7 @@ local battleOpen = false
 local battleArena: string? = nil
 local musicOn = true
 local musicVolume = 0.8 -- the player's music volume (Settings, 0-1)
+local sfxVolume = 1 -- the player's SFX volume (Settings, 0-1), for the lobby's ambience
 local track: Sound? = nil
 local trackName: string? = nil
 
@@ -201,73 +205,229 @@ function AreaFx.setBattle(open: boolean, arena: string?)
 	refresh()
 end
 
--- Spins the portal swirl images (SurfaceGuis built by Server/World/HubBuilder).
-local function spinPortal(hub: Instance)
-	local core = hub:WaitForChild("PortalCore", 30)
-	if core == nil then
-		return
-	end
-	for _, gui in core:GetChildren() do
-		local img = gui:FindFirstChild("Swirl")
-		if img and img:IsA("ImageLabel") then
+-- The lobby's slow motion (FIX_LOBBY section 4.7, FIX_LOBBY_2 B3): the golden card statue and the
+-- rune rings turn, the summoning circle and the light pillar pulse, the floating cards and rune
+-- stones orbit, the golden egg bobs, koi swim the stream, banners sway, lanterns flicker and
+-- shooting stars cross the sky. Client-only and purely visual; still under reduced motion. The
+-- lobby streams out while the player is in a world, so its parts are collected again whenever
+-- they change. Particles run at half rate on touch devices.
+type Mover = { part: BasePart, home: CFrame, kind: string, i: number }
+type Flicker = { light: PointLight, base: number }
+
+local MOVING = { Spin = true, Sway = true, Pulse = true, Orbit = true, Koi = true, Bob = true }
+
+local function collect(hub: Instance): ({ Mover }, { Model }, { Flicker })
+	local movers: { Mover } = {}
+	local rings: { Model } = {}
+	local lights: { Flicker } = {}
+	local touch = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+	for _, d in hub:GetDescendants() do
+		local fx = d:GetAttribute("Fx")
+		if d:IsA("Model") and fx == "Spin" then
+			table.insert(rings, d)
+		elseif d:IsA("BasePart") and type(fx) == "string" and MOVING[fx] then
+			table.insert(movers, { part = d, home = d.CFrame, kind = fx, i = #movers + 1 })
+			if fx == "Pulse" and d:GetAttribute("BaseTransparency") == nil then
+				d:SetAttribute("BaseTransparency", d.Transparency)
+			end
+		elseif d:IsA("PointLight") and d.Color.R > d.Color.B then -- warm lantern and fire light
+			table.insert(lights, { light = d, base = d.Brightness })
+		elseif d:IsA("ImageLabel") and d.Name == "Swirl" and d:GetAttribute("Spinning") == nil then
+			d:SetAttribute("Spinning", true) -- the portal's swirl
 			TweenService:Create(
-				img,
+				d,
 				TweenInfo.new(6, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
-				{ Rotation = if gui.Name == "Swirl" then 360 else -360 }
+				{ Rotation = 360 }
 			):Play()
+		elseif d:IsA("ParticleEmitter") and touch and d:GetAttribute("BaseRate") == nil then
+			d:SetAttribute("BaseRate", d.Rate)
+			d.Rate = d.Rate / 2
 		end
+	end
+	return movers, rings, lights
+end
+
+local function num(p: Instance, key: string, default: number): number
+	local value = p:GetAttribute(key)
+	return if type(value) == "number" then value else default
+end
+
+local function move(m: Mover, t: number, origin: Vector3)
+	local p, home = m.part, m.home
+	if m.kind == "Spin" then
+		p.CFrame = CFrame.new(home.Position) * CFrame.Angles(0, t * 0.6, 0)
+	elseif m.kind == "Sway" then
+		p.CFrame = home * CFrame.Angles(0, 0, math.sin(t * 1.3 + m.i) * math.rad(4))
+	elseif m.kind == "Pulse" then
+		local base = num(p, "BaseTransparency", 0.7)
+		p.Transparency = base + (1 - base) * 0.45 * (0.5 + 0.5 * math.sin(t * 1.8 + m.i))
+	elseif m.kind == "Bob" then
+		p.CFrame = home * CFrame.new(0, math.sin(t * 1.1) * 0.8, 0) * CFrame.Angles(0, t * 0.4, 0)
+	elseif m.kind == "Orbit" then
+		local c = origin + Vector3.new(num(p, "cx", 0), num(p, "cy", 0), num(p, "cz", 0))
+		local a = t * num(p, "speed", 0.2)
+		local rel = home.Position - c
+		if p:GetAttribute("axis") == "X" then
+			p.CFrame = CFrame.new(c) * CFrame.Angles(a, 0, 0) * CFrame.new(rel) * CFrame.Angles(0, a * 3, 0)
+		else
+			local lift = Vector3.new(0, math.sin(t + m.i) * num(p, "bob", 0), 0)
+			p.CFrame = CFrame.new(c)
+				* CFrame.Angles(0, a, 0)
+				* CFrame.new(rel + lift)
+				* home.Rotation
+				* CFrame.Angles(0, t * 0.8, 0)
+		end
+	elseif m.kind == "Koi" then
+		local z0, z1 = num(p, "z0", 0), num(p, "z1", 1)
+		local span = z1 - z0
+		local u = ((home.Position.Z - origin.Z - z0) / span + t * 0.05 * (1 + m.i % 3 * 0.3)) % 1
+		local wiggle = math.sin(t * 1.7 + m.i)
+		p.CFrame = CFrame.new(home.Position.X + wiggle * 0.5, home.Position.Y, origin.Z + z0 + u * span)
+			* CFrame.Angles(0, wiggle * 0.5, 0)
 	end
 end
 
--- The lobby's slow motion (FIX_LOBBY section 4.7): the golden card statue turns, the banners sway
--- and the lanterns flicker. Client-only and purely visual; still under reduced motion.
-function lobbyMotion(hub: Instance)
-	local architecture = hub:WaitForChild("Architecture", 30)
-	if architecture == nil then
-		return
-	end
-	local spinners: { BasePart } = {}
-	local swayers: { { part: BasePart, home: CFrame } } = {}
-	for _, d in architecture:GetChildren() do
-		if d:IsA("BasePart") then
-			local fx = d:GetAttribute("Fx")
-			if fx == "Spin" then
-				table.insert(spinners, d)
-			elseif fx == "Sway" then
-				table.insert(swayers, { part = d, home = d.CFrame })
-			end
+-- A shooting star: a short neon streak across the sky, client-local.
+local function shootingStar(origin: Vector3)
+	local from = origin + Vector3.new(math.random(-260, 260), math.random(220, 320), math.random(-420, -200))
+	local dir = Vector3.new(if math.random() < 0.5 then -1 else 1, -0.35, math.random() * 0.4).Unit
+	local star = Instance.new("Part")
+	star.Name = "ShootingStar"
+	star.Anchored = true
+	star.CanCollide = false
+	star.CanQuery = false
+	star.CanTouch = false
+	star.CastShadow = false
+	star.Material = Enum.Material.Neon
+	star.Color = Color3.fromHex("#FFF6D8")
+	star.Size = Vector3.new(0.8, 0.8, 26)
+	star.CFrame = CFrame.lookAt(from, from + dir)
+	star.Transparency = 0.1
+	star.Parent = workspace
+	local tween = TweenService:Create(
+		star,
+		TweenInfo.new(1.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+		{ CFrame = CFrame.lookAt(from + dir * 260, from + dir * 261), Transparency = 1 }
+	)
+	tween.Completed:Connect(function()
+		star:Destroy()
+	end)
+	tween:Play()
+end
+
+-- The lobby's ambient sound zones (Config/LobbyDecor.Ambient): looped sounds at their spots, heard
+-- only nearby (fountain water, waterfalls, chimes by the shrine, wind at the edges). Client-local,
+-- at the player's SFX volume.
+local ambience: { { sound: Sound, volume: number } } = {}
+local function ambientSounds(origin: Vector3)
+	local folder = Instance.new("Folder")
+	folder.Name = "LobbyAmbience"
+	for _, zone in HubLayout.Ambient do
+		local def = Sounds[zone.sound]
+		if def and def.id then
+			local spot = Instance.new("Part")
+			spot.Name = zone.sound
+			spot.Anchored = true
+			spot.CanCollide = false
+			spot.CanQuery = false
+			spot.CanTouch = false
+			spot.Transparency = 1
+			spot.Size = Vector3.one
+			spot.Position = origin + Vector3.new(zone.at[1], zone.at[2], zone.at[3])
+			spot.Parent = folder
+			local snd = Instance.new("Sound")
+			snd.SoundId = def.id :: string
+			snd.Looped = true
+			snd.Volume = def.volume * sfxVolume
+			snd.RollOffMode = Enum.RollOffMode.InverseTapered
+			snd.RollOffMinDistance = zone.range * 0.2
+			snd.RollOffMaxDistance = zone.range
+			snd.Parent = spot
+			snd:Play()
+			table.insert(ambience, { sound = snd, volume = def.volume })
 		end
 	end
-	local lights: { { light: PointLight, base: number } } = {}
-	local models = hub:FindFirstChild("Models")
-	local function addLights(root: Instance)
-		for _, d in root:GetDescendants() do
-			if d:IsA("PointLight") and d.Color.R > d.Color.B then -- warm lantern and fire light
-				table.insert(lights, { light = d, base = d.Brightness })
-			end
+	folder.Parent = workspace
+end
+
+function AreaFx.setSfxVolume(v: number)
+	sfxVolume = math.clamp(v, 0, 1)
+	for _, a in ambience do
+		a.sound.Volume = a.volume * sfxVolume
+	end
+end
+
+function lobbyMotion(first: Instance)
+	local o = HubLayout.ORIGIN
+	local origin = Vector3.new(o[1], o[2], o[3])
+	ambientSounds(origin)
+	local hub: Instance = first
+	local dirty = true
+	local conns: { RBXScriptConnection } = {}
+	local function watch(h: Instance)
+		for _, c in conns do
+			c:Disconnect()
 		end
+		conns = {
+			h.DescendantAdded:Connect(function()
+				dirty = true
+			end),
+			h.DescendantRemoving:Connect(function()
+				dirty = true
+			end),
+		}
 	end
-	if models then
-		task.delay(8, function() -- the meshes stream in on the server
-			addLights(models)
-		end)
-	end
+	watch(first)
+	local movers: { Mover } = {}
+	local rings: { Model } = {}
+	local lights: { Flicker } = {}
+	local lastScan = 0
+	local nextStar = os.clock() + 6
 	local t0 = os.clock()
-	task.spawn(function()
-		while hub.Parent do
-			local t = os.clock() - t0
-			if not reducedOf() then
-				for _, p in spinners do
-					p.CFrame = CFrame.new(p.Position) * CFrame.Angles(0, t * 0.6, 0)
-				end
-				for i, s in swayers do
-					s.part.CFrame = s.home * CFrame.Angles(0, 0, math.sin(t * 1.3 + i) * math.rad(4))
-				end
-				for i, l in lights do
-					l.light.Brightness = l.base * (0.88 + 0.12 * math.noise(t * 3, i))
-				end
+	local last = t0
+	RunService.Heartbeat:Connect(function()
+		local now = os.clock()
+		local dt = now - last
+		if dt < 1 / 30 then
+			return
+		end
+		last = now
+		if hub.Parent == nil then
+			local found = workspace:FindFirstChild("Hub")
+			if found == nil then
+				return
 			end
-			task.wait(1 / 20)
+			hub = found
+			watch(found)
+			dirty = true
+		end
+		if dirty and now - lastScan > 0.5 then
+			dirty = false
+			lastScan = now
+			movers, rings, lights = collect(hub)
+		end
+		if reducedOf() then
+			return
+		end
+		local t = now - t0
+		for _, m in movers do
+			if m.part.Parent then
+				move(m, t, origin)
+			end
+		end
+		for i, ring in rings do
+			if ring.Parent then
+				ring:PivotTo(ring:GetPivot() * CFrame.Angles(0, dt * (if i % 2 == 0 then -0.12 else 0.16), 0))
+			end
+		end
+		for i, l in lights do
+			l.light.Brightness = l.base * (0.88 + 0.12 * math.noise(t * 3, i))
+		end
+		local player = Players.LocalPlayer
+		local inLobby = player == nil or (player:GetAttribute("World") or 0) == 0
+		if inLobby and not onMenu and not battleOpen and now >= nextStar then
+			nextStar = now + 8 + math.random() * 7
+			shootingStar(origin)
 		end
 	end)
 end
@@ -298,7 +458,9 @@ function AreaFx.start(ctx: any)
 				if (settings.music ~= false) ~= musicOn then
 					AreaFx.setMusic(settings.music ~= false)
 				end
-				Ui.setSfxVolume(if settings.sfx == false then 0 else (settings.sfxVolume or 100) / 100)
+				local sfx = if settings.sfx == false then 0 else (settings.sfxVolume or 100) / 100
+				Ui.setSfxVolume(sfx)
+				AreaFx.setSfxVolume(sfx)
 				AreaFx.setMusicVolume((settings.musicVolume or 80) / 100)
 			end
 		end
@@ -307,7 +469,6 @@ function AreaFx.start(ctx: any)
 	task.spawn(function()
 		local hub = workspace:WaitForChild("Hub", 60)
 		if hub then
-			spinPortal(hub)
 			lobbyMotion(hub)
 		end
 	end)

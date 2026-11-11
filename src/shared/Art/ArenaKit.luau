@@ -127,9 +127,19 @@ function ArenaKit.prim(spec: Arenas.Prim, i: number, parent: Instance)
 		p.CFrame = CFrame.new(at) * turn * CFrame.Angles(0, 0, math.rad(90))
 	else
 		p = part(`Prim{i}`, parent)
-		p.Shape = if spec.shape == "Ball" then Enum.PartType.Ball else Enum.PartType.Block
-		p.Size = v3(spec.size)
+		local size = spec.size
+		local round = spec.shape == "Ball"
+		local stretched = round and (size[1] ~= size[2] or size[2] ~= size[3])
+		-- a Ball part is always a sphere: a stretched one (an egg, a lantern) is a block with a
+		-- sphere mesh, which takes the block's size
+		p.Shape = if round and not stretched then Enum.PartType.Ball else Enum.PartType.Block
+		p.Size = v3(size)
 		p.CFrame = CFrame.new(at) * turn
+		if stretched then
+			local mesh = Instance.new("SpecialMesh")
+			mesh.MeshType = Enum.MeshType.Sphere
+			mesh.Parent = p
+		end
 	end
 	p.Color = color
 	p.Material = mat
@@ -140,6 +150,11 @@ function ArenaKit.prim(spec: Arenas.Prim, i: number, parent: Instance)
 	end
 	if spec.tag then
 		p:SetAttribute("Fx", spec.tag)
+	end
+	if spec.attrs then
+		for k, val in spec.attrs do
+			p:SetAttribute(k, val)
+		end
 	end
 	if spec.image then
 		local faces: { Enum.NormalId } = if spec.shape == "Cylinder"

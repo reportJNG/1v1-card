@@ -65,6 +65,12 @@ Detailed specs live elsewhere; this file points to them:
   worlds, and a final fresh-player pass at desktop and phone sizes. Painted pieces stay TEMP until
   the owner's sheets pass the review gate (`docs/MASTER_FIX_REPORT.md`). 323 headless tests pass.
 
+- **FIX_LOBBY_2 sections A and B done (2026-11-11):** the main menu has its own scene and never
+  shows the lobby; the lobby got its second pass (spawn shrine, giant double torii, WORLDS temple
+  gate with a light pillar, egg pagoda with a golden egg, tiled plaza, walls, shelf edge, ambient
+  sound). Scores: spawn 9, everything else 8 (`docs/LOBBY_AUDIT.md`). New textures, hero meshes
+  and a night skybox wait for the review gate. 329 headless tests pass.
+
 - **Character art live (2026-11-10):** Rook Emberforge, Halvard Frostwarden, Nox Veilstrider and
   Solaris Dawnbringer, approved in writing and uploaded in one batch of 4 (no rejections), show on
   cards, the deck, hatch reveals, the menu and in battle.

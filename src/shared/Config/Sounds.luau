@@ -74,6 +74,11 @@ local Sounds: { [string]: Sound } = {
 	music_arena_volcano = { id = "rbxassetid://1839685565", volume = 0.25, kind = "music", looped = true }, -- APM "Light The Fire"
 	music_arena_celestial = { id = "rbxassetid://9038610306", volume = 0.25, kind = "music", looped = true }, -- APM "A Heroic Legend No Choir"
 	music_arena_storm = { id = "rbxassetid://9046674561", volume = 0.25, kind = "music", looped = true }, -- APM "Taiko Thunderstorm--ALT. 1"
+	-- Lobby ambience (FIX_LOBBY_2 B3): looped, placed at their spots (Config/LobbyDecor.Ambient), SFX volume
+	ambient_fountain = { id = "rbxassetid://9120557629", volume = 0.35, kind = "sfx", looped = true }, -- PSE "Water Fountain 1"
+	ambient_waterfall = { id = "rbxassetid://9120552550", volume = 0.45, kind = "sfx", looped = true }, -- PSE waterfall, steady stream
+	ambient_chimes = { id = "rbxassetid://9120750072", volume = 0.3, kind = "sfx", looped = true }, -- PSE wind chimes
+	ambient_wind = { id = "rbxassetid://9119643864", volume = 0.3, kind = "sfx", looped = true }, -- PSE "Storm Drain Presence" (soft wind)
 }
 
 return table.freeze(Sounds)

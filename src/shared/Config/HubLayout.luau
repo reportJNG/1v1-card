@@ -8,6 +8,7 @@
 -- architecture (ground, paths, steps, fountain, signs, stalls) is simple parts. Positions are
 -- studs from the hub origin; north is -Z; models face +Z (toward the spawn) at rotY = 0.
 local Arenas = require(script.Parent.Arenas)
+local LobbyDecor = require(script.Parent.LobbyDecor)
 
 export type Vec = { number } -- { x, y, z }
 export type Prim = Arenas.Prim
@@ -156,10 +157,12 @@ end
 
 local Pieces: { Piece } = {
 	-- North: the 1v1 ARENA gate on its terrace, the arena hall behind it, two guardian statues.
-	{ model = "torii", at = { 0, 2, -64 }, scale = 2.0 },
-	{ model = "arena", at = { 0, 2, -94 }, scale = 1.35 },
-	{ model = "w8_statue", at = { -26, 2, -62 }, scale = 0.95 },
-	{ model = "w8_statue", at = { 26, 2, -62 }, scale = 0.95 },
+	-- (FIX_LOBBY_2 B2: a giant double torii, 3x, and a bigger hall)
+	{ model = "torii", at = { 0, 2, -64 }, scale = 3.0 },
+	{ model = "torii", at = { 0, 2, -78 }, scale = 2.3 },
+	{ model = "arena", at = { 0, 2, -112 }, scale = 1.7 },
+	{ model = "w8_statue", at = { -33, 2, -62 }, scale = 1.3 },
+	{ model = "w8_statue", at = { 33, 2, -62 }, scale = 1.3 },
 	-- East: the WORLDS portal on its dais, facing the plaza.
 	{
 		model = "portal",
@@ -169,7 +172,7 @@ local Pieces: { Piece } = {
 		light = { offset = { 0, 18, 0 }, color = "#C77DFF", range = 42, brightness = 4 },
 	},
 	-- West: the egg pavilion, facing the plaza.
-	{ model = "egg_stall", at = { -76, 0.4, 0 }, rotY = 90, scale = 1.4 },
+	{ model = "egg_stall", at = { -76, 0.4, 0 }, rotY = 90, scale = 0.85 },
 	-- South-west: the merchant's cart.
 	{ model = "merchant_cart", at = { -48, 0, 56 }, rotY = 40, scale = 1.3 },
 	-- Lanterns around the plaza (between the four paths) and posts along the spawn path.
@@ -181,15 +184,13 @@ local Pieces: { Piece } = {
 	lantern(-37, -15),
 	lantern(15, -37),
 	lantern(-15, -37),
-	post(-11, 50, 0),
-	post(11, 50, 0),
 	post(-16, 82, 0),
 	post(16, 82, 0),
 	-- Temple backdrop.
 	{ model = "pagoda", at = { -58, 0, -104 }, rotY = 20, scale = 1.15 },
 	{ model = "pagoda", at = { 60, 0, -108 }, rotY = -20, scale = 1.05 },
-	{ model = "pagoda", at = { -112, 0, -40 }, rotY = 60, scale = 1.0 },
-	{ model = "pagoda", at = { 114, 0, -36 }, rotY = -60, scale = 0.95 },
+	{ model = "pagoda", at = { -144, 0, -40 }, rotY = 60, scale = 1.0 },
+	{ model = "pagoda", at = { 146, 0, -36 }, rotY = -60, scale = 0.95 },
 	-- The cherry grove.
 	{ model = "cherry_tree", at = { -38, 0, -36 }, rotY = 30, scale = 0.85 },
 	{ model = "cherry_tree", at = { 38, 0, -38 }, rotY = 200, scale = 0.85 },
@@ -210,8 +211,8 @@ local Pieces: { Piece } = {
 	{ model = "cherry_tree", at = { 64, 0, 130 }, rotY = 40, scale = 1.0 },
 	{ model = "cherry_tree", at = { -150, 0, -130 }, rotY = 110, scale = 1.3 },
 	{ model = "cherry_tree", at = { 152, 0, -128 }, rotY = 250, scale = 1.3 },
-	{ model = "pagoda", at = { -26, 0, -150 }, rotY = 10, scale = 1.3 },
-	{ model = "pagoda", at = { 30, 0, -156 }, rotY = -10, scale = 1.2 },
+	{ model = "pagoda", at = { -58, 0, -164 }, rotY = 10, scale = 1.3 },
+	{ model = "pagoda", at = { 62, 0, -168 }, rotY = -10, scale = 1.2 },
 	-- Floating islands on the horizon.
 	{ model = "sky_island", at = { -170, 60, -230 }, rotY = 40, scale = 2.5 },
 	{ model = "sky_island", at = { 185, 85, -270 }, rotY = 200, scale = 3 },
@@ -222,7 +223,7 @@ local Pieces: { Piece } = {
 
 local Prims: { Prim } = {
 	-- Ground: night grass, the courtyard, the round plaza and its inlays.
-	p("Block", { 1400, 2, 1400 }, { 0, -1.05, -10 }, "#2A2450", "Grass", { collide = true, name = "Ground" }),
+	p("Block", { 420, 2, 420 }, { 0, -1.05, 0 }, "#2A2450", "Grass", { collide = true, name = "Ground" }),
 	p("Block", { 236, 0.3, 236 }, { 0, 0.0, -6 }, "#3B3364", "Slate", { collide = true, name = "Courtyard" }),
 	p("Cylinder", { 72, 0.3 }, { 0, 0.2, 0 }, "#5B5088", "Cobblestone", { collide = true, name = "Plaza" }),
 	p("Ring", { 73, 0.7, 48 }, { 0, 0.4, 0 }, "#8E84BE", "Marble"),
@@ -245,21 +246,12 @@ local Prims: { Prim } = {
 		light = { color = "#FFD27A", range = 28, brightness = 2 },
 	}),
 	-- The spawn circle and the path north over the river.
-	p("Cylinder", { 20, 0.3 }, { 0, 0.2, 96 }, "#4A4278", "Slate", { collide = true, name = "SpawnCircle" }),
-	p("Ring", { 20.5, 0.15, 36 }, { 0, 0.36, 96 }, "#FFC54B", "Neon", { transparency = 0.4 }),
 	p("Block", { 14, 0.2, 30 }, { 0, 0.2, 51 }, "#6E5FA6", "Brick", { collide = true }),
 	p("Block", { 14, 0.2, 10 }, { 0, 0.2, 83 }, "#6E5FA6", "Brick", { collide = true }),
 	-- The river and its banks, with a wooden bridge.
-	p(
-		"Block",
-		{ 1400, 0.3, 10 },
-		{ 0, 0.1, 72 },
-		"#2F6FBF",
-		"Glass",
-		{ transparency = 0.25, name = "River" }
-	),
-	p("Block", { 1400, 0.6, 1.2 }, { 0, 0.3, 66.4 }, "#4A4270", "Cobblestone"),
-	p("Block", { 1400, 0.6, 1.2 }, { 0, 0.3, 77.6 }, "#4A4270", "Cobblestone"),
+	p("Block", { 420, 0.3, 10 }, { 0, 0.1, 72 }, "#2F6FBF", "Glass", { transparency = 0.25, name = "River" }),
+	p("Block", { 420, 0.6, 1.2 }, { 0, 0.3, 66.4 }, "#4A4270", "Cobblestone"),
+	p("Block", { 420, 0.6, 1.2 }, { 0, 0.3, 77.6 }, "#4A4270", "Cobblestone"),
 	p("Block", { 14, 0.6, 13 }, { 0, 0.6, 72 }, "#7A4A2E", "WoodPlanks", { collide = true, name = "Bridge" }),
 	p("Block", { 0.5, 1.4, 13 }, { -7.2, 1.6, 72 }, "#5A3420", "Wood", { collide = true }),
 	p("Block", { 0.5, 1.4, 13 }, { 7.2, 1.6, 72 }, "#5A3420", "Wood", { collide = true }),
@@ -269,20 +261,20 @@ local Prims: { Prim } = {
 	p("Block", { 0.9, 2.4, 0.9 }, { 7.2, 1.5, 78.4 }, "#B83A4A", "Wood"),
 	-- North: a short path, three steps and the arena terrace, with banners and the round sign.
 	p("Block", { 16, 0.2, 14 }, { 0, 0.2, -42 }, "#6E5FA6", "Brick", { collide = true }),
-	p("Block", { 22, 0.5, 2.5 }, { 0, 0.25, -50.25 }, "#7A6FAA", "Slate", { collide = true }),
-	p("Block", { 22, 1.0, 2.5 }, { 0, 0.5, -52.75 }, "#7A6FAA", "Slate", { collide = true }),
-	p("Block", { 22, 1.5, 2.5 }, { 0, 0.75, -55.25 }, "#7A6FAA", "Slate", { collide = true }),
-	p("Block", { 64, 2, 44 }, { 0, 1, -78.5 }, "#4A3F78", "Slate", { collide = true, name = "ArenaTerrace" }),
-	p("Block", { 64, 0.3, 1.2 }, { 0, 2.1, -56.9 }, "#FFC54B", "Metal"),
-	p("Cylinder", { 11, 0.9 }, { 0, 29, -62.4 }, "#8A5A34", "WoodPlanks", {
+	p("Block", { 30, 0.5, 2.5 }, { 0, 0.25, -50.25 }, "#7A6FAA", "Slate", { collide = true }),
+	p("Block", { 30, 1.0, 2.5 }, { 0, 0.5, -52.75 }, "#7A6FAA", "Slate", { collide = true }),
+	p("Block", { 30, 1.5, 2.5 }, { 0, 0.75, -55.25 }, "#7A6FAA", "Slate", { collide = true }),
+	p("Block", { 80, 2, 80 }, { 0, 1, -96.5 }, "#4A3F78", "Slate", { collide = true, name = "ArenaTerrace" }),
+	p("Block", { 80, 0.3, 1.2 }, { 0, 2.1, -56.9 }, "#FFC54B", "Metal"),
+	p("Cylinder", { 15, 1.2 }, { 0, 38.5, -61.2 }, "#8A5A34", "WoodPlanks", {
 		rot = { 90, 0, 0 },
 		image = "icon_play",
 		name = "ArenaSign",
 	}),
-	p("Cylinder", { 0.5, 13 }, { -30.5, 8.5, -60 }, "#3A2A20", "Wood"),
-	p("Cylinder", { 0.5, 13 }, { 30.5, 8.5, -60 }, "#3A2A20", "Wood"),
-	p("Block", { 3.6, 8, 0.2 }, { -30.5, 9.6, -59.6 }, "#C4283C", "Fabric", { tag = "Sway" }),
-	p("Block", { 3.6, 8, 0.2 }, { 30.5, 9.6, -59.6 }, "#7B3CFF", "Fabric", { tag = "Sway" }),
+	p("Cylinder", { 0.5, 13 }, { -39, 8.5, -60 }, "#3A2A20", "Wood"),
+	p("Cylinder", { 0.5, 13 }, { 39, 8.5, -60 }, "#3A2A20", "Wood"),
+	p("Block", { 3.6, 8, 0.2 }, { -39, 9.6, -59.6 }, "#C4283C", "Fabric", { tag = "Sway" }),
+	p("Block", { 3.6, 8, 0.2 }, { 39, 9.6, -59.6 }, "#7B3CFF", "Fabric", { tag = "Sway" }),
 	-- East: the path and the two-tier dais under the portal.
 	p("Block", { 18, 0.2, 12 }, { 45, 0.2, 0 }, "#6E5FA6", "Brick", { collide = true }),
 	p("Cylinder", { 32, 0.6 }, { 70, 0.3, 0 }, "#4A3F78", "Slate", { collide = true }),
@@ -338,15 +330,23 @@ local Prims: { Prim } = {
 		light = { color = "#FFD27A", range = 14, brightness = 0 },
 	}),
 }
-for _, list in { brazier(-9, 2, -59), brazier(9, 2, -59), brazier(62, 1.2, -11), brazier(62, 1.2, 11) } do
+for _, list in { brazier(-16, 2, -59), brazier(16, 2, -59), brazier(62, 1.2, -11), brazier(62, 1.2, 11) } do
 	for _, prim in list do
 		table.insert(Prims, prim)
 	end
 end
-for _, z in { 50 } do
+for _, z in { 44, 58 } do
 	for _, prim in lanternString(z) do
 		table.insert(Prims, prim)
 	end
+end
+-- FIX_LOBBY_2 section B: the spawn shrine, the tiled path and koi stream, the carpet, the temple
+-- gate, the egg pagoda, the plaza's pool, cards, tiles and seats, walls and the shelf's edge.
+for _, prim in LobbyDecor.Prims do
+	table.insert(Prims, prim)
+end
+for _, piece in LobbyDecor.Pieces do
+	table.insert(Pieces, piece)
 end
 
 -- The eggs on the pavilion's pedestals: World 1's eggs (the real pack images, unedited), each
@@ -365,18 +365,18 @@ local Features: { [string]: Feature } = {
 	arena = {
 		at = { 0, 4, -60 },
 		prompt = { name = "HubArena", action = "Enter", object = "1v1 Arena" },
-		sign = { text = "1v1 ARENA", icon = "icon_play", height = 50, size = 46 },
+		sign = { text = "1v1 ARENA", icon = "icon_play", height = 74, size = 56 },
 	},
 	portal = {
 		at = { 75, 19.5, 0 },
 		rotY = -90,
 		prompt = { name = "HubPortal", action = "Travel", object = "Worlds" },
-		sign = { text = "WORLDS", icon = "icon_worlds", height = 42, size = 40 },
+		sign = { text = "WORLDS", icon = "icon_worlds", height = 68, size = 44 },
 	},
 	egg_stall = {
 		at = { -66, 3, 0 },
 		prompt = { name = "HubShop", action = "Browse", object = "Egg Shop" },
-		sign = { text = "EGGS", icon = "icon_shop", height = 30, size = 26 },
+		sign = { text = "EGGS", icon = "icon_shop", height = 48, size = 30 },
 	},
 	merchant = {
 		at = { -46, 3, 54 },
@@ -397,7 +397,7 @@ local Features: { [string]: Feature } = {
 
 return table.freeze({
 	ORIGIN = { -2400, 0, 0 } :: Vec, -- west of World 1 (worlds start at X = 0)
-	SPAWN = { 0, 0.5, 96 } :: Vec, -- facing north: the plaza, the arena gate and the portal
+	SPAWN = { 0, 1.5, 96 } :: Vec, -- on top of the spawn shrine (LobbyDecor), facing north: the plaza, the arena gate and the portal
 	MERCHANT = { -46, 1, 54 } :: Vec, -- the lobby merchant (the server's sell range check)
 	PETALS = { area = { 220, 220 }, height = 46, rate = 22 },
 	FIREFLIES = { at = { 0, 2, 72 }, area = { 200, 14 }, rate = 10 },
@@ -407,4 +407,5 @@ return table.freeze({
 	Prims = table.freeze(Prims),
 	EggPedestals = table.freeze(EggPedestals),
 	Features = table.freeze(Features),
+	Ambient = LobbyDecor.Ambient,
 })

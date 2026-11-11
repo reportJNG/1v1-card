@@ -27,6 +27,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 12 | Worlds 1-10 upgrade | done, waiting for owner (hero props, MaterialVariants and skies through the review gate) | `map(world1)` … `map(world10)` | each world: landmark 8 · nodes 8 · clarity 8 · mood 8 (`docs/screens/worlds/compare_world*.png`) |
 | 13 | Final pass | done | `fix(13)`, `docs(13)` | fresh-player run at desktop and phone landscape; 2 bugs fixed (`docs/screens/final_master`) |
 | 14 | Characters: renamed; 4 of 5 with approved art live (Rook, Halvard, Nox, Solaris) | done, waiting for owner (a Zephyr Volt image) | `art(14)` | cards 9 · hatch 9 · battle 8 · deck 8 · art-first 9 (`compare_card_art.png`, `docs/screens/cards_art`) |
+| FIX_LOBBY_2 | A: the main menu's own scene; B: the big lobby upgrade (spawn shrine, giant double torii, temple gate + light pillar, egg pagoda + golden egg, tiled plaza, walls, shelf edge, ambient sound) | done, waiting for owner (hero meshes, textures and a night skybox through the review gate) | `map(menu)`, `map(lobby2)` | menu: never shows the lobby (`compare_menu_stage.png`); lobby: spawn 9 · plaza 8 · arena 8 · portal 8 · eggs 8 · aerial 8 · phone 8 (`docs/screens/lobby/compare_lobby2.png`) |
 
 ## Phase notes
 
@@ -438,6 +439,25 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
   `approve` broke on a backslash in the owner's quote; both fixed, the selftest passes.
 - **Zephyr Volt** (N) keeps TEMP art, logged in `docs/WAITING_ON_YOU.md`.
 - Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds; **323 passed, 0 failed**.
+
+### FIX_LOBBY_2 (2026-11-10/11)
+- **Section A** (`map(menu)`): the main menu has its own cinematic scene (`Config/MenuStage`,
+  `App/MenuScene`) 20,000 studs from the lobby; PLAY fades through black and the camera settles
+  behind the character from above. A Play check found 0 of the lobby's parts in the menu's view.
+- **Section B** (`map(lobby2)`): the whole of B1-B3 as data (`Config/LobbyDecor` merged into
+  `Config/HubLayout`), with only simple shapes, existing meshes and images, and licensed sounds.
+  Details, numbers and scores: `docs/LOBBY_AUDIT.md` "FIX_LOBBY_2 section B". 3,230 parts, 26
+  lights, 15 emitters; the spawn, the WORLDS gate and the egg pagoda stream as Atomic models.
+- **Found while building:** Roblox Ball parts are always spheres, so stretched balls (the golden
+  egg, paper lanterns, rocks, flowers) are now blocks with a sphere mesh (`Shared/Art/ArenaKit`);
+  the lobby's client motion now collects the lobby again after it streams back in (it used to keep
+  references to parts that had streamed out).
+- **Verified in Play:** PLAY → the welcome burst and words → the spawn view; rune rings turn, the
+  golden egg bobs, all seven ambient sounds load and play, landmark models are Atomic, no script
+  errors. Phone view at 986 x 405.
+- **Not verified:** a real frame time (Studio holds a background Play window at 15 fps; the lobby's
+  client work measures 0.47 ms per update) and a phone MicroProfiler run (needs a published place).
+- Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds; **329 passed, 0 failed**.
 
 ## Waiting for art
 Nothing is blocked: each phase builds its layout and behaviour with TEMP images. The sheets each
