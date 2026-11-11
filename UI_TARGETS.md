@@ -40,7 +40,9 @@ Prompts: `art/ui/PROMPTS_V3.md`.
 | **Egg Shop** | `bad-gui/06-egg-shop-target.png`, `ui-refs/hd-02-egg-shop.png`, `ui-refs-2/01-egg-gui.png` | `BAD_GUI_3_EGG_SHOP.md` |
 | Egg opening | `ui-refs-2/02-egg-opening.png` | `MISSION.md` §7.3 |
 | **Deck Builder + Families** | `bad-gui/14-target-deck-builder…` (layout only), `ui-refs/hd-04-deck-builder-families.png` | `BAD_GUI_6_DECK_AND_INVENTORY.md` |
-| **Inventory + inspect** | `bad-gui/15-target-inventory…` (layout only), `ui-refs/hd-03-inventory-card.png` | `BAD_GUI_6_DECK_AND_INVENTORY.md` |
+| **Cards (collection + inspect)** | `bad-gui/15-target-inventory…` (layout only), `ui-refs/hd-03-inventory-card.png` | `BAD_GUI_9_CARDS_AND_INVENTORY.md` |
+| **Inventory (items + eggs)** | `bad-gui/15-target-inventory…` (layout only) | `BAD_GUI_6_DECK_AND_INVENTORY.md`, `BAD_GUI_9_CARDS_AND_INVENTORY.md` |
+| **Interact prompts** | `bad-gui/21-harvest-prompt-web-box.png` (bad) | `BAD_GUI_9_CARDS_AND_INVENTORY.md` §1 |
 | Cards (frames, template, stats, animations, rarity) | `ui-refs-2/03..08` | `MISSION.md` §6 |
 | Arena (queue panel) | `ui-refs/hd-05-arena.png` (no bet panel!) | `MISSION.md` §8 |
 | **Battle screen (fighting) + 5 arena maps** | `bad-gui/18-target-battle-screen.png` | `BAD_GUI_8_BATTLE_SCREEN.md` |

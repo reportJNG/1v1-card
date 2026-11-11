@@ -33,8 +33,28 @@ local function unitPower(u: BattleRules.Unit): number
 	return math.floor(u.maxHp / 10 + u.atk + u.def + u.spd / 2 + 0.5)
 end
 
+export type CardNumbers = { power: number, hp: number, atk: number, def: number, spd: number, crit: number }
+
+local function numbers(u: BattleRules.Unit): CardNumbers
+	return {
+		power = unitPower(u),
+		hp = u.maxHp,
+		atk = math.floor(u.atk + 0.5),
+		def = math.floor(u.def + 0.5),
+		spd = math.floor(u.spd + 0.5),
+		crit = u.crit,
+	}
+end
+
+-- One card copy's numbers at its level, exactly as a battle would field it alone. The single
+-- source for every card number on screen (BAD_GUI_9 section 3): the card's power plate, the Cards
+-- inspect panel and the stats panel all read this, so they can never disagree.
+function Power.stats(characterId: string, level: number): CardNumbers
+	return numbers(BattleRules.preview({ { characterId = characterId, level = level } })[1])
+end
+
 function Power.card(characterId: string, level: number): number
-	return unitPower(BattleRules.preview({ { characterId = characterId, level = level } })[1])
+	return Power.stats(characterId, level).power
 end
 
 function Power.deck(specs: { Spec }): DeckPreview

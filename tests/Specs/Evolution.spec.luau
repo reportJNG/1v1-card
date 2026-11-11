@@ -42,18 +42,21 @@ return function()
 	end)
 
 	describe("Rarity display", function()
-		it("gives every rarity a badge, display name, palette, emblem and kit tag", function()
-			local badges = { Common = "N", Rare = "R", Epic = "SR", Legendary = "SSR", Mythical = "UR" }
-			for _, name in Rarities.Order do
-				local def = Rarities.Defs[name]
-				expect(def.badge).to.equal(badges[name])
-				expect(#def.colors).to.equal(4)
-				expect(def.emblem == "star" or def.emblem == "crown").to.equal(true)
-				expect(def.tag).to.equal(string.lower(def.badge))
+		it(
+			"shows every rarity by its locked name (no N / R / SR / SSR / UR letters), with a palette, emblem and kit tag",
+			function()
+				local tags = { Common = "n", Rare = "r", Epic = "sr", Legendary = "ssr", Mythical = "ur" }
+				for _, name in Rarities.Order do
+					local def = Rarities.Defs[name] :: any
+					expect(def.badge).to.equal(nil)
+					expect(def.displayName).to.equal(name)
+					expect(Rarities.label(name)).to.equal(name)
+					expect(#def.colors).to.equal(4)
+					expect(def.emblem == "star" or def.emblem == "crown").to.equal(true)
+					expect(def.tag).to.equal(tags[name]) -- kit file suffix only, never shown
+				end
 			end
-			expect(Rarities.Defs.Mythical.displayName).to.equal("God-tier")
-			expect(Rarities.label("Mythical")).to.equal("UR · God-tier")
-		end)
+		)
 	end)
 
 	describe("Special descriptions", function()

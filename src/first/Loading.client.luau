@@ -2,7 +2,7 @@
 -- Screen 1, launch loading (MISSION 2.2). Runs once from ReplicatedFirst when the game starts; no
 -- button or path ever returns to it.
 --   * replaces Roblox's default loading screen at once
---   * the 1v1 CARD logo, a fan of card backs that shuffle and flip one by one to the N -> UR
+--   * the 1v1 CARD logo, a fan of card backs that shuffle and flip one by one from Common to Mythical
 --     rarity frames, a progress bar with a percentage, and a rotating tip
 --   * really preloads (ContentProvider:PreloadAsync): every kit and UI image, the egg icons, the
 --     main-menu music and core sounds; the bar is the real preload progress plus the wait for the
@@ -145,7 +145,7 @@ new("ImageLabel", {
 	Parent = box,
 })
 
--- The card fan: five backs that shuffle, then flip one by one to N, R, SR, SSR, UR.
+-- The card fan: five backs that shuffle, then flip one by one to Common, Rare, Epic, Legendary, Mythical.
 local TAGS = { "n", "r", "sr", "ssr", "ur" }
 local cards: { any } = {}
 local CARD = Vector2.new(104, 143)
@@ -206,10 +206,10 @@ local function flip(c: any, toFront: boolean)
 		})
 		c.badge = new("ImageLabel", {
 			BackgroundTransparency = 1,
-			Image = kit(`badge_{c.tag}_small`),
+			Image = kit(`corner_gem_{c.tag}`), -- the rarity's gem, never letters (BAD_GUI_9)
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			Position = UDim2.fromScale(0.5, 0.06),
-			Size = UDim2.fromScale(0.62, 0.22),
+			Size = UDim2.fromScale(0.26, 0.19),
 			ScaleType = Enum.ScaleType.Fit,
 			ZIndex = c.face.ZIndex + 2,
 			Parent = c.face,

@@ -369,7 +369,8 @@ function Battle.open(ctx: any, start: any): Handle
 			TextSize = 22,
 			TextWrapped = false,
 			TextXAlignment = Enum.TextXAlignment.Center,
-			Size = UDim2.fromOffset(42, 22),
+			AutomaticSize = Enum.AutomaticSize.X, -- the rarity's name (BAD_GUI_9: no letters)
+			Size = UDim2.fromOffset(0, 22),
 			LayoutOrder = if left then 1 else 3,
 			ZIndex = 3,
 			Parent = subRow,
@@ -531,7 +532,7 @@ function Battle.open(ctx: any, start: any): Handle
 			local def = Characters.ById[u.characterId]
 			s.name.Text = string.upper(def.displayName)
 			local rdef = Rarities.Defs[def.rarity]
-			s.badge.Text = rdef.badge
+			s.badge.Text = string.upper(rdef.displayName)
 			s.badge.TextColor3 = Theme.Rarity[def.rarity]
 			s.hp = -1
 		end

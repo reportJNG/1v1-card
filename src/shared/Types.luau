@@ -115,8 +115,7 @@ export type RarityDef = {
 	colors: { Color3 }, -- { light, main, deep, glow } (display only)
 	statBudget: number, -- fraction added to role base stats
 	mergePoints: number, -- points a spare copy gives when merged
-	badge: string, -- N / R / SR / SSR / UR (display only)
-	displayName: string, -- what players read; "God-tier" for Mythical (display only)
+	displayName: string, -- what players read: the locked rarity name (display only)
 	emblem: string, -- "star" | "crown"
 	tag: string, -- kit image suffix
 }

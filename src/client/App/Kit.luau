@@ -104,6 +104,35 @@ function Kit.canvas(size: Size, w: number, h: number): (UDim2, UDim2)
 	return UDim2.fromOffset(cw, ch), UDim2.fromOffset(-g.card[1] * cw, -g.card[2] * ch)
 end
 
+-- The CARDS icon (BAD_GUI_9: the CARDS button showed the bag): three of the kit's own card backs
+-- fanned out, Epic / Legendary / Mythical. Composed from images already in the kit, so no new upload.
+function Kit.cardsIcon(size: number, props: { [string]: any }): Frame
+	local holder = Instance.new("Frame")
+	holder.Name = "CardsIcon"
+	holder.BackgroundTransparency = 1
+	holder.Size = UDim2.fromOffset(size, size)
+	local parent = props.Parent
+	for k, v in props do
+		if k ~= "Parent" then
+			(holder :: any)[k] = v
+		end
+	end
+	for i, tag in { "sr", "ur", "ssr" } do
+		local turn = (i - 2) * 16
+		Kit.image(`card_back_{tag}`, {
+			Name = `Card{i}`,
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5 + (i - 2) * 0.17, 0.52 + math.abs(i - 2) * 0.04),
+			Size = UDim2.fromScale(0.56, 0.78),
+			Rotation = turn,
+			ZIndex = holder.ZIndex + (if i == 2 then 2 else 1),
+			Parent = holder,
+		})
+	end
+	holder.Parent = parent
+	return holder
+end
+
 -- The art window as fractions of the card face (x, y, w, h).
 function Kit.window(size: Size): (number, number, number, number)
 	local g = CardKit.Geometry[size]

@@ -17,6 +17,14 @@ local STATUS_TEXT: { [string]: string } = {
 	Reflect = "Reflect",
 }
 
+-- The Special's main effect in one short line ("Deals 1.33x ATK damage."), for the Cards inspect
+-- panel where only one big line fits (BAD_GUI_9 section 3); the full text is in the stats panel.
+function AbilityText.short(a: Types.AbilityDef): string
+	local full = AbilityText.special(a)
+	local first = string.match(full, "^([^,]+),") or string.sub(full, 1, -2)
+	return first .. "."
+end
+
 function AbilityText.special(a: Types.AbilityDef): string
 	local parts: { string } = {}
 	if a.kind == "Damage" then

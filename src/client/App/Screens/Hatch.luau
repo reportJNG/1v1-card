@@ -5,16 +5,16 @@
 --   1 Summon  the screen dims and blurs; the pack egg rises out of a glowing summoning circle with
 --             turning runes while the view pushes in (0.9 s)
 --   2 Crack   rising shakes; crack sprites (our own, on a layer over the unedited egg) spread; the
---             glow shifts from neutral to the rarity colour (1.0 s, +0.4 s slow-mo for SSR and up)
+--             glow shifts from neutral to the rarity colour (1.0 s, +0.4 s slow-mo for Legendary and up)
 --   3 Break   the egg hides; tier-tinted shard sprites burst out with a flash, a shockwave ring and
 --             a short screen shake (0.5 s)
 --   4 Reveal  black silhouettes rise in an aura of their rarity colour with light rays; the badge
---             slams in (0.8 s; UR +0.6 s with a light pillar)
+--             slams in (0.8 s; Mythical +0.6 s with a light pillar)
 --   5 Get card the silhouettes turn into the cards, which flip in, with "NEW!" or "+1"; confetti
---             for SSR and up; Continue, Open Again, and Equip for a single new card
+--             for Legendary and up; Continue, Open Again, and Equip for a single new card
 -- x3 / x8 run stages 1-3 once and reveal a row or grid. Tap anywhere (or Skip) jumps to stage 5.
 -- Golden eggs are gold throughout. With auto-open on, a finished reveal opens the next batch by
--- itself (opts.again) until the player stops it, a request fails, or SSR+ pauses the run.
+-- itself (opts.again) until the player stops it, a request fails, or Legendary+ pauses the run.
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
@@ -180,7 +180,7 @@ local function shake(target: GuiObject, seconds: number)
 	target.Position = UDim2.fromOffset(0, 0)
 end
 
--- Confetti that falls across the screen (SSR and up): pieces of the kit's confetti strip.
+-- Confetti that falls across the screen (Legendary and up): pieces of the kit's confetti strip.
 local function confetti(parent: GuiObject, color: Color3)
 	local palette = { color, C.GoldHi, C.Pink, C.Blue, C.Green, C.White }
 	for k = 1, 36 do
@@ -583,11 +583,12 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 						Parent = sil,
 					})
 				end
-				Kit.image(`badge_{Rarities.Defs[def.rarity].tag}_large`, {
+				-- the rarity's gem (no rarity letters, BAD_GUI_9)
+				Kit.image(`corner_gem_{Rarities.Defs[def.rarity].tag}`, {
 					Name = "Badge",
 					AnchorPoint = Vector2.new(0.5, 0.5),
 					Position = UDim2.fromScale(0.5, 0.02),
-					Size = UDim2.fromOffset(size.X * 0.8, size.X * 0.4),
+					Size = UDim2.fromOffset(size.X * 0.32, size.X * 0.32),
 					Visible = false,
 					ZIndex = 9,
 					Parent = sil,

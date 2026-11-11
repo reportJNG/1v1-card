@@ -31,7 +31,7 @@ export type Piece = {
 export type Feature = {
 	at: Vec,
 	rotY: number?,
-	prompt: { name: string, action: string, object: string }?,
+	prompt: { name: string, action: string, object: string, height: number? }?, -- height: studs above the anchor
 	sign: { text: string, icon: string?, height: number, size: number }?, -- size: width in studs
 }
 
@@ -360,7 +360,9 @@ local EggPedestals: { { egg: string, at: Vec } } = {
 }
 
 -- Interactive spots. Prompts only open a screen on the client (Play, Worlds, Shop, Quests,
--- Merchant); every action behind them goes through the normal server-checked remotes.
+-- Merchant); every action behind them goes through the normal server-checked remotes. Each
+-- prompt's action is one word that matches what it does (BAD_GUI_9: ENTER, OPEN, SELL, CLAIM); the
+-- sign's icon follows the word.
 local Features: { [string]: Feature } = {
 	arena = {
 		at = { 0, 4, -60 },
@@ -370,18 +372,18 @@ local Features: { [string]: Feature } = {
 	portal = {
 		at = { 75, 19.5, 0 },
 		rotY = -90,
-		prompt = { name = "HubPortal", action = "Travel", object = "Worlds" },
+		prompt = { name = "HubPortal", action = "Enter", object = "Worlds" },
 		sign = { text = "WORLDS", icon = "icon_worlds", height = 68, size = 44 },
 	},
 	egg_stall = {
 		at = { -66, 3, 0 },
-		prompt = { name = "HubShop", action = "Browse", object = "Egg Shop" },
+		prompt = { name = "HubShop", action = "Open", object = "Egg Shop" },
 		sign = { text = "EGGS", icon = "icon_shop", height = 48, size = 30 },
 	},
 	merchant = {
 		at = { -46, 3, 54 },
-		prompt = { name = "Sell", action = "Sell", object = "Lantern Trader" },
-		sign = { text = "LANTERN TRADER", icon = "icon_coin", height = 14, size = 14 },
+		prompt = { name = "Sell", action = "Sell", object = "Lantern Trader", height = 10.5 }, -- over the cart canopy
+		sign = { text = "LANTERN TRADER", icon = "icon_coin", height = 18, size = 14 }, -- over its SELL prompt
 	},
 	quests = {
 		at = { 44, 3, 56 },

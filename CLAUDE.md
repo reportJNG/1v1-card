@@ -142,6 +142,9 @@ Piece-style fighter. Full log: `PLAN.md` §4.
 - **1-4 big words, or an icon plus a number.** Never a paragraph in gameplay.
 - **Visible boxes are painted images (9-slice), never Frame + UICorner + UIStroke.** Display fonts
   with strokes. Every element has an icon. No empty flat space.
+- **Rarity is its locked name or its gem,** never N / R / SR / SSR / UR letters. Every card number on
+  screen comes from `Domain/Power.stats` (BAD_GUI_9).
+- **Interact prompts are billboards:** a key plate, one big word, an icon; no box (`App/Prompts`).
 - **Never polish code-drawn panels.** The painted look = owner-generated component sheets, cut by
   `scripts/art/cut_sheet.py`, 9-sliced, served through `App/Ui/Kit`.
 

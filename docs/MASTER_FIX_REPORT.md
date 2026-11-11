@@ -28,6 +28,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 13 | Final pass | done | `fix(13)`, `docs(13)` | fresh-player run at desktop and phone landscape; 2 bugs fixed (`docs/screens/final_master`) |
 | 14 | Characters: renamed; set 1 (Rook, Halvard, Nox) and set 02 (Kael, Brann, Aurex, new) live; Solaris withdrawn | done, waiting for owner (Zephyr Volt and Solaris images) | `art(14)`, `art(14b)` | cards 9 · hatch 9 · battle 8 · deck 9 · art-first 9 (`compare_card_art.png`, `compare_card_art_set02.png`, `docs/screens/cards_art`) |
 | FIX_LOBBY_2 | A: the main menu's own scene; B: the big lobby upgrade (spawn shrine, giant double torii, temple gate + light pillar, egg pagoda + golden egg, tiled plaza, walls, shelf edge, ambient sound) | done, waiting for owner (hero meshes, textures and a night skybox through the review gate) | `map(menu)`, `map(lobby2)` | menu: never shows the lobby (`compare_menu_stage.png`); lobby: spawn 9 · plaza 8 · arena 8 · portal 8 · eggs 8 · aerial 8 · phone 8 (`docs/screens/lobby/compare_lobby2.png`) |
+| BAD_GUI_9 | Prompts as billboards; a new Cards screen; Inventory = items and eggs; no rarity letters; one source for card numbers; UPGRADE; labelled tabs | done, waiting for art (Sheets A, B, F1) | `ui(9b)` | cards: layout 8 · art-first 9 · one name/numbers 9 · rarity 9 · text 8 · buttons 8; inventory: tabs 9 · items only 9 · inspect + SELL 8 · text 8 · space 8; prompts: no box 9 · word 9 · icon 8 · hold ring 8 · distance 8 (`compare_cards.png`, `compare_inventory2.png`, `compare_prompts.png`) |
 
 ## Phase notes
 
@@ -466,6 +467,32 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 - **Names:** "Kael" and "Brann" are also first names of Warcraft characters; the full names are the
   owner's and original. Display names can change without touching ids.
 - Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds; **329 passed, 0 failed**.
+
+### BAD_GUI_9 (2026-11-11)
+- **Prompts** (`App/Prompts`): no box. A painted E plate (round TAP on touch), one big outlined word, then
+  the item icon on a soft glow and the yield for nodes, or the place's icon. Harvest became a 0.4 s
+  hold with a gold ring that fills around the plate (two clipped halves of the kit's glow ring turned by
+  gradients). Every server prompt has one word and an icon; the merchants' SELL got its own height
+  so it clears the cart, and their name signs moved up over it.
+- **Cards screen** (`Screens/Cards`, new) and **Inventory** (`Screens/Inventory`, renamed from
+  `Collection`): CARDS opens the collection (rarity / family / sort chips, a paged art-first grid with
+  power plates, the inspect panel and a DECK button); the new BAG button at the deck bar's left end
+  opens the bag with items and eggs only (labelled tabs with count badges, an item inspect with a
+  quantity picker and SELL; no panel until something is selected). The CARDS icon is a fan of the
+  kit's own card backs (`Kit.cardsIcon`), so no new image was made or uploaded.
+- **Rarity letters removed** (`Config/Rarities.badge` deleted): gems (`corner_gem_*`, already in the kit)
+  on cards, the hatch reveal and the loading fan, names on chips, the battle bar and the Odds panel.
+  **Mythical now reads "Mythical"**, not "God-tier" (the locked name, BAD_GUI_9).
+- **One source for numbers:** `Power.stats` feeds the card's POWER / HEALTH plate (it showed ATK / DEF
+  from `Cards.statsAt`), the Cards panel and the stats panel's big numbers. Checked in Studio: Halvard
+  Lv 1 shows 538 / 778 on the plate and the panel. `CardNumbers.spec` (3 tests).
+- **Found in Play:** the deck bar's redraw deleted the BAG button (it now skips it); the empty-bag words
+  were laid out as a grid cell and spilled over the tabs (now a centred icon + words); the SELL prompt
+  sat inside the cart canopy. Verified in Play: CARDS opens Cards, BAG opens Inventory with no card
+  inspect, HARVEST with the hold ring harvested a Greenleaf node (tutorial 2/5), ENTER and SELL prompts.
+- Not verified: a touch device (the TAP button and touch hold are written to the ProximityPrompt API
+  but only ran with a mouse and keyboard here).
+- Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds; **333 passed, 0 failed**.
 
 ### FIX_LOBBY_2 (2026-11-10/11)
 - **Section A** (`map(menu)`): the main menu has its own cinematic scene (`Config/MenuStage`,

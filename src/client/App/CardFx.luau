@@ -9,7 +9,7 @@
 --   energy    the lightning layer flickers in short random bursts; from Ascended it crackles
 --             continuously (flipped 180 degrees between frames: the card is symmetric)
 --   shine     a diagonal sweep every 4-6 s (R and up, Golden, Max)
---   particles sparkles twinkle (SR), embers and motes rise (SSR, UR)
+--   particles sparkles twinkle (Epic), embers and motes rise (Legendary, Mythical)
 --   hover     grid cards lift to 1.05 with a brighter aura and a tick
 --   parallax  layers shift toward the pointer on hover / drag (PC), while pressed (touch) or with
 --             the device's tilt (mobile accelerometer)

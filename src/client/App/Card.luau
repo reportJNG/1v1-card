@@ -7,21 +7,23 @@
 --   glow      the frame's outer glow (breathes)
 --   panel     the dark violet inner panel
 --   window    with character art: light rays in the rarity colour, the cut-out, a vignette;
---             without art (the clean template, board 06): the big glowing emblem (star for N and R,
---             crown for SR and up)
---   fx        shine sweep, sparkles (SR+), embers (SSR), emerald motes (UR)
+--             without art (the clean template, board 06): the big glowing emblem (star for Common and Rare,
+--             crown for Epic and up)
+--   fx        shine sweep, sparkles (Epic+), embers (Legendary), emerald motes (Mythical)
 --   energy    the frame's lightning strokes (flicker in bursts; crackle from Ascended)
 --   frame     the ornate rarity frame; Golden copies add the gold foil overlay
 --   marks     evolution: corner gems (Awakened), gold inner line (Ascended), crown + MAX ribbon (Max)
---   badge     N / R / SR / SSR / UR, top-left over the frame; the crown top-right for SR and up
---   text      name, rarity name, "Lv. N", ATK and DEF chips, the family gem
+--   badge     the rarity's coloured gem, top-left over the frame (BAD_GUI_9: no rarity letters);
+--             the crown top-right for Epic and up
+--   text      name, rarity name, "Lv. N", the POWER and HEALTH chips (Power.stats, the same
+--             numbers as every panel), the family gem
 -- Rarity names, colours, badges and emblems come from Config/Rarities; evolution stages from
 -- Domain/Evolution. Animation runs in App/CardFx, only while the card is on screen.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Characters = require(Shared.Config.Characters)
 local Rarities = require(Shared.Config.Rarities)
-local Cards = require(Shared.Domain.Cards)
+local Power = require(Shared.Domain.Power)
 local Evolution = require(Shared.Domain.Evolution)
 local Cutout = require(Shared.Art.Cutout)
 local Theme = require(script.Parent.Theme)
@@ -41,7 +43,7 @@ export type Options = {
 	size: Vector2, -- the card keeps 5:7 inside this box
 	interactive: boolean?, -- parallax on hover / press / tilt (big single cards)
 	hover: boolean?, -- lift and brighten on hover (grid cards); auras wait for the hover
-	stats: boolean?, -- show the ATK / DEF chips (default: medium and large cards)
+	stats: boolean?, -- show the POWER / HEALTH chips (default: medium and large cards)
 	sticker: ("new" | "dup" | "max")?,
 	favorite: boolean?,
 	bare: boolean?, -- art first, no words (BAD_GUI_5 deck bar): hides the name, rarity line and small level
@@ -204,7 +206,7 @@ local function artWindow(win: Frame, def: any, rdef: any, z: number): { GuiObjec
 	return { rays, character }
 end
 
--- The clean template's emblem (board 06): star for N and R, crown for SR and up, glowing.
+-- The clean template's emblem (board 06): star for Common and Rare, crown for Epic and up, glowing.
 local function emblemWindow(face: Frame, def: any, rdef: any, z: number): GuiObject
 	local slot = if rdef.emblem == "crown"
 		then "emblem_crown_gold"
@@ -458,16 +460,18 @@ function Card.build(parent: Instance, o: Options): Frame
 		end
 	end
 
-	-- Badge (top-left, over the frame) and, for SR and up, the crown (top-right).
-	local badgeW = math.floor(w * (if small then 0.6 else 0.46))
-	local badge = Kit.image(`badge_{tag}_{if size == "large" then "large" else "small"}`, {
+	-- Badge: the rarity's coloured gem (top-left, over the frame) and, for Epic and up, the crown
+	-- (top-right). No rarity letters (BAD_GUI_9); the rarity's name is on the card itself.
+	local badgeW = math.floor(w * (if small then 0.3 else 0.22))
+	local badge = Kit.image(`corner_gem_{tag}`, {
 		Name = "Badge",
-		AnchorPoint = Vector2.new(0, 0.5),
-		Position = UDim2.fromOffset(-math.floor(w * 0.06), math.floor(h * 0.02)),
-		Size = UDim2.fromOffset(badgeW, math.floor(badgeW / 2)),
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromOffset(math.floor(w * 0.07), math.floor(h * 0.04)),
+		Size = UDim2.fromOffset(badgeW, badgeW),
 		ZIndex = 30,
 		Parent = face,
 	})
+	badge:SetAttribute("Rarity", def.rarity)
 	if stageIndex == 4 then
 		Kit.image("emblem_crown_gold", {
 			Name = "MaxCrown",
@@ -574,9 +578,9 @@ function Card.build(parent: Instance, o: Options): Frame
 	end
 	local showStats = if o.stats ~= nil then o.stats else not small
 	if showStats then
-		local st = Cards.statsAt(def.id, level)
-		statChip(face, "icon_atk", st.atk, L.atkY, 32, h)
-		statChip(face, "icon_def", st.def, L.defY, 32, h)
+		local st = Power.stats(def.id, level)
+		statChip(face, "icon_atk", st.power, L.atkY, 32, h)
+		statChip(face, "icon_hp", st.hp, L.defY, 32, h)
 	end
 
 	if stageIndex == 4 and not small then

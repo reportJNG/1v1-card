@@ -10,7 +10,9 @@
 --   right         the quest panel: TUTORIAL until the first-session steps are done, then the
 --                 dailies; tap to collapse it to a trophy badge (collapsed by default on phones)
 --   bottom centre the deck bar: 3 tall art-first cards (big level, stage stars, slot number, no
---                 names); tapping it opens the Deck Builder
+--                 names); tapping it opens the Deck Builder. The BAG button sits at its left end
+--                 and opens the Inventory (items and eggs); CARDS opens the Cards screen
+--                 (BAD_GUI_9 section 2)
 -- Everything else is off the screen; messages are pops at their source (App/WorldText). Pieces slide
 -- off their nearest edge for the UiFlow HUD modes (full / currencies / hidden); battles hide all.
 -- Images are today's kit (TEMP) until the owner's E1-E4 sheets are cut, approved and uploaded.
@@ -43,7 +45,7 @@ export type Hud = {
 
 -- The four buttons (BAD_GUI_5 section 2.1). `badge` is the HudBadges dot that lights it.
 local GRID: { { id: string, icon: string, label: string, color: string, badge: string? } } = {
-	{ id = "Collection", icon = "icon_cards", label = "CARDS", color = "red", badge = nil },
+	{ id = "Cards", icon = "cards", label = "CARDS", color = "red", badge = nil }, -- icon: Kit.cardsIcon
 	{ id = "Shop", icon = "icon_shop", label = "EGGS", color = "orange", badge = "Shop" },
 	{ id = "Worlds", icon = "icon_worlds", label = "WORLDS", color = "purple", badge = nil },
 	{ id = "Play", icon = "icon_play", label = "1v1", color = "teal", badge = nil },
@@ -99,14 +101,27 @@ function Hud.build(ctx: any, root: Frame): Hud
 			ScaleType = Enum.ScaleType.Stretch,
 			Size = UDim2.fromOffset(B, B),
 		})
-		Ui.icon(icon, math.floor(B * 0.6), {
-			Name = "Icon",
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.fromScale(0.5, 0.42),
-			Size = UDim2.fromScale(0.6, 0.6),
-			ZIndex = 2,
-			Parent = b,
-		})
+		if icon == "cards" then
+			-- fanned card backs, not the bag: the bag is the Inventory's button
+			local fan = Kit.cardsIcon(math.floor(B * 0.6), {
+				Name = "Icon",
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromScale(0.5, 0.42),
+				Size = UDim2.fromScale(0.62, 0.62),
+				ZIndex = 2,
+				Parent = b,
+			})
+			fan.ZIndex = 2
+		else
+			Ui.icon(icon, math.floor(B * 0.6), {
+				Name = "Icon",
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromScale(0.5, 0.42),
+				Size = UDim2.fromScale(0.6, 0.6),
+				ZIndex = 2,
+				Parent = b,
+			})
+		end
 		local label = Ui.display({
 			Name = "Label",
 			Text = text,
@@ -417,6 +432,15 @@ function Hud.build(ctx: any, root: Frame): Hud
 		Ui.sound("click")
 		ctx.open("Deck")
 	end)
+	-- The BAG button (the Inventory: items and eggs), at the deck bar's left end; it slides with the
+	-- bar, and harvested items fly to it.
+	local bag, bagDot = bigButton("Inventory", "orange", "icon_cards", "BAG", function()
+		ctx.open("Inventory")
+	end)
+	bag.AnchorPoint = Vector2.new(1, 1)
+	bag.Position = UDim2.new(0, -12, 1, -4)
+	bag.Parent = deckBar
+	buttons.Inventory = { button = bag, dot = bagDot }
 
 	-- The quest panel (right), collapsing to a trophy badge.
 	local quest: TextButton = Ui.new("TextButton", {
@@ -653,7 +677,7 @@ function Hud.build(ctx: any, root: Frame): Hud
 		end
 		deckKey = key
 		for _, ch in deckBar:GetChildren() do
-			if ch:IsA("GuiObject") and ch ~= deckDot then
+			if ch:IsA("GuiObject") and ch ~= deckDot and ch ~= bag then
 				ch:Destroy()
 			end
 		end
@@ -806,6 +830,7 @@ function Hud.build(ctx: any, root: Frame): Hud
 			local physical = if phone then 64 else 76
 			B = math.floor(math.max(44, physical) / s)
 			gridLayout.CellSize = UDim2.fromOffset(B, B)
+			bag.Size = UDim2.fromOffset(B, B)
 			grid.Size = UDim2.fromOffset(2 * B + 10, 2 * B + 12)
 			CW = math.floor((if phone then 100 else 130) / s)
 			local maxH = (height or 540) * 0.22
@@ -851,7 +876,7 @@ function Hud.build(ctx: any, root: Frame): Hud
 			local map: { [string]: GuiObject } = {
 				coins = coins.Parent :: GuiObject,
 				gems = gems.Parent :: GuiObject,
-				bag = buttons.Collection.button,
+				bag = bag,
 				worlds = buttons.Worlds.button,
 				deck = deckBar,
 			}

@@ -4,11 +4,12 @@
 --
 -- Display (CARDS_EGGS_MISSION section 2, display only: ids and saves never change): every UI
 -- shows a rarity through these fields, never a hard-coded colour or name.
---   badge        the italic letters on the card badge (N / R / SR / SSR / UR)
---   displayName  the name players read ("God-tier" for Mythical)
+--   displayName  the name players read: the locked names Common / Rare / Epic / Legendary /
+--                Mythical (BAD_GUI_9: no N / R / SR / SSR / UR letters anywhere; a card shows its
+--                rarity as this name or as its coloured gem, kit corner_gem_<tag>)
 --   color        the main colour (text, pills, odds rows)
 --   colors       { light, main, deep, glow } for gradients, frames and auras
---   emblem       the template card / egg emblem: "star" (N, R) or "crown" (SR and up)
+--   emblem       the template card / egg emblem: "star" (Common, Rare) or "crown" (Epic and up)
 --   tag          the kit image suffix (art/ui/kit/frame_<tag>_<size>.png and friends)
 local Types = require(script.Parent.Parent.Types)
 
@@ -34,7 +35,6 @@ Rarities.Defs = table.freeze({
 		colors = palette("#FFFFFF", "#E4E2F0", "#9080C0", "#E8E6FF"),
 		statBudget = 0.00,
 		mergePoints = 1,
-		badge = "N",
 		displayName = "Common",
 		emblem = "star",
 		tag = "n",
@@ -45,7 +45,6 @@ Rarities.Defs = table.freeze({
 		colors = palette("#9BE4FF", "#00A0F0", "#0060C0", "#1EA8FF"),
 		statBudget = 0.02,
 		mergePoints = 2,
-		badge = "R",
 		displayName = "Rare",
 		emblem = "star",
 		tag = "r",
@@ -56,7 +55,6 @@ Rarities.Defs = table.freeze({
 		colors = palette("#E090F0", "#9B4DFF", "#5A1FB0", "#B45CFF"),
 		statBudget = 0.04,
 		mergePoints = 4,
-		badge = "SR",
 		displayName = "Epic",
 		emblem = "crown",
 		tag = "sr",
@@ -67,7 +65,6 @@ Rarities.Defs = table.freeze({
 		colors = palette("#FFE680", "#F0C010", "#B87800", "#FFB01E"),
 		statBudget = 0.06,
 		mergePoints = 8,
-		badge = "SSR",
 		displayName = "Legendary",
 		emblem = "crown",
 		tag = "ssr",
@@ -78,17 +75,16 @@ Rarities.Defs = table.freeze({
 		colors = palette("#9CFFD6", "#00C070", "#007A48", "#18E890"),
 		statBudget = 0.08,
 		mergePoints = 15,
-		badge = "UR",
-		displayName = "God-tier",
+		displayName = "Mythical",
 		emblem = "crown",
 		tag = "ur",
 	},
 }) :: { [string]: Types.RarityDef }
 
--- "UR · God-tier": the badge and the display name, as the Odds panel and labels show them.
+-- The name players read for a rarity (the Odds panel and labels).
 function Rarities.label(rarity: string): string
 	local def = Rarities.Defs[rarity]
-	return if def then `{def.badge} · {def.displayName}` else rarity
+	return if def then def.displayName else rarity
 end
 
 return table.freeze(Rarities)

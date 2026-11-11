@@ -149,7 +149,12 @@ local function portalCore(at: Vector3, rotY: number, radius: number, parent: Ins
 	sparks.Parent = core
 end
 
-local function prompt(at: Vector3, def: { name: string, action: string, object: string }, parent: Instance)
+local function prompt(
+	at: Vector3,
+	def: { name: string, action: string, object: string, height: number? },
+	icon: string?,
+	parent: Instance
+)
 	local p = slab({
 		Name = def.name,
 		Size = Vector3.new(2, 2, 2),
@@ -164,6 +169,12 @@ local function prompt(at: Vector3, def: { name: string, action: string, object: 
 	pp.ObjectText = def.object
 	pp.MaxActivationDistance = 22 -- the anchors sit inside the arena, portal and stall meshes
 	pp.HoldDuration = 0
+	if icon then
+		pp:SetAttribute("Icon", icon) -- App/Prompts draws it after the word (BAD_GUI_9 section 1)
+	end
+	if def.height then
+		pp:SetAttribute("Height", def.height)
+	end
 	pp.Style = Enum.ProximityPromptStyle.Custom -- drawn by the client (App/Prompts)
 	pp.RequiresLineOfSight = false
 	pp.Parent = p
@@ -451,7 +462,7 @@ function HubBuilder.build(parent: Instance): Model
 		if f.prompt then
 			-- At chest height, whatever the feature's height (the portal core floats at 16 studs,
 			-- which put its prompt at the edge of its range).
-			prompt(Vector3.new(at.X, origin.Y + 3, at.Z), f.prompt, hub)
+			prompt(Vector3.new(at.X, origin.Y + 3, at.Z), f.prompt, if f.sign then f.sign.icon else nil, hub)
 		end
 		if key == "quests" then
 			-- a big "!" over the board while a quest is ready to claim (App/WorldInteraction)

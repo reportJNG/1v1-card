@@ -4,7 +4,8 @@
 -- five purple action buttons on the right.
 --   header    crown (or star) icon, name, rarity name in its colour
 --   level     "Lv. N / 15" and the real merge progress bar ("x / y" merge points), MAX at the cap
---   stats     big ATK and DEF, HP and SPD underneath (Cards.statsAt, K / M only above 9,999)
+--   stats     big POWER and HEALTH, ATK / DEF / SPD underneath (Power.stats: the same numbers as
+--             the card plate and the Cards inspect panel; K / M only above 9,999)
 --   abilities the Special (energy cost) and the passive, with their real descriptions
 --   family    the family bonus when it is active in the deck, else what it would give
 --   buttons   Upgrade (merge), Evolve (stages by level), Equip (deck), Favorite, Preview
@@ -18,7 +19,7 @@ local Rarities = require(Shared.Config.Rarities)
 local Economy = require(Shared.Config.Economy)
 local Families = require(Shared.Config.Families)
 local Progression = require(Shared.Config.Progression)
-local Cards = require(Shared.Domain.Cards)
+local Power = require(Shared.Domain.Power)
 local Evolution = require(Shared.Domain.Evolution)
 local AbilityText = require(Shared.Domain.AbilityText)
 local Cutout = require(Shared.Art.Cutout)
@@ -581,24 +582,25 @@ function CardStats.show(ctx: any, uid: string)
 					Parent = bar,
 				})
 
-				-- Stats: big ATK and DEF, HP and SPD underneath.
-				local st = Cards.statsAt(card.characterId, card.level)
+				-- Stats: big POWER and HEALTH, ATK / DEF / SPD underneath (one source: Power.stats).
+				local st = Power.stats(card.characterId, card.level)
 				local big = Ui.frame({
 					BackgroundTransparency = 1,
 					Size = UDim2.new(1, 0, 0, 30),
 					LayoutOrder = 3,
 					Parent = inner,
 				}, { Ui.list(true, 12) })
-				statLine(big, "icon_atk", "ATK", math.floor(st.atk + 0.5), 30, 1)
-				statLine(big, "icon_def", "DEF", math.floor(st.def + 0.5), 30, 2)
+				statLine(big, "icon_atk", "POWER", st.power, 30, 1)
+				statLine(big, "icon_hp", "HEALTH", st.hp, 30, 2)
 				local small = Ui.frame({
 					BackgroundTransparency = 1,
 					Size = UDim2.new(1, 0, 0, 22),
 					LayoutOrder = 4,
 					Parent = inner,
 				}, { Ui.list(true, 12) })
-				statLine(small, "icon_hp", "HP", math.floor(st.hp + 0.5), 22, 1)
-				statLine(small, "icon_spd", "SPD", math.floor(st.spd + 0.5), 22, 2)
+				statLine(small, "icon_atk", "ATK", st.atk, 22, 1)
+				statLine(small, "icon_def", "DEF", st.def, 22, 2)
+				statLine(small, "icon_spd", "SPD", st.spd, 22, 3)
 
 				ability(
 					inner,

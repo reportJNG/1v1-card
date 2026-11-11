@@ -78,6 +78,12 @@ Detailed specs live elsewhere; this file points to them:
   in battle. The active roster is 8 (`Config/Roster.active`); `sim/balance.py` passes on it.
   Solaris Dawnbringer's approval was withdrawn on 2026-11-11: back to TEMP art.
 
+- **BAD_GUI_9 done (2026-11-11):** interact prompts are billboards (E plate, one big word, item icon, a
+  hold ring for harvest); CARDS opens a new Cards screen and a BAG button opens the Inventory (items
+  and eggs only, labelled tabs); no N / R / SR / SSR / UR letters anywhere (gems and the locked names;
+  Mythical no longer reads "God-tier"); the card plate and every panel read one stat source
+  (`Power.stats`); STATS became UPGRADE. 333 headless tests pass.
+
 **Not done:**
 - **Zephyr Volt (N) art:** the held nature image isn't approved; waiting for a new storm image.
 - **The kit images are "Pending" at Roblox** since the ban: the account's recent uploads (UI kit,

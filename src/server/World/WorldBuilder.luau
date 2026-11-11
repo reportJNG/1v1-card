@@ -102,16 +102,31 @@ local function label(adornee: BasePart, spec: Billboard.Spec, kind: { maxDistanc
 	Billboard.make(full).Parent = adornee
 end
 
-local function prompt(parent: BasePart, action: string, object: string, range: number, name: string)
+-- An interact prompt, drawn by the client (App/Prompts) as a billboard: the key plate, `action` as
+-- one big word, and `icon` (an icon slot) or the node's item icon (BAD_GUI_9 section 1). `hold` makes
+-- it a hold (a ring fills around the key plate).
+local function prompt(
+	parent: BasePart,
+	action: string,
+	object: string,
+	range: number,
+	name: string,
+	icon: string?,
+	hold: number?
+): ProximityPrompt
 	local pp = Instance.new("ProximityPrompt")
 	pp.Name = name
 	pp.ActionText = action
 	pp.ObjectText = object
 	pp.MaxActivationDistance = range
-	pp.HoldDuration = 0
+	pp.HoldDuration = hold or 0
+	if icon then
+		pp:SetAttribute("Icon", icon)
+	end
 	pp.Style = Enum.ProximityPromptStyle.Custom -- drawn by the client (App/Prompts)
 	pp.RequiresLineOfSight = false
 	pp.Parent = parent
+	return pp
 end
 
 local function light(parent: BasePart, color: string, range: number, brightness: number)
@@ -368,7 +383,10 @@ local function buildNodes(worldId: number, farm: Folder, accent: string): { () -
 		p:SetAttribute("NodeId", node.id)
 		p:SetAttribute("ItemId", item.id)
 		p:SetAttribute("RespawnSeconds", node.resource.respawnSeconds)
-		prompt(p, "Harvest", item.displayName, WorldLayouts.HARVEST_RANGE - 2, "Harvest")
+		local pp = prompt(p, "Harvest", item.displayName, WorldLayouts.HARVEST_RANGE - 2, "Harvest", nil, 0.4)
+		pp:SetAttribute("ItemId", item.id)
+		local yield = node.resource.yield
+		pp:SetAttribute("Yield", if yield[1] == yield[2] then `x{yield[1]}` else `x{yield[1]}-{yield[2]}`)
 		if rare then
 			light(p, accent, 14, 1.4)
 		end
@@ -424,9 +442,12 @@ local function buildMerchant(worldId: number, model: Model, name: string): () ->
 		icon = "icon_coin",
 		gradient = Billboard.Gold,
 		studs = 2.6,
-		offset = Vector3.new(0, 13, 0), -- above the cart
+		offset = Vector3.new(0, 17, 0), -- above the cart and its SELL prompt
 	}, Billboard.Kind.npc)
-	prompt(npc, "Sell items", name, WorldLayouts.MERCHANT_RANGE - 2, "Sell")
+	prompt(npc, "Sell", name, WorldLayouts.MERCHANT_RANGE - 2, "Sell", "icon_coin"):SetAttribute(
+		"Height",
+		10.5
+	) -- over the cart
 	light(npc, "#FFB45A", 18, 1.5)
 	return function()
 		local cart = prop("merchant_cart", Vector3.new(at.X, 0, at.Z - 4), 160, 1.5, folder)
@@ -463,7 +484,7 @@ local function buildGuardian(worldId: number, model: Model, accent: string): () 
 		studs = 2.2,
 		offset = Vector3.new(0, 9.6, 0),
 	}, Billboard.Kind.npc)
-	prompt(npc, "Challenge", def.displayName, 14, "Challenge")
+	prompt(npc, "Fight", def.displayName, 14, "Challenge", "icon_play")
 	light(npc, "#A469FF", 22, 2.2)
 	-- The Guardian stands in the gate: a standee of its lead card (Shared/Art/Standee), scaled up,
 	-- facing the spawn.
@@ -516,7 +537,7 @@ local function buildLobbyPortal(worldId: number, model: Model): () -> ()
 	end
 	light(core, "#C77DFF", 26, 3)
 	local trigger = anchor("Lobby", at + Vector3.new(0, 4, 0), Vector3.new(4, 4, 4), folder)
-	prompt(trigger, "Return", "Back to Lobby", 14, "WorldLobby")
+	prompt(trigger, "Enter", "Back to Lobby", 14, "WorldLobby", "icon_home")
 	label(trigger, {
 		name = "LobbySign",
 		text = "LOBBY",

@@ -35,6 +35,9 @@ local LAUNCH = {
 	"aurelia_dawn",
 	"brannok_ironhide",
 	"taren_ashscale",
+	"kael_voidbinder",
+	"aurex_sunforge",
+	"brann_cinderfall",
 }
 
 -- A mid-game profile: launch characters (some duplicates, one Golden, one Robux copy), a deck,
@@ -128,7 +131,8 @@ function Preview.app(robux: boolean?): (any, ScreenGui)
 		end,
 		screens = {
 			Play = require(Screens.Play) :: any,
-			Collection = require(Screens.Collection) :: any,
+			Cards = require(Screens.Cards) :: any,
+			Inventory = require(Screens.Inventory) :: any,
 			Deck = require(Screens.Deck) :: any,
 			Shop = require(Screens.Shop) :: any,
 			Worlds = require(Screens.Worlds) :: any,

@@ -28,6 +28,19 @@ return function()
 			end
 		end)
 
+		it("names each prompt's action with one word and gives it an icon (BAD_GUI_9 section 1)", function()
+			local words = { Enter = true, Open = true, Sell = true, Claim = true }
+			for key, f in HubLayout.Features do
+				if f.prompt then
+					expect(words[f.prompt.action]).to.equal(true)
+					expect((string.find(f.prompt.action, " ", 1, true))).to.equal(nil)
+					expect(f.sign and f.sign.icon).to.be.ok() -- drawn after the word
+					expect(UiAssets[(f.sign :: any).icon]).to.be.ok()
+				end
+				expect(key).to.be.ok()
+			end
+		end)
+
 		it("uses only meshes the game already has", function()
 			for _, piece in HubLayout.Pieces do
 				expect(modelOf(piece.model)).to.be.ok()
