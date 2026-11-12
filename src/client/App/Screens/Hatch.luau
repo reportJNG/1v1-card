@@ -2,9 +2,9 @@
 -- The egg opening (MISSION 7.3, board `ui-refs-2/02`), shown only after the server has rolled AND
 -- saved the result (the reply carries the cards), so the animation only shows it: no fake
 -- "almost" moments, and every tint is the real rarity being revealed.
---   1 Summon  the screen dims and blurs; the pack egg rises out of a glowing summoning circle with
+--   1 Summon  the screen dims and blurs; the 3D egg (App/EggView) rises out of a glowing summoning circle with
 --             turning runes while the view pushes in (0.9 s)
---   2 Crack   rising shakes; crack sprites (our own, on a layer over the unedited egg) spread; the
+--   2 Crack   rising shakes; crack sprites (our own, on a layer over the egg) spread and glow; the
 --             glow shifts from neutral to the rarity colour (1.0 s, +0.4 s slow-mo for Legendary and up)
 --   3 Break   the egg hides; tier-tinted shard sprites burst out with a flash, a shockwave ring and
 --             a short screen shake (0.5 s)
@@ -27,6 +27,7 @@ local App = script.Parent.Parent
 local Theme = require(App.Theme)
 local Ui = require(App.Ui)
 local Visuals = require(App.Visuals)
+local EggView = require(App.EggView)
 local Kit = require(App.Kit)
 local CardActions = require(App.CardActions)
 local EggTiers = require(Shared.Config.EggTiers)
@@ -500,8 +501,8 @@ function Hatch.show(ctx: any, firstCards: { any }, egg: Types.EggDef, golden: bo
 				ZIndex = 3,
 				Parent = board,
 			})
-			local eggImage = Visuals.egg(eggHolder, egg, golden, 128) :: ImageLabel
-			eggImage.ZIndex = 3
+			-- the same 3D egg as the lobby pedestals (App/EggView); the crack sprites lie over it
+			local eggImage = EggView.new(egg.id, golden, 128, { ZIndex = 3, Parent = eggHolder })
 			local cracks: { ImageLabel } = {}
 			for k = 1, 3 do
 				table.insert(

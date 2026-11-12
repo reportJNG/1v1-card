@@ -3,9 +3,12 @@
 -- (Config/Arenas, picked by the server from the match seed), key lights on both pads, the two
 -- active fighters as glowing aura silhouettes on light pads, and a scripted camera. It only PLAYS
 -- the event packets the server sends (Hit, Parry, Shield, KO, Enter...): every number shown comes
--- from the server. Fighters are standees (Shared/Art/Standee: the character's cut-out art on a
--- panel, turned to the camera) until a character's approved model exists
--- (CharacterDef.assets.model).
+-- from the server. Fighters are 3D R15 rigs with their Blender identity meshes (Shared/Art/
+-- FighterRig, animated by App/FighterAnim: idle, attack, defend, special, hit, KO, win) once a
+-- fighter's meshes are approved and uploaded (Config/Fighters); until then each is its standee
+-- (Shared/Art/Standee: the character's cut-out art on a panel, turned to the camera). In a Guardian
+-- Trial the player's whole deck stands in the arena: the active fighter on the pad, the other two
+-- behind it, against the Guardian (1.8x, its world's colour) (MAKE_3D_EGGS_AND_FIGHTERS section 2).
 -- Battle reactions are effects only (CLAUDE.md "Asset safety": hits and KOs never show faces):
 -- sparks, a shield bubble, big numbers, a shock ring and "K.O.!", and a KO'd fighter shatters
 -- into aura particles.
@@ -21,6 +24,8 @@ local Art = require(Shared.Config.Art)
 local ArenaLayout = require(Shared.Domain.ArenaLayout)
 local ArenaKit = require(Shared.Art.ArenaKit)
 local Standee = require(Shared.Art.Standee)
+local FighterRig = require(Shared.Art.FighterRig)
+local FighterAnim = require(script.Parent.FighterAnim)
 local Theme = require(script.Parent.Theme)
 local Ui = require(script.Parent.Ui)
 local Kit = require(script.Parent.Kit)
@@ -43,6 +48,9 @@ end
 
 local HOME_CAM = CFrame.lookAt(ORIGIN + v3(ArenaLayout.CAMERA.at), ORIGIN + v3(ArenaLayout.CAMERA.look))
 
+-- guardianSide: the AI seat in a Guardian Trial (its fighter is the Guardian), worldId its world.
+export type Options = { guardianSide: number?, worldId: number? }
+
 export type Stage = typeof(setmetatable(
 	{} :: {
 		model: Model,
@@ -61,6 +69,9 @@ export type Stage = typeof(setmetatable(
 		pending: { [number]: string }?, -- fighters waiting for the intro
 		introSkip: (() -> ())?,
 		spinners: { Model },
+		anims: { [number]: FighterAnim.Controller? }, -- R15 fighters on the pads
+		benched: { [number]: { Model } }, -- the rest of the deck standing behind (Trials)
+		opts: Options,
 	},
 	BattleStage
 ))
@@ -116,7 +127,13 @@ local function spot(model: Model, at: Vector3, color: Color3, name: string, brig
 	return s
 end
 
-function BattleStage.new(you: number, ids: { [number]: string }, reduced: boolean, arenaId: string?): Stage
+function BattleStage.new(
+	you: number,
+	ids: { [number]: string },
+	reduced: boolean,
+	arenaId: string?,
+	opts: Options?
+): Stage
 	local model = Instance.new("Model")
 	model.Name = "BattleStage"
 	local arena = Arenas.ById[arenaId or ""] or Arenas.List[1]
@@ -138,6 +155,9 @@ function BattleStage.new(you: number, ids: { [number]: string }, reduced: boolea
 		pending = nil :: { [number]: string }?,
 		introSkip = nil :: (() -> ())?,
 		spinners = {},
+		anims = {},
+		benched = {},
+		opts = opts or {},
 	}, BattleStage)
 	buildArena(arena, model)
 	-- The fighters are always lit (BAD_GUI_8 section 5): a key light over each pad, a rim light in
@@ -358,16 +378,31 @@ function BattleStage.enter(self: Stage, side: number, characterId: string)
 	if old then
 		old:Destroy()
 	end
+	local oldAnim = self.anims[side]
+	if oldAnim then
+		oldAnim.destroy()
+		self.anims[side] = nil
+	end
 	self.ids[side] = characterId
-	local rig = Standee.build(characterId)
+	local guardian = self.opts.guardianSide == side
+	local model3d = if guardian
+		then FighterRig.guardian(self.opts.worldId or 1)
+		else FighterRig.build(characterId)
+	local rig = model3d or Standee.build(characterId)
 	local mark = markPos(side, self.you)
 	local facing = markPos(3 - side, self.you)
 	-- Face the camera, turned a little toward the opponent; the pivot is the standee's feet.
 	local toCamera = Vector3.new(HOME_CAM.Position.X, mark.Y, HOME_CAM.Position.Z) - mark
 	local toFoe = (facing - mark).Unit
 	local look = (toCamera.Unit * 0.8 + toFoe * 0.35).Unit
+	if model3d then
+		look = (toFoe * 0.85 + toCamera.Unit * 0.3).Unit -- a 3D fighter faces its foe
+	end
 	rig:PivotTo(CFrame.lookAt(mark, mark + look))
 	rig.Parent = self.model
+	if model3d then
+		self.anims[side] = FighterAnim.attach(rig, toFoe, self.reduced)
+	end
 	local color = accentOf(characterId)
 	aura(rig, color)
 	self.fighters[side] = rig
@@ -408,6 +443,30 @@ function BattleStage.enter(self: Stage, side: number, characterId: string)
 			end
 		end)
 		t:Play()
+	end
+end
+
+-- The rest of a deck standing behind its active fighter (Guardian Trials: the player's three deck
+-- fighters are all in the arena). Rebuilt when the deck changes; KO'd cards leave.
+function BattleStage.bench(self: Stage, side: number, ids: { string })
+	local old: { Model } = self.benched[side] or {}
+	for _, m in old do
+		m:Destroy()
+	end
+	self.benched[side] = {}
+	local mark = markPos(side, self.you)
+	local toFoe = (markPos(3 - side, self.you) - mark).Unit
+	local across = toFoe:Cross(Vector3.yAxis).Unit
+	for i, id in ids do
+		local m = FighterRig.build(id) or Standee.build(id)
+		local at = mark - toFoe * 7 + across * (if i == 1 then -5 else 5)
+		m:PivotTo(CFrame.lookAt(at, at + toFoe))
+		m.Parent = self.model
+		if m:GetAttribute("Rig") == "R15" then
+			FighterAnim.attach(m, toFoe, self.reduced)
+		end
+		aura(m, accentOf(id))
+		table.insert(self.benched[side], m)
 	end
 end
 
@@ -564,6 +623,11 @@ end
 -- Moves a fighter toward its opponent and back (the attack dash).
 function BattleStage.lunge(self: Stage, side: number, distance: number)
 	local rig = self.fighters[side]
+	local anim = self.anims[side]
+	if anim then
+		anim.play("attack") -- the dash and strike are in the pose set
+		return
+	end
 	if rig == nil or self.reduced then
 		return
 	end
@@ -589,6 +653,11 @@ end
 -- Knock-back flinch on the fighter that was hit.
 function BattleStage.flinch(self: Stage, side: number)
 	local rig = self.fighters[side]
+	local anim = self.anims[side]
+	if anim then
+		anim.play("hit")
+		return
+	end
 	if rig == nil or self.reduced then
 		return
 	end
@@ -607,6 +676,10 @@ function BattleStage.bubble(self: Stage, side: number, color: Color3)
 	local rig = self.fighters[side]
 	if rig == nil then
 		return
+	end
+	local anim = self.anims[side]
+	if anim then
+		anim.play("defend")
 	end
 	local cf, size = rig:GetBoundingBox()
 	local b = part({
@@ -646,6 +719,21 @@ function BattleStage.knockOut(self: Stage, side: number)
 	local cf = rig:GetBoundingBox()
 	local color = accentOf(self.ids[side])
 	self.fighters[side] = nil
+	local anim = self.anims[side]
+	self.anims[side] = nil
+	if anim and not self.reduced then
+		anim.play("ko") -- falls to the knees and down, then dissolves into element particles
+		task.delay(0.65, function()
+			anim.destroy()
+			self:burst(cf.Position, color, 46)
+			self:burst(cf.Position + Vector3.new(0, 1.5, 0), C.White, 18)
+			self:ring(rig:GetPivot().Position, color, 18)
+			rig:Destroy()
+		end)
+		return
+	elseif anim then
+		anim.destroy()
+	end
 	if self.reduced then
 		self:burst(cf.Position, color, 30)
 		rig:Destroy()
@@ -703,6 +791,11 @@ end
 
 function BattleStage.destroy(self: Stage)
 	RunService:UnbindFromRenderStep(RENDER_KEY)
+	for _, anim in self.anims do
+		if anim then
+			anim.destroy()
+		end
+	end
 	self.model:Destroy()
 	local cam = self.camera
 	cam.CameraType = self.saved.cameraType
@@ -828,13 +921,24 @@ function BattleStage.showResult(self: Stage, sides: { [number]: ResultSide }, mo
 			pose(rig, spec.won)
 			head = rig:FindFirstChild("Head") :: BasePart?
 		else
-			r = Standee.build(spec.characterId)
-			r:PivotTo(CFrame.lookAt(mark, mark + look))
-			r.Parent = self.model
-			if not spec.won then
-				r:PivotTo(r:GetPivot() * CFrame.Angles(math.rad(-10), 0, 0))
+			local m3 = if self.opts.guardianSide == side
+				then FighterRig.guardian(self.opts.worldId or 1)
+				else FighterRig.build(spec.characterId)
+			if m3 then -- the 3D fighter strikes its win pose, or lies KO'd
+				r = m3
+				r:PivotTo(CFrame.lookAt(mark, mark + look))
+				r.Parent = self.model
+				FighterAnim.attach(r, look, self.reduced).play(if spec.won then "win" else "ko")
+				head = r:FindFirstChild("Head") :: BasePart?
+			else
+				r = Standee.build(spec.characterId)
+				r:PivotTo(CFrame.lookAt(mark, mark + look))
+				r.Parent = self.model
+				if not spec.won then
+					r:PivotTo(r:GetPivot() * CFrame.Angles(math.rad(-10), 0, 0))
+				end
+				head = r:FindFirstChild("Panel") :: BasePart?
 			end
-			head = r:FindFirstChild("Panel") :: BasePart?
 		end
 		aura(r, color)
 		if not spec.won then
@@ -937,6 +1041,10 @@ function BattleStage.playEvents(
 			if isSpecial then
 				-- camera cut to the caster, an aura burst and a screen flash, then the hit
 				self:cutTo(attacker)
+				local anim = self.anims[attacker]
+				if anim then
+					anim.play("special")
+				end
 				self:burst(markPos(attacker, self.you) + Vector3.new(0, 3, 0), color, 24)
 				self:flash(0.25)
 				task.wait(0.35)

@@ -29,6 +29,7 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 | 14 | Characters: renamed; set 1 (Rook, Halvard, Nox) and set 02 (Kael, Brann, Aurex, new) live; Solaris withdrawn | done, waiting for owner (Zephyr Volt and Solaris images) | `art(14)`, `art(14b)` | cards 9 · hatch 9 · battle 8 · deck 9 · art-first 9 (`compare_card_art.png`, `compare_card_art_set02.png`, `docs/screens/cards_art`) |
 | FIX_LOBBY_2 | A: the main menu's own scene; B: the big lobby upgrade (spawn shrine, giant double torii, temple gate + light pillar, egg pagoda + golden egg, tiled plaza, walls, shelf edge, ambient sound) | done, waiting for owner (hero meshes, textures and a night skybox through the review gate) | `map(menu)`, `map(lobby2)` | menu: never shows the lobby (`compare_menu_stage.png`); lobby: spawn 9 · plaza 8 · arena 8 · portal 8 · eggs 8 · aerial 8 · phone 8 (`docs/screens/lobby/compare_lobby2.png`) |
 | BAD_GUI_9 | Prompts as billboards; a new Cards screen; Inventory = items and eggs; no rarity letters; one source for card numbers; UPGRADE; labelled tabs | done, waiting for art (Sheets A, B, F1) | `ui(9b)` | cards: layout 8 · art-first 9 · one name/numbers 9 · rarity 9 · text 8 · buttons 8; inventory: tabs 9 · items only 9 · inspect + SELL 8 · text 8 · space 8; prompts: no box 9 · word 9 · icon 8 · hold ring 8 · distance 8 (`compare_cards.png`, `compare_inventory2.png`, `compare_prompts.png`) |
+| MAKE_3D | 24 3D eggs + Golden on rarity pedestals; the hatch uses the 3D egg; 6 fighters + the Guardian as R15 + Blender parts with idle/attack/defend/special/hit/KO/win; Trials show the deck in 3D | in progress, waiting for owner (OK on `docs/review/3d_eggs.png` and `3d_fighters.png`) | `art(3d)` | scored after the meshes are approved and live |
 
 ## Phase notes
 
@@ -467,6 +468,31 @@ behaviour are final; only named owner sheets are missing) · `done, waiting for 
 - **Names:** "Kael" and "Brann" are also first names of Warcraft characters; the full names are the
   owner's and original. Display names can change without touching ids.
 - Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds; **329 passed, 0 failed**.
+
+### MAKE_3D (2026-11-11, in progress)
+- **Made in Blender, reviewed, not uploaded.** `scripts/blender/eggs.py` builds one 1,520-triangle base egg
+  and 24 themed variants with modelled details (spots, ears and tails, crown and gems, shards, horns,
+  wings and halo, tentacles, crest, gold trim and aura, confetti and party hat, stripes, voxel chunks,
+  swirl, "?" rune), toon shading and an inverted-hull outline; Golden is the same mesh with the gold
+  material. `scripts/blender/fighters.py` builds the six approved characters on the R15 blocky body with
+  their own hair, coat, collar or scarf, chains, armour and weapon, and an original stone golem knight
+  Guardian (visor slit, no face) in a colour per world; each has an attack sequence. Review package:
+  `docs/review/3d_eggs.png`, `3d_fighters.png`, `3d_fighters_attack/`, `3d-2026-11-11.md`.
+- **Built now, without uploads:** the lobby's egg pedestals (carved stone in the tier colour, a thin
+  glowing rim ring instead of the white disc, the egg floating and turning on its own beat, sparkles for
+  Legendary and up, one label above the egg with icon, name and price, narrower than the gap between
+  pedestals; a spec checks it); the hatch's egg is the same 3D egg in a viewport (`App/EggView`). Until
+  the meshes are approved the egg is a TEMP egg shape in its own colours (`Shared/Art/EggModel`,
+  ContentStatus `eggModels`).
+- **Fighters in code:** `Config/Fighters` (body colours, identity meshes per R15 part, empty until
+  upload), `Shared/Art/FighterRig` (Roblox's R15 from a HumanoidDescription plus the welded meshes),
+  `Config/FighterPoses` + `App/FighterAnim` (the seven actions on the Motor6Ds, no animation uploads),
+  and `App/BattleStage` (in a Trial the benched deck fighters stand behind the active one; the Guardian is
+  1.8x in its world colour; attack, hit, defend, special, KO and win drive the poses). A fighter shows in
+  3D only when all its meshes are uploaded; until then it stays its approved-art standee (primitive
+  parts are never stacked into a stand-in character). Battle logic is unchanged.
+- Not verified in Studio yet (Studio was closed; it will be checked before the swap), not scored.
+- Checks: StyLua, Selene, luau-lsp clean, 3 Rojo builds; **338 passed, 0 failed**.
 
 ### BAD_GUI_9 (2026-11-11)
 - **Prompts** (`App/Prompts`): no box. A painted E plate (round TAP on touch), one big outlined word, then

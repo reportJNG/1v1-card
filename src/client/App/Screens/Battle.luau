@@ -145,10 +145,37 @@ function Battle.open(ctx: any, start: any): Handle
 	local reduced = ctx.reducedMotion()
 	local arena = Arenas.ById[start.arena or ""] or Arenas.List[1]
 
+	local guardianSide: number? = nil
+	if start.mode == "Trial" and start.seats then
+		for side, seat in start.seats do
+			if seat.ai then
+				guardianSide = side
+			end
+		end
+	end
 	local stage = BattleStage.new(you, {
 		[1] = view.sides[1].units[view.sides[1].active].characterId,
 		[2] = view.sides[2].units[view.sides[2].active].characterId,
-	}, reduced, arena.id)
+	}, reduced, arena.id, { guardianSide = guardianSide, worldId = start.worldId })
+	-- Trials: the player's whole deck stands in the arena (the others behind the active one)
+	local benchKey = ""
+	local function syncBench()
+		if guardianSide == nil then
+			return
+		end
+		local s = view.sides[you]
+		local ids = {}
+		for i, u in s.units do
+			if i ~= s.active and u.hp > 0 then
+				table.insert(ids, u.characterId)
+			end
+		end
+		local key = table.concat(ids, ",")
+		if key ~= benchKey then
+			benchKey = key
+			stage:bench(you, ids)
+		end
+	end
 	local onStage: { [number]: string } = {
 		[1] = view.sides[1].units[view.sides[1].active].characterId,
 		[2] = view.sides[2].units[view.sides[2].active].characterId,
@@ -1087,6 +1114,7 @@ function Battle.open(ctx: any, start: any): Handle
 				stage:enter(side, id)
 			end
 		end
+		syncBench()
 	end
 
 	------------------------------------------------------------------------------------------

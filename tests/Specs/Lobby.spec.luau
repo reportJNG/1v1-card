@@ -7,6 +7,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local HubLayout = require(Shared.Config.HubLayout)
 local WorldProps = require(Shared.Config.WorldProps)
 local Eggs = require(Shared.Config.Eggs)
+local EggModels = require(Shared.Config.EggModels)
 local UiAssets = require(Shared.Config.UiAssets)
 local Sounds = require(Shared.Config.Sounds)
 
@@ -128,6 +129,27 @@ return function()
 				for _, prim in HubLayout.Prims do
 					if prim.tag then
 						expect(known[prim.tag]).to.equal(true)
+					end
+				end
+			end
+		)
+
+		it(
+			"has a 3D egg model for every egg, and egg labels narrower than the gap between pedestals",
+			function()
+				for _, id in Eggs.RequiredIds do
+					local m = EggModels.ById[id]
+					expect(m).to.be.ok()
+					expect(Color3.fromHex(m.body)).to.be.ok()
+					expect(Color3.fromHex(m.accent)).to.be.ok()
+				end
+				local spots = HubLayout.EggPedestals
+				for i = 1, #spots do
+					for j = i + 1, #spots do
+						local a, b = spots[i].at, spots[j].at
+						local d = math.sqrt((a[1] - b[1]) ^ 2 + (a[3] - b[3]) ^ 2)
+						-- side by side, two labels (each LABEL wide) must not touch
+						expect(d > EggModels.LABEL[1] + 0.5).to.equal(true)
 					end
 				end
 			end

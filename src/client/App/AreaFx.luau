@@ -262,7 +262,8 @@ local function move(m: Mover, t: number, origin: Vector3)
 		local base = num(p, "BaseTransparency", 0.7)
 		p.Transparency = base + (1 - base) * 0.45 * (0.5 + 0.5 * math.sin(t * 1.8 + m.i))
 	elseif m.kind == "Bob" then
-		p.CFrame = home * CFrame.new(0, math.sin(t * 1.1) * 0.8, 0) * CFrame.Angles(0, t * 0.4, 0)
+		local ph = num(p, "phase", 0) -- each lobby egg floats on its own beat
+		p.CFrame = home * CFrame.new(0, math.sin(t * 1.1 + ph) * 0.8, 0) * CFrame.Angles(0, t * 0.4 + ph, 0)
 	elseif m.kind == "Orbit" then
 		local c = origin + Vector3.new(num(p, "cx", 0), num(p, "cy", 0), num(p, "cz", 0))
 		local a = t * num(p, "speed", 0.2)

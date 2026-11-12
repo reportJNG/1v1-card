@@ -99,6 +99,12 @@ the worlds (`Config/HubLayout.Models`, `Config/WorldProps`), plus simple parts, 
 uploaded and no Creator Store models were used.** Hero props from Blender / `generate_scene` are a
 later art pass and go through the review gate first.
 
+## 3D eggs and fighters (MAKE_3D_EGGS_AND_FIGHTERS, 2026-11-11)
+- Made by us in Blender 5.2 from primitives (`scripts/blender/eggs.py`, `scripts/blender/fighters.py`).
+- **No free or downloaded asset is used**: the Blender asset libraries (Poly Haven, Sketchfab, Poly
+  Pizza) are switched off on this machine; no Creator Store or UGC item; no icon-pack image on any
+  mesh. Nothing uploaded yet (review gate: `docs/review/3d-2026-11-11.md`).
+
 ## Creator Store assets
 
 | Asset id | Name | Creator | Type | Used for | Scripts removed | License check |

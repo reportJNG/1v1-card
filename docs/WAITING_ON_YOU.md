@@ -2,6 +2,14 @@
 
 Things only the owner can do. Everything else keeps moving without them. Newest items first.
 
+## 0000000. 3D eggs and fighters: your OK, and one question (2026-11-11)
+- **Approve or reject** `docs/review/3d_eggs.png` (24 eggs + Golden) and `docs/review/3d_fighters.png`
+  (the six approved characters + the Guardian; attack GIFs in `docs/review/3d_fighters_attack/`). Rule
+  checks: `docs/review/3d-2026-11-11.md`. Nothing is uploaded until you write OK; then FBX uploads go
+  in batches of 5 or fewer and stop at the first moderated, rejected or 403 result.
+- **Question:** should ranked PvP 1v1 also show 3D fighters, or keep the card battle screen?
+  (MAKE_3D_EGGS_AND_FIGHTERS section 2: PvP keeps the card screen unless you say otherwise.)
+
 ## 000000. Two cards still have TEMP art; one upload to archive (2026-11-11)
 Live with approved art: Rook Emberforge, Halvard Frostwarden, Nox Veilstrider (set 1) and the three
 new set 02 characters Kael Voidbinder, Brann Cinderfall and Aurex Sunforge (uploaded in one batch of

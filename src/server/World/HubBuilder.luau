@@ -2,7 +2,7 @@
 -- Builds the lobby from Config/HubLayout (FIX_LOBBY.md): the ground, paths, steps, river,
 -- fountain and card statue, stalls and shrine as simple shapes (Shared/Art/ArenaKit.prim); every
 -- generated mesh (one MeshPart each, loaded once per mesh with AssetService and cloned); the egg
--- pedestals with the pack eggs; lantern and brazier lights; fire, fountain spray, fireflies and
+-- pedestals with the 3D eggs (the pack images only on their labels); lantern and brazier lights; fire, fountain spray, fireflies and
 -- petals; the Worlds portal core; world text over every place; interaction prompts and the
 -- spawn. The ground and spawn exist on return; the meshes stream in on a background thread.
 -- Idempotent: rebuilding replaces the previous hub. Runs on Hub servers only.
@@ -14,6 +14,8 @@ local Eggs = require(Shared.Config.Eggs)
 local EggTiers = require(Shared.Config.EggTiers)
 local Rarities = require(Shared.Config.Rarities)
 local ArenaKit = require(Shared.Art.ArenaKit)
+local EggModel = require(Shared.Art.EggModel)
+local EggModels = require(Shared.Config.EggModels)
 local UiAssets = require(Shared.Config.UiAssets)
 local Billboard = require(Shared.Ui.Billboard)
 local MeshLibrary = require(script.Parent.MeshLibrary)
@@ -334,70 +336,147 @@ function life(origin: Vector3, architecture: Instance)
 	}, architecture)
 end
 
--- The egg pavilion's pedestals: a pedestal per egg glowing in the egg's tier colour with a turning
--- ring, the egg's pack image (unedited) and its Coin price floating over it.
+-- The egg pavilion's pedestals (MAKE_3D_EGGS_AND_FIGHTERS section 1): a carved stone pedestal in
+-- the egg's tier colour with a thin glowing ring at its rim (no white glow disc), the 3D egg floating
+-- and turning above it (Shared/Art/EggModel), sparkles for Legendary and up, and one label above the
+-- egg, never behind it: the egg's icon and name, then the Coin price. The label is narrower than the
+-- gap between pedestals, so neighbouring labels can't overlap.
+local LABEL_W, LABEL_H = EggModels.LABEL[1], EggModels.LABEL[2] -- studs
+
+local function eggLabel(egg: any, top: number, parent: BasePart)
+	local gui = Instance.new("BillboardGui")
+	gui.Name = "EggLabel"
+	gui.Size = UDim2.fromScale(LABEL_W, LABEL_H)
+	gui.StudsOffsetWorldSpace = Vector3.new(0, top, 0)
+	gui.LightInfluence = 0
+	gui.MaxDistance = 90
+	gui.AlwaysOnTop = false -- see Shared/Ui/Billboard
+	gui.Parent = parent
+	local function row(y: number, h: number, icon: string, text: string, gradient: { Color3 }?)
+		local f = Instance.new("Frame")
+		f.BackgroundTransparency = 1
+		f.Position = UDim2.fromScale(0, y)
+		f.Size = UDim2.fromScale(1, h)
+		f.Parent = gui
+		local list = Instance.new("UIListLayout")
+		list.FillDirection = Enum.FillDirection.Horizontal
+		list.HorizontalAlignment = Enum.HorizontalAlignment.Center
+		list.VerticalAlignment = Enum.VerticalAlignment.Center
+		list.Padding = UDim.new(0.02, 0)
+		list.Parent = f
+		local img = Instance.new("ImageLabel")
+		img.Name = "Icon"
+		img.BackgroundTransparency = 1
+		img.Image = icon
+		img.ScaleType = Enum.ScaleType.Fit
+		img.Size = UDim2.fromScale(1, 1)
+		img.SizeConstraint = Enum.SizeConstraint.RelativeYY
+		img.Parent = f
+		local t = Instance.new("TextLabel")
+		t.Name = "Text"
+		t.BackgroundTransparency = 1
+		t.Text = text
+		t.FontFace = Font.fromEnum(Enum.Font.LuckiestGuy)
+		t.TextScaled = true
+		t.TextColor3 = Color3.new(1, 1, 1)
+		t.AutomaticSize = Enum.AutomaticSize.None
+		t.Size = UDim2.fromScale(0.78, 1)
+		t.TextXAlignment = Enum.TextXAlignment.Left
+		t.Parent = f
+		local stroke = Instance.new("UIStroke")
+		stroke.Color = Color3.fromHex("#05070F")
+		stroke.Thickness = 3
+		stroke.Parent = t
+		if gradient then
+			local g = Instance.new("UIGradient")
+			g.Rotation = 90
+			g.Color = ColorSequence.new(gradient[1], gradient[2])
+			g.Parent = t
+		end
+	end
+	row(0, 0.56, egg.icon.normalAssetId or "", string.upper(egg.displayName))
+	if egg.coinPrice then
+		row(0.58, 0.42, asset("icon_coin"), tostring(egg.coinPrice), Billboard.Gold)
+	end
+end
+
 function eggPedestals(origin: Vector3, parent: Instance)
 	local folder = Instance.new("Folder")
 	folder.Name = "EggPedestals"
-	for _, spot in HubLayout.EggPedestals do
+	local stone = Color3.fromHex("#5E5878")
+	for i, spot in HubLayout.EggPedestals do
 		local egg = Eggs.ById[spot.egg]
 		if egg then
 			local at = origin + v(spot.at)
-			local tier = Rarities.Defs[EggTiers.of(egg)].colors[4]
-			slab({
-				Name = egg.id,
-				Shape = Enum.PartType.Cylinder,
-				Size = Vector3.new(2, 3.4, 3.4),
-				CFrame = CFrame.new(at + Vector3.new(0, 1, 0)) * CFrame.Angles(0, 0, math.rad(90)),
-				Color = Color3.fromHex("#5B5088"),
-				Material = Enum.Material.Marble,
-			}, folder)
-			local glow = slab({
-				Name = "Glow",
-				Shape = Enum.PartType.Cylinder,
-				Size = Vector3.new(0.15, 3.7, 3.7),
-				CFrame = CFrame.new(at + Vector3.new(0, 2.05, 0)) * CFrame.Angles(0, 0, math.rad(90)),
-				Color = tier,
-				Material = Enum.Material.Neon,
-				Transparency = 0.2,
-				CanCollide = false,
-				CastShadow = false,
-			}, folder)
-			ArenaKit.prim({
+			local rdef = Rarities.Defs[EggTiers.of(egg)]
+			local tier = rdef.colors[4]
+			local stand = Instance.new("Model")
+			stand.Name = egg.id
+			local function cyl(
+				name: string,
+				h: number,
+				d: number,
+				y: number,
+				color: Color3,
+				material: Enum.Material
+			)
+				return slab({
+					Name = name,
+					Shape = Enum.PartType.Cylinder,
+					Size = Vector3.new(h, d, d),
+					CFrame = CFrame.new(at + Vector3.new(0, y, 0)) * CFrame.Angles(0, 0, math.rad(90)),
+					Color = color,
+					Material = material,
+				}, stand)
+			end
+			-- carved stone in the tier colour: a foot, the column, and a rim cap
+			cyl("Foot", 0.45, 4.0, 0.22, rdef.colors[3]:Lerp(stone, 0.6), Enum.Material.Slate)
+			cyl("Column", 1.5, 3.1, 1.15, rdef.colors[3]:Lerp(stone, 0.45), Enum.Material.Slate)
+			local cap = cyl("Rim", 0.4, 3.9, 2.05, rdef.colors[2]:Lerp(stone, 0.35), Enum.Material.Marble)
+			for k = 0, 7 do -- carved notches around the rim
+				local a = k / 8 * math.pi * 2
+				slab({
+					Name = "Notch",
+					Size = Vector3.new(0.35, 0.3, 0.35),
+					CFrame = CFrame.new(at + Vector3.new(math.cos(a) * 1.9, 1.9, math.sin(a) * 1.9))
+						* CFrame.Angles(0, -a, 0),
+					Color = rdef.colors[3]:Lerp(stone, 0.2),
+					Material = Enum.Material.Slate,
+				}, stand)
+			end
+			ArenaKit.prim({ -- the thin glowing ring at the rim
 				shape = "Ring",
-				size = { 4.6, 0.12, 20 },
-				at = { at.X, at.Y + 0.5, at.Z },
+				size = { 3.95, 0.1, 20 },
+				at = { at.X, at.Y + 2.27, at.Z },
 				color = tier:ToHex(),
 				material = "Neon",
-				transparency = 0.15,
-				tag = "Spin",
-			}, 0, glow)
-			local gui = Instance.new("BillboardGui")
-			gui.Name = "Egg"
-			gui.Size = UDim2.fromScale(4, 4.6)
-			gui.StudsOffsetWorldSpace = Vector3.new(0, 2.6, 0)
-			gui.LightInfluence = 0
-			gui.MaxDistance = 140
-			gui.AlwaysOnTop = false -- see Shared/Ui/Billboard
-			gui.Parent = glow
-			local img = Instance.new("ImageLabel")
-			img.BackgroundTransparency = 1
-			img.Image = egg.icon.normalAssetId or ""
-			img.ScaleType = Enum.ScaleType.Fit
-			img.Size = UDim2.fromScale(1, 1)
-			img.Parent = gui
-			if egg.coinPrice then
-				local price = Billboard.make({
-					name = "Price",
-					text = tostring(egg.coinPrice),
-					icon = "icon_coin",
-					gradient = Billboard.Gold,
-					studs = 1.2,
-					maxDistance = 90,
-				})
-				price.StudsOffsetWorldSpace = Vector3.new(0, 5.9, 0)
-				price.Parent = glow
+				transparency = 0.05,
+			}, 0, stand)
+			-- the egg floats and turns above the rim (App/AreaFx "Bob"; each egg on its own beat)
+			local model = EggModel.build(egg.id, false, EggModels.HEIGHT)
+			model:PivotTo(CFrame.new(at + Vector3.new(0, 2.85, 0)))
+			for _, p in model:GetDescendants() do
+				if p:IsA("BasePart") then
+					p:SetAttribute("Fx", "Bob")
+					p:SetAttribute("phase", i * 1.3)
+				end
 			end
+			model.Parent = stand
+			if rdef.order >= 4 then -- Legendary and up sparkle
+				local e = Instance.new("ParticleEmitter")
+				e.Name = "Sparkle"
+				e.Texture = "rbxasset://textures/particles/sparkles_main.dds"
+				e.Color = ColorSequence.new(tier)
+				e.Size = NumberSequence.new(0.4)
+				e.Lifetime = NumberRange.new(0.8, 1.4)
+				e.Rate = 5
+				e.Speed = NumberRange.new(0.4, 0.9)
+				e.SpreadAngle = Vector2.new(180, 180)
+				e.LightEmission = 1
+				e.Parent = cap
+			end
+			eggLabel(egg, 2.05 + 0.8 + EggModels.HEIGHT + 0.9 + 1.6, cap)
+			stand.Parent = folder
 		end
 	end
 	folder.Parent = parent
